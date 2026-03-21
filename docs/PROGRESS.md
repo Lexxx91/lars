@@ -1,8 +1,8 @@
 # PROGRESS.md — Estado del Proyecto L.A.R.S.©
 
-## Estado actual: FASE 0 EN PROGRESO
+## Estado actual: FASE 0 COMPLETADA
 
-Setup del proyecto iniciado. Stack aprobado, componentes base creados, documentación generada.
+Setup completo. Proyecto desplegado en staging. Listo para Fase 1.
 
 ---
 
@@ -10,7 +10,7 @@ Setup del proyecto iniciado. Stack aprobado, componentes base creados, documenta
 
 | Fase | Estado | Fecha | Notas |
 |------|--------|-------|-------|
-| 0 — Setup | 🟡 En progreso | 21 Mar 2026 | Stack aprobado, tokens CSS + 8 componentes base creados, docs generados. Falta: Supabase, Vercel, Git. |
+| 0 — Setup | ✅ Completada | 21 Mar 2026 | Stack completo, 8 componentes, Supabase con schema, Vercel desplegado, GitHub conectado. |
 | 1 — Hero + P1 + Landing | ⬜ Pendiente | — | — |
 | 2 — P2-P4 + Primera Verdad + Micro-espejo 1 | ⬜ Pendiente | — | — |
 | 3 — P5-P8 + Micro-espejo 2 | ⬜ Pendiente | — | — |
