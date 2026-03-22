@@ -3,7 +3,7 @@
 /**
  * EvolutionArchetype.tsx — Sección Día 3: Arquetipo del Sistema Nervioso
  *
- * Muestra el arquetipo con teaser + expandible con patrones y 3 capas de necesidad.
+ * Muestra el arquetipo con narrativa espejo + creencias + expandibles con patrones y 3 capas de necesidad.
  */
 
 import { useState } from 'react'
@@ -18,6 +18,10 @@ interface Props {
 export default function EvolutionArchetype({ archetype, isNew }: Props) {
   const [patternsOpen, setPatternsOpen] = useState(false)
   const [needsOpen, setNeedsOpen] = useState(false)
+  const [fearsOpen, setFearsOpen] = useState(false)
+
+  // Dividir la narrativa en párrafos
+  const narrativeParagraphs = archetype.narrative.split('\n\n')
 
   return (
     <div
@@ -70,51 +74,183 @@ export default function EvolutionArchetype({ archetype, isNew }: Props) {
           fontFamily: 'var(--font-inter)',
           fontSize: 'var(--text-body-sm)',
           color: 'var(--color-text-tertiary)',
-          marginBottom: 'var(--space-2)',
+          marginBottom: 'var(--space-4)',
         }}
       >
         {archetype.descriptors}
       </p>
 
-      {/* Herida + Armadura */}
-      <p
-        style={{
-          fontFamily: 'var(--font-inter)',
-          fontSize: 'var(--text-body-sm)',
-          color: 'var(--color-text-secondary)',
-          marginBottom: 'var(--space-2)',
-        }}
-      >
-        Herida de la {archetype.wound.toLowerCase()} → Armadura de{' '}
-        {archetype.armor.toLowerCase()}
-      </p>
+      {/* ── Narrativa (el espejo) ── */}
+      <div style={{ marginBottom: 'var(--space-5)' }}>
+        {narrativeParagraphs.map((paragraph, i) => (
+          <p
+            key={i}
+            style={{
+              fontFamily: 'var(--font-cormorant)',
+              fontSize: 'var(--text-h3)',
+              fontStyle: 'italic',
+              lineHeight: 'var(--lh-h3)',
+              color: 'var(--color-text-primary)',
+              marginBottom:
+                i < narrativeParagraphs.length - 1
+                  ? 'var(--space-4)'
+                  : '0',
+            }}
+          >
+            {paragraph}
+          </p>
+        ))}
+      </div>
 
-      {/* Estado SN */}
-      <p
+      {/* ── Creencia central ── */}
+      <div
         style={{
-          fontFamily: 'var(--font-inter)',
-          fontSize: 'var(--text-caption)',
-          color: 'var(--color-accent)',
+          borderLeft: '2px solid var(--color-error)',
+          paddingLeft: 'var(--space-4)',
           marginBottom: 'var(--space-4)',
-          opacity: 0.8,
         }}
       >
-        {archetype.snState}
-      </p>
+        <p
+          style={{
+            fontFamily: 'var(--font-inter-tight)',
+            fontSize: 'var(--text-overline)',
+            letterSpacing: 'var(--ls-overline)',
+            textTransform: 'uppercase',
+            color: 'var(--color-text-tertiary)',
+            marginBottom: 'var(--space-1)',
+          }}
+        >
+          Creencia central
+        </p>
+        <p
+          style={{
+            fontFamily: 'var(--font-inter)',
+            fontSize: 'var(--text-body)',
+            lineHeight: 'var(--lh-body)',
+            color: 'var(--color-text-primary)',
+            fontWeight: 500,
+          }}
+        >
+          &ldquo;{archetype.centralBelief}&rdquo;
+        </p>
+      </div>
 
-      {/* Teaser */}
-      <p
+      {/* ── Creencia de sanación ── */}
+      <div
         style={{
-          fontFamily: 'var(--font-cormorant)',
-          fontSize: 'var(--text-h3)',
-          fontStyle: 'italic',
-          lineHeight: 'var(--lh-h3)',
-          color: 'var(--color-text-primary)',
+          borderLeft: '2px solid var(--color-accent)',
+          paddingLeft: 'var(--space-4)',
           marginBottom: 'var(--space-5)',
         }}
       >
-        &ldquo;{archetype.teaser}&rdquo;
-      </p>
+        <p
+          style={{
+            fontFamily: 'var(--font-inter-tight)',
+            fontSize: 'var(--text-overline)',
+            letterSpacing: 'var(--ls-overline)',
+            textTransform: 'uppercase',
+            color: 'var(--color-text-tertiary)',
+            marginBottom: 'var(--space-1)',
+          }}
+        >
+          Creencia de sanación
+        </p>
+        <p
+          style={{
+            fontFamily: 'var(--font-inter)',
+            fontSize: 'var(--text-body)',
+            lineHeight: 'var(--lh-body)',
+            color: 'var(--color-accent)',
+            fontWeight: 500,
+          }}
+        >
+          &ldquo;{archetype.healingBelief}&rdquo;
+        </p>
+      </div>
+
+      {/* Herida + Armadura + Estado SN */}
+      <div
+        style={{
+          backgroundColor: 'rgba(255,255,255,0.03)',
+          borderRadius: 'var(--radius-md)',
+          padding: 'var(--space-4)',
+          marginBottom: 'var(--space-4)',
+        }}
+      >
+        <p
+          style={{
+            fontFamily: 'var(--font-inter)',
+            fontSize: 'var(--text-body-sm)',
+            color: 'var(--color-text-secondary)',
+            marginBottom: 'var(--space-2)',
+          }}
+        >
+          Herida de la {archetype.wound.toLowerCase()} → Armadura de{' '}
+          {archetype.armor.toLowerCase()}
+        </p>
+        <p
+          style={{
+            fontFamily: 'var(--font-inter)',
+            fontSize: 'var(--text-caption)',
+            color: 'var(--color-accent)',
+            opacity: 0.8,
+          }}
+        >
+          {archetype.snState}
+        </p>
+      </div>
+
+      {/* ── Expandible: Miedos principales ── */}
+      <button
+        onClick={() => setFearsOpen((o) => !o)}
+        style={{
+          width: '100%',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          background: 'transparent',
+          border: 'none',
+          borderTop: 'var(--border-subtle)',
+          fontFamily: 'var(--font-inter)',
+          fontSize: 'var(--text-body-sm)',
+          color: 'var(--color-text-secondary)',
+          cursor: 'pointer',
+          padding: 'var(--space-4) 0',
+          transition: 'color var(--transition-base)',
+        }}
+      >
+        <span>Tus miedos principales</span>
+        <span
+          style={{
+            display: 'inline-block',
+            transform: fearsOpen ? 'rotate(180deg)' : 'none',
+            transition: 'transform var(--transition-base)',
+            fontSize: '16px',
+          }}
+        >
+          ↓
+        </span>
+      </button>
+
+      {fearsOpen && (
+        <div style={{ paddingBottom: 'var(--space-4)' }}>
+          {archetype.fears.map((fear) => (
+            <p
+              key={fear}
+              style={{
+                fontFamily: 'var(--font-inter)',
+                fontSize: 'var(--text-body-sm)',
+                lineHeight: 'var(--lh-body)',
+                color: 'var(--color-text-secondary)',
+                marginBottom: 'var(--space-2)',
+                paddingLeft: 'var(--space-3)',
+              }}
+            >
+              · {fear}
+            </p>
+          ))}
+        </div>
+      )}
 
       {/* ── Expandible: Patrones de Burnout ── */}
       <button

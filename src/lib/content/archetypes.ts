@@ -27,9 +27,19 @@ export interface ArchetypeData {
   key: string
   name: string
   descriptors: string
+  /** Grupo caracterológico: Desconfiados, Humillados, Vulnerables, Necesitados, Rechazados */
+  group: string
   wound: string
   armor: string
   snState: string
+  /** Narrativa completa del arquetipo — texto espejo en 2ª persona */
+  narrative: string
+  /** Creencia central que gobierna el patrón (ej: "No puedo confiar en nadie") */
+  centralBelief: string
+  /** Creencia de sanación — la dirección de integración */
+  healingBelief: string
+  /** Miedos principales del arquetipo */
+  fears: string[]
   /** Frase corta para el teaser en el mapa */
   teaser: string
   /** 6 patrones de burnout */
@@ -50,9 +60,18 @@ const ARCHETYPES: ArchetypeData[] = [
     key: 'esceptico',
     name: 'El Escéptico',
     descriptors: 'Desconfiado · Impenetrable · Hermético',
+    group: 'Desconfiados',
     wound: 'Traición',
     armor: 'Desconfianza + hipervigilancia',
     snState: 'Simpático crónico — eje HPA hiperactivo, cortisol elevado',
+    narrative: 'En algún momento de tu historia alguien en quien confiaste plenamente te traicionó — y esa traición llegó desde el lugar donde menos la esperabas. Quizá fue un padre que prometía y no cumplía, una madre cuyo amor venía con condiciones invisibles, una pareja que usó tu vulnerabilidad como munición, o un entorno donde mostrarte tal como eras se pagaba con humillación o abandono.\n\nTu sistema nervioso extrajo una conclusión que ya no te consultó: confiar es el preludio del daño. Y a partir de ese momento cerró con llave desde dentro.\n\nNo es que no quieras abrirte — es que cada vez que alguien cruzó tus puertas, destrozó algo que tardaste años en construir. Eres hermético no por frialdad sino por supervivencia, impenetrable no por arrogancia sino porque la vulnerabilidad siempre vino acompañada de dolor.',
+    centralBelief: 'No puedo confiar en nadie. Debo estar siempre en guardia.',
+    healingBelief: 'Es posible confiar y no ser traicionado. Puedo sentirme seguro y confiado.',
+    fears: [
+      'Ser traicionado, manipulado y atacado',
+      'Pérdida de control y vulnerabilidad ante otros',
+      'Estar solo o sin apoyo real',
+    ],
     teaser: 'Tu sistema nervioso escanea amenazas 24/7. No te quemas por trabajar demasiado sino por vigilar demasiado.',
     patterns: [
       {
@@ -118,9 +137,17 @@ const ARCHETYPES: ArchetypeData[] = [
     key: 'obsesivo',
     name: 'El Obsesivo',
     descriptors: 'Controlador · Obsesivo · Inflexible · Tenso',
+    group: 'Humillados',
     wound: 'Humillación',
     armor: 'Control absoluto',
     snState: 'Hiperactivación prefrontal — déficit de serotonina y GABA',
+    narrative: 'En algún momento de tu historia ocurrió algo que no pudiste prever — y ese algo te destrozó. Quizá fue un padre impredecible cuyo humor cambiaba sin aviso, un entorno donde las reglas se movían sin explicación, una pérdida que cayó del cielo sin darle tiempo a tu cuerpo de prepararse. Tu sistema nervioso extrajo una conclusión brutal de esa experiencia: si no lo vi venir, no pude protegerme.\n\nY a partir de ahí tomó una decisión que ya no te consultó — nunca más serás sorprendido. Convirtió tu mente en su herramienta de supervivencia más sofisticada y más agotadora.\n\nNo piensas por placer ni por curiosidad, piensas porque dejar de pensar significa perder el control, y perder el control significa quedar expuesto a ese caos original que tu cuerpo nunca olvidó. La rumiación es el intento desesperado de tu biología por predecir lo que viene y controlar el resultado final.\n\nPero el precio es brutal: vives encerrado en una cárcel de escenarios que nunca suceden mientras la vida real pasa al otro lado de los barrotes que tú mismo construiste.',
+    centralBelief: 'Debo mantener el control a toda costa para evitar el castigo.',
+    healingBelief: 'Puedo soltar el control y expresar mis emociones sin temor.',
+    fears: [
+      'Perder el autocontrol y enfrentarse a impulsos reprimidos',
+      'Angustia ante cambios, lo inesperado y la incertidumbre',
+    ],
     teaser: 'La rumiación ES hiperactivación cognitiva. Tu mente no para de ejecutar algoritmos de seguridad: anticipar todos los escenarios posibles.',
     patterns: [
       {
@@ -185,10 +212,19 @@ const ARCHETYPES: ArchetypeData[] = [
     id: 3,
     key: 'perfeccionista',
     name: 'El Perfeccionista',
-    descriptors: 'Exigente · Insatisfecho · Exhausto · Implacable',
+    descriptors: 'Exigente · Insatisfecho · Exhausto · Implacable · Incansable · Severo',
+    group: 'Vulnerables',
     wound: 'Desprotección',
     armor: 'Perfección (amor condicionado al rendimiento)',
     snState: 'Simpático sostenido — dopamina orientada al logro, cortisol crónico',
+    narrative: 'En algún momento de tu historia aprendiste que el amor, la aceptación o la seguridad no eran gratuitos — se ganaban con resultados. Quizá fue un padre que solo mostraba orgullo cuando sacabas un diez, un entorno donde el error se castigaba con frialdad o desprecio, una infancia donde ser suficiente nunca fue suficiente.\n\nTu sistema nervioso extrajo una conclusión devastadora: mi valor depende de mi rendimiento. Y a partir de ahí construyó una maquinaria imparable que hoy te gobierna.\n\nEres brutalmente exigente — no por ambición sino por terror. Eres crónicamente insatisfecho — ningún logro llena, ningún resultado basta. Eres implacable contigo mismo — cada error no es un tropiezo sino una confirmación de lo que más temes. Eres incansable — no paras porque parar significa enfrentarte al vacío que hay debajo de todo el hacer.\n\nY lo más trágico es que la perfección que persigues no existe — y cada paso que das hacia ella te aleja un paso más de lo único que realmente necesitabas desde el principio: saber que eras suficiente sin hacer absolutamente nada.',
+    centralBelief: 'Mi valor depende de mi rendimiento.',
+    healingBelief: 'Soy valioso por quien soy, no por lo que logro.',
+    fears: [
+      'Ser ineficaz o fracasado',
+      'Sentirse inferior, insuficiente o no ser admirado',
+      'La crítica que confirme que no vale lo suficiente',
+    ],
     teaser: 'El patrón definitorio: «Mi valor depende de mi rendimiento.» El error no toca la conducta: toca la identidad.',
     patterns: [
       {
@@ -253,10 +289,19 @@ const ARCHETYPES: ArchetypeData[] = [
     id: 4,
     key: 'dependiente',
     name: 'El Dependiente',
-    descriptors: 'Necesitado · Fusionado · Entregado · Codependiente',
+    descriptors: 'Necesitado · Fusionado · Entregado · Codependiente · Enganchado · Complaciente',
+    group: 'Necesitados',
     wound: 'Abandono',
     armor: 'Dependencia',
     snState: 'Desregulación HPA — oxitocina dependiente del otro',
+    narrative: 'En algún momento de tu historia aprendiste que existir solo no era seguro — y que la única forma de sobrevivir era a través de otro. Quizá fue una madre que te necesitaba más de lo que tú la necesitabas a ella, un hogar donde el amor se ganaba cuidando las emociones de los demás, una infancia donde nadie reguló tu mundo interior y tuviste que buscar esa regulación fuera.\n\nTu sistema nervioso extrajo una conclusión que ya no te consultó: solo no puedo, sin el otro me desintegro. Y a partir de ahí construyó un modo de funcionar que hoy confundes con tu personalidad.\n\nEres profundamente necesitado — no por capricho sino por supervivencia, tu cuerpo siente la ausencia del otro como una emergencia biológica real. Eres fusionado — no sabes existir como entidad separada. Eres codependiente — regulas al otro para regularte a ti mismo.\n\nY lo más doloroso es que esa entrega total que confundes con amor es en realidad la estrategia desesperada de un sistema nervioso que nunca aprendió la lección más importante — que puedes sostenerte solo.',
+    centralBelief: 'No puedo vivir sin ser cuidado. Solo no puedo, sin el otro me desintegro.',
+    healingBelief: 'Puedo nutrirme a mí mismo.',
+    fears: [
+      'El abandono y la privación afectiva',
+      'Sentirse solo y desprotegido',
+      'Que el otro se vaya',
+    ],
     teaser: 'Decir no = arriesgarse al abandono. Si pongo un límite, el otro puede irse. Y si se va, me desintegro.',
     patterns: [
       {
@@ -321,10 +366,19 @@ const ARCHETYPES: ArchetypeData[] = [
     id: 5,
     key: 'sumiso',
     name: 'El Sumiso',
-    descriptors: 'Sacrificado · Obediente · Resignado · Callado · Invisible',
+    descriptors: 'Sacrificado · Obediente · Resignado · Callado · Tragador · Invisible · Anulado',
+    group: 'Necesitados',
     wound: 'Vergüenza + opresión',
     armor: 'Sumisión (fawning)',
     snState: 'Congelado entre activación (rabia reprimida) y colapso dorsal (fawning)',
+    narrative: 'En algún momento de tu historia aprendiste que tener voz era peligroso — que expresar una necesidad, una opinión o un límite traía consecuencias que tu cuerpo no podía permitirse. Quizá fue un hogar donde el conflicto terminaba en gritos o en violencia, un padre cuya ira se activaba cuando alguien cuestionaba su autoridad, una madre que castigaba con silencio.\n\nTu sistema nervioso extrajo una conclusión que marcó el resto de tu vida: si me someto, sobrevivo. Y a partir de ahí construyó una arquitectura de rendición que hoy gobierna cada una de tus relaciones.\n\nEres sumiso — no por debilidad sino porque la sumisión fue la estrategia que te mantuvo vivo cuando resistir no era una opción. Eres callado — tienes voz pero aprendiste que usarla tenía un precio. Eres un tragador — te tragas la rabia, la opinión, la necesidad, y ese tragar constante es lo que tu cuerpo convierte en tensión y enfermedad.\n\nY lo más devastador es que esa anulación fue tan gradual, tan temprana y tan completa que hoy ni siquiera la vives como pérdida — porque para perder algo primero necesitas saber que lo tenías.',
+    centralBelief: 'Mis deseos son vergonzosos. No tengo derecho a ser libre. Si me someto, sobrevivo.',
+    healingBelief: 'Mis necesidades son válidas. Tengo derecho a ser libre y expresar mis deseos.',
+    fears: [
+      'Ser humillado, explotado, controlado o reprimido',
+      'Ridiculizado o menospreciado',
+      'La pérdida de control y el desamparo',
+    ],
     teaser: 'El «no» fue amputado en la infancia. Expresar una necesidad, una opinión o un límite traía castigo. La voz fue suprimida.',
     patterns: [
       {
@@ -389,10 +443,19 @@ const ARCHETYPES: ArchetypeData[] = [
     id: 6,
     key: 'autosuficiente',
     name: 'El Autosuficiente',
-    descriptors: 'Desconectado · Solitario · Inaccesible · Intocable',
+    descriptors: 'Desconectado · Solitario · Inaccesible · Prescindible · Intocable',
+    group: 'Rechazados',
     wound: 'Rechazo',
     armor: 'Autosuficiencia (apagón emocional)',
     snState: 'Dorsal vagal — apagón parasimpático, disociación, aplanamiento afectivo',
+    narrative: 'En algún momento de tu historia necesitaste a alguien — con toda la desesperación de la que es capaz un ser humano — y esa persona no estuvo. Quizá fue un padre que se fue sin explicación, una madre que estaba físicamente presente pero emocionalmente en otro planeta, un cuidador que respondía a tu necesidad con indiferencia.\n\nTu sistema nervioso extrajo la conclusión más solitaria de todas: necesitar duele más que no tener. Y a partir de ahí ejecutó un apagón emocional que hoy confundes con fortaleza.\n\nEres autosuficiente — no porque hayas aprendido a sostenerte sino porque tu biología decidió que depender de alguien era un riesgo que nunca más correría. Eres desconectado — cortaste los cables emocionales. Eres solitario — convertiste la soledad en refugio. Eres intocable — nadie te toca porque tocar implica sentir.\n\nY lo más trágico es que esa autosuficiencia que exhibes como tu mayor virtud es en realidad tu herida más profunda disfrazada de coraza — porque no hay nada más doloroso que un ser humano que necesita desesperadamente conectar y cuyo sistema nervioso le ha prohibido hacerlo para siempre.',
+    centralBelief: 'No tengo derecho a existir. Necesitar duele más que no tener.',
+    healingBelief: 'Tengo derecho a existir y ser aceptado.',
+    fears: [
+      'Ser destruido o aniquilado',
+      'Perder su identidad y autonomía a través de la cercanía emocional',
+      'El contacto como amenaza',
+    ],
     teaser: 'El cuerpo fue anestesiado porque sentir era demasiado peligroso. Necesitar dolía más que no tener. El apagón somático es total.',
     patterns: [
       {
@@ -458,9 +521,17 @@ const ARCHETYPES: ArchetypeData[] = [
     key: 'arrogante',
     name: 'El Arrogante',
     descriptors: 'Soberbio · Crítico · Intelectual · Infranqueable',
+    group: 'Vulnerables',
     wound: 'Impotencia',
     armor: 'Superioridad',
     snState: 'Simpático de dominancia — testosterona y dopamina competitiva',
+    narrative: 'En algún momento de tu historia alguien te hizo sentir pequeño — tan pequeño que tu sistema nervioso juró que nunca más nadie tendría el poder de hacerte sentir así. Quizá fue un padre que te humillaba delante de otros, un entorno escolar donde fuiste el débil, una familia donde tu sensibilidad se ridiculizaba como defecto.\n\nTu sistema nervioso extrajo una conclusión que reconfiguró tu personalidad entera: si estoy arriba nadie me alcanza, y si nadie me alcanza nadie me hiere. Y a partir de ahí construyó una torre de superioridad que hoy el mundo confunde con tu carácter.\n\nEres soberbio — pero esa soberbia no es ego sino escudo. Eres crítico — juzgas a todos porque mientras juzgas nadie te juzga a ti. Eres intelectual — usas la mente como trinchera, racionalizas todo para no sentir nada. Y eres infranqueable — la superioridad funciona como foso y muralla contra la intimidad.\n\nY lo más devastador de este arquetipo es que funciona — la gente te respeta, te teme, te admira desde lejos, y esa distancia que interpretas como victoria es exactamente la condena que tu sistema nervioso diseñó sin consultarte.',
+    centralBelief: 'Debo demostrar superioridad para ser digno y no quedar expuesto como impostor.',
+    healingBelief: 'Soy valioso por quien soy; puedo conectar con mi vulnerabilidad y seguir siendo digno.',
+    fears: [
+      'Sentirse impotente, insignificante o humillado',
+      'Colapso del self grandioso y exposición de su vulnerabilidad real',
+    ],
     teaser: 'Competitivo: no busca perfección por miedo al error sino por necesidad de superioridad. «Si soy el mejor, nadie puede hacerme pequeño.»',
     patterns: [
       {
