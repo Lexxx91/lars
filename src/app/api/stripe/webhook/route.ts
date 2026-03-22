@@ -2,13 +2,12 @@
  * POST /api/stripe/webhook
  *
  * Recibe eventos de Stripe. Cuando checkout.session.completed:
- * — registra la conversión en diagnosticos.funnel (Supabase)
+ * — marca funnel.converted_week1 = true en diagnosticos (Supabase)
+ * — guarda datos del pago (session ID, email, importe, fecha)
  *
- * Para que funcione:
- * 1. Crear webhook en Stripe Dashboard → https://dashboard.stripe.com/webhooks
- *    URL: https://tu-dominio.com/api/stripe/webhook
- *    Evento: checkout.session.completed
- * 2. Copiar el Signing Secret en STRIPE_WEBHOOK_SECRET (.env.local)
+ * Configuración en Stripe Dashboard → Webhooks:
+ *   URL: https://lars.institutoepigeinetico.com/api/stripe/webhook
+ *   Evento: checkout.session.completed
  */
 
 import { NextRequest, NextResponse } from 'next/server'
@@ -18,7 +17,7 @@ import { createAdminClient } from '@/lib/supabase'
 function getStripe(): Stripe | null {
   const key = process.env.STRIPE_SECRET_KEY
   if (!key || key.startsWith('sk_test_xxx')) return null
-  return new Stripe(key, { apiVersion: '2026-02-25.clover' })
+  return new Stripe(key)
 }
 
 export async function POST(req: NextRequest) {
@@ -53,10 +52,23 @@ export async function POST(req: NextRequest) {
     if (hash) {
       try {
         const supabase = createAdminClient()
+
+        // Leer funnel actual para hacer merge (no sobreescribir)
+        const { data } = await supabase
+          .from('diagnosticos')
+          .select('funnel')
+          .eq('hash', hash)
+          .single<{ funnel: Record<string, unknown> }>()
+
+        const currentFunnel = data?.funnel ?? {}
+
         await supabase
           .from('diagnosticos')
           .update({
             funnel: {
+              ...currentFunnel,
+              converted_week1: true,
+              cta_clicked: true,
               paid: true,
               product: 'lars_semana1',
               stripe_session_id: stripeSessionId,
@@ -67,10 +79,9 @@ export async function POST(req: NextRequest) {
           })
           .eq('hash', hash)
 
-        console.log(`[webhook] Conversión registrada — hash: ${hash}, sesión: ${stripeSessionId}`)
+        console.log(`[webhook] Conversión registrada — hash: ${hash}, sesión: ${stripeSessionId}, €${amountTotal / 100}`)
       } catch (err) {
         console.error('[webhook] Supabase update failed:', err)
-        // No devolver error — Stripe reintentará si hay 500
       }
     }
   }
