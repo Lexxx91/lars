@@ -407,7 +407,7 @@ export async function sendDia30Email(to: string, mapHash: string): Promise<void>
 /** Post-pago: Protocolo + Sesión + MNN© */
 export async function sendPostPagoEmail(to: string, mapHash: string): Promise<void> {
   const mapUrl = `${getBaseUrl()}/mapa/${mapHash}`
-  const bookingUrl = process.env.NEXT_PUBLIC_BOOKING_URL ?? '#'
+  const bookingUrl = `${mapUrl}#section-session`
 
   const html = `
 <!DOCTYPE html>

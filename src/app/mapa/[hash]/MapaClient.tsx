@@ -20,6 +20,7 @@ import { useEffect, useState, useRef, useCallback } from 'react'
 import Button from '@/components/ui/Button'
 import Card from '@/components/ui/Card'
 import Badge from '@/components/ui/Badge'
+import { trackEvent } from '@/lib/posthog'
 import type { DimensionResult, DimensionKey } from '@/lib/insights'
 import { getScoreColor, getScoreLabel } from '@/lib/insights'
 import type { EvolutionState, ReevaluationScores, ReevaluationEntry } from '@/lib/map-evolution'
@@ -110,6 +111,7 @@ export default function MapaClient({
   firstStep,
   mostCompromisedKey,
   hash,
+  createdAt,
   lastVisitedAt,
   // Evolution
   evolution,
@@ -175,15 +177,26 @@ export default function MapaClient({
     return () => timers.forEach(clearTimeout)
   }, [])
 
-  // ── Registrar visita ─────────────────────────────────────────────────────
+  // ── Registrar visita + analytics ─────────────────────────────────────────
 
   useEffect(() => {
+    const daysSinceCreation = Math.floor(
+      (Date.now() - new Date(createdAt).getTime()) / 86400000
+    )
+    trackEvent('map_view', { day: daysSinceCreation })
     fetch(`/api/mapa/${hash}/visita`, { method: 'PATCH' }).catch(() => {})
-  }, [hash])
+  }, [hash, createdAt])
 
   // ── Stripe Checkout ──────────────────────────────────────────────────────
 
+  const checkoutDebounceRef = useRef(false)
+
   const handleStripeCheckout = useCallback(async () => {
+    if (checkoutDebounceRef.current) return
+    checkoutDebounceRef.current = true
+    setTimeout(() => { checkoutDebounceRef.current = false }, 2000)
+
+    trackEvent('cta_clicked')
     setCheckoutLoading(true)
     setCheckoutError(null)
     try {
@@ -586,6 +599,7 @@ export default function MapaClient({
               <EvolutionSession
                 isNew={evolution.session.isNew}
                 booked={evolution.session.booked}
+                mapHash={hash}
               />
             </div>
           )}
@@ -946,15 +960,38 @@ export default function MapaClient({
                   </Button>
 
                   {checkoutError && (
-                    <p style={{
-                      fontFamily: 'var(--font-inter)',
-                      fontSize: 'var(--text-body-sm)',
-                      color: 'var(--color-error)',
-                      textAlign: 'center',
+                    <div style={{
+                      padding: 'var(--space-4)',
+                      borderRadius: 'var(--radius-md)',
+                      border: '1px solid rgba(239,68,68,0.3)',
+                      background: 'rgba(239,68,68,0.08)',
                       marginBottom: 'var(--space-3)',
+                      textAlign: 'center',
                     }}>
-                      {checkoutError}
-                    </p>
+                      <p style={{
+                        fontFamily: 'var(--font-inter)',
+                        fontSize: 'var(--text-body-sm)',
+                        color: 'var(--color-text-primary)',
+                        marginBottom: 'var(--space-2)',
+                      }}>
+                        No se pudo conectar con el sistema de pago. Tus datos están a salvo.
+                      </p>
+                      <button
+                        onClick={() => { setCheckoutError(null); handleStripeCheckout() }}
+                        style={{
+                          padding: 'var(--space-2) var(--space-4)',
+                          borderRadius: 'var(--radius-pill)',
+                          border: 'var(--border-subtle)',
+                          background: 'transparent',
+                          color: 'var(--color-accent)',
+                          fontFamily: 'var(--font-inter)',
+                          fontSize: 'var(--text-caption)',
+                          cursor: 'pointer',
+                        }}
+                      >
+                        Intentar de nuevo
+                      </button>
+                    </div>
                   )}
 
                   <p style={{

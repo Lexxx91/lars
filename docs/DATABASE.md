@@ -160,6 +160,65 @@ Cómo obtener la key de Resend:
 
 ---
 
+## Tabla `bookings` (Sistema de reservas)
+
+Reservas de sesiones de 20 minutos con Javier, integradas con Google Calendar.
+
+| Columna | Tipo | Descripción |
+|---------|------|-------------|
+| `id` | uuid (PK) | Identificador interno |
+| `diagnostico_id` | uuid (FK → diagnosticos.id) | Referencia al diagnóstico |
+| `email` | text NOT NULL | Email del usuario |
+| `map_hash` | text NOT NULL | Hash del mapa (para link directo) |
+| `slot_start` | timestamptz NOT NULL | Inicio del slot (UTC) |
+| `slot_end` | timestamptz NOT NULL | Fin del slot (+20 min) |
+| `status` | text NOT NULL DEFAULT 'confirmed' | confirmed / cancelled / completed |
+| `google_event_id` | text | ID del evento en Google Calendar |
+| `google_meet_url` | text | URL de la videollamada |
+| `reminder_sent` | boolean DEFAULT false | Si se envió el recordatorio 24h |
+| `created_at` | timestamptz DEFAULT NOW() | Cuándo se creó la reserva |
+| `cancelled_at` | timestamptz | Cuándo se canceló (si aplica) |
+
+**Índice único parcial:** Solo 1 booking confirmado por `slot_start` (evita doble reserva).
+
+**RLS:** Activo. Solo service_role_key puede acceder.
+
+---
+
+## Tabla `availability_config` (Configuración de disponibilidad)
+
+Reglas de disponibilidad de Javier. Dos tipos de registros:
+- **Recurrente:** día de la semana + horario (ej: "Lunes 10:00-13:00")
+- **Bloqueo:** fecha específica bloqueada (ej: vacaciones)
+
+| Columna | Tipo | Descripción |
+|---------|------|-------------|
+| `id` | uuid (PK) | Identificador interno |
+| `day_of_week` | int | 0=Dom, 1=Lun ... 6=Sáb. NULL para bloqueos |
+| `start_time` | time | Hora de inicio (ej: '10:00') |
+| `end_time` | time | Hora de fin (ej: '13:00') |
+| `specific_date` | date | Fecha a bloquear. NULL para reglas recurrentes |
+| `is_blocked` | boolean DEFAULT false | true = bloquear esta fecha |
+| `timezone` | text DEFAULT 'Europe/Madrid' | Zona horaria de referencia |
+| `created_at` | timestamptz DEFAULT NOW() | Cuándo se creó |
+
+**RLS:** Activo. Solo service_role_key puede acceder.
+
+---
+
+## SQL de migración — Bookings (Ejecutar en Supabase)
+
+Ve a **Supabase Dashboard → SQL Editor** y ejecuta el contenido de:
+`supabase/migrations/002_bookings.sql`
+
+**Para revertir:**
+```sql
+DROP TABLE IF EXISTS bookings;
+DROP TABLE IF EXISTS availability_config;
+```
+
+---
+
 ## Seguridad
 
 - Los mapas vivos son privados por diseño.
@@ -171,4 +230,20 @@ Cómo obtener la key de Resend:
 
 ---
 
-*L.A.R.S.© · Database Schema · Fase 4 · Marzo 2026*
+## Variables de entorno nuevas (Google Calendar)
+
+```
+GOOGLE_SERVICE_ACCOUNT_KEY={"type":"service_account","project_id":"...","private_key":"...","client_email":"lars-booking@tu-proyecto.iam.gserviceaccount.com",...}
+GOOGLE_CALENDAR_ID=javier@institutoepigenetico.com
+```
+
+Cómo configurar:
+1. Ir a **Google Cloud Console** → crear proyecto → habilitar **Calendar API**
+2. Crear una **cuenta de servicio** → descargar JSON
+3. En el calendario de Javier en Google Calendar → Compartir con el email de la cuenta de servicio (permisos: "Hacer cambios en eventos")
+4. Copiar el JSON como variable de entorno `GOOGLE_SERVICE_ACCOUNT_KEY` en Vercel
+5. Poner el email del calendario de Javier como `GOOGLE_CALENDAR_ID`
+
+---
+
+*L.A.R.S.© · Database Schema · Marzo 2026*

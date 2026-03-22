@@ -3,21 +3,38 @@
 /**
  * EvolutionSession.tsx — Sección Día 10: Sesión con Javier
  *
- * Placeholder: botón con link configurable (env var NEXT_PUBLIC_BOOKING_URL).
- * Se reemplazará por sistema de reservas propio integrado con Google Calendar.
+ * Integra el BookingWidget para reserva inline de sesiones
+ * y BookingConfirmed para mostrar el estado post-reserva.
  */
 
+import { useState } from 'react'
 import Badge from '@/components/ui/Badge'
-import Button from '@/components/ui/Button'
+import BookingWidget from '@/components/booking/BookingWidget'
+import BookingConfirmed from '@/components/booking/BookingConfirmed'
 
 interface Props {
   isNew: boolean
   booked: boolean
+  mapHash: string
+  bookingDetails?: {
+    slotStart: string
+    meetUrl: string | null
+  } | null
 }
 
-export default function EvolutionSession({ isNew, booked }: Props) {
-  const bookingUrl =
-    process.env.NEXT_PUBLIC_BOOKING_URL ?? '#'
+export default function EvolutionSession({ isNew, booked: initialBooked, mapHash, bookingDetails }: Props) {
+  const [booked, setBooked] = useState(initialBooked)
+  const [currentBooking, setCurrentBooking] = useState(bookingDetails ?? null)
+
+  function handleBooked(booking: { slotStart: string; meetUrl: string | null }) {
+    setCurrentBooking(booking)
+    setBooked(true)
+  }
+
+  function handleCancelled() {
+    setCurrentBooking(null)
+    setBooked(false)
+  }
 
   return (
     <div
@@ -57,33 +74,24 @@ export default function EvolutionSession({ isNew, booked }: Props) {
           fontSize: 'var(--text-body-sm)',
           lineHeight: 'var(--lh-body)',
           color: 'var(--color-text-secondary)',
-          marginBottom: 'var(--space-5)',
+          marginBottom: booked ? 0 : 'var(--space-2)',
         }}
       >
         20 minutos. Sin compromiso. Ya tiene tus datos — no repites nada.
       </p>
 
-      {booked ? (
-        <p
-          style={{
-            fontFamily: 'var(--font-inter)',
-            fontSize: 'var(--text-body-sm)',
-            color: 'var(--color-success)',
-          }}
-        >
-          ✓ Sesión agendada
-        </p>
+      {booked && currentBooking ? (
+        <BookingConfirmed
+          slotStart={currentBooking.slotStart}
+          meetUrl={currentBooking.meetUrl}
+          mapHash={mapHash}
+          onCancelled={handleCancelled}
+        />
       ) : (
-        <a
-          href={bookingUrl}
-          target="_blank"
-          rel="noopener noreferrer"
-          style={{ textDecoration: 'none' }}
-        >
-          <Button variant="secondary" size="small">
-            Agendar sesión gratuita
-          </Button>
-        </a>
+        <BookingWidget
+          mapHash={mapHash}
+          onBooked={handleBooked}
+        />
       )}
     </div>
   )

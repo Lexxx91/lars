@@ -29,6 +29,20 @@ export default function NervousSystemSVG() {
           .nerve-group {
             animation: nervePulse 3s ease-in-out infinite;
           }
+          .nerve-group path:nth-child(1) { animation: nervePulse 3s ease-in-out 0s infinite; }
+          .nerve-group path:nth-child(2) { animation: nervePulse 3s ease-in-out 0.2s infinite; }
+          .nerve-group path:nth-child(3) { animation: nervePulse 3s ease-in-out 0.4s infinite; }
+          .nerve-group path:nth-child(4) { animation: nervePulse 3s ease-in-out 0.6s infinite; }
+          .nerve-group path:nth-child(5) { animation: nervePulse 3s ease-in-out 0.8s infinite; }
+          .nerve-group path:nth-child(6) { animation: nervePulse 3s ease-in-out 1.0s infinite; }
+          .nerve-group path:nth-child(7) { animation: nervePulse 3s ease-in-out 0.3s infinite; }
+          .nerve-group path:nth-child(8) { animation: nervePulse 3s ease-in-out 0.5s infinite; }
+          .nerve-group path:nth-child(9) { animation: nervePulse 3s ease-in-out 0.7s infinite; }
+          .nerve-group path:nth-child(10) { animation: nervePulse 3s ease-in-out 0.9s infinite; }
+          .nerve-group path:nth-child(11) { animation: nervePulse 3s ease-in-out 1.1s infinite; }
+          .nerve-group path:nth-child(12) { animation: nervePulse 3s ease-in-out 0.1s infinite; }
+          .nerve-group path:nth-child(13) { animation: nervePulse 3s ease-in-out 0.35s infinite; }
+          .nerve-group path:nth-child(14) { animation: nervePulse 3s ease-in-out 0.65s infinite; }
         }
         .nerve-group {
           opacity: 0.28;
