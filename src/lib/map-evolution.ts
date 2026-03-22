@@ -151,7 +151,7 @@ export function computeEvolutionState(
   const allReevaluations = mapEvolution.reevaluations ?? []
 
   // Determinar qué reevaluación es la "activa" (la más reciente pendiente)
-  const reevalMilestones = [UNLOCK_DAYS.reevaluation] // día 30
+  const reevalMilestones: number[] = [UNLOCK_DAYS.reevaluation] // día 30
   for (
     let q = UNLOCK_DAYS.quarterly;
     q <= daysSinceCreation;
