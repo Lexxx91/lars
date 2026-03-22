@@ -12,7 +12,7 @@
  * Protegido con ADMIN_SECRET.
  */
 
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect, useCallback, Fragment } from 'react'
 import Button from '@/components/ui/Button'
 import Card from '@/components/ui/Card'
 import Input from '@/components/ui/Input'
@@ -27,15 +27,47 @@ const DAYS_OF_WEEK = [
   { value: 5, label: 'Vie' },
 ]
 
-const TIME_BLOCKS = [
-  { start: '09:00', end: '10:00', label: '09–10' },
-  { start: '10:00', end: '11:00', label: '10–11' },
-  { start: '11:00', end: '12:00', label: '11–12' },
-  { start: '12:00', end: '13:00', label: '12–13' },
-  { start: '16:00', end: '17:00', label: '16–17' },
-  { start: '17:00', end: '18:00', label: '17–18' },
-  { start: '18:00', end: '19:00', label: '18–19' },
-]
+// Genera bloques de 20 min: mañana 09:00–13:00, tarde 16:00–19:00
+function generateTimeBlocks() {
+  const blocks: { start: string; end: string; label: string; section: 'morning' | 'afternoon' }[] = []
+  const pad = (n: number) => n.toString().padStart(2, '0')
+
+  // Mañana: 09:00 a 12:40 (último slot que cabe antes de las 13:00)
+  for (let h = 9; h < 13; h++) {
+    for (let m = 0; m < 60; m += 20) {
+      const endM = m + 20
+      const endH = endM >= 60 ? h + 1 : h
+      const endMin = endM >= 60 ? endM - 60 : endM
+      if (endH > 13 || (endH === 13 && endMin > 0 && m + 20 > 60)) continue
+      blocks.push({
+        start: `${pad(h)}:${pad(m)}`,
+        end: `${pad(endH)}:${pad(endMin)}`,
+        label: `${pad(h)}:${pad(m)}`,
+        section: 'morning',
+      })
+    }
+  }
+
+  // Tarde: 16:00 a 18:40 (último slot que cabe antes de las 19:00)
+  for (let h = 16; h < 19; h++) {
+    for (let m = 0; m < 60; m += 20) {
+      const endM = m + 20
+      const endH = endM >= 60 ? h + 1 : h
+      const endMin = endM >= 60 ? endM - 60 : endM
+      if (endH > 19) continue
+      blocks.push({
+        start: `${pad(h)}:${pad(m)}`,
+        end: `${pad(endH)}:${pad(endMin)}`,
+        label: `${pad(h)}:${pad(m)}`,
+        section: 'afternoon',
+      })
+    }
+  }
+
+  return blocks
+}
+
+const TIME_BLOCKS = generateTimeBlocks()
 
 interface AvailabilityRule {
   id: string
@@ -133,19 +165,20 @@ export default function DisponibilidadPage() {
   async function toggleSlot(dayOfWeek: number, startTime: string, endTime: string) {
     const existingId = getRuleId(dayOfWeek, startTime, endTime)
     try {
+      const dayLabel = DAYS_OF_WEEK.find(d => d.value === dayOfWeek)?.label ?? ''
       if (existingId) {
         await fetch(`/api/admin/disponibilidad?id=${existingId}`, {
           method: 'DELETE',
           headers: { 'x-admin-secret': secret },
         })
-        showSuccess('Horario eliminado')
+        showSuccess(`${dayLabel} ${startTime}–${endTime} desactivado`)
       } else {
         await fetch('/api/admin/disponibilidad', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json', 'x-admin-secret': secret },
           body: JSON.stringify({ dayOfWeek, startTime, endTime }),
         })
-        showSuccess('Horario añadido')
+        showSuccess(`${dayLabel} ${startTime}–${endTime} activado`)
       }
       await fetchData()
     } catch {
@@ -282,7 +315,7 @@ export default function DisponibilidadPage() {
           lineHeight: 'var(--lh-body)',
         }}>
           Configura tus horarios semanales y bloquea fechas puntuales.
-          Los usuarios verán slots de 20 minutos dentro de los horarios que actives.
+          Cada celda = 1 slot de 20 min. Pulsa para activar/desactivar.
         </p>
       </div>
 
@@ -351,20 +384,20 @@ export default function DisponibilidadPage() {
               <tr>
                 <th style={{
                   fontFamily: 'var(--font-inter-tight)',
-                  fontSize: 'var(--text-caption)',
+                  fontSize: '11px',
                   fontWeight: 500,
                   color: 'var(--color-text-tertiary)',
-                  padding: 'var(--space-2)',
+                  padding: 'var(--space-1)',
                   textAlign: 'center',
-                  width: '70px',
+                  width: '52px',
                 }} />
                 {DAYS_OF_WEEK.map((day) => (
                   <th key={day.value} style={{
                     fontFamily: 'var(--font-inter-tight)',
-                    fontSize: 'var(--text-caption)',
-                    fontWeight: 500,
+                    fontSize: '11px',
+                    fontWeight: 600,
                     color: 'var(--color-text-secondary)',
-                    padding: 'var(--space-2)',
+                    padding: 'var(--space-1)',
                     textAlign: 'center',
                   }}>
                     {day.label}
@@ -373,53 +406,101 @@ export default function DisponibilidadPage() {
               </tr>
             </thead>
             <tbody>
-              {TIME_BLOCKS.map((block) => (
-                <tr key={block.start}>
-                  <td style={{
-                    fontFamily: 'var(--font-inter-tight)',
-                    fontSize: 'var(--text-caption)',
-                    color: 'var(--color-text-tertiary)',
-                    padding: 'var(--space-1) var(--space-2)',
-                    whiteSpace: 'nowrap',
-                    textAlign: 'right',
-                  }}>
-                    {block.label}
-                  </td>
-                  {DAYS_OF_WEEK.map((day) => {
-                    const active = isSlotActive(day.value, block.start, block.end)
-                    return (
-                      <td key={day.value} style={{ padding: '3px' }}>
-                        <button
-                          onClick={() => toggleSlot(day.value, block.start, block.end)}
-                          disabled={loading}
+              {TIME_BLOCKS.map((block, idx) => {
+                // Separador visual entre mañana y tarde
+                const prevBlock = idx > 0 ? TIME_BLOCKS[idx - 1] : null
+                const showSeparator = prevBlock && prevBlock.section === 'morning' && block.section === 'afternoon'
+
+                return (
+                  <Fragment key={block.start}>
+                    {showSeparator && (
+                      <tr>
+                        <td
+                          colSpan={DAYS_OF_WEEK.length + 1}
                           style={{
-                            width: '100%',
-                            height: '38px',
-                            borderRadius: 'var(--radius-sm)',
-                            border: active
-                              ? '1px solid rgba(74,222,128,0.3)'
-                              : 'var(--border-subtle)',
-                            backgroundColor: active
-                              ? 'rgba(74,222,128,0.12)'
-                              : 'var(--color-bg-tertiary)',
-                            color: active ? 'var(--color-success)' : 'var(--color-text-tertiary)',
-                            cursor: loading ? 'wait' : 'pointer',
-                            fontFamily: 'var(--font-inter-tight)',
-                            fontSize: 'var(--text-caption)',
-                            fontWeight: 500,
-                            transition: 'all var(--transition-base)',
+                            padding: 'var(--space-2) 0',
+                            textAlign: 'center',
                           }}
                         >
-                          {active ? '✓' : '–'}
-                        </button>
+                          <div style={{
+                            borderTop: '1px dashed rgba(255,255,255,0.08)',
+                            fontSize: '10px',
+                            fontFamily: 'var(--font-inter-tight)',
+                            color: 'var(--color-text-tertiary)',
+                            paddingTop: 'var(--space-1)',
+                            opacity: 0.6,
+                          }}>
+                            Pausa 13:00–16:00
+                          </div>
+                        </td>
+                      </tr>
+                    )}
+                    <tr key={block.start}>
+                      <td style={{
+                        fontFamily: 'var(--font-inter-tight)',
+                        fontSize: '11px',
+                        color: 'var(--color-text-tertiary)',
+                        padding: '2px 4px',
+                        whiteSpace: 'nowrap',
+                        textAlign: 'right',
+                      }}>
+                        {block.label}
                       </td>
-                    )
-                  })}
-                </tr>
-              ))}
+                      {DAYS_OF_WEEK.map((day) => {
+                        const active = isSlotActive(day.value, block.start, block.end)
+                        return (
+                          <td key={day.value} style={{ padding: '2px' }}>
+                            <button
+                              onClick={() => toggleSlot(day.value, block.start, block.end)}
+                              disabled={loading}
+                              style={{
+                                width: '100%',
+                                height: '30px',
+                                borderRadius: 'var(--radius-sm)',
+                                border: active
+                                  ? '1px solid rgba(74,222,128,0.3)'
+                                  : '1px solid rgba(255,255,255,0.06)',
+                                backgroundColor: active
+                                  ? 'rgba(74,222,128,0.15)'
+                                  : 'rgba(255,255,255,0.03)',
+                                color: active ? 'var(--color-success)' : 'rgba(255,255,255,0.15)',
+                                cursor: loading ? 'wait' : 'pointer',
+                                fontFamily: 'var(--font-inter-tight)',
+                                fontSize: '10px',
+                                fontWeight: 500,
+                                transition: 'all var(--transition-base)',
+                              }}
+                            >
+                              {active ? '✓' : ''}
+                            </button>
+                          </td>
+                        )
+                      })}
+                    </tr>
+                  </Fragment>
+                )
+              })}
             </tbody>
           </table>
         </div>
+
+        {/* Resumen de slots activos */}
+        {(() => {
+          const activeCount = TIME_BLOCKS.reduce((count, block) =>
+            count + DAYS_OF_WEEK.filter(day => isSlotActive(day.value, block.start, block.end)).length, 0
+          )
+          return activeCount > 0 ? (
+            <p style={{
+              fontFamily: 'var(--font-inter)',
+              fontSize: '12px',
+              color: 'var(--color-text-tertiary)',
+              marginTop: 'var(--space-3)',
+              opacity: 0.7,
+            }}>
+              {activeCount} slot{activeCount !== 1 ? 's' : ''} activo{activeCount !== 1 ? 's' : ''} de 20 min
+            </p>
+          ) : null
+        })()}
       </section>
 
       {/* ═══ Sección 2: Bloquear fechas ═══════════════════════════════════ */}
