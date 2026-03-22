@@ -19,6 +19,7 @@
 import { useEffect, useState, useRef, useCallback } from 'react'
 import Button from '@/components/ui/Button'
 import Card from '@/components/ui/Card'
+import Badge from '@/components/ui/Badge'
 import type { DimensionResult, DimensionKey } from '@/lib/insights'
 import { getScoreColor, getScoreLabel } from '@/lib/insights'
 import type { EvolutionState, ReevaluationScores, ReevaluationEntry } from '@/lib/map-evolution'
@@ -129,6 +130,8 @@ export default function MapaClient({
   const [visibleDims, setVisibleDims] = useState(-1)
   const [showPriority, setShowPriority] = useState(false)
   const [showFirstStep, setShowFirstStep] = useState(false)
+  const [showTimeline, setShowTimeline] = useState(false)
+  const [showPrice, setShowPrice] = useState(false)
   const [showCTA, setShowCTA] = useState(false)
   const [detailOpen, setDetailOpen] = useState(false)
   const [shareToast, setShareToast] = useState<string | null>(null)
@@ -165,7 +168,9 @@ export default function MapaClient({
       setTimeout(() => setVisibleDims(4), 6000),
       setTimeout(() => setShowPriority(true), 7000),
       setTimeout(() => setShowFirstStep(true), 8000),
-      setTimeout(() => setShowCTA(true), 9500),
+      setTimeout(() => setShowTimeline(true), 9500),
+      setTimeout(() => setShowPrice(true), 10200),
+      setTimeout(() => setShowCTA(true), 11000),
     ]
     return () => timers.forEach(clearTimeout)
   }, [])
@@ -393,6 +398,24 @@ export default function MapaClient({
           z-index: 100;
           animation: mapaFadeUp 300ms ease both;
           white-space: nowrap; max-width: 90vw;
+        }
+        .mapa-timeline-phase {
+          opacity: 0;
+          animation: mapaFadeUp 400ms var(--ease-out-expo, cubic-bezier(0.16,1,0.3,1)) both;
+        }
+        .mapa-timeline-phase:nth-child(1) { animation-delay: 0ms; }
+        .mapa-timeline-phase:nth-child(2) { animation-delay: 150ms; }
+        .mapa-timeline-phase:nth-child(3) { animation-delay: 300ms; }
+        .mapa-timeline-node-mobile { display: flex; }
+        .mapa-timeline-line-desktop { display: none; }
+        @media (min-width: 768px) {
+          .mapa-timeline-grid {
+            display: grid !important;
+            grid-template-columns: 1fr 1fr 1fr !important;
+            gap: var(--space-6) !important;
+          }
+          .mapa-timeline-node-mobile { display: none !important; }
+          .mapa-timeline-line-desktop { display: flex !important; }
         }
       `}</style>
 
@@ -648,6 +671,188 @@ export default function MapaClient({
             </div>
           )}
 
+          {/* ── BLOQUE A — Timeline de 3 fases ── */}
+          {showTimeline && (
+            <div className="mapa-fade-up" style={{ marginBottom: 'var(--space-12)' }}>
+              <h3 style={{
+                fontFamily: 'var(--font-cormorant)',
+                fontSize: 'var(--text-h3)',
+                lineHeight: 'var(--lh-h3)',
+                fontWeight: 500,
+                color: 'var(--color-text-primary)',
+                marginBottom: 'var(--space-8)',
+              }}>
+                Tu regulación es un proceso de 12 semanas. Tu primer paso son los próximos 7 días.
+              </h3>
+
+              <div
+                className="mapa-timeline-grid"
+                style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-5)' }}
+              >
+                {/* Fase 1 — El Despertar (activa) */}
+                <div className="mapa-timeline-phase" style={{ display: 'flex', gap: 'var(--space-4)' }}>
+                  <div className="mapa-timeline-node-mobile" style={{
+                    flexDirection: 'column', alignItems: 'center', flexShrink: 0, width: '24px',
+                  }}>
+                    <div style={{
+                      width: 12, height: 12, borderRadius: '50%',
+                      backgroundColor: 'var(--color-success)',
+                      marginTop: 'var(--space-6)', flexShrink: 0,
+                    }} />
+                    <div style={{ flex: 1, width: 2, backgroundColor: 'rgba(74,222,128,0.18)', marginTop: 4 }} />
+                  </div>
+                  <Card style={{
+                    border: '1px solid rgba(74,222,128,0.18)',
+                    background: 'rgba(74,222,128,0.04)',
+                    flex: 1,
+                  }}>
+                    <div style={{ marginBottom: 'var(--space-3)' }}>
+                      <Badge status="disponible">AQUÍ EMPIEZAS</Badge>
+                    </div>
+                    <p style={{
+                      fontFamily: 'var(--font-inter)',
+                      fontSize: 'var(--text-body-lg, 1.125rem)',
+                      fontWeight: 600,
+                      color: 'var(--color-text-primary)',
+                      marginBottom: 'var(--space-1)',
+                    }}>El Despertar</p>
+                    <p style={{
+                      fontFamily: 'var(--font-inter)',
+                      fontSize: 'var(--text-caption)',
+                      color: 'var(--color-text-secondary)',
+                      marginBottom: 'var(--space-3)',
+                    }}>Semanas 1–4 · Reconocer y estabilizar</p>
+                    <p style={{
+                      fontFamily: 'var(--font-inter)',
+                      fontSize: 'var(--text-body-sm)',
+                      lineHeight: 'var(--lh-body-sm)',
+                      color: 'var(--color-text-tertiary)',
+                    }}>
+                      Entenderás qué le pasa a tu biología: neurotransmisores, función hormonal, inflamación. Restaurarás tu sueño con un protocolo diseñado por un médico. En la semana 4, tu primer balance formal confirmará lo que tu cuerpo ya empieza a notar.
+                    </p>
+                  </Card>
+                </div>
+
+                {/* Fase 2 — La Metamorfosis (atenuada) */}
+                <div className="mapa-timeline-phase" style={{ display: 'flex', gap: 'var(--space-4)', opacity: 0.5 }}>
+                  <div className="mapa-timeline-node-mobile" style={{
+                    flexDirection: 'column', alignItems: 'center', flexShrink: 0, width: '24px',
+                  }}>
+                    <div style={{
+                      width: 12, height: 12, borderRadius: '50%',
+                      border: '2px solid var(--color-text-tertiary)',
+                      marginTop: 'var(--space-6)', flexShrink: 0,
+                    }} />
+                    <div style={{ flex: 1, width: 2, backgroundColor: 'rgba(255,255,255,0.06)', marginTop: 4 }} />
+                  </div>
+                  <Card style={{ flex: 1 }}>
+                    <p style={{
+                      fontFamily: 'var(--font-inter)',
+                      fontSize: 'var(--text-body-lg, 1.125rem)',
+                      fontWeight: 600,
+                      color: 'var(--color-text-secondary)',
+                      marginBottom: 'var(--space-1)',
+                    }}>La Metamorfosis</p>
+                    <p style={{
+                      fontFamily: 'var(--font-inter)',
+                      fontSize: 'var(--text-caption)',
+                      color: 'var(--color-text-tertiary)',
+                      marginBottom: 'var(--space-3)',
+                    }}>Semanas 5–8 · Activar y procesar</p>
+                    <p style={{
+                      fontFamily: 'var(--font-inter)',
+                      fontSize: 'var(--text-body-sm)',
+                      lineHeight: 'var(--lh-body-sm)',
+                      color: 'var(--color-text-tertiary)',
+                    }}>
+                      Desmontarás las creencias y patrones que sostienen el ciclo. Conocerás las partes internas que dirigen tus decisiones sin que lo sepas — el perfeccionista, el controlador, el crítico — y aprenderás a liderarlas. Lo que el burnout congeló empieza a procesarse.
+                    </p>
+                  </Card>
+                </div>
+
+                {/* Fase 3 — Volar Alto (atenuada) */}
+                <div className="mapa-timeline-phase" style={{ display: 'flex', gap: 'var(--space-4)', opacity: 0.5 }}>
+                  <div className="mapa-timeline-node-mobile" style={{
+                    flexDirection: 'column', alignItems: 'center', flexShrink: 0, width: '24px',
+                  }}>
+                    <div style={{
+                      width: 12, height: 12, borderRadius: '50%',
+                      border: '2px solid var(--color-text-tertiary)',
+                      marginTop: 'var(--space-6)', flexShrink: 0,
+                    }} />
+                  </div>
+                  <Card style={{ flex: 1 }}>
+                    <p style={{
+                      fontFamily: 'var(--font-inter)',
+                      fontSize: 'var(--text-body-lg, 1.125rem)',
+                      fontWeight: 600,
+                      color: 'var(--color-text-secondary)',
+                      marginBottom: 'var(--space-1)',
+                    }}>Volar Alto</p>
+                    <p style={{
+                      fontFamily: 'var(--font-inter)',
+                      fontSize: 'var(--text-caption)',
+                      color: 'var(--color-text-tertiary)',
+                      marginBottom: 'var(--space-3)',
+                    }}>Semanas 9–12 · Conectar y reconstruir</p>
+                    <p style={{
+                      fontFamily: 'var(--font-inter)',
+                      fontSize: 'var(--text-body-sm)',
+                      lineHeight: 'var(--lh-body-sm)',
+                      color: 'var(--color-text-tertiary)',
+                    }}>
+                      Repararás los vínculos que el burnout dañó, pondrás límites desde tus valores y diseñarás tu nueva arquitectura vital. Un sistema de alertas tempranas para que el burnout no vuelva.
+                    </p>
+                  </Card>
+                </div>
+              </div>
+
+              {/* Línea horizontal desktop */}
+              <div className="mapa-timeline-line-desktop" style={{
+                alignItems: 'center', justifyContent: 'center',
+                gap: 0, marginTop: 'var(--space-4)', padding: '0 var(--space-6)',
+              }}>
+                <div style={{
+                  width: 12, height: 12, borderRadius: '50%',
+                  backgroundColor: 'var(--color-success)', flexShrink: 0,
+                }} />
+                <div style={{ flex: 1, height: 2, backgroundColor: 'rgba(74,222,128,0.18)' }} />
+                <div style={{
+                  width: 12, height: 12, borderRadius: '50%',
+                  border: '2px solid var(--color-text-tertiary)', flexShrink: 0, opacity: 0.5,
+                }} />
+                <div style={{ flex: 1, height: 2, backgroundColor: 'rgba(255,255,255,0.06)' }} />
+                <div style={{
+                  width: 12, height: 12, borderRadius: '50%',
+                  border: '2px solid var(--color-text-tertiary)', flexShrink: 0, opacity: 0.5,
+                }} />
+              </div>
+            </div>
+          )}
+
+          {/* ── BLOQUE B — Reencuadre de precio ── */}
+          {showPrice && (
+            <div className="mapa-fade-up" style={{ marginBottom: 'var(--space-12)' }}>
+              <p style={{
+                fontFamily: 'var(--font-inter)',
+                fontSize: 'var(--text-body)',
+                lineHeight: 'var(--lh-body)',
+                color: 'var(--color-text-primary)',
+                marginBottom: 'var(--space-4)',
+              }}>
+                El programa completo tiene tres niveles de acompañamiento desde 2.500€, según la profundidad que necesites. La elección del plan viene después — cuando hayas comprobado con tu propio cuerpo que esto funciona.
+              </p>
+              <p style={{
+                fontFamily: 'var(--font-inter)',
+                fontSize: 'var(--text-body-sm)',
+                lineHeight: 'var(--lh-body-sm)',
+                color: 'var(--color-text-secondary)',
+              }}>
+                Por eso existe la Semana 1.
+              </p>
+            </div>
+          )}
+
           {/* ── CTA + URGENCIA + COMPARTIR ── */}
           {showCTA && (
             <div className="mapa-fade-up">
@@ -832,10 +1037,10 @@ export default function MapaClient({
                     background: 'var(--color-bg-secondary)',
                   }}>
                     {[
-                      ['Protocolo de Sueño de Emergencia', 'Diseñado por el Dr. Carlos Alvear. Resultados en 72 horas.'],
-                      ['Sesión 1:1 con Javier A. Martín Ramos', 'Director del Instituto Epigenético. Ya tiene tu mapa.'],
-                      ['MNN© — Mapa de Niveles de Neurotransmisores', 'Tu primer análisis bioquímico real.'],
-                      ['Garantía total', '7 días. Si no mejora tu sueño, devolución íntegra.'],
+                      ['Protocolo de Sueño de Emergencia', 'Diseñado por el Dr. Carlos Alvear. Un plan concreto para ganar hasta una hora más de sueño al día. Resultados en 72 horas.'],
+                      ['Sesión 1:1 con Javier A. Martín Ramos', 'Director del Instituto Epigenético. Ya tiene tu mapa — la sesión arranca desde tus datos, no desde cero.'],
+                      ['Mapa de Niveles de Neurotransmisores (MNN©)', 'Tu primer análisis bioquímico real: qué sustancias produce tu cerebro, cuáles le faltan y qué significa eso para tu sueño, tu energía y tu claridad mental.'],
+                      ['Garantía total', '7 días. Si no notas mejora en tu sueño, devolución íntegra. Sin preguntas. Sin formularios.'],
                     ].map(([title, desc]) => (
                       <div key={title} style={{ marginTop: 'var(--space-4)' }}>
                         <p style={{
