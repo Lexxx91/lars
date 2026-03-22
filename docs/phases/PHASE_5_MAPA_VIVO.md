@@ -72,7 +72,7 @@ Textos caption en cada dimensión que revelan profundidad no accesible sin progr
 **Botón pill verde large:** "Empieza la Semana 1"
 
 **Post-CTA (body-sm, tertiary):**
-> "97€ · Protocolo de Sueño de Emergencia + Sesión 1:1 con Javier + MNN© · Garantía de 7 días"
+> "97€ · Protocolo de Sueño de Emergencia + Sesión 1:1 con Javier + Mapa de Niveles de Neurotransmisores (MNN©) · Garantía de 7 días"
 
 **Garantía (caption, tertiary):**
 > "Si tu sueño no mejora en 7 días, te devolvemos los 97€. Sin preguntas."

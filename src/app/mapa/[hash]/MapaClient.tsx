@@ -791,7 +791,7 @@ export default function MapaClient({
                     lineHeight: 'var(--lh-body-sm)',
                     marginBottom: 'var(--space-2)',
                   }}>
-                    97€ · Protocolo de Sueño de Emergencia + Sesión 1:1 con Javier + MNN© · Garantía de 7 días
+                    97€ · Protocolo de Sueño de Emergencia + Sesión 1:1 con Javier + Mapa de Niveles de Neurotransmisores (MNN©) · Garantía de 7 días
                   </p>
                   <p style={{
                     fontFamily: 'var(--font-inter)',
