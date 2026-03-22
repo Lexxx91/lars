@@ -206,3 +206,197 @@ export async function sendDia0Email({
     html,
   })
 }
+
+// ─── EMAILS DE EVOLUCIÓN (Día 3-90) ──────────────────────────────────────────
+
+/**
+ * Template base dark minimal para todos los emails de evolución.
+ * Solo cambia: asunto, contenido, texto del botón.
+ */
+function buildEvolutionEmail(params: {
+  content: string
+  buttonText: string
+  mapUrl: string
+}): string {
+  return `
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+</head>
+<body style="
+  margin: 0; padding: 0;
+  background-color: #0B0F0E;
+  font-family: -apple-system, 'Helvetica Neue', Arial, sans-serif;
+  color: #E8EAE9;
+">
+  <table width="100%" cellpadding="0" cellspacing="0" style="max-width: 560px; margin: 0 auto; padding: 48px 24px;">
+    <tr><td>
+      ${params.content}
+      <table cellpadding="0" cellspacing="0" style="margin: 32px 0;">
+        <tr><td style="background: #4ADE80; border-radius: 100px; padding: 16px 32px;">
+          <a href="${params.mapUrl}" style="color: #0B0F0E; font-size: 15px; font-weight: 500; text-decoration: none; display: block; white-space: nowrap;">
+            ${params.buttonText}
+          </a>
+        </td></tr>
+      </table>
+      <div style="height: 1px; background: rgba(255,255,255,0.08); margin-bottom: 24px;"></div>
+      <p style="font-size: 13px; color: #506258; line-height: 1.6; margin: 0;">
+        Este mapa es tuyo. Confidencial. Solo tú puedes verlo.
+      </p>
+    </td></tr>
+  </table>
+</body>
+</html>`
+}
+
+/** Día 3: Arquetipo del Sistema Nervioso */
+export async function sendDia3Email(to: string, mapHash: string): Promise<void> {
+  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL ?? 'https://lars.institutoepigeinetico.com'
+  const mapUrl = `${baseUrl}/mapa/${mapHash}`
+
+  const html = buildEvolutionEmail({
+    content: `
+      <p style="font-size: 14px; color: #E8EAE9; line-height: 1.6; margin: 0 0 16px 0;">
+        Tu arquetipo del sistema nervioso está disponible. Es la pieza que faltaba para entender por qué tu cuerpo responde como responde.
+      </p>`,
+    buttonText: 'Ver mi mapa',
+    mapUrl,
+  })
+
+  await getResend().emails.send({
+    from: getFromEmail(), to,
+    subject: 'Hay algo nuevo en tu mapa de regulación',
+    html,
+  })
+}
+
+/** Día 7: Insight de inteligencia colectiva */
+export async function sendDia7Email(to: string, mapHash: string): Promise<void> {
+  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL ?? 'https://lars.institutoepigeinetico.com'
+  const mapUrl = `${baseUrl}/mapa/${mapHash}`
+
+  const html = buildEvolutionEmail({
+    content: `
+      <p style="font-size: 14px; color: #E8EAE9; line-height: 1.6; margin: 0 0 16px 0;">
+        Nuevo insight sobre tu dimensión más comprometida. Un dato que no existía cuando hiciste tu diagnóstico.
+      </p>`,
+    buttonText: 'Ver mi mapa',
+    mapUrl,
+  })
+
+  await getResend().emails.send({
+    from: getFromEmail(), to,
+    subject: 'Tu mapa se ha actualizado',
+    html,
+  })
+}
+
+/** Día 10: Sesión con Javier */
+export async function sendDia10Email(to: string, mapHash: string): Promise<void> {
+  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL ?? 'https://lars.institutoepigeinetico.com'
+  const mapUrl = `${baseUrl}/mapa/${mapHash}`
+
+  const html = buildEvolutionEmail({
+    content: `
+      <p style="font-size: 14px; color: #E8EAE9; line-height: 1.6; margin: 0 0 16px 0;">
+        20 minutos. Sin compromiso. Ya tiene tus datos.
+      </p>`,
+    buttonText: 'Agendar sesión',
+    mapUrl,
+  })
+
+  await getResend().emails.send({
+    from: getFromEmail(), to,
+    subject: 'Javier puede revisar tu mapa contigo',
+    html,
+  })
+}
+
+/** Día 14: Subdimensiones */
+export async function sendDia14Email(to: string, mapHash: string): Promise<void> {
+  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL ?? 'https://lars.institutoepigeinetico.com'
+  const mapUrl = `${baseUrl}/mapa/${mapHash}`
+
+  const html = buildEvolutionEmail({
+    content: `
+      <p style="font-size: 14px; color: #E8EAE9; line-height: 1.6; margin: 0 0 16px 0;">
+        2 preguntas más para aumentar la resolución de tu diagnóstico.
+      </p>`,
+    buttonText: 'Ver mi mapa',
+    mapUrl,
+  })
+
+  await getResend().emails.send({
+    from: getFromEmail(), to,
+    subject: 'Hay 3 subdimensiones nuevas disponibles',
+    html,
+  })
+}
+
+/** Día 21: Extracto del libro */
+export async function sendDia21Email(to: string, mapHash: string): Promise<void> {
+  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL ?? 'https://lars.institutoepigeinetico.com'
+  const mapUrl = `${baseUrl}/mapa/${mapHash}`
+
+  const html = buildEvolutionEmail({
+    content: `
+      <p style="font-size: 14px; color: #E8EAE9; line-height: 1.6; margin: 0 0 16px 0;">
+        Basado en tu dimensión más comprometida. Del libro "Burnout: El Renacimiento del Líder Fénix."
+      </p>`,
+    buttonText: 'Ver mi mapa',
+    mapUrl,
+  })
+
+  await getResend().emails.send({
+    from: getFromEmail(), to,
+    subject: 'Un capítulo escrito para tu situación',
+    html,
+  })
+}
+
+/** Día 30: Reevaluación */
+export async function sendDia30Email(to: string, mapHash: string): Promise<void> {
+  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL ?? 'https://lars.institutoepigeinetico.com'
+  const mapUrl = `${baseUrl}/mapa/${mapHash}`
+
+  const html = buildEvolutionEmail({
+    content: `
+      <p style="font-size: 14px; color: #E8EAE9; line-height: 1.6; margin: 0 0 16px 0;">
+        Actualiza tu mapa en 30 segundos. Tus scores anteriores se guardan para que veas la evolución.
+      </p>`,
+    buttonText: 'Actualizar mi mapa',
+    mapUrl,
+  })
+
+  await getResend().emails.send({
+    from: getFromEmail(), to,
+    subject: 'Un mes desde tu diagnóstico — ¿ha cambiado algo?',
+    html,
+  })
+}
+
+/** Día 90+: Reevaluación trimestral */
+export async function sendDia90Email(to: string, mapHash: string): Promise<void> {
+  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL ?? 'https://lars.institutoepigeinetico.com'
+  const mapUrl = `${baseUrl}/mapa/${mapHash}`
+
+  const html = buildEvolutionEmail({
+    content: `
+      <p style="font-size: 14px; color: #E8EAE9; line-height: 1.6; margin: 0 0 16px 0;">
+        ¿Ha cambiado algo?
+      </p>
+      <p style="font-size: 14px; color: #8A9E98; line-height: 1.6; margin: 0 0 16px 0;">
+        Tu mapa sigue aquí. Actualízalo en 30 segundos y compara.
+      </p>`,
+    buttonText: 'Actualizar mi mapa',
+    mapUrl,
+  })
+
+  await getResend().emails.send({
+    from: getFromEmail(), to,
+    subject: '3 meses desde tu mapa — una pregunta',
+    html,
+  })
+}

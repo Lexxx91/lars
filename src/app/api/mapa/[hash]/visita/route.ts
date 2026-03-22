@@ -2,11 +2,13 @@
  * PATCH /api/mapa/[hash]/visita
  *
  * Registra la fecha de última visita en diagnosticos.meta.last_visited_at
+ * y marca secciones de evolución como "viewed" (para quitar badges NUEVO).
  * Se llama desde MapaClient en cada visita (fire-and-forget).
  */
 
 import { NextRequest, NextResponse } from 'next/server'
 import { createAdminClient } from '@/lib/supabase'
+import { computeEvolutionState, type MapEvolutionData } from '@/lib/map-evolution'
 
 export async function PATCH(
   _req: NextRequest,
@@ -18,28 +20,60 @@ export async function PATCH(
   try {
     const supabase = createAdminClient()
 
-    // Leer meta actual para hacer merge (no sobreescribir otros campos)
+    // Leer meta y map_evolution actual
     const { data } = await supabase
       .from('diagnosticos')
-      .select('meta')
+      .select('meta, map_evolution, created_at')
       .eq('hash', hash)
-      .single<{ meta: Record<string, unknown> }>()
+      .single<{
+        meta: Record<string, unknown>
+        map_evolution: MapEvolutionData
+        created_at: string
+      }>()
 
-    const currentMeta = data?.meta ?? {}
+    if (!data) return NextResponse.json({ ok: false }, { status: 404 })
+
+    const currentMeta = data.meta ?? {}
+    const mapEvolution = data.map_evolution
+
+    // Calcular qué secciones están desbloqueadas
+    const evolution = computeEvolutionState(data.created_at, mapEvolution)
+
+    // Marcar como viewed las secciones desbloqueadas que no lo estaban
+    const updatedEvolution = { ...mapEvolution }
+    let changed = false
+
+    if (evolution.archetype.unlocked && !mapEvolution.archetype_viewed) {
+      updatedEvolution.archetype_viewed = true
+      changed = true
+    }
+    if (evolution.insightD7.unlocked && !mapEvolution.insight_d7_viewed) {
+      updatedEvolution.insight_d7_viewed = true
+      changed = true
+    }
+    if (evolution.bookExcerpt.unlocked && !mapEvolution.book_excerpt_viewed) {
+      updatedEvolution.book_excerpt_viewed = true
+      changed = true
+    }
+
+    const updatePayload: Record<string, unknown> = {
+      meta: {
+        ...currentMeta,
+        last_visited_at: new Date().toISOString(),
+      },
+    }
+
+    if (changed) {
+      updatePayload.map_evolution = updatedEvolution
+    }
 
     await supabase
       .from('diagnosticos')
-      .update({
-        meta: {
-          ...currentMeta,
-          last_visited_at: new Date().toISOString(),
-        },
-      })
+      .update(updatePayload)
       .eq('hash', hash)
 
     return NextResponse.json({ ok: true })
   } catch {
-    // Silencioso — no afecta la experiencia del usuario
     return NextResponse.json({ ok: false }, { status: 500 })
   }
 }

@@ -12,6 +12,8 @@
  *   7s   → Prioridad destacada
  *   8s   → Primer paso
  *   9.5s → CTA + Urgencia + Compartir
+ *
+ * + Secciones de evolución (Día 3-90) que se ACUMULAN.
  */
 
 import { useEffect, useState, useRef, useCallback } from 'react'
@@ -19,6 +21,20 @@ import Button from '@/components/ui/Button'
 import Card from '@/components/ui/Card'
 import type { DimensionResult, DimensionKey } from '@/lib/insights'
 import { getScoreColor, getScoreLabel } from '@/lib/insights'
+import type { EvolutionState, ReevaluationScores, ReevaluationEntry } from '@/lib/map-evolution'
+import type { ArchetypeData } from '@/lib/content/archetypes'
+import type { SubdimensionConfig } from '@/lib/content/subdimensions'
+import type { BookExcerptData } from '@/lib/content/book-excerpts'
+
+// Secciones de evolución
+import DimensionCard from './sections/DimensionCard'
+import EvolutionTimeline from './sections/EvolutionTimeline'
+import EvolutionChart from './sections/EvolutionChart'
+import EvolutionArchetype from './sections/EvolutionArchetype'
+import EvolutionSession from './sections/EvolutionSession'
+import EvolutionSubdimensions from './sections/EvolutionSubdimensions'
+import EvolutionBookExcerpt from './sections/EvolutionBookExcerpt'
+import EvolutionReevaluation from './sections/EvolutionReevaluation'
 
 // ─── TIPOS ────────────────────────────────────────────────────────────────────
 
@@ -30,6 +46,19 @@ interface Props {
   hash: string
   createdAt: string
   lastVisitedAt?: string | null
+  // Evolution
+  evolution: EvolutionState
+  archetype: ArchetypeData | null
+  d7Insight: string | null
+  subdimensionConfig: SubdimensionConfig | null
+  subdimensionScores: Record<string, number> | null
+  bookExcerpt: BookExcerptData | null
+  originalSliders: Record<string, number>
+  originalScores: ReevaluationScores
+  reevaluations: ReevaluationEntry[]
+  reevaluationScores: ReevaluationScores | null
+  worstDimensionName: string
+  worstScore: number
 }
 
 // ─── HELPERS ──────────────────────────────────────────────────────────────────
@@ -80,6 +109,19 @@ export default function MapaClient({
   mostCompromisedKey,
   hash,
   lastVisitedAt,
+  // Evolution
+  evolution,
+  archetype,
+  d7Insight,
+  subdimensionConfig,
+  subdimensionScores,
+  bookExcerpt,
+  originalSliders,
+  originalScores,
+  reevaluations,
+  reevaluationScores,
+  worstDimensionName,
+  worstScore,
 }: Props) {
   const [displayScore, setDisplayScore] = useState(0)
   const [visibleDims, setVisibleDims] = useState(-1)
@@ -180,32 +222,26 @@ export default function MapaClient({
     const ctx = canvas.getContext('2d')!
     ctx.scale(dpr, dpr)
 
-    // Fondo — color-bg-primary del sistema
     ctx.fillStyle = '#0a252c'
     ctx.fillRect(0, 0, W, H)
 
-    // Borde sutil
     ctx.strokeStyle = 'rgba(255,255,255,0.06)'
     ctx.lineWidth = 1
     roundRect(ctx, 1, 1, W - 2, H - 2, 20)
     ctx.stroke()
 
-    // Overline (acento lavanda)
     ctx.fillStyle = '#c6c8ee'
     ctx.font = '600 11px system-ui, sans-serif'
     ctx.fillText('TU DIAGNÓSTICO · L.A.R.S.©', 40, 52)
 
-    // Título
     ctx.fillStyle = '#F5F5F0'
     ctx.font = '600 26px system-ui, sans-serif'
     ctx.fillText('Tu Mapa de Regulación', 40, 88)
 
-    // Sub
     ctx.fillStyle = '#6B7572'
     ctx.font = '400 12px system-ui, sans-serif'
     ctx.fillText('Instituto Epigenético · Calibrado con +25.000 evaluaciones', 40, 112)
 
-    // Separador
     ctx.strokeStyle = 'rgba(255,255,255,0.08)'
     ctx.lineWidth = 1
     ctx.beginPath()
@@ -213,7 +249,6 @@ export default function MapaClient({
     ctx.lineTo(W - 40, 130)
     ctx.stroke()
 
-    // Score global
     ctx.fillStyle = globalColor
     ctx.font = 'bold 56px system-ui, sans-serif'
     const scoreText = String(global)
@@ -223,7 +258,6 @@ export default function MapaClient({
     ctx.font = '400 22px system-ui, sans-serif'
     ctx.fillText('/100', 40 + scoreW + 4, 196)
 
-    // Badge estado
     ctx.font = '600 12px system-ui, sans-serif'
     const badgeW = ctx.measureText(globalLabel).width + 24
     roundRect(ctx, 40, 208, badgeW, 26, 13)
@@ -232,7 +266,6 @@ export default function MapaClient({
     ctx.fillStyle = '#0a252c'
     ctx.fillText(globalLabel, 40 + 12, 226)
 
-    // Dimensiones
     dimensionResults.forEach((dim, i) => {
       const y = 266 + i * 86
       const BAR_W = W - 80
@@ -269,7 +302,6 @@ export default function MapaClient({
       }
     })
 
-    // Footer
     ctx.strokeStyle = 'rgba(255,255,255,0.06)'
     ctx.lineWidth = 1
     ctx.beginPath()
@@ -287,6 +319,16 @@ export default function MapaClient({
     link.href = canvas.toDataURL('image/png', 1.0)
     link.click()
   }, [global, globalColor, globalLabel, dimensionResults, hash])
+
+  // ── Preparar subdimensiones para DimensionCard ──────────────────────────
+
+  const subdimScoresForCard = subdimensionScores && subdimensionConfig
+    ? subdimensionConfig.subdimensions.map((sub) => ({
+        key: sub.key,
+        name: sub.name,
+        score: subdimensionScores[sub.key] ?? 50,
+      }))
+    : null
 
   // ─────────────────────────────────────────────────────────────────────────
 
@@ -389,13 +431,7 @@ export default function MapaClient({
           </div>
 
           {/* ── SCORE GLOBAL ── */}
-          <div
-            className="mapa-fade-up"
-            style={{
-              animationDelay: '100ms',
-              marginBottom: 'var(--space-10)',
-            }}
-          >
+          <div className="mapa-fade-up" style={{ animationDelay: '100ms', marginBottom: 'var(--space-10)' }}>
             <Card style={{ border: `1px solid ${globalColor}33` }}>
               <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: 'var(--space-5)' }}>
                 <div>
@@ -441,134 +477,53 @@ export default function MapaClient({
                   {globalLabel}
                 </span>
               </div>
-              {/* Puente 3 — Benchmark dinámico */}
               <p className="mapa-puente">{PUENTES.p3}</p>
             </Card>
           </div>
 
-          {/* ── 5 DIMENSIONES ── */}
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-4)', marginBottom: 'var(--space-8)' }}>
+          {/* ── TIMELINE (solo si hay al menos 1 evolución desbloqueada) ── */}
+          {evolution.archetype.unlocked && (
+            <EvolutionTimeline evolution={evolution} />
+          )}
+
+          {/* ── GRÁFICA DE EVOLUCIÓN (solo si hay reevaluaciones) ── */}
+          <EvolutionChart
+            globalScore={global}
+            reevaluations={reevaluations}
+          />
+
+          {/* ── 5 DIMENSIONES (usando DimensionCard extraído) ── */}
+          <div id="section-dimensions" style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-4)', marginBottom: 'var(--space-8)' }}>
             {dimensionResults.map((dim, i) => {
               if (visibleDims < i) return null
 
               const isMostCompromised = dim.key === mostCompromisedKey
-              const isD2 = dim.key === 'd2'
               const isD3orD4 = dim.key === 'd3' || dim.key === 'd4'
               const showPriorityTag = isMostCompromised && showPriority
 
+              // D7 insight only on worst dimension
+              const dimD7Insight = isMostCompromised && evolution.insightD7.unlocked ? d7Insight : null
+              const dimD7IsNew = isMostCompromised && evolution.insightD7.isNew
+
+              // Subdimension scores only on worst dimension
+              const dimSubScores = isMostCompromised ? subdimScoresForCard : null
+
+              // Puente
+              let puente: string | null = null
+              if (isMostCompromised) puente = PUENTES.p2
+              else if (isD3orD4) puente = PUENTES.p4
+
               return (
-                <div
+                <DimensionCard
                   key={dim.key}
-                  className={`mapa-fade-up${showPriorityTag ? ' mapa-priority' : ''}`}
-                  style={{
-                    backgroundColor: 'var(--color-bg-secondary)',
-                    border: showPriorityTag
-                      ? `1px solid ${dim.color}33`
-                      : 'var(--border-subtle)',
-                    borderRadius: 'var(--radius-lg)',
-                    padding: 'var(--space-6)',
-                  }}
-                >
-                  {/* Tags */}
-                  <div style={{ display: 'flex', gap: 'var(--space-2)', flexWrap: 'wrap', marginBottom: showPriorityTag || isD2 ? 'var(--space-3)' : 0 }}>
-                    {showPriorityTag && (
-                      <span style={{
-                        display: 'inline-block',
-                        padding: '3px 10px',
-                        borderRadius: 'var(--radius-pill)',
-                        background: `${dim.color}18`,
-                        color: dim.color,
-                        fontFamily: 'var(--font-inter)',
-                        fontSize: 'var(--text-caption)',
-                        fontWeight: 500,
-                        letterSpacing: '0.04em',
-                        textTransform: 'uppercase',
-                      }}>
-                        Tu prioridad nº1
-                      </span>
-                    )}
-                    {isD2 && (
-                      <span style={{
-                        display: 'inline-block',
-                        padding: '3px 10px',
-                        borderRadius: 'var(--radius-pill)',
-                        background: 'rgba(74,222,128,0.1)',
-                        color: 'var(--color-success)',
-                        fontFamily: 'var(--font-inter)',
-                        fontSize: 'var(--text-caption)',
-                        fontWeight: 500,
-                        letterSpacing: '0.04em',
-                        textTransform: 'uppercase',
-                      }}>
-                        Mejorable en 72 horas
-                      </span>
-                    )}
-                  </div>
-
-                  {/* Nombre + score */}
-                  <div style={{
-                    display: 'flex', justifyContent: 'space-between',
-                    alignItems: 'center', marginBottom: 'var(--space-3)',
-                  }}>
-                    <span style={{
-                      fontFamily: 'var(--font-inter-tight)',
-                      fontSize: 'var(--text-h4)',
-                      fontWeight: 500,
-                      color: 'var(--color-text-primary)',
-                      lineHeight: 'var(--lh-h4)',
-                    }}>
-                      {dim.name}
-                    </span>
-                    <span style={{
-                      fontFamily: 'var(--font-plus-jakarta)',
-                      fontSize: 'var(--text-h3)',
-                      fontWeight: 700,
-                      color: dim.color,
-                      lineHeight: 1,
-                    }}>
-                      {dim.score}
-                      <span style={{
-                        fontSize: 'var(--text-caption)',
-                        fontWeight: 400,
-                        color: 'var(--color-text-tertiary)',
-                      }}>/100</span>
-                    </span>
-                  </div>
-
-                  {/* Barra semáforo */}
-                  <div style={{
-                    height: '6px',
-                    borderRadius: '3px',
-                    background: 'rgba(255,255,255,0.08)',
-                    marginBottom: 'var(--space-4)',
-                    overflow: 'hidden',
-                  }}>
-                    <div
-                      className="mapa-bar-fill"
-                      style={{ width: `${dim.score}%`, background: dim.color }}
-                    />
-                  </div>
-
-                  {/* Insight */}
-                  <p style={{
-                    fontFamily: 'var(--font-inter)',
-                    fontSize: 'var(--text-body-sm)',
-                    lineHeight: 'var(--lh-body)',
-                    color: 'var(--color-text-secondary)',
-                  }}>
-                    {dim.insight}
-                  </p>
-
-                  {/* Puente 2 — dimensión más comprometida */}
-                  {isMostCompromised && (
-                    <p className="mapa-puente">{PUENTES.p2}</p>
-                  )}
-
-                  {/* Puente 4 — D3/D4 */}
-                  {isD3orD4 && !isMostCompromised && (
-                    <p className="mapa-puente">{PUENTES.p4}</p>
-                  )}
-                </div>
+                  dim={dim}
+                  isMostCompromised={isMostCompromised}
+                  showPriorityTag={showPriorityTag}
+                  d7Insight={dimD7Insight}
+                  d7IsNew={dimD7IsNew}
+                  subdimensionScores={dimSubScores}
+                  puente={puente}
+                />
               )
             })}
           </div>
@@ -597,12 +552,73 @@ export default function MapaClient({
             </div>
           )}
 
+          {/* ══════════════════════════════════════════════════════════════════
+               SECCIONES DE EVOLUCIÓN — SE ACUMULAN (no reemplazan)
+             ══════════════════════════════════════════════════════════════════ */}
+
+          {/* Día 3 — Arquetipo del Sistema Nervioso */}
+          {evolution.archetype.unlocked && archetype && (
+            <div id="section-archetype" style={{ marginBottom: 'var(--space-6)' }}>
+              <EvolutionArchetype
+                archetype={archetype}
+                isNew={evolution.archetype.isNew}
+              />
+            </div>
+          )}
+
+          {/* Día 10-14 — Sesión con Javier */}
+          {evolution.session.unlocked && (
+            <div id="section-session" style={{ marginBottom: 'var(--space-6)' }}>
+              <EvolutionSession
+                isNew={evolution.session.isNew}
+                booked={evolution.session.booked}
+              />
+            </div>
+          )}
+
+          {/* Día 14 — Subdimensiones */}
+          {evolution.subdimensions.unlocked && subdimensionConfig && (
+            <div id="section-subdimensions" style={{ marginBottom: 'var(--space-6)' }}>
+              <EvolutionSubdimensions
+                config={subdimensionConfig}
+                completed={evolution.subdimensions.completed}
+                isNew={evolution.subdimensions.isNew}
+                hash={hash}
+              />
+            </div>
+          )}
+
+          {/* Día 21 — Extracto del libro */}
+          {evolution.bookExcerpt.unlocked && bookExcerpt && (
+            <div id="section-book" style={{ marginBottom: 'var(--space-6)' }}>
+              <EvolutionBookExcerpt
+                excerpt={bookExcerpt}
+                isNew={evolution.bookExcerpt.isNew}
+                worstDimensionName={worstDimensionName}
+                worstScore={worstScore}
+              />
+            </div>
+          )}
+
+          {/* Día 30/90 — Reevaluación */}
+          {(evolution.reevaluation.unlocked || evolution.nextQuarterlyUnlocked) && (
+            <div id="section-reevaluation" style={{ marginBottom: 'var(--space-6)' }}>
+              <EvolutionReevaluation
+                originalSliders={originalSliders}
+                originalScores={originalScores}
+                completed={evolution.reevaluation.completed}
+                isNew={evolution.reevaluation.isNew || evolution.nextQuarterlyUnlocked}
+                completedScores={reevaluationScores}
+                reevaluations={reevaluations}
+                hash={hash}
+                daysSinceCreation={evolution.daysSinceCreation}
+              />
+            </div>
+          )}
+
           {/* ── PRIMER PASO ── */}
           {showFirstStep && (
-            <div
-              className="mapa-fade-up"
-              style={{ marginBottom: 'var(--space-12)' }}
-            >
+            <div className="mapa-fade-up" style={{ marginBottom: 'var(--space-12)' }}>
               <Card style={{
                 border: '1px solid rgba(74,222,128,0.18)',
                 background: 'rgba(74,222,128,0.04)',
@@ -625,7 +641,6 @@ export default function MapaClient({
                 }}>
                   {firstStep}
                 </p>
-                {/* Puente 1 — plan vivo */}
                 <p className="mapa-puente">{PUENTES.p1}</p>
               </Card>
             </div>
@@ -635,12 +650,7 @@ export default function MapaClient({
           {showCTA && (
             <div className="mapa-fade-up">
 
-              {/* Separador */}
-              <div style={{
-                height: '1px',
-                background: 'var(--color-surface-subtle)',
-                marginBottom: 'var(--space-12)',
-              }} />
+              <div style={{ height: '1px', background: 'var(--color-surface-subtle)', marginBottom: 'var(--space-12)' }} />
 
               {/* Benchmark */}
               <div style={{ textAlign: 'center', marginBottom: 'var(--space-12)' }}>
@@ -678,7 +688,7 @@ export default function MapaClient({
                 </p>
               </div>
 
-              {/* Pre-CTA — Cormorant italic per spec M7 */}
+              {/* Pre-CTA */}
               <p style={{
                 fontFamily: 'var(--font-cormorant)',
                 fontSize: 'var(--text-h2)',
@@ -692,7 +702,6 @@ export default function MapaClient({
                 Tu sistema nervioso lleva años sosteniendo lo que tú no podías soltar. Ahora tienes el mapa.
               </p>
 
-              {/* Delta de alivio */}
               <p style={{
                 fontFamily: 'var(--font-inter)',
                 fontSize: 'var(--text-body)',
@@ -728,7 +737,6 @@ export default function MapaClient({
                 </p>
               )}
 
-              {/* Post-CTA */}
               <p style={{
                 fontFamily: 'var(--font-inter)',
                 fontSize: 'var(--text-body-sm)',
