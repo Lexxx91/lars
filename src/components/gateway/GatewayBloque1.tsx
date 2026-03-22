@@ -17,6 +17,7 @@ import SingleSelectStep from './SingleSelectStep'
 import MultiSelectStep from './MultiSelectStep'
 import MicroEspejo from '@/components/ui/MicroEspejo'
 import ProgressBar from '@/components/ui/ProgressBar'
+import { trackEvent } from '@/lib/posthog'
 import {
   P2_OPTIONS,
   P3_OPTIONS,
@@ -112,6 +113,7 @@ export default function GatewayBloque1({
   // ── Handlers ──
   const handleP2Select = useCallback(
     (id: string) => {
+      trackEvent('gateway_p2', { option: id })
       setP2(id)
       setZone('reflexion')
       changeStep('analyzing')
@@ -120,6 +122,7 @@ export default function GatewayBloque1({
   )
 
   const handleAnalyzingComplete = useCallback(() => {
+    trackEvent('gateway_first_truth')
     changeStep('primera-verdad')
   }, [changeStep])
 
@@ -130,6 +133,7 @@ export default function GatewayBloque1({
 
   const handleP3Continue = useCallback(
     (selections: string[]) => {
+      trackEvent('gateway_p3', { selections, count: selections.length })
       setP3Selections(selections)
       changeStep('p4')
     },
@@ -138,6 +142,7 @@ export default function GatewayBloque1({
 
   const handleP4Select = useCallback(
     (id: string) => {
+      trackEvent('gateway_p4', { option: id })
       setP4(id)
       setZone('reflexion')
       changeStep('micro-espejo-1')
@@ -146,6 +151,7 @@ export default function GatewayBloque1({
   )
 
   const handleMicroEspejo1Continue = useCallback(() => {
+    trackEvent('gateway_mirror_1')
     onComplete({ p2, p3Selections, p4 })
   }, [onComplete, p2, p3Selections, p4])
 

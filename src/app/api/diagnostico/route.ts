@@ -11,7 +11,7 @@
 
 import { NextRequest, NextResponse } from 'next/server'
 import { createAdminClient } from '@/lib/supabase'
-import { computeScores } from '@/lib/scoring'
+import { computeScores, computeConvertScores } from '@/lib/scoring'
 import { generateHash } from '@/lib/hash'
 import { sendDia0Email } from '@/lib/email'
 import { getMostCompromised } from '@/lib/insights'
@@ -21,8 +21,12 @@ import type { Bloque2Answers } from '@/lib/gateway-bloque2-data'
 interface DiagnosticoPayload {
   email: string
   p1: string
+  p2?: string
   bloque1: Bloque1Answers
   bloque2: Bloque2Answers
+  update?: boolean
+  mode?: 'deepen' | 'convert'
+  sliders?: Record<string, number>
 }
 
 function detectProfile(p6: string, p2: string, p4: string): Record<string, unknown> {
@@ -50,10 +54,14 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
     return NextResponse.json({ error: 'Payload inválido' }, { status: 400 })
   }
 
-  const { email, p1, bloque1, bloque2 } = payload
+  const { email, p1, bloque1, bloque2, update, mode } = payload
 
-  // Validación básica
-  if (!email || !p1 || !bloque1 || !bloque2) {
+  // Validación básica — modo convert solo requiere p1, p2 y sliders
+  if (mode === 'convert') {
+    if (!email || !p1 || !payload.sliders) {
+      return NextResponse.json({ error: 'Faltan campos requeridos (convert)' }, { status: 400 })
+    }
+  } else if (!email || !p1 || !bloque1 || !bloque2) {
     return NextResponse.json({ error: 'Faltan campos requeridos' }, { status: 400 })
   }
 
@@ -62,8 +70,10 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
     return NextResponse.json({ error: 'Email inválido' }, { status: 400 })
   }
 
-  // Calcular scores
-  const scores = computeScores(p1, bloque1, bloque2)
+  // Calcular scores según modo
+  const scores = mode === 'convert'
+    ? computeConvertScores(p1, (payload as DiagnosticoPayload).p2 ?? 'C', payload.sliders!)
+    : computeScores(p1, bloque1, bloque2)
 
   const supabase = createAdminClient()
 
@@ -76,10 +86,56 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
     .limit(1)
     .single()
 
-  if (existing?.hash) {
-    // Email ya existe — devolver hash existente sin reenviar email
-    // (el frontend mostrará el mapa actualizado con las respuestas previas)
+  if (existing?.hash && !update) {
+    // Email ya existe — devolver hash existente para mostrar opciones
     return NextResponse.json({ hash: existing.hash, existing: true })
+  }
+
+  // ── Modo update: actualizar registro existente con nuevas respuestas ──────
+  if (existing?.hash && update && bloque1 && bloque2) {
+    const updatedScores = computeScores(p1, bloque1, bloque2)
+    const updatedResponses = {
+      p1,
+      p2: bloque1.p2,
+      p3: bloque1.p3Selections,
+      p4: bloque1.p4,
+      p5: bloque2.p5,
+      p6: bloque2.p6,
+      p7: {
+        regulacion: bloque2.sliders['d1'] ?? 5,
+        sueno:      bloque2.sliders['d2'] ?? 5,
+        claridad:   bloque2.sliders['d3'] ?? 5,
+        emocional:  bloque2.sliders['d4'] ?? 5,
+        alegria:    bloque2.sliders['d5'] ?? 5,
+      },
+      p8: bloque2.p8,
+    }
+    const updatedProfile = detectProfile(bloque2.p6, bloque1.p2, bloque1.p4)
+    const updatedScoresToStore = {
+      global:        updatedScores.global,
+      d1_regulacion: updatedScores.d1,
+      d2_sueno:      updatedScores.d2,
+      d3_claridad:   updatedScores.d3,
+      d4_emocional:  updatedScores.d4,
+      d5_alegria:    updatedScores.d5,
+      label:         updatedScores.label,
+    }
+
+    const { error: updateError } = await supabase
+      .from('diagnosticos')
+      .update({
+        responses: updatedResponses,
+        scores: updatedScoresToStore,
+        profile: updatedProfile,
+      })
+      .eq('hash', existing.hash)
+
+    if (updateError) {
+      console.error('[diagnostico] Error actualizando:', updateError)
+      return NextResponse.json({ error: 'Error actualizando diagnóstico' }, { status: 500 })
+    }
+
+    return NextResponse.json({ hash: existing.hash })
   }
 
   // ── Generar hash único ────────────────────────────────────────────────────
@@ -96,22 +152,40 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
   }
 
   // ── Preparar datos a persistir ────────────────────────────────────────────
-  const responses = {
-    p1,
-    p2: bloque1.p2,
-    p3: bloque1.p3Selections,
-    p4: bloque1.p4,
-    p5: bloque2.p5,
-    p6: bloque2.p6,
-    p7: {
-      regulacion: bloque2.sliders['d1'] ?? 5,
-      sueno:      bloque2.sliders['d2'] ?? 5,
-      claridad:   bloque2.sliders['d3'] ?? 5,
-      emocional:  bloque2.sliders['d4'] ?? 5,
-      alegria:    bloque2.sliders['d5'] ?? 5,
-    },
-    p8: bloque2.p8,
-  }
+  const responses = mode === 'convert'
+    ? {
+        p1,
+        p2: payload.p2 ?? 'C',
+        p3: null, // no contestada en convert
+        p4: null,
+        p5: null,
+        p6: null,
+        p7: {
+          regulacion: payload.sliders!['d1'] ?? 5,
+          sueno:      payload.sliders!['d2'] ?? 5,
+          claridad:   payload.sliders!['d3'] ?? 5,
+          emocional:  payload.sliders!['d4'] ?? 5,
+          alegria:    payload.sliders!['d5'] ?? 5,
+        },
+        p8: null,
+        mode: 'convert',
+      }
+    : {
+        p1,
+        p2: bloque1.p2,
+        p3: bloque1.p3Selections,
+        p4: bloque1.p4,
+        p5: bloque2.p5,
+        p6: bloque2.p6,
+        p7: {
+          regulacion: bloque2.sliders['d1'] ?? 5,
+          sueno:      bloque2.sliders['d2'] ?? 5,
+          claridad:   bloque2.sliders['d3'] ?? 5,
+          emocional:  bloque2.sliders['d4'] ?? 5,
+          alegria:    bloque2.sliders['d5'] ?? 5,
+        },
+        p8: bloque2.p8,
+      }
 
   const scoresToStore = {
     global:        scores.global,
@@ -123,7 +197,13 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
     label:         scores.label,
   }
 
-  const profile = detectProfile(bloque2.p6, bloque1.p2, bloque1.p4)
+  const profile = mode === 'convert'
+    ? {
+        ego_primary: 'Desconocido', // no tenemos P6 en convert
+        shame_level: 'low',
+        denial_detected: (payload.p2 ?? 'C') === 'D',
+      }
+    : detectProfile(bloque2.p6, bloque1.p2, bloque1.p4)
 
   const mapEvolution = {
     archetype_unlocked: false,
@@ -143,16 +223,28 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
     reevaluations: [],
   }
 
-  const confidenceChain = {
-    d1_first_truth: true,   // llegó a la bisagra → completó todos los pasos
-    d2_collective_data: true,
-    d3_mirror_1: true,
-    d4_mirror_2: true,
-    d5_bisagra: true,
-    d6_email: true,         // dio el email → cadena completa
-    d7_result: false,       // se marca al visitar el mapa
-    abandoned_at_deposit: null,
-  }
+  const confidenceChain = mode === 'convert'
+    ? {
+        d1_first_truth: false,  // saltada en convert
+        d2_collective_data: false,
+        d3_mirror_1: false,
+        d4_mirror_2: false,
+        d5_bisagra: true,
+        d6_email: true,
+        d7_result: false,
+        abandoned_at_deposit: null,
+        mode: 'convert',
+      }
+    : {
+        d1_first_truth: true,
+        d2_collective_data: true,
+        d3_mirror_1: true,
+        d4_mirror_2: true,
+        d5_bisagra: true,
+        d6_email: true,
+        d7_result: false,
+        abandoned_at_deposit: null,
+      }
 
   const funnel = {
     gateway_completed: true,
@@ -178,6 +270,7 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
     meta: {
       source: req.headers.get('referer') ?? 'direct',
       device: req.headers.get('user-agent') ?? 'unknown',
+      ...(mode === 'convert' ? { mode: 'convert' } : {}),
     },
   })
 

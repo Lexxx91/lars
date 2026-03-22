@@ -119,6 +119,47 @@ function getLabel(global: number): ScoreLabel {
   return 'Crítico'
 }
 
+// ─── CONVERT: scoring con preguntas reducidas ────────────────────────────────
+
+/**
+ * Calcula scores para el flujo CONVERT (90s).
+ * Solo tiene P1, P2 y sliders (P7). El resto usa defaults razonables.
+ */
+export function computeConvertScores(
+  p1: string,
+  p2: string,
+  convertSliders: Record<string, number>,
+): DimensionScores {
+  const sd1 = sliderToScore(convertSliders['d1'])
+  const sd2 = sliderToScore(convertSliders['d2'])
+  const sd3 = sliderToScore(convertSliders['d3'])
+  const sd4 = sliderToScore(convertSliders['d4'])
+  const sd5 = sliderToScore(convertSliders['d5'])
+
+  // D1: sin P6 → peso P1 y P2 más, slider compensa
+  const p1d1 = P1_D1[p1] ?? 40
+  const p2d1 = P2_D1[p2] ?? 40
+  const d1 = clamp(p1d1 * 0.20 + p2d1 * 0.45 + sd1 * 0.35)
+
+  // D2: mismo que completo pero sin ajuste negación (no tenemos P6)
+  const p2d2 = P2_SLEEP[p2] ?? 40
+  const d2 = clamp(p2d2 * 0.50 + sd2 * 0.50)
+
+  // D3: sin P3 → slider con base media
+  const d3 = clamp(45 * 0.40 + sd3 * 0.60)
+
+  // D4: sin P4 → slider con base neutra
+  const d4 = clamp(35 * 0.40 + sd4 * 0.60)
+
+  // D5: sin P5 → slider con base media
+  const d5 = clamp(40 * 0.40 + sd5 * 0.60)
+
+  // Global ponderado (mismo peso que completo, sin ajustes P6/P8)
+  const global = clamp(d1 * 0.30 + d2 * 0.20 + d3 * 0.20 + d4 * 0.15 + d5 * 0.15)
+
+  return { d1, d2, d3, d4, d5, global, label: getLabel(global) }
+}
+
 // ─── FUNCIÓN PRINCIPAL ────────────────────────────────────────────────────────
 
 export function computeScores(

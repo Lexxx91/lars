@@ -10,6 +10,7 @@ Toda la estrategia, el copy, las decisiones de experiencia y los principios de d
 
 - `docs/VISION.md` — Qué es el producto, para quién, los 4 perfiles de cliente, métricas de éxito
 - `docs/DESIGN.md` — Sistema de diseño visual completo (paleta, tipografía, componentes, reglas)
+- `docs/ANIMATIONS.md` — **Spec técnica obligatoria de cada animación, transición, SVG y micro-interacción (A-01 a A-15)**
 - `docs/features/FEATURE_LANDING_DESIGN.md` — Landing page completa: copy exacto, secciones, checklists
 - `docs/features/FEATURE_GATEWAY_DESIGN.md` — Gateway completo: 8 mecánicas, preguntas, variantes, scoring, mapa vivo, emails, CTA
 - `docs/phases/` — Specs individuales por fase de construcción. Una fase = una sesión.
@@ -43,6 +44,37 @@ Los perfiles completos están en VISION.md. El copy de cada feature ya está cal
   FASE 2: Solo después de aprobación, conecta la funcionalidad
 - Variables de diseño centralizadas. Nunca valores sueltos en el código.
 
+## REGLA NO NEGOCIABLE — CAPA VISUAL
+
+Este proyecto tiene DOS capas con **igual prioridad de entrega**:
+- **CONTENIDO:** copy, estructura, lógica, datos
+- **EXPERIENCIA:** animaciones, transiciones, SVGs, micro-interacciones, revelación progresiva
+
+**Si una pantalla no tiene sus animaciones y transiciones implementadas, NO ESTÁ TERMINADA.**
+
+Antes de marcar cualquier componente como completo, verificar contra `docs/ANIMATIONS.md`.
+Cada animación tiene un ID (A-01 a A-15), specs CSS/JS exactas, y una checklist de verificación.
+
+**Referencia visual:** functionhealth.com — datos de salud revelados progresivamente con coreografía.
+
+**Anti-patrones fatales (= entrega INCOMPLETA):**
+- Texto plano sobre fondo estático sin animaciones
+- Corte seco entre pantallas sin transición
+- Números que aparecen estáticos sin counter animado
+- Cards/secciones que aparecen todas de golpe sin stagger
+- Un solo fondo para todo el gateway (debe haber 3 zonas emocionales)
+- Formulario tipo Google Form sin diseño editorial
+
+**Checklist visual por fase:**
+
+Fase 1: A-01 (SVG pulso), A-02 (cards P1 feedback), A-03 (below-fold scroll), A-15 (IntersectionObserver)
+Fase 2: A-04 (transiciones P→P), A-05 (primera verdad), A-06 (micro-espejo 1)
+Fase 3: A-04 (transiciones P5-P8), A-07 (sliders color), A-08 (micro-espejo 2)
+Fase 4: A-09 (typing "Calculando..."), A-10 (score counter), A-11 (mapa borroso email)
+Fase 5: A-12 (momento WOW 8s), A-13 (CTA calma), A-14 (descarga PNG)
+
+**Si alguna de estas no está implementada, la fase NO se cierra.**
+
 ## La experiencia (CRÍTICO)
 - La landing ES el gateway. No hay páginas separadas. Una sola experiencia.
 - P1 está visible en el hero. Sin botón "Empezar." La persona llega y la pregunta está ahí.
@@ -60,6 +92,7 @@ Los perfiles completos están en VISION.md. El copy de cada feature ya está cal
   1. Revisión técnica: estados vacíos, loading, error, datos inválidos,
      doble clic, responsive, seguridad.
   2. Revisión de experiencia: checklist del feature doc correspondiente.
+  3. **Revisión visual: checklist de `docs/ANIMATIONS.md` para la fase actual.**
 
 ## Seguridad
 - Sigue docs/SECURITY.md siempre (se genera en Fase 0).
