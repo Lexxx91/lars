@@ -27,7 +27,7 @@ lars-project/
 │   │   ├── supabase.ts            # Conexión a base de datos
 │   │   ├── stripe.ts              # Configuración de pagos
 │   │   ├── scoring.ts             # Algoritmo de scoring (5 dimensiones)
-│   │   └── analytics.ts           # Wrapper de PostHog
+│   │   └── availability.ts        # Lógica de disponibilidad y slots
 │   └── types/
 │       └── gateway.ts             # Definiciones de datos (TypeScript)
 ├── supabase/migrations/           # Cambios de base de datos (reversibles)
@@ -91,9 +91,9 @@ Usuario hace clic en CTA
 
 ```
 Cada interacción del gateway
-  → Frontend envía evento a PostHog
-  → Evento incluye: paso, respuesta, tiempo, dispositivo
-  → PostHog genera funnels automáticamente
+  → Se guarda en Supabase (tabla diagnosticos, campo funnel)
+  → Panel admin /admin/analytics muestra embudo visual
+  → Métricas: paso completado, tasa de conversión, abandono
 ```
 
 ---

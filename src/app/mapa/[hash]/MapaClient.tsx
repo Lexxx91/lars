@@ -20,7 +20,6 @@ import { useEffect, useState, useRef, useCallback } from 'react'
 import Button from '@/components/ui/Button'
 import Card from '@/components/ui/Card'
 import Badge from '@/components/ui/Badge'
-import { trackEvent } from '@/lib/posthog'
 import type { DimensionResult, DimensionKey } from '@/lib/insights'
 import { getScoreColor, getScoreLabel } from '@/lib/insights'
 import type { EvolutionState, ReevaluationScores, ReevaluationEntry } from '@/lib/map-evolution'
@@ -183,7 +182,6 @@ export default function MapaClient({
     const daysSinceCreation = Math.floor(
       (Date.now() - new Date(createdAt).getTime()) / 86400000
     )
-    trackEvent('map_view', { day: daysSinceCreation })
     fetch(`/api/mapa/${hash}/visita`, { method: 'PATCH' }).catch(() => {})
   }, [hash, createdAt])
 
@@ -196,7 +194,6 @@ export default function MapaClient({
     checkoutDebounceRef.current = true
     setTimeout(() => { checkoutDebounceRef.current = false }, 2000)
 
-    trackEvent('cta_clicked')
     setCheckoutLoading(true)
     setCheckoutError(null)
     try {

@@ -86,6 +86,10 @@ interface Booking {
   slot_end: string
   status: string
   google_meet_url: string | null
+  google_event_id?: string | null
+  diagnostico_id?: string | null
+  completed_at?: string | null
+  cancelled_at?: string | null
 }
 
 export default function DisponibilidadPage() {
@@ -94,7 +98,11 @@ export default function DisponibilidadPage() {
   const [loading, setLoading] = useState(false)
   const [rules, setRules] = useState<AvailabilityRule[]>([])
   const [bookings, setBookings] = useState<Booking[]>([])
+  const [pastBookings, setPastBookings] = useState<Booking[]>([])
   const [blockDate, setBlockDate] = useState('')
+  const [blockMode, setBlockMode] = useState<'full_day' | 'time_range'>('full_day')
+  const [blockStartTime, setBlockStartTime] = useState('09:00')
+  const [blockEndTime, setBlockEndTime] = useState('13:00')
   const [error, setError] = useState<string | null>(null)
   const [success, setSuccess] = useState<string | null>(null)
 
@@ -128,6 +136,7 @@ export default function DisponibilidadPage() {
       const data = await res.json()
       setRules(data.config ?? [])
       setBookings(data.upcomingBookings ?? [])
+      setPastBookings(data.pastBookings ?? [])
       setError(null)
     } catch {
       setError('Error de conexión')
@@ -198,16 +207,50 @@ export default function DisponibilidadPage() {
   async function addBlockedDate() {
     if (!blockDate) return
     try {
+      const payload: Record<string, string | boolean> = { specificDate: blockDate }
+      if (blockMode === 'time_range') {
+        payload.startTime = blockStartTime
+        payload.endTime = blockEndTime
+      }
       await fetch('/api/admin/disponibilidad', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', 'x-admin-secret': secret },
-        body: JSON.stringify({ specificDate: blockDate }),
+        body: JSON.stringify(payload),
       })
       setBlockDate('')
-      showSuccess('Fecha bloqueada')
+      showSuccess(blockMode === 'time_range'
+        ? `Franja ${blockStartTime}–${blockEndTime} bloqueada`
+        : 'Fecha bloqueada')
       await fetchData()
     } catch {
       setError('Error al bloquear fecha')
+    }
+  }
+
+  async function handleBookingAction(bookingId: string, action: 'cancel_booking' | 'complete_booking' | 'noshow_booking') {
+    const labels = {
+      cancel_booking: 'cancelar esta sesion',
+      complete_booking: 'marcar como completada',
+      noshow_booking: 'marcar como no-show',
+    }
+    if (!confirm(`¿Seguro que quieres ${labels[action]}?`)) return
+
+    try {
+      const res = await fetch('/api/admin/disponibilidad', {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json', 'x-admin-secret': secret },
+        body: JSON.stringify({ action, bookingId }),
+      })
+      if (!res.ok) throw new Error('Error')
+      const statusLabels = {
+        cancel_booking: 'Sesion cancelada',
+        complete_booking: 'Sesion completada',
+        noshow_booking: 'Marcada como no-show',
+      }
+      showSuccess(statusLabels[action])
+      await fetchData()
+    } catch {
+      setError('Error al actualizar la sesion')
     }
   }
 
@@ -531,10 +574,10 @@ export default function DisponibilidadPage() {
           color: 'var(--color-text-tertiary)',
           marginBottom: 'var(--space-4)',
         }}>
-          Bloquea días puntuales para que no aparezcan slots.
+          Bloquea dias completos o franjas horarias puntuales.
         </p>
 
-        <div style={{ display: 'flex', gap: 'var(--space-3)', marginBottom: 'var(--space-4)' }}>
+        <div style={{ display: 'flex', gap: 'var(--space-3)', marginBottom: 'var(--space-3)' }}>
           <input
             type="date"
             value={blockDate}
@@ -564,6 +607,76 @@ export default function DisponibilidadPage() {
           </Button>
         </div>
 
+        {/* Toggle: Todo el día / Franja horaria */}
+        <div style={{ display: 'flex', gap: 'var(--space-3)', alignItems: 'center', marginBottom: 'var(--space-4)' }}>
+          <div style={{
+            display: 'flex',
+            borderRadius: 'var(--radius-md)',
+            border: 'var(--border-medium)',
+            overflow: 'hidden',
+          }}>
+            {(['full_day', 'time_range'] as const).map((mode) => (
+              <button
+                key={mode}
+                onClick={() => setBlockMode(mode)}
+                style={{
+                  padding: 'var(--space-2) var(--space-3)',
+                  fontFamily: 'var(--font-inter-tight)',
+                  fontSize: '12px',
+                  fontWeight: 500,
+                  border: 'none',
+                  cursor: 'pointer',
+                  backgroundColor: blockMode === mode ? 'rgba(96,165,250,0.25)' : 'transparent',
+                  color: blockMode === mode ? '#93c5fd' : 'var(--color-text-tertiary)',
+                  transition: 'all var(--transition-base)',
+                }}
+              >
+                {mode === 'full_day' ? 'Todo el dia' : 'Franja horaria'}
+              </button>
+            ))}
+          </div>
+
+          {blockMode === 'time_range' && (
+            <div style={{ display: 'flex', gap: 'var(--space-2)', alignItems: 'center' }}>
+              <input
+                type="time"
+                value={blockStartTime}
+                onChange={(e) => setBlockStartTime(e.target.value)}
+                step="1200"
+                style={{
+                  padding: 'var(--space-2) var(--space-3)',
+                  borderRadius: 'var(--radius-md)',
+                  border: 'var(--border-medium)',
+                  backgroundColor: 'var(--color-bg-tertiary)',
+                  color: 'var(--color-text-primary)',
+                  fontFamily: 'var(--font-inter)',
+                  fontSize: '12px',
+                  outline: 'none',
+                  colorScheme: 'dark',
+                }}
+              />
+              <span style={{ color: 'var(--color-text-tertiary)', fontSize: '12px' }}>a</span>
+              <input
+                type="time"
+                value={blockEndTime}
+                onChange={(e) => setBlockEndTime(e.target.value)}
+                step="1200"
+                style={{
+                  padding: 'var(--space-2) var(--space-3)',
+                  borderRadius: 'var(--radius-md)',
+                  border: 'var(--border-medium)',
+                  backgroundColor: 'var(--color-bg-tertiary)',
+                  color: 'var(--color-text-primary)',
+                  fontFamily: 'var(--font-inter)',
+                  fontSize: '12px',
+                  outline: 'none',
+                  colorScheme: 'dark',
+                }}
+              />
+            </div>
+          )}
+        </div>
+
         {blockedDates.length > 0 ? (
           <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-2)' }}>
             {blockedDates.map((rule) => (
@@ -584,6 +697,9 @@ export default function DisponibilidadPage() {
                   color: 'var(--color-error)',
                 }}>
                   {formatDateSpanish(rule.specific_date!)}
+                  {rule.start_time && rule.end_time
+                    ? ` · ${normalizeTime(rule.start_time)}–${normalizeTime(rule.end_time)}`
+                    : ' · Todo el dia'}
                 </span>
                 <button
                   onClick={() => removeBlockedDate(rule.id)}
@@ -614,6 +730,171 @@ export default function DisponibilidadPage() {
       </section>
 
       {/* ═══ Sección 3: Próximas sesiones ═════════════════════════════════ */}
+      <section style={{ marginBottom: 'var(--space-12)' }}>
+        <p style={{
+          fontFamily: 'var(--font-inter-tight)',
+          fontSize: 'var(--text-overline)',
+          letterSpacing: 'var(--ls-overline)',
+          color: 'var(--color-accent)',
+          textTransform: 'uppercase',
+          marginBottom: 'var(--space-3)',
+        }}>
+          Proximas sesiones
+        </p>
+        <Separator style={{ marginTop: 0, marginBottom: 'var(--space-5)' }} />
+
+        {bookings.length > 0 ? (
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-3)' }}>
+            {bookings.map((booking) => {
+              const slotTime = new Date(booking.slot_start).getTime()
+              const isPast = slotTime < Date.now()
+
+              return (
+                <Card key={booking.id} style={{ padding: 'var(--space-4) var(--space-5)' }}>
+                  <div style={{
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    alignItems: 'center',
+                    marginBottom: 'var(--space-2)',
+                  }}>
+                    <span style={{
+                      fontFamily: 'var(--font-plus-jakarta)',
+                      fontSize: 'var(--text-body)',
+                      fontWeight: 600,
+                      color: 'var(--color-text-primary)',
+                    }}>
+                      {formatDateTimeSpanish(booking.slot_start)}
+                    </span>
+                    <Badge status="disponible">Confirmada</Badge>
+                  </div>
+
+                  <div style={{
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    alignItems: 'center',
+                  }}>
+                    <span style={{
+                      fontFamily: 'var(--font-inter)',
+                      fontSize: 'var(--text-body-sm)',
+                      color: 'var(--color-text-secondary)',
+                    }}>
+                      {booking.email}
+                    </span>
+                    <a
+                      href={`/mapa/${booking.map_hash}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      style={{
+                        fontFamily: 'var(--font-inter-tight)',
+                        fontSize: 'var(--text-caption)',
+                        color: 'var(--color-accent)',
+                        textDecoration: 'none',
+                      }}
+                    >
+                      Ver mapa →
+                    </a>
+                  </div>
+
+                  {booking.google_meet_url && (
+                    <a
+                      href={booking.google_meet_url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      style={{
+                        display: 'inline-block',
+                        marginTop: 'var(--space-2)',
+                        fontFamily: 'var(--font-inter)',
+                        fontSize: 'var(--text-caption)',
+                        color: 'var(--color-info)',
+                        textDecoration: 'none',
+                      }}
+                    >
+                      Google Meet →
+                    </a>
+                  )}
+
+                  {/* Acciones */}
+                  <div style={{
+                    display: 'flex',
+                    gap: 'var(--space-2)',
+                    marginTop: 'var(--space-3)',
+                    paddingTop: 'var(--space-3)',
+                    borderTop: '1px solid rgba(255,255,255,0.06)',
+                  }}>
+                    {!isPast && (
+                      <button
+                        onClick={() => handleBookingAction(booking.id, 'cancel_booking')}
+                        style={{
+                          padding: 'var(--space-2) var(--space-3)',
+                          borderRadius: 'var(--radius-sm)',
+                          border: '1px solid rgba(248,113,113,0.3)',
+                          backgroundColor: 'rgba(248,113,113,0.08)',
+                          color: '#f87171',
+                          cursor: 'pointer',
+                          fontFamily: 'var(--font-inter-tight)',
+                          fontSize: '12px',
+                          fontWeight: 500,
+                          transition: 'all var(--transition-base)',
+                        }}
+                      >
+                        Cancelar sesion
+                      </button>
+                    )}
+                    {isPast && (
+                      <>
+                        <button
+                          onClick={() => handleBookingAction(booking.id, 'complete_booking')}
+                          style={{
+                            padding: 'var(--space-2) var(--space-3)',
+                            borderRadius: 'var(--radius-sm)',
+                            border: '1px solid rgba(74,222,128,0.3)',
+                            backgroundColor: 'rgba(74,222,128,0.08)',
+                            color: '#4ade80',
+                            cursor: 'pointer',
+                            fontFamily: 'var(--font-inter-tight)',
+                            fontSize: '12px',
+                            fontWeight: 500,
+                            transition: 'all var(--transition-base)',
+                          }}
+                        >
+                          Completar
+                        </button>
+                        <button
+                          onClick={() => handleBookingAction(booking.id, 'noshow_booking')}
+                          style={{
+                            padding: 'var(--space-2) var(--space-3)',
+                            borderRadius: 'var(--radius-sm)',
+                            border: '1px solid rgba(250,204,21,0.3)',
+                            backgroundColor: 'rgba(250,204,21,0.08)',
+                            color: '#facc15',
+                            cursor: 'pointer',
+                            fontFamily: 'var(--font-inter-tight)',
+                            fontSize: '12px',
+                            fontWeight: 500,
+                            transition: 'all var(--transition-base)',
+                          }}
+                        >
+                          No-show
+                        </button>
+                      </>
+                    )}
+                  </div>
+                </Card>
+              )
+            })}
+          </div>
+        ) : (
+          <p style={{
+            fontFamily: 'var(--font-inter)',
+            fontSize: 'var(--text-body-sm)',
+            color: 'var(--color-text-tertiary)',
+          }}>
+            No hay sesiones agendadas.
+          </p>
+        )}
+      </section>
+
+      {/* ═══ Sección 4: Historial de sesiones ═══════════════════════════════ */}
       <section>
         <p style={{
           fontFamily: 'var(--font-inter-tight)',
@@ -623,77 +904,75 @@ export default function DisponibilidadPage() {
           textTransform: 'uppercase',
           marginBottom: 'var(--space-3)',
         }}>
-          Próximas sesiones
+          Historial de sesiones
         </p>
         <Separator style={{ marginTop: 0, marginBottom: 'var(--space-5)' }} />
 
-        {bookings.length > 0 ? (
+        {pastBookings.length > 0 ? (
           <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-3)' }}>
-            {bookings.map((booking) => (
-              <Card key={booking.id} style={{ padding: 'var(--space-4) var(--space-5)' }}>
-                <div style={{
-                  display: 'flex',
-                  justifyContent: 'space-between',
-                  alignItems: 'center',
-                  marginBottom: 'var(--space-2)',
-                }}>
-                  <span style={{
-                    fontFamily: 'var(--font-plus-jakarta)',
-                    fontSize: 'var(--text-body)',
-                    fontWeight: 600,
-                    color: 'var(--color-text-primary)',
-                  }}>
-                    {formatDateTimeSpanish(booking.slot_start)}
-                  </span>
-                  <Badge status="disponible">Confirmada</Badge>
-                </div>
+            {pastBookings.map((booking) => {
+              const statusConfig = {
+                completed: { label: 'Completada', color: '#4ade80', bg: 'rgba(74,222,128,0.08)', border: 'rgba(74,222,128,0.2)' },
+                cancelled: { label: 'Cancelada', color: '#f87171', bg: 'rgba(248,113,113,0.08)', border: 'rgba(248,113,113,0.2)' },
+                no_show: { label: 'No-show', color: '#facc15', bg: 'rgba(250,204,21,0.08)', border: 'rgba(250,204,21,0.2)' },
+              }[booking.status] ?? { label: booking.status, color: 'var(--color-text-tertiary)', bg: 'transparent', border: 'var(--border-medium)' }
 
-                <div style={{
-                  display: 'flex',
-                  justifyContent: 'space-between',
-                  alignItems: 'center',
+              return (
+                <Card key={booking.id} style={{
+                  padding: 'var(--space-3) var(--space-4)',
+                  background: statusConfig.bg,
+                  border: `1px solid ${statusConfig.border}`,
                 }}>
-                  <span style={{
-                    fontFamily: 'var(--font-inter)',
-                    fontSize: 'var(--text-body-sm)',
-                    color: 'var(--color-text-secondary)',
+                  <div style={{
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    alignItems: 'center',
                   }}>
-                    {booking.email}
-                  </span>
-                  <a
-                    href={`/mapa/${booking.map_hash}`}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    style={{
-                      fontFamily: 'var(--font-inter-tight)',
-                      fontSize: 'var(--text-caption)',
-                      color: 'var(--color-accent)',
-                      textDecoration: 'none',
-                    }}
-                  >
-                    Ver mapa →
-                  </a>
-                </div>
-
-                {booking.google_meet_url && (
-                  <a
-                    href={booking.google_meet_url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    style={{
-                      display: 'inline-block',
-                      marginTop: 'var(--space-2)',
-                      fontFamily: 'var(--font-inter)',
-                      fontSize: 'var(--text-caption)',
-                      color: 'var(--color-info)',
-                      textDecoration: 'none',
-                    }}
-                  >
-                    Google Meet →
-                  </a>
-                )}
-              </Card>
-            ))}
+                    <div>
+                      <span style={{
+                        fontFamily: 'var(--font-plus-jakarta)',
+                        fontSize: 'var(--text-body-sm)',
+                        fontWeight: 600,
+                        color: 'var(--color-text-primary)',
+                      }}>
+                        {formatDateTimeSpanish(booking.slot_start)}
+                      </span>
+                      <span style={{
+                        fontFamily: 'var(--font-inter)',
+                        fontSize: 'var(--text-caption)',
+                        color: 'var(--color-text-secondary)',
+                        marginLeft: 'var(--space-3)',
+                      }}>
+                        {booking.email}
+                      </span>
+                    </div>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-3)' }}>
+                      <span style={{
+                        fontFamily: 'var(--font-inter-tight)',
+                        fontSize: '11px',
+                        fontWeight: 600,
+                        color: statusConfig.color,
+                      }}>
+                        {statusConfig.label}
+                      </span>
+                      <a
+                        href={`/mapa/${booking.map_hash}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        style={{
+                          fontFamily: 'var(--font-inter-tight)',
+                          fontSize: 'var(--text-caption)',
+                          color: 'var(--color-accent)',
+                          textDecoration: 'none',
+                        }}
+                      >
+                        Ver mapa →
+                      </a>
+                    </div>
+                  </div>
+                </Card>
+              )
+            })}
           </div>
         ) : (
           <p style={{
@@ -701,7 +980,7 @@ export default function DisponibilidadPage() {
             fontSize: 'var(--text-body-sm)',
             color: 'var(--color-text-tertiary)',
           }}>
-            No hay sesiones agendadas.
+            No hay sesiones en el historial.
           </p>
         )}
       </section>

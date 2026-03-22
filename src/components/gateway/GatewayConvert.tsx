@@ -19,7 +19,6 @@ import CompressedBisagra from './CompressedBisagra'
 import EmailCapture from './EmailCapture'
 import ProgressBar from '@/components/ui/ProgressBar'
 import { computeConvertScores } from '@/lib/scoring'
-import { trackEvent, identifyUser } from '@/lib/posthog'
 import { P2_OPTIONS } from '@/lib/gateway-bloque1-data'
 import { P7_SLIDERS } from '@/lib/gateway-bloque2-data'
 
@@ -60,13 +59,11 @@ export default function GatewayConvert({
   }, [])
 
   const handleP2Select = useCallback((id: string) => {
-    trackEvent('gateway_p2', { option: id, mode: 'convert' })
     setP2(id)
     changeStep('p7')
   }, [changeStep])
 
   const handleP7Continue = useCallback((values: Record<string, number>) => {
-    trackEvent('gateway_p7', { sliders: values, mode: 'convert' })
     setSliders(values)
     changeStep('bisagra')
   }, [changeStep])
@@ -76,8 +73,6 @@ export default function GatewayConvert({
   }, [changeStep])
 
   const handleEmailComplete = useCallback((email: string) => {
-    trackEvent('gateway_email_captured', { mode: 'convert' })
-    identifyUser(email)
     onComplete(email, p2, sliders)
   }, [onComplete, p2, sliders])
 

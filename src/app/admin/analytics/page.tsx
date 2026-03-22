@@ -2,7 +2,7 @@
  * /admin/analytics — Panel de analytics L.A.R.S.
  *
  * Muestra el embudo completo, métricas clave y últimos diagnósticos.
- * Datos reales de Supabase, no requiere PostHog.
+ * Datos reales de Supabase.
  */
 
 import AnalyticsDashboard from './AnalyticsDashboard'

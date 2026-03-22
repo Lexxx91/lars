@@ -1,6 +1,5 @@
 import type { Metadata, Viewport } from "next";
 import { Plus_Jakarta_Sans, Inter, Inter_Tight, Cormorant_Garamond } from "next/font/google";
-import PostHogProvider from "@/components/PostHogProvider";
 import "./globals.css";
 
 const plusJakartaSans = Plus_Jakarta_Sans({
@@ -66,7 +65,7 @@ export default function RootLayout({
       className={`${plusJakartaSans.variable} ${inter.variable} ${interTight.variable} ${cormorantGaramond.variable}`}
     >
       <body>
-        <PostHogProvider>{children}</PostHogProvider>
+        {children}
       </body>
     </html>
   );

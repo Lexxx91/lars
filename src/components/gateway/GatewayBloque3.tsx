@@ -22,7 +22,6 @@ import BisagraScreen from './BisagraScreen'
 import EmailCapture from './EmailCapture'
 import ProgressBar from '@/components/ui/ProgressBar'
 import { computeScores } from '@/lib/scoring'
-import { trackEvent, identifyUser } from '@/lib/posthog'
 import type { Bloque1Answers } from './GatewayBloque1'
 import type { Bloque2Answers } from '@/lib/gateway-bloque2-data'
 
@@ -73,7 +72,6 @@ export default function GatewayBloque3({
   }, [])
 
   const handleCalculandoComplete = useCallback(() => {
-    trackEvent('gateway_bisagra', { score: scores.global })
     changeStep('bisagra')
   }, [changeStep, scores.global])
 
@@ -83,8 +81,6 @@ export default function GatewayBloque3({
 
   const handleEmailComplete = useCallback(
     (email: string) => {
-      trackEvent('gateway_email_captured')
-      identifyUser(email)
       onComplete(email)
     },
     [onComplete]

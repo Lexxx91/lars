@@ -12,7 +12,7 @@ Decidido en Fase 0 · Marzo 2026
 | Base de datos | Supabase (PostgreSQL) | Free → $25/mes |
 | Email | Resend + React Email | Free (100/día) |
 | Pagos | Stripe | 1.4% + 0.25€/transacción |
-| Analytics | PostHog | Free (1M eventos/mes) |
+| Analytics | Custom (Supabase) | Integrado en la DB |
 | Hosting | Vercel | Free → $20/mes |
 | Fuentes | Google Fonts (next/font) | — |
 
@@ -53,11 +53,11 @@ Decidido en Fase 0 · Marzo 2026
 - **Qué es:** La plataforma de pagos online más utilizada en Europa.
 - **Por qué:** Para los 97€ de la Semana 1. Stripe Checkout genera una página de pago segura — no construimos formulario propio. Webhooks para confirmar el pago automáticamente. Refunds para la garantía de 7 días.
 
-### PostHog
+### Analytics custom (Supabase)
 
-- **Qué es:** Una plataforma de analytics que mide eventos específicos (no solo visitas).
-- **Por qué:** Necesitamos medir cada paso del gateway: quién responde P1, dónde abandonan, cuántos llegan a la bisagra, cuántos dan el email, cuántos hacen clic en el CTA. PostHog hace funnels visuales, session replay (ver la experiencia real del usuario en móvil), y funciona sin cookies — cumplimos RGPD sin banner de cookies invasivo.
-- **Alternativas descartadas:** Google Analytics (basado en pageviews, no eventos), Mixpanel (más caro), Amplitude (más complejo).
+- **Qué es:** Sistema de analytics propio construido sobre la misma base de datos Supabase.
+- **Por qué:** Los datos del funnel (quién responde P1, dónde abandonan, cuántos dan el email) ya están en Supabase como parte del flujo del gateway. El panel de admin en `/admin/analytics` muestra el embudo visual y métricas en tiempo real sin dependencias externas. Cero cookies, cumplimos RGPD automáticamente.
+- **PostHog descartado:** Se probó inicialmente pero se eliminó — añadía una dependencia externa innecesaria cuando todos los datos ya están en nuestra DB.
 
 ### Vercel
 

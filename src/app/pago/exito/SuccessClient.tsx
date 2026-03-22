@@ -14,7 +14,6 @@
 
 import { useEffect } from 'react'
 import Button from '@/components/ui/Button'
-import { trackEvent } from '@/lib/posthog'
 
 interface Props {
   hash: string | null
@@ -36,7 +35,6 @@ function getEmailUrl(email: string | null): string {
 export default function SuccessClient({ hash, email, sessionId }: Props) {
   // Registrar vista de la página de éxito + analytics
   useEffect(() => {
-    trackEvent('payment_completed')
     if (hash) {
       fetch(`/api/mapa/${hash}/visita`, { method: 'PATCH' }).catch(() => {})
     }

@@ -525,15 +525,4 @@ input[type="range"]::-moz-range-track {
   border-radius: 4px;
 }
 
-/* ============================================================
-   PREFERS REDUCED MOTION — anulación global
-   ============================================================ */
-@media (prefers-reduced-motion: reduce) {
-  *,
-  *::before,
-  *::after {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
-  }
-}
+/* prefers-reduced-motion ya definido arriba en sección ACCESIBILIDAD */

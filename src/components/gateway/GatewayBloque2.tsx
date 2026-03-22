@@ -19,7 +19,6 @@ import SingleSelectStep from './SingleSelectStep'
 import SlidersStep from './SlidersStep'
 import MicroEspejo from '@/components/ui/MicroEspejo'
 import ProgressBar from '@/components/ui/ProgressBar'
-import { trackEvent } from '@/lib/posthog'
 import {
   P5_OPTIONS,
   P6_OPTIONS,
@@ -111,7 +110,6 @@ export default function GatewayBloque2({
   // ── Handlers ──
   const handleP5Select = useCallback(
     (id: string) => {
-      trackEvent('gateway_p5', { option: id })
       setP5(id)
       changeStep('p6')
     },
@@ -120,7 +118,6 @@ export default function GatewayBloque2({
 
   const handleP6Select = useCallback(
     (id: string) => {
-      trackEvent('gateway_p6', { option: id })
       setP6(id)
       setZone('reflexion')
       changeStep('micro-espejo-2')
@@ -129,14 +126,12 @@ export default function GatewayBloque2({
   )
 
   const handleMicroEspejo2Continue = useCallback(() => {
-    trackEvent('gateway_mirror_2')
     setZone('exploracion')
     changeStep('p7')
   }, [changeStep])
 
   const handleP7Continue = useCallback(
     (values: Record<string, number>) => {
-      trackEvent('gateway_p7', { sliders: values })
       setSliders(values)
       changeStep('p8')
     },
@@ -145,7 +140,6 @@ export default function GatewayBloque2({
 
   const handleP8Select = useCallback(
     (id: string) => {
-      trackEvent('gateway_p8', { option: id })
       setP8(id)
       onComplete({ p5, p6, sliders, p8: id })
     },
@@ -164,7 +158,7 @@ export default function GatewayBloque2({
   // El copy base de P5/P6 no cambia — solo el contexto sutil
   const p5Context =
     p4 === 'D'
-      ? 'Dato: esta pregunta revela D5 — alegría de vivir.'
+      ? 'El 41% de personas con tu perfil no recuerdan cuándo fue la última vez.'
       : p4 === 'C'
       ? 'No hay prisa. Tómate tu tiempo para responder.'
       : p4 === 'E'

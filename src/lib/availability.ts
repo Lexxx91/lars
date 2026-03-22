@@ -8,6 +8,7 @@
 import { createAdminClient } from './supabase'
 
 const SLOT_DURATION_MINUTES = 20
+const BUFFER_MINUTES = 10
 const LOOKAHEAD_DAYS = 14
 const MIN_HOURS_BEFORE_SLOT = 2
 
@@ -55,16 +56,23 @@ export async function getAvailableSlots(): Promise<TimeSlot[]> {
 
   if (bookingsError) throw new Error(`Error leyendo bookings: ${bookingsError.message}`)
 
-  const bookedStartTimes = new Set(
-    (bookings ?? []).map((b: { slot_start: string }) => new Date(b.slot_start).getTime())
-  )
+  const bookedRanges = (bookings ?? []).map((b: { slot_start: string }) => {
+    const start = new Date(b.slot_start).getTime()
+    return {
+      start,
+      end: start + (SLOT_DURATION_MINUTES + BUFFER_MINUTES) * 60 * 1000,
+    }
+  })
 
-  // 3. Separar reglas recurrentes y bloques de fecha
+  // 3. Separar reglas recurrentes, bloques de día completo y franjas horarias
   const recurringRules = typedRules.filter((r) => r.day_of_week !== null && !r.is_blocked)
-  const blockedDates = new Set(
+  const fullDayBlocks = new Set(
     typedRules
-      .filter((r) => r.specific_date && r.is_blocked)
+      .filter((r) => r.specific_date && r.is_blocked && !r.start_time)
       .map((r) => r.specific_date!)
+  )
+  const timeRangeBlocks = typedRules.filter(
+    (r) => r.specific_date && r.is_blocked && r.start_time && r.end_time
   )
 
   // 4. Generar slots dia a dia
@@ -77,7 +85,19 @@ export async function getAvailableSlots(): Promise<TimeSlot[]> {
 
     // Fecha en zona horaria de Madrid para comparar
     const madridDate = toMadridDateString(day)
-    if (blockedDates.has(madridDate)) continue
+    if (fullDayBlocks.has(madridDate)) continue
+
+    // Obtener franjas horarias bloqueadas para este día (en UTC)
+    const dayTimeBlocks = timeRangeBlocks
+      .filter((r) => r.specific_date === madridDate)
+      .map((r) => {
+        const [bStartH, bStartM] = r.start_time!.split(':').map(Number)
+        const [bEndH, bEndM] = r.end_time!.split(':').map(Number)
+        return {
+          start: madridDateToUTC(day, bStartH, bStartM).getTime(),
+          end: madridDateToUTC(day, bEndH, bEndM).getTime(),
+        }
+      })
 
     const dayOfWeek = getMadridDayOfWeek(day)
 
@@ -103,7 +123,9 @@ export async function getAvailableSlots(): Promise<TimeSlot[]> {
         const slotEnd = slotStart + SLOT_DURATION_MINUTES * 60 * 1000
 
         // Filtrar: slot en el futuro (con margen) y no reservado
-        if (slotStart >= minTime && !bookedStartTimes.has(slotStart)) {
+        const isBooked = bookedRanges.some(r => slotStart >= r.start && slotStart < r.end)
+        const isTimeBlocked = dayTimeBlocks.some(r => slotStart >= r.start && slotStart < r.end)
+        if (slotStart >= minTime && !isBooked && !isTimeBlocked) {
           slots.push({
             start: new Date(slotStart),
             end: new Date(slotEnd),

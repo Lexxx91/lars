@@ -172,12 +172,14 @@ Reservas de sesiones de 20 minutos con Javier, integradas con Google Calendar.
 | `map_hash` | text NOT NULL | Hash del mapa (para link directo) |
 | `slot_start` | timestamptz NOT NULL | Inicio del slot (UTC) |
 | `slot_end` | timestamptz NOT NULL | Fin del slot (+20 min) |
-| `status` | text NOT NULL DEFAULT 'confirmed' | confirmed / cancelled / completed |
+| `status` | text NOT NULL DEFAULT 'confirmed' | confirmed / cancelled / completed / no_show |
 | `google_event_id` | text | ID del evento en Google Calendar |
 | `google_meet_url` | text | URL de la videollamada |
 | `reminder_sent` | boolean DEFAULT false | Si se envió el recordatorio 24h |
 | `created_at` | timestamptz DEFAULT NOW() | Cuándo se creó la reserva |
 | `cancelled_at` | timestamptz | Cuándo se canceló (si aplica) |
+| `completed_at` | timestamptz | Cuándo se completó/marcó no-show (migración 003) |
+| `admin_notes` | text | Notas del admin sobre la sesión (migración 003) |
 
 **Índice único parcial:** Solo 1 booking confirmado por `slot_start` (evita doble reserva).
 
@@ -187,9 +189,10 @@ Reservas de sesiones de 20 minutos con Javier, integradas con Google Calendar.
 
 ## Tabla `availability_config` (Configuración de disponibilidad)
 
-Reglas de disponibilidad de Javier. Dos tipos de registros:
+Reglas de disponibilidad de Javier. Tres tipos de registros:
 - **Recurrente:** día de la semana + horario (ej: "Lunes 10:00-13:00")
-- **Bloqueo:** fecha específica bloqueada (ej: vacaciones)
+- **Bloqueo día completo:** fecha específica sin start_time/end_time (ej: vacaciones)
+- **Bloqueo franja horaria:** fecha específica con start_time/end_time (ej: reunión de 10:00-12:00)
 
 | Columna | Tipo | Descripción |
 |---------|------|-------------|
@@ -215,6 +218,17 @@ Ve a **Supabase Dashboard → SQL Editor** y ejecuta el contenido de:
 ```sql
 DROP TABLE IF EXISTS bookings;
 DROP TABLE IF EXISTS availability_config;
+```
+
+## SQL de migración — Historial de sesiones (Ejecutar en Supabase)
+
+Ve a **Supabase Dashboard → SQL Editor** y ejecuta el contenido de:
+`supabase/migrations/003_booking_history.sql`
+
+**Para revertir:**
+```sql
+ALTER TABLE bookings DROP COLUMN IF EXISTS completed_at;
+ALTER TABLE bookings DROP COLUMN IF EXISTS admin_notes;
 ```
 
 ---

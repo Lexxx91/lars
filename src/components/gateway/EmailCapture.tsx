@@ -260,27 +260,29 @@ export default function EmailCapture({ scores, onComplete }: EmailCaptureProps) 
             style={{
               width: '100%',
               padding: '14px 16px',
-              borderRadius: 'var(--radius-md)',
+              borderRadius: 'var(--radius-pill)',
               border: showError
                 ? '1px solid var(--color-error)'
-                : '1px solid rgba(255,255,255,0.10)',
-              background: 'var(--color-bg-tertiary)',
+                : '1px solid rgba(255,255,255,0.12)',
+              background: 'rgba(255,255,255,0.05)',
               color: 'var(--color-text-primary)',
               fontFamily: 'var(--font-inter)',
               fontSize: '16px', /* 16px: evita zoom en iOS */
               outline: 'none',
-              transition: 'border-color var(--transition-fast)',
+              transition: 'border-color 200ms ease, box-shadow 200ms ease',
               marginBottom: showError ? 'var(--space-2)' : 'var(--space-4)',
               boxSizing: 'border-box',
             }}
             onFocus={(e) => {
               if (!showError) {
                 e.currentTarget.style.borderColor = 'var(--color-accent)'
+                e.currentTarget.style.boxShadow = '0 0 0 3px rgba(198, 200, 238, 0.15)'
               }
             }}
             onBlurCapture={(e) => {
+              e.currentTarget.style.boxShadow = 'none'
               if (!showError) {
-                e.currentTarget.style.borderColor = 'rgba(255,255,255,0.10)'
+                e.currentTarget.style.borderColor = 'rgba(255,255,255,0.12)'
               }
             }}
           />

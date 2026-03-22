@@ -20,34 +20,71 @@ import GatewayBloque1 from '@/components/gateway/GatewayBloque1'
 import GatewayBloque2 from '@/components/gateway/GatewayBloque2'
 import GatewayBloque3 from '@/components/gateway/GatewayBloque3'
 import OfflineBanner from '@/components/ui/OfflineBanner'
-import { trackEvent } from '@/lib/posthog'
 import type { Bloque1Answers } from '@/components/gateway/GatewayBloque1'
 import type { Bloque2Answers } from '@/lib/gateway-bloque2-data'
 
 type Phase = 'landing' | 'bloque1' | 'bloque2' | 'bloque3'
 
+const STORAGE_KEY = 'lars_gateway_state'
+const EXPIRATION_MS = 24 * 60 * 60 * 1000 // 24 horas
+
+interface SavedState {
+  phase: Phase
+  p1: string | null
+  bloque1Answers: Bloque1Answers | null
+  bloque2Answers: Bloque2Answers | null
+  savedAt: number
+}
+
+/** Lee estado guardado de localStorage. Devuelve null si no existe o expiró. */
+function loadSavedState(): SavedState | null {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY)
+    if (!raw) return null
+    const saved: SavedState = JSON.parse(raw)
+    if (Date.now() - saved.savedAt > EXPIRATION_MS) {
+      localStorage.removeItem(STORAGE_KEY)
+      return null
+    }
+    return saved
+  } catch {
+    return null
+  }
+}
+
+/** Persiste el estado actual en localStorage. */
+function saveState(state: Omit<SavedState, 'savedAt'>) {
+  try {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify({ ...state, savedAt: Date.now() }))
+  } catch {
+    // localStorage lleno o no disponible — no bloquea el flujo
+  }
+}
+
+/** Limpia el estado guardado (al completar el gateway). */
+function clearSavedState() {
+  try { localStorage.removeItem(STORAGE_KEY) } catch { /* no-op */ }
+}
+
 export default function GatewayController() {
-  const [phase, setPhase] = useState<Phase>('landing')
-  const [p1, setP1] = useState<string | null>(null)
-  const [bloque1Answers, setBloque1Answers] = useState<Bloque1Answers | null>(null)
-  const [bloque2Answers, setBloque2Answers] = useState<Bloque2Answers | null>(null)
+  /* Restaurar estado guardado (si existe y no expiró) */
+  const [restored] = useState(() => loadSavedState())
+
+  const [phase, setPhase] = useState<Phase>(restored?.phase ?? 'landing')
+  const [p1, setP1] = useState<string | null>(restored?.p1 ?? null)
+  const [bloque1Answers, setBloque1Answers] = useState<Bloque1Answers | null>(restored?.bloque1Answers ?? null)
+  const [bloque2Answers, setBloque2Answers] = useState<Bloque2Answers | null>(restored?.bloque2Answers ?? null)
   const [duplicateHash, setDuplicateHash] = useState<string | null>(null)
   const [duplicateEmail, setDuplicateEmail] = useState<string | null>(null)
 
-  /* Tracking de abandono — dispara evento al cerrar pestaña */
+  /* Persistir estado en localStorage cada vez que cambia */
   useEffect(() => {
-    const handleBeforeUnload = () => {
-      if (phase !== 'landing') {
-        trackEvent('gateway_abandoned', { phase })
-      }
-    }
-    window.addEventListener('beforeunload', handleBeforeUnload)
-    return () => window.removeEventListener('beforeunload', handleBeforeUnload)
-  }, [phase])
+    if (phase === 'landing') return // no guardar estado en landing
+    saveState({ phase, p1, bloque1Answers, bloque2Answers })
+  }, [phase, p1, bloque1Answers, bloque2Answers])
 
   /* P1 seleccionada en el hero → directo al diagnóstico completo */
   const handleP1Select = useCallback((id: string) => {
-    trackEvent('gateway_p1', { option: id })
     setP1(id)
     setPhase('bloque1')
   }, [])
@@ -80,6 +117,7 @@ export default function GatewayController() {
 
       if (res.ok) {
         const data = await res.json()
+        clearSavedState()
         if (data.existing) {
           setDuplicateHash(data.hash)
           setDuplicateEmail(email)
@@ -87,9 +125,11 @@ export default function GatewayController() {
           window.location.href = `/mapa/${data.hash}`
         }
       } else {
+        clearSavedState()
         window.location.href = '/mapa/preview'
       }
     } catch {
+      clearSavedState()
       window.location.href = '/mapa/preview'
     }
   }, [p1, bloque1Answers, bloque2Answers])
@@ -107,6 +147,7 @@ export default function GatewayController() {
       })
       if (res.ok) {
         const { hash } = await res.json()
+        clearSavedState()
         window.location.href = `/mapa/${hash}`
       }
     } catch {
@@ -117,12 +158,14 @@ export default function GatewayController() {
   /* Duplicado: ver mapa existente */
   const handleDuplicateViewExisting = useCallback(() => {
     if (duplicateHash) {
+      clearSavedState()
       window.location.href = `/mapa/${duplicateHash}`
     }
   }, [duplicateHash])
 
   /* Cerrar cualquier bloque → volver a landing */
   const handleClose = useCallback(() => {
+    clearSavedState()
     setPhase('landing')
   }, [])
 

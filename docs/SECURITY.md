@@ -22,7 +22,6 @@
 | `NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY` | Frontend | Pública (solo para Checkout) |
 | `STRIPE_WEBHOOK_SECRET` | Solo Backend | SECRETA |
 | `RESEND_API_KEY` | Solo Backend | SECRETA |
-| `NEXT_PUBLIC_POSTHOG_KEY` | Frontend | Pública (solo analytics) |
 
 **Regla:** Todo lo que empieza con `NEXT_PUBLIC_` es visible en el navegador. Solo poner ahí lo que sea seguro exponer.
 
@@ -74,11 +73,11 @@ Supabase incluye backups automáticos diarios en el plan Pro. En free tier, los 
 
 ---
 
-## Analytics (PostHog)
+## Analytics (custom Supabase)
 
-- Modo sin cookies activado — cumple RGPD sin banner de cookies.
-- Los eventos no incluyen datos personales (email, nombre). Solo acciones anónimas (paso completado, tiempo, dispositivo).
-- La key pública de PostHog solo permite enviar eventos, no leerlos.
+- Sistema de analytics propio sin cookies — cumple RGPD sin banner.
+- Los datos del funnel se almacenan en Supabase como parte del flujo del gateway.
+- No se envían datos a servicios externos de analytics.
 
 ---
 
@@ -95,7 +94,7 @@ Supabase incluye backups automáticos diarios en el plan Pro. En free tier, los 
 - Guardar contraseñas (no hay autenticación de usuario)
 - Exponer `SUPABASE_SERVICE_ROLE_KEY` en el frontend
 - Guardar tarjetas de crédito (Stripe las maneja)
-- Enviar datos personales a PostHog
+- Enviar datos personales a servicios externos de analytics
 - Indexar mapas vivos en buscadores
 - Permitir acceso a datos de un usuario desde otro `map_hash`
 
