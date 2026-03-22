@@ -2,16 +2,20 @@
 
 /**
  * ReliefSection — Sección ALIVIO + Footer mínimo.
+ * A-15: scroll reveal + Counter animado para el dato "142 personas".
  * CTA que hace scroll suave a P1 y emite evento para el pulse.
- * Dato colectivo fijo: "142 personas" (Fase 1 — se conecta a Supabase en Fase 8).
  */
 
+import { useScrollReveal } from '@/hooks/useScrollReveal'
+import Counter from '@/components/ui/Counter'
+
 export default function ReliefSection() {
+  const sectionRef = useScrollReveal<HTMLElement>(0.1)
+
   const handleCTA = () => {
     const p1 = document.getElementById('p1-section')
     if (p1) {
       p1.scrollIntoView({ behavior: 'smooth', block: 'center' })
-      // Pequeño delay para que el scroll termine antes del pulse
       setTimeout(() => {
         window.dispatchEvent(new CustomEvent('scrollToP1'))
       }, 600)
@@ -21,6 +25,8 @@ export default function ReliefSection() {
   return (
     <>
       <section
+        ref={sectionRef}
+        className="scroll-reveal"
         aria-label="Qué mide el diagnóstico"
         style={{
           paddingTop: 'var(--space-4)',
@@ -39,7 +45,7 @@ export default function ReliefSection() {
             textAlign: 'center',
           }}
         >
-          {/* Headline — callback al SHOCK de apertura */}
+          {/* Headline */}
           <h2
             style={{
               fontFamily: 'var(--font-inter-tight)',
@@ -86,7 +92,7 @@ export default function ReliefSection() {
             Harvard&nbsp;·&nbsp;+25.000 sistemas nerviosos analizados&nbsp;·&nbsp;+20 años
           </p>
 
-          {/* Dato colectivo */}
+          {/* Dato colectivo — counter animado de 0 → 142 */}
           <p
             style={{
               fontFamily: 'var(--font-inter)',
@@ -96,7 +102,7 @@ export default function ReliefSection() {
               marginBottom: 'var(--space-10)',
             }}
           >
-            142 personas completaron este diagnóstico esta semana.
+            <Counter to={142} duration={800} suffix=" personas completaron este diagnóstico esta semana." />
           </p>
 
           {/* CTA */}

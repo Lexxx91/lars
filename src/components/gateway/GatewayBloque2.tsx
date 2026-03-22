@@ -1,56 +1,53 @@
 'use client'
 
 /**
- * GatewayBloque1 — P2 → Analizando → Primera Verdad → P3 → P4 → Micro-espejo 1
+ * GatewayBloque2 — P5 → P6 → Micro-espejo 2 → P7 (sliders) → P8
  *
- * A-04: Cross-fade entre pasos con changeStep (exit 200ms → enter 300ms).
- *       NUNCA corte seco entre preguntas.
+ * A-04: Cross-fade entre pasos (mismo patrón que GatewayBloque1).
+ * A-07: Sliders con color dinámico en SlidersStep.
+ * A-08: Micro-espejo 2 intensificado (fondo más oscuro, texto más grande, delay mayor).
  *
- * Al completar Micro-espejo 1, llama a onComplete con las respuestas
- * para que GatewayController pase al Bloque 2.
+ * P6 — la más importante — tiene diseño visual reforzado (padding mayor, fuente más grande).
+ *
+ * Progreso: 60% → 70% → 75% (pausa) → 82% → 90%
+ * Al completar P8, llama a onComplete con todas las respuestas del bloque.
  */
 
 import { useState, useCallback } from 'react'
 import ZoneWrapper from './ZoneWrapper'
-import AnalyzingScreen from './AnalyzingScreen'
 import SingleSelectStep from './SingleSelectStep'
-import MultiSelectStep from './MultiSelectStep'
+import SlidersStep from './SlidersStep'
 import MicroEspejo from '@/components/ui/MicroEspejo'
 import ProgressBar from '@/components/ui/ProgressBar'
 import {
-  P2_OPTIONS,
-  P3_OPTIONS,
-  P4_OPTIONS,
-  getPrimeraVerdad,
-  getMicroEspejo1,
-} from '@/lib/gateway-bloque1-data'
+  P5_OPTIONS,
+  P6_OPTIONS,
+  P7_SLIDERS,
+  P8_OPTIONS,
+  getMicroEspejo2,
+  type Bloque2Answers,
+} from '@/lib/gateway-bloque2-data'
 
 // ─── TIPOS ────────────────────────────────────────────────────────────────────
 
-type Step = 'p2' | 'analyzing' | 'primera-verdad' | 'p3' | 'p4' | 'micro-espejo-1'
+type Step = 'p5' | 'p6' | 'micro-espejo-2' | 'p7' | 'p8'
 type Zone = 'exploracion' | 'reflexion'
 
-export interface Bloque1Answers {
-  p2: string
-  p3Selections: string[]
-  p4: string
-}
-
-// Progreso no lineal — pausa en revelaciones (barra no avanza)
 const PROGRESS: Record<Step, number> = {
-  p2: 20,
-  analyzing: 20,
-  'primera-verdad': 20,
-  p3: 35,
-  p4: 45,
-  'micro-espejo-1': 50,
+  p5: 60,
+  p6: 70,
+  'micro-espejo-2': 75,
+  p7: 82,
+  p8: 90,
 }
 
 // ─── PROPS ────────────────────────────────────────────────────────────────────
 
-interface GatewayBloque1Props {
+interface GatewayBloque2Props {
   p1: string
-  onComplete: (answers: Bloque1Answers) => void
+  /** Respuestas de Bloque 1 — usadas para personalización de tono */
+  p4: string
+  onComplete: (answers: Bloque2Answers) => void
   onClose?: () => void
 }
 
@@ -83,23 +80,24 @@ const overlineStyle: React.CSSProperties = {
 
 // ─── COMPONENTE ───────────────────────────────────────────────────────────────
 
-export default function GatewayBloque1({
-  p1,
+export default function GatewayBloque2({
+  p4,
   onComplete,
   onClose,
-}: GatewayBloque1Props) {
+}: GatewayBloque2Props) {
   // ── Estado de pasos con cross-fade (A-04) ──
-  const [step, setStep] = useState<Step>('p2')
+  const [step, setStep] = useState<Step>('p5')
   const [stepKey, setStepKey] = useState(0)
   const [isExiting, setIsExiting] = useState(false)
 
   // ── Zona y respuestas ──
   const [zone, setZone] = useState<Zone>('exploracion')
-  const [p2, setP2] = useState('')
-  const [p3Selections, setP3Selections] = useState<string[]>([])
-  const [p4, setP4] = useState('')
+  const [p5, setP5] = useState('')
+  const [p6, setP6] = useState('')
+  const [sliders, setSliders] = useState<Record<string, number | undefined>>({})
+  const [p8, setP8] = useState('')
 
-  // ── changeStep: fade-out 200ms → nuevo paso con step-enter ──
+  // ── changeStep: cross-fade A-04 ──
   const changeStep = useCallback((newStep: Step) => {
     setIsExiting(true)
     setTimeout(() => {
@@ -110,51 +108,62 @@ export default function GatewayBloque1({
   }, [])
 
   // ── Handlers ──
-  const handleP2Select = useCallback(
+  const handleP5Select = useCallback(
     (id: string) => {
-      setP2(id)
-      setZone('reflexion')
-      changeStep('analyzing')
+      setP5(id)
+      changeStep('p6')
     },
     [changeStep]
   )
 
-  const handleAnalyzingComplete = useCallback(() => {
-    changeStep('primera-verdad')
-  }, [changeStep])
+  const handleP6Select = useCallback(
+    (id: string) => {
+      setP6(id)
+      setZone('reflexion')
+      changeStep('micro-espejo-2')
+    },
+    [changeStep]
+  )
 
-  const handlePrimeraVerdadContinue = useCallback(() => {
+  const handleMicroEspejo2Continue = useCallback(() => {
     setZone('exploracion')
-    changeStep('p3')
+    changeStep('p7')
   }, [changeStep])
 
-  const handleP3Continue = useCallback(
-    (selections: string[]) => {
-      setP3Selections(selections)
-      changeStep('p4')
+  const handleP7Continue = useCallback(
+    (values: Record<string, number>) => {
+      setSliders(values)
+      changeStep('p8')
     },
     [changeStep]
   )
 
-  const handleP4Select = useCallback(
+  const handleP8Select = useCallback(
     (id: string) => {
-      setP4(id)
-      setZone('reflexion')
-      changeStep('micro-espejo-1')
+      setP8(id)
+      onComplete({ p5, p6, sliders, p8: id })
     },
-    [changeStep]
+    [onComplete, p5, p6, sliders]
   )
-
-  const handleMicroEspejo1Continue = useCallback(() => {
-    onComplete({ p2, p3Selections, p4 })
-  }, [onComplete, p2, p3Selections, p4])
 
   // ── Contenido calculado ──
-  const primeraVerdad = getPrimeraVerdad(p1 || 'A', p2 || 'B')
-  const microEspejo1Content = getMicroEspejo1(p3Selections, p4 || 'A')
+  const microEspejo2Content = getMicroEspejo2(p6 || 'A')
 
   const progress = PROGRESS[step]
   const progressLabel = `Tu diagnóstico: ${progress}% completo`
+
+  // ── Ajuste de tono según P4 (personalización invisible) ──
+  // Fuerte (P4=D): contexto más directo
+  // Cuidador (P4=C): tono más suave
+  // El copy base de P5/P6 no cambia — solo el contexto sutil
+  const p5Context =
+    p4 === 'D'
+      ? 'Dato: esta pregunta revela D5 — alegría de vivir.'
+      : p4 === 'C'
+      ? 'No hay prisa. Tómate tu tiempo para responder.'
+      : p4 === 'E'
+      ? 'Basado en tu combinación anterior, esta dimensión es clave.'
+      : 'El 41% de personas que hacen este diagnóstico no recuerdan cuándo fue.'
 
   // ─── RENDER ───────────────────────────────────────────────────────────────
 
@@ -162,7 +171,7 @@ export default function GatewayBloque1({
     <div
       className="gateway-overlay"
       role="main"
-      aria-label="Diagnóstico — Gateway L.A.R.S."
+      aria-label="Diagnóstico — Gateway L.A.R.S. Bloque 2"
       style={{
         position: 'fixed',
         inset: 0,
@@ -210,9 +219,6 @@ export default function GatewayBloque1({
                   padding: 'var(--space-1)',
                   fontSize: 'var(--text-body-sm)',
                   fontFamily: 'var(--font-inter)',
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: 'var(--space-1)',
                   transition: 'color var(--transition-fast)',
                 }}
               >
@@ -224,86 +230,89 @@ export default function GatewayBloque1({
         </div>
       </div>
 
-      {/* ── ZoneWrapper — fondo que cambia y respira ── */}
+      {/* ── ZoneWrapper ── */}
       <ZoneWrapper zone={zone}>
-        {/*
-          Cross-fade container (A-04):
-          key={stepKey} → React remonta el elemento en cada cambio de paso
-          className → step-exit mientras sale (200ms), step-enter cuando entra (350ms)
-        */}
+        {/* Cross-fade container (A-04) */}
         <div
           key={stepKey}
           className={isExiting ? 'step-exit' : 'step-enter'}
         >
-          {/* P2 */}
-          {step === 'p2' && (
+          {/* P5 — Alegría de vivir */}
+          {step === 'p5' && (
             <SingleSelectStep
-              question="¿Cómo son tus noches últimamente?"
-              context="Tu sueño es el indicador más fiable de cómo está tu sistema nervioso."
-              options={P2_OPTIONS}
-              onSelect={handleP2Select}
+              question="¿Cuándo fue la última vez que disfrutaste algo de verdad — sin culpa, sin prisa, sin pensar en lo siguiente?"
+              collectiveData={p5Context}
+              options={P5_OPTIONS}
+              onSelect={handleP5Select}
             />
           )}
 
-          {/* Analizando... */}
-          {step === 'analyzing' && (
-            <AnalyzingScreen onComplete={handleAnalyzingComplete} />
-          )}
-
-          {/* Primera Verdad */}
-          {step === 'primera-verdad' && (
+          {/* P6 — Frase identitaria (diseño reforzado) */}
+          {step === 'p6' && (
             <div>
-              <p style={overlineStyle}>Lo que revelan tus respuestas</p>
-              <MicroEspejo
-                observation={primeraVerdad.text}
-                collectiveData={primeraVerdad.collectiveData}
-              />
-              <button
-                onClick={handlePrimeraVerdadContinue}
-                style={continueButtonStyle}
+              {/* Overline que marca importancia */}
+              <p
+                style={{
+                  fontFamily: 'var(--font-inter)',
+                  fontSize: 'var(--text-caption)',
+                  color: 'var(--color-accent)',
+                  letterSpacing: 'var(--ls-overline)',
+                  textTransform: 'uppercase',
+                  marginBottom: 'var(--space-4)',
+                }}
               >
-                Seguir con mi diagnóstico →
-              </button>
+                La pregunta clave
+              </p>
+              <SingleSelectStep
+                question="¿Cuál de estas frases sientes más verdadera ahora mismo?"
+                collectiveData="Cada una de estas frases la ha elegido más de 1.000 personas antes que tú."
+                options={P6_OPTIONS}
+                reinforced
+                onSelect={handleP6Select}
+              />
             </div>
           )}
 
-          {/* P3 — Claridad cognitiva (selección múltiple) */}
-          {step === 'p3' && (
-            <MultiSelectStep
-              question="¿Reconoces alguna de estas señales en tu día a día?"
-              context="Tu cerebro consume el 20% de tu energía total. Cuando el sistema nervioso está en alerta, desvía esos recursos a la supervivencia."
-              collectiveData="El 68% de ejecutivos con tu perfil reportan 3 o más de estos síntomas."
-              options={P3_OPTIONS}
-              onContinue={handleP3Continue}
-            />
-          )}
-
-          {/* P4 — Equilibrio emocional */}
-          {step === 'p4' && (
-            <SingleSelectStep
-              question="¿Cuál de estas frases podrías haber dicho tú esta semana?"
-              context="La reactividad emocional no es un defecto de carácter. Es la respuesta de un cerebro que ha agotado los recursos para regular."
-              collectiveData="Esta es la pregunta que más tarda en responderse. Tómate tu tiempo."
-              options={P4_OPTIONS}
-              onSelect={handleP4Select}
-            />
-          )}
-
-          {/* Micro-espejo 1 */}
-          {step === 'micro-espejo-1' && (
+          {/* Micro-espejo 2 — A-08: versión intensificada */}
+          {step === 'micro-espejo-2' && (
             <div>
-              <p style={overlineStyle}>Tu patrón — 50% completado</p>
+              <p style={overlineStyle}>Tu patrón — 75% completado</p>
               <MicroEspejo
-                observation={microEspejo1Content.text}
-                collectiveData={microEspejo1Content.collectiveData}
+                observation={microEspejo2Content.text}
+                collectiveData={microEspejo2Content.collectiveData}
+                intensified
               />
+              {/* Delay del botón: 3000ms (más largo que M1 para que la persona procese P6) */}
               <button
-                onClick={handleMicroEspejo1Continue}
-                style={continueButtonStyle}
+                onClick={handleMicroEspejo2Continue}
+                style={{
+                  ...continueButtonStyle,
+                  /* El botón aparece después de 3s — la persona necesita más tiempo aquí */
+                  animation: 'fade-in-quick 300ms ease 3000ms both',
+                }}
               >
                 Continuar el diagnóstico →
               </button>
             </div>
+          )}
+
+          {/* P7 — Sliders A-07 */}
+          {step === 'p7' && (
+            <SlidersStep
+              question="En una escala del 1 al 10, ¿cómo calificarías cada una de estas áreas?"
+              sliders={P7_SLIDERS}
+              onContinue={handleP7Continue}
+            />
+          )}
+
+          {/* P8 — Duración */}
+          {step === 'p8' && (
+            <SingleSelectStep
+              question="¿Cuánto tiempo llevas sintiéndote así?"
+              context="La duración importa: determina cómo responde tu cuerpo a la intervención."
+              options={P8_OPTIONS}
+              onSelect={handleP8Select}
+            />
           )}
         </div>
       </ZoneWrapper>

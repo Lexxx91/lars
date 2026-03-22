@@ -1,9 +1,12 @@
+'use client'
+
 /**
  * SocialProofSection — Sección PRUEBA SOCIAL.
- * Testimonios en formato minimalista. Sin fotos. Cargo + edad.
- * IMPORTANTE: Estos son PLANTILLA. Javier debe sustituirlos por testimonios
- * reales adaptados de sus consultas (pendiente de decisión en PROGRESS.md).
+ * A-15: Testimonios con scroll reveal + stagger (200ms entre cada uno).
+ * IMPORTANTE: Textos son PLANTILLA — pendiente de testimonios reales de Javier.
  */
+
+import { useRef, useEffect, useState } from 'react'
 
 const testimonials = [
   {
@@ -22,8 +25,27 @@ const testimonials = [
 ]
 
 export default function SocialProofSection() {
+  const sectionRef = useRef<HTMLElement>(null)
+  const [visible, setVisible] = useState(false)
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setVisible(true)
+          observer.disconnect()
+        }
+      },
+      { threshold: 0.1 }
+    )
+    const el = sectionRef.current
+    if (el) observer.observe(el)
+    return () => observer.disconnect()
+  }, [])
+
   return (
     <section
+      ref={sectionRef}
       aria-label="Testimonios"
       style={{
         paddingTop: 'var(--space-4)',
@@ -40,7 +62,6 @@ export default function SocialProofSection() {
             border: '1px solid rgba(250, 204, 21, 0.3)',
             borderRadius: 'var(--radius-md)',
             padding: 'var(--space-3) var(--space-4)',
-            marginBottom: 'var(--space-6)',
             maxWidth: '680px',
             margin: '0 auto var(--space-6)',
           }}
@@ -78,6 +99,11 @@ export default function SocialProofSection() {
               borderRadius: '0 var(--radius-md) var(--radius-md) 0',
               padding: 'var(--space-5) var(--space-6)',
               margin: 0,
+              /* Stagger: cada testimonio entra 200ms después del anterior */
+              opacity: visible ? 1 : 0,
+              transform: visible ? 'none' : 'translateY(20px)',
+              transition: `opacity 500ms var(--ease-out-expo) ${index * 200}ms,
+                           transform 500ms var(--ease-out-expo) ${index * 200}ms`,
             }}
           >
             <p

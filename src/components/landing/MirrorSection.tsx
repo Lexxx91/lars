@@ -1,12 +1,19 @@
+'use client'
+
 /**
  * MirrorSection — Sección ESPEJO (Normalización).
- * Objetivo: que la persona se reconozca. "Esto me pasa a mí."
- * Copy exacto de FEATURE_LANDING_DESIGN.md.
+ * A-15: scroll reveal con IntersectionObserver.
  */
 
+import { useScrollReveal } from '@/hooks/useScrollReveal'
+
 export default function MirrorSection() {
+  const ref = useScrollReveal<HTMLElement>(0.15)
+
   return (
     <section
+      ref={ref}
+      className="scroll-reveal"
       aria-label="Normalización"
       style={{
         paddingTop: 'var(--space-16)',
@@ -15,12 +22,7 @@ export default function MirrorSection() {
         paddingRight: 'var(--container-padding-mobile)',
       }}
     >
-      <div
-        style={{
-          maxWidth: '680px',
-          margin: '0 auto',
-        }}
-      >
+      <div style={{ maxWidth: '680px', margin: '0 auto' }}>
         <h2
           style={{
             fontFamily: 'var(--font-inter-tight)',

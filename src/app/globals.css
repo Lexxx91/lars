@@ -258,6 +258,55 @@ svg {
 }
 
 /* ============================================================
+   EASING FUNCTIONS — Fuente: docs/ANIMATIONS.md
+   ============================================================ */
+:root {
+  --ease-out-expo:  cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-out-quart: cubic-bezier(0.25, 1, 0.5, 1);
+  --ease-in-out:    cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ============================================================
+   SCROLL REVEAL — A-03 / A-15 (IntersectionObserver)
+   ============================================================ */
+.scroll-reveal {
+  opacity: 0;
+  transform: translateY(28px);
+  transition:
+    opacity  600ms var(--ease-out-expo),
+    transform 600ms var(--ease-out-expo);
+}
+
+.scroll-reveal.scroll-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Stagger delays para grupos de cards */
+.scroll-stagger > .scroll-reveal:nth-child(1) { transition-delay:   0ms; }
+.scroll-stagger > .scroll-reveal:nth-child(2) { transition-delay: 150ms; }
+.scroll-stagger > .scroll-reveal:nth-child(3) { transition-delay: 300ms; }
+
+/* Testimonios — delays para stagger */
+.testimonials-stagger > .scroll-reveal:nth-child(1) { transition-delay:   0ms; }
+.testimonials-stagger > .scroll-reveal:nth-child(2) { transition-delay: 200ms; }
+.testimonials-stagger > .scroll-reveal:nth-child(3) { transition-delay: 400ms; }
+
+/* ============================================================
+   TYPING CURSOR — A-05 / A-09
+   ============================================================ */
+.typing-cursor::after {
+  content: '|';
+  animation: blink 530ms step-end infinite;
+  color: var(--color-accent);
+  margin-left: 1px;
+}
+
+@keyframes blink {
+  50% { opacity: 0; }
+}
+
+/* ============================================================
    ANIMACIONES — Fase 1
    ============================================================ */
 
@@ -396,4 +445,95 @@ svg {
 
 .fade-in {
   animation: fade-in-quick 300ms ease forwards;
+}
+
+/* ============================================================
+   STEP-EXIT — A-04 cross-fade entre preguntas
+   ============================================================ */
+@keyframes step-fade-out {
+  from { opacity: 1; transform: translateY(0); }
+  to   { opacity: 0; transform: translateY(-8px); }
+}
+
+.step-exit {
+  animation: step-fade-out 200ms var(--ease-in-out) forwards;
+  pointer-events: none;
+}
+
+/* ============================================================
+   FADE-IN-UP — counter y revelaciones secuenciales
+   ============================================================ */
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.fade-in-up {
+  animation: fadeInUp 400ms var(--ease-out-expo) both;
+}
+
+/* ============================================================
+   PULSE GLOW — CalculandoScreen A-09
+   ============================================================ */
+@keyframes pulse-glow {
+  0%, 100% {
+    opacity: 0.6;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.15);
+  }
+}
+
+/* ============================================================
+   SLIDER RANGE — thumb styling cross-browser
+   ============================================================ */
+input[type="range"] {
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: var(--color-text-primary);
+  cursor: pointer;
+  border: 2px solid var(--color-bg-primary);
+  margin-top: 0;
+}
+
+input[type="range"]::-moz-range-thumb {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: var(--color-text-primary);
+  cursor: pointer;
+  border: 2px solid var(--color-bg-primary);
+}
+
+input[type="range"]::-webkit-slider-runnable-track {
+  background: transparent;
+  height: 8px;
+}
+
+input[type="range"]::-moz-range-track {
+  background: transparent;
+  height: 8px;
+  border-radius: 4px;
+}
+
+/* ============================================================
+   PREFERS REDUCED MOTION — anulación global
+   ============================================================ */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
 }
