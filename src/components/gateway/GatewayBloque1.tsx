@@ -11,7 +11,7 @@
  */
 
 import { useState, useCallback } from 'react'
-import ZoneWrapper from './ZoneWrapper'
+import ZoneWrapper, { getZoneBg } from './ZoneWrapper'
 import AnalyzingScreen from './AnalyzingScreen'
 import SingleSelectStep from './SingleSelectStep'
 import MultiSelectStep from './MultiSelectStep'
@@ -171,7 +171,8 @@ export default function GatewayBloque1({
         flexDirection: 'column',
         overflowY: 'auto',
         overflowX: 'hidden',
-        backgroundColor: 'var(--color-bg-primary)',
+        backgroundColor: getZoneBg(zone),
+        transition: 'background-color 600ms var(--ease-zone)',
       }}
     >
       {/* ── Barra de progreso sticky ── */}
@@ -180,11 +181,8 @@ export default function GatewayBloque1({
           position: 'sticky',
           top: 0,
           zIndex: 10,
-          backgroundColor:
-            zone === 'reflexion'
-              ? 'var(--color-bg-secondary)'
-              : 'var(--color-bg-primary)',
-          transition: 'background-color 600ms ease',
+          backgroundColor: getZoneBg(zone),
+          transition: 'background-color 600ms var(--ease-zone)',
           padding: 'var(--space-4) var(--container-padding-mobile)',
           paddingBottom: 'var(--space-3)',
           borderBottom: 'var(--border-subtle)',
@@ -250,15 +248,16 @@ export default function GatewayBloque1({
             <AnalyzingScreen onComplete={handleAnalyzingComplete} />
           )}
 
-          {/* Primera Verdad */}
+          {/* Primera Verdad — stagger: label → observation → data → button */}
           {step === 'primera-verdad' && (
             <div>
-              <p style={overlineStyle}>Lo que revelan tus respuestas</p>
+              <p className="mirror-stagger-label" style={overlineStyle}>Lo que revelan tus respuestas</p>
               <MicroEspejo
                 observation={primeraVerdad.text}
                 collectiveData={primeraVerdad.collectiveData}
               />
               <button
+                className="mirror-stagger-button"
                 onClick={handlePrimeraVerdadContinue}
                 style={continueButtonStyle}
               >
@@ -289,15 +288,16 @@ export default function GatewayBloque1({
             />
           )}
 
-          {/* Micro-espejo 1 */}
+          {/* Micro-espejo 1 — stagger: label → observation → data → button */}
           {step === 'micro-espejo-1' && (
             <div>
-              <p style={overlineStyle}>Tu patrón — 50% completado</p>
+              <p className="mirror-stagger-label" style={overlineStyle}>Tu patrón — 50% completado</p>
               <MicroEspejo
                 observation={microEspejo1Content.text}
                 collectiveData={microEspejo1Content.collectiveData}
               />
               <button
+                className="mirror-stagger-button"
                 onClick={handleMicroEspejo1Continue}
                 style={continueButtonStyle}
               >

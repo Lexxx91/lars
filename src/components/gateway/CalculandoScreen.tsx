@@ -50,7 +50,7 @@ export default function CalculandoScreen({ onComplete }: CalculandoScreenProps) 
         minHeight: '60vh',
         gap: 'var(--space-5)',
         /* ZONA 3 — máxima oscuridad envolvente */
-        background: 'radial-gradient(ellipse at center, #070f12 0%, #030a0c 100%)',
+        background: 'radial-gradient(ellipse at center, var(--bg-reveal-solid) 0%, #030a0c 100%)',
         borderRadius: 'var(--radius-xl)',
         padding: 'var(--space-16) var(--space-8)',
       }}

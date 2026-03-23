@@ -14,7 +14,7 @@
  */
 
 import { useState, useCallback } from 'react'
-import ZoneWrapper from './ZoneWrapper'
+import ZoneWrapper, { getZoneBg } from './ZoneWrapper'
 import SingleSelectStep from './SingleSelectStep'
 import SlidersStep from './SlidersStep'
 import MicroEspejo from '@/components/ui/MicroEspejo'
@@ -180,7 +180,8 @@ export default function GatewayBloque2({
         flexDirection: 'column',
         overflowY: 'auto',
         overflowX: 'hidden',
-        backgroundColor: 'var(--color-bg-primary)',
+        backgroundColor: getZoneBg(zone),
+        transition: 'background-color 600ms var(--ease-zone)',
       }}
     >
       {/* ── Barra de progreso sticky ── */}
@@ -189,11 +190,8 @@ export default function GatewayBloque2({
           position: 'sticky',
           top: 0,
           zIndex: 10,
-          backgroundColor:
-            zone === 'reflexion'
-              ? 'var(--color-bg-secondary)'
-              : 'var(--color-bg-primary)',
-          transition: 'background-color 600ms ease',
+          backgroundColor: getZoneBg(zone),
+          transition: 'background-color 600ms var(--ease-zone)',
           padding: 'var(--space-4) var(--container-padding-mobile)',
           paddingBottom: 'var(--space-3)',
           borderBottom: 'var(--border-subtle)',
@@ -273,10 +271,10 @@ export default function GatewayBloque2({
             </div>
           )}
 
-          {/* Micro-espejo 2 — A-08: versión intensificada */}
+          {/* Micro-espejo 2 — A-08: versión intensificada, stagger con delay largo */}
           {step === 'micro-espejo-2' && (
             <div>
-              <p style={overlineStyle}>Tu patrón — 75% completado</p>
+              <p className="mirror-stagger-label" style={overlineStyle}>Tu patrón — 75% completado</p>
               <MicroEspejo
                 observation={microEspejo2Content.text}
                 collectiveData={microEspejo2Content.collectiveData}
@@ -284,12 +282,9 @@ export default function GatewayBloque2({
               />
               {/* Delay del botón: 3000ms (más largo que M1 para que la persona procese P6) */}
               <button
+                className="mirror-stagger-button-intensified"
                 onClick={handleMicroEspejo2Continue}
-                style={{
-                  ...continueButtonStyle,
-                  /* El botón aparece después de 3s — la persona necesita más tiempo aquí */
-                  animation: 'fade-in-quick 300ms ease 3000ms both',
-                }}
+                style={continueButtonStyle}
               >
                 Continuar el diagnóstico →
               </button>

@@ -264,6 +264,13 @@ svg {
   --ease-out-expo:  cubic-bezier(0.16, 1, 0.3, 1);
   --ease-out-quart: cubic-bezier(0.25, 1, 0.5, 1);
   --ease-in-out:    cubic-bezier(0.4, 0, 0.2, 1);
+
+  /* Zone transition easings — EXPERIENCE_STANDARDS.md §1 */
+  --ease-zone: cubic-bezier(0.65, 0, 0.35, 1);
+
+  /* REVEAL zone gradient */
+  --bg-reveal-gradient: linear-gradient(180deg, #060d10 0%, #0a252c 100%);
+  --bg-reveal-solid: #060d10;
 }
 
 /* ============================================================
@@ -523,6 +530,45 @@ input[type="range"]::-moz-range-track {
   background: transparent;
   height: 8px;
   border-radius: 4px;
+}
+
+/* ============================================================
+   MICRO-MIRROR STAGGER — Sprint 2 Emotional Zones
+   Each element in the micro-mirror appears sequentially:
+   label → observation → collective data → continue button
+   ============================================================ */
+
+/* Slide-in from left for observation text */
+@keyframes slideInLeft {
+  from { opacity: 0; transform: translateX(-20px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
+/* Stagger classes for micro-mirror elements */
+.mirror-stagger-label {
+  opacity: 0;
+  animation: fade-in-quick 300ms var(--ease-out-expo) forwards;
+}
+
+.mirror-stagger-observation {
+  opacity: 0;
+  animation: slideInLeft 400ms var(--ease-out-expo) 150ms forwards;
+}
+
+.mirror-stagger-data {
+  opacity: 0;
+  animation: fade-in-quick 300ms var(--ease-out-expo) 550ms forwards;
+}
+
+.mirror-stagger-button {
+  opacity: 0;
+  animation: fade-in-quick 300ms var(--ease-out-expo) 750ms forwards;
+}
+
+/* Intensified micro-mirror 2: longer button delay (person processes P6) */
+.mirror-stagger-button-intensified {
+  opacity: 0;
+  animation: fade-in-quick 300ms var(--ease-out-expo) 3000ms forwards;
 }
 
 /* prefers-reduced-motion ya definido arriba en sección ACCESIBILIDAD */

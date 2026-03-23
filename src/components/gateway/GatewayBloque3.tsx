@@ -16,7 +16,6 @@
  */
 
 import { useState, useCallback } from 'react'
-import ZoneWrapper from './ZoneWrapper'
 import CalculandoScreen from './CalculandoScreen'
 import BisagraScreen from './BisagraScreen'
 import EmailCapture from './EmailCapture'
@@ -102,7 +101,7 @@ export default function GatewayBloque3({
         flexDirection: 'column',
         overflowY: 'auto',
         overflowX: 'hidden',
-        backgroundColor: '#07181d', /* ZONA 3 — máxima oscuridad */
+        background: 'var(--bg-reveal-gradient)', /* ZONA 3 — REVEAL gradient */
       }}
     >
       {/* ── Barra de progreso sticky ── */}
@@ -111,8 +110,8 @@ export default function GatewayBloque3({
           position: 'sticky',
           top: 0,
           zIndex: 10,
-          backgroundColor: '#07181d',
-          transition: 'background-color 600ms ease',
+          backgroundColor: 'var(--bg-reveal-solid)', /* Solid for sticky header */
+          transition: 'background-color 800ms var(--ease-zone)',
           padding: 'var(--space-4) var(--container-padding-mobile)',
           paddingBottom: 'var(--space-3)',
           borderBottom: 'var(--border-subtle)',
