@@ -126,7 +126,10 @@ export default function SingleSelectStep({
                 cursor: isDimmed ? 'default' : 'pointer',
                 transition:
                   'background var(--transition-fast), border-color var(--transition-fast), opacity var(--transition-fast)',
-                opacity: isDimmed ? 0.35 : 1,
+                opacity: isDimmed ? 0.5 : 1,
+                animation: isSelected
+                  ? 'selectPulse 300ms cubic-bezier(0.34, 1.56, 0.64, 1)'
+                  : 'none',
                 display: 'flex',
                 justifyContent: 'space-between',
                 alignItems: 'flex-start',

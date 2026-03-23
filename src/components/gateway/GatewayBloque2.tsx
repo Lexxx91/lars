@@ -114,7 +114,7 @@ export default function GatewayBloque2({
       setStep(newStep)
       setStepKey((k) => k + 1)
       setIsExiting(false)
-    }, 200)
+    }, 400)
   }, [])
 
   // ── Handlers ──

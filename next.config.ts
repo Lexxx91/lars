@@ -1,6 +1,10 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  // Fix Turbopack root detection (duplicate lockfiles in parent dir)
+  turbopack: {
+    root: process.cwd(),
+  },
   // Security headers
   async headers() {
     return [

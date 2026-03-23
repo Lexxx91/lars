@@ -110,13 +110,14 @@ export default function GatewayBloque1({
   const [p4, setP4] = useState('')
 
   // ── changeStep: fade-out 200ms → nuevo paso con step-enter ──
+  // A-04: exit 300ms + breath 100ms = 400ms before new step mounts
   const changeStep = useCallback((newStep: Step) => {
     setIsExiting(true)
     setTimeout(() => {
       setStep(newStep)
       setStepKey((k) => k + 1)
       setIsExiting(false)
-    }, 200)
+    }, 400)
   }, [])
 
   // ── Handlers ──

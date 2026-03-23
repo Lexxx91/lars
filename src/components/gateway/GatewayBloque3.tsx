@@ -16,8 +16,7 @@
  */
 
 import { useState, useCallback, useEffect } from 'react'
-import CalculandoScreen from './CalculandoScreen'
-import BisagraScreen from './BisagraScreen'
+import BisagraSequence from './BisagraSequence'
 import EmailCapture from './EmailCapture'
 import ProgressBar from '@/components/ui/ProgressBar'
 import { useNervousSystem } from '@/contexts/NervousSystemContext'
@@ -27,10 +26,9 @@ import type { Bloque2Answers } from '@/lib/gateway-bloque2-data'
 
 // ─── TIPOS ────────────────────────────────────────────────────────────────────
 
-type Step = 'calculando' | 'bisagra' | 'email'
+type Step = 'bisagra' | 'email'
 
 const PROGRESS: Record<Step, number> = {
-  calculando: 90,
   bisagra: 90,
   email: 95,
 }
@@ -54,7 +52,7 @@ export default function GatewayBloque3({
   onComplete,
   onClose,
 }: GatewayBloque3Props) {
-  const [step, setStep] = useState<Step>('calculando')
+  const [step, setStep] = useState<Step>('bisagra')
   const [stepKey, setStepKey] = useState(0)
   const [isExiting, setIsExiting] = useState(false)
   const { setState: setNervousState, setScore: setNervousScore } = useNervousSystem()
@@ -62,11 +60,11 @@ export default function GatewayBloque3({
   /* Score calculado una sola vez al montar — antes del typing */
   const [scores] = useState(() => computeScores(p1, bloque1, bloque2))
 
-  /* Nervous system: frozen during calculando, resolved on bisagra */
+  /* Nervous system: frozen during bisagra (includes calc phase), resolved on email */
   useEffect(() => {
-    if (step === 'calculando') {
+    if (step === 'bisagra') {
       setNervousState('frozen')
-    } else if (step === 'bisagra' || step === 'email') {
+    } else if (step === 'email') {
       setNervousScore(scores.global)
       setNervousState('resolved')
     }
@@ -79,12 +77,8 @@ export default function GatewayBloque3({
       setStep(newStep)
       setStepKey((k) => k + 1)
       setIsExiting(false)
-    }, 200)
+    }, 400)
   }, [])
-
-  const handleCalculandoComplete = useCallback(() => {
-    changeStep('bisagra')
-  }, [changeStep, scores.global])
 
   const handleBisagraContinue = useCallback(() => {
     changeStep('email')
@@ -166,7 +160,7 @@ export default function GatewayBloque3({
           flex: 1,
           display: 'flex',
           flexDirection: 'column',
-          justifyContent: step === 'calculando' ? 'center' : 'flex-start',
+          justifyContent: step === 'bisagra' ? 'center' : 'flex-start',
           padding: 'var(--space-8) var(--container-padding-mobile)',
         }}
       >
@@ -175,11 +169,8 @@ export default function GatewayBloque3({
             key={stepKey}
             className={isExiting ? 'step-exit' : 'step-enter'}
           >
-            {step === 'calculando' && (
-              <CalculandoScreen onComplete={handleCalculandoComplete} />
-            )}
             {step === 'bisagra' && (
-              <BisagraScreen scores={scores} onContinue={handleBisagraContinue} />
+              <BisagraSequence scores={scores} onContinue={handleBisagraContinue} />
             )}
             {step === 'email' && (
               <EmailCapture scores={scores} onComplete={handleEmailComplete} />
