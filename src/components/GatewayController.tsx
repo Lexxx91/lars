@@ -77,6 +77,7 @@ export default function GatewayController() {
   const [bloque2Answers, setBloque2Answers] = useState<Bloque2Answers | null>(restored?.bloque2Answers ?? null)
   const [duplicateHash, setDuplicateHash] = useState<string | null>(null)
   const [duplicateEmail, setDuplicateEmail] = useState<string | null>(null)
+  const [landingExiting, setLandingExiting] = useState(false)
   const { setState: setNervousState } = useNervousSystem()
 
   /* Nervous system: fragmented on landing */
@@ -90,10 +91,15 @@ export default function GatewayController() {
     saveState({ phase, p1, bloque1Answers, bloque2Answers })
   }, [phase, p1, bloque1Answers, bloque2Answers])
 
-  /* P1 seleccionada en el hero → directo al diagnóstico completo */
+  /* P1 seleccionada en el hero → fade out landing, then mount gateway */
   const handleP1Select = useCallback((id: string) => {
     setP1(id)
-    setPhase('bloque1')
+    // 600ms delay already happens in P1Cards (selection feedback).
+    // Now fade out landing content, then mount gateway.
+    setLandingExiting(true)
+    setTimeout(() => {
+      setPhase('bloque1')
+    }, 400) // 400ms = landing fade-out duration
   }, [])
 
   /* Bloque1 completo → pasa a bloque2 */
@@ -182,18 +188,26 @@ export default function GatewayController() {
       <OfflineBanner />
 
       {/* Landing — siempre montada debajo de los overlays */}
-      <HeroSection onP1Select={handleP1Select} />
-
       <div
-        aria-hidden="true"
         style={{
-          height: '48px',
-          background: `linear-gradient(to bottom, var(--color-bg-primary), var(--color-bg-secondary))`,
-          marginTop: '-1px',
+          opacity: landingExiting ? 0 : 1,
+          transition: 'opacity 400ms ease',
+          pointerEvents: landingExiting ? 'none' : 'auto',
         }}
-      />
+      >
+        <HeroSection onP1Select={handleP1Select} />
 
-      <BelowTheFold />
+        <div
+          aria-hidden="true"
+          style={{
+            height: '48px',
+            background: `linear-gradient(to bottom, var(--color-bg-primary), var(--color-bg-secondary))`,
+            marginTop: '-1px',
+          }}
+        />
+
+        <BelowTheFold />
+      </div>
 
       {/* ── Flujo diagnóstico completo ── */}
       {phase === 'bloque1' && p1 && (

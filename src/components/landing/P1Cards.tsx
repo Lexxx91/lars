@@ -141,14 +141,19 @@ export default function P1Cards({ onSelect, animateEntrance = false }: P1CardsPr
                   : 'var(--border-subtle)',
                 borderRadius: 'var(--radius-lg)',
                 padding: 'var(--space-4) var(--space-5)',
-                cursor: 'pointer',
+                cursor: selected && !isSelected ? 'default' : 'pointer',
                 transition:
-                  'background var(--transition-fast), border-color var(--transition-fast)',
+                  'background var(--transition-fast), border-color var(--transition-fast), opacity 200ms ease',
                 display: 'flex',
                 justifyContent: 'space-between',
                 alignItems: 'flex-start',
                 gap: 'var(--space-4)',
                 minHeight: '44px',
+                /* Dimming: unselected cards fade when one is selected */
+                opacity: selected && !isSelected ? 0.5 : 1,
+                pointerEvents: selected && !isSelected ? 'none' : 'auto',
+                /* Pulse: selected card gets spring scale animation */
+                animation: isSelected ? 'selectPulse 300ms cubic-bezier(0.34, 1.56, 0.64, 1)' : 'none',
               }}
             >
               <div style={{ flex: 1 }}>

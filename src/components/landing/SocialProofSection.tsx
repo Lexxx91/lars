@@ -94,6 +94,7 @@ export default function SocialProofSection() {
           <blockquote
             key={index}
             style={{
+              position: 'relative',
               background: 'var(--color-bg-tertiary)',
               borderLeft: '3px solid rgba(198, 200, 238, 0.4)',
               borderRadius: '0 var(--radius-md) var(--radius-md) 0',
@@ -106,6 +107,23 @@ export default function SocialProofSection() {
                            transform 500ms var(--ease-out-expo) ${index * 200}ms`,
             }}
           >
+            {/* Decorative quotation mark — Cormorant Garamond, large, muted */}
+            <span
+              aria-hidden="true"
+              style={{
+                position: 'absolute',
+                top: '-4px',
+                left: '12px',
+                fontFamily: 'var(--font-cormorant)',
+                fontSize: '3.5rem',
+                lineHeight: 1,
+                color: 'rgba(198, 200, 238, 0.15)',
+                pointerEvents: 'none',
+                userSelect: 'none',
+              }}
+            >
+              &ldquo;
+            </span>
             <p
               style={{
                 fontFamily: 'var(--font-inter)',
@@ -114,6 +132,7 @@ export default function SocialProofSection() {
                 fontStyle: 'italic',
                 color: 'var(--color-text-primary)',
                 marginBottom: 'var(--space-3)',
+                position: 'relative',
               }}
             >
               &ldquo;{t.quote}&rdquo;
@@ -125,6 +144,7 @@ export default function SocialProofSection() {
                 lineHeight: 'var(--lh-body-sm)',
                 fontStyle: 'normal',
                 color: 'var(--color-text-secondary)',
+                position: 'relative',
               }}
             >
               — {t.author}
