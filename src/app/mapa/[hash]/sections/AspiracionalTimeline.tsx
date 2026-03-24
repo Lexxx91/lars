@@ -176,6 +176,10 @@ export default function AspiracionalTimeline({
             style={{
               position: 'relative',
               marginBottom: i < points.length - 1 ? 'var(--space-8)' : 0,
+              opacity: isVisible ? 1 : 0,
+              transform: isVisible ? 'translateY(0)' : 'translateY(12px)',
+              transition: 'opacity 0.5s cubic-bezier(0.16, 1, 0.3, 1), transform 0.5s cubic-bezier(0.16, 1, 0.3, 1)',
+              transitionDelay: isVisible ? `${i * 150}ms` : '0ms',
             }}
           >
             {/* Dot */}
@@ -424,9 +428,11 @@ export default function AspiracionalTimeline({
         @keyframes pulse-accent {
           0%, 100% {
             box-shadow: 0 0 12px rgba(180, 90, 50, 0.4);
+            transform: scale(1);
           }
           50% {
             box-shadow: 0 0 20px rgba(180, 90, 50, 0.6);
+            transform: scale(1.3);
           }
         }
       `}</style>

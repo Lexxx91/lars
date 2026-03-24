@@ -270,9 +270,9 @@ export default function BookingWidget({ mapHash, onBooked }: Props) {
             gridTemplateColumns: 'repeat(auto-fill, minmax(76px, 1fr))',
             gap: 'var(--space-2)',
           }}>
-            {selectedDayData.slots.map((slot) => (
+            {selectedDayData.slots.map((slot, idx) => (
               <button
-                key={slot.start}
+                key={`${slot.start}-${idx}`}
                 onClick={() => {
                   setSelectedSlot(slot)
                   setError(null)

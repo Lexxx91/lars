@@ -565,6 +565,13 @@ export default function MapaClient({
           animation-delay: 50ms;
         }
         .mapa-priority { animation: mapaPriorityPulse 2s ease 0.1s 2; }
+        @keyframes badgeScaleIn {
+          from { opacity: 0; transform: scale(0.5); }
+          to   { opacity: 1; transform: scale(1); }
+        }
+        .badge-scale-in {
+          animation: badgeScaleIn 200ms cubic-bezier(0.34, 1.56, 0.64, 1) both;
+        }
         .mapa-detail-toggle {
           width: 100%; display: flex; align-items: center;
           justify-content: space-between;

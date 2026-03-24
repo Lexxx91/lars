@@ -54,6 +54,12 @@ export default function EvolutionChart({
     const ctx = canvas.getContext('2d')!
     ctx.scale(dpr, dpr)
 
+    // Resolve CSS custom properties for canvas
+    const styles = getComputedStyle(canvas)
+    const accentColor = styles.getPropertyValue('--color-accent').trim() || '#B45A32'
+    const successColor = styles.getPropertyValue('--color-success').trim() || '#3D9A5F'
+    const textColor = styles.getPropertyValue('--color-text-primary').trim() || '#1E1310'
+
     // Clear
     ctx.clearRect(0, 0, W, H)
 
@@ -88,7 +94,7 @@ export default function EvolutionChart({
     }
 
     // Line
-    ctx.strokeStyle = '#B45A32'
+    ctx.strokeStyle = accentColor
     ctx.lineWidth = 2
     ctx.lineJoin = 'round'
     ctx.beginPath()
@@ -123,7 +129,7 @@ export default function EvolutionChart({
       const y = yScale(p.score)
 
       // Point
-      ctx.fillStyle = i === 0 ? '#B45A32' : '#3D9A5F'
+      ctx.fillStyle = i === 0 ? accentColor : successColor
       ctx.beginPath()
       ctx.arc(x, y, 4, 0, Math.PI * 2)
       ctx.fill()
@@ -136,7 +142,7 @@ export default function EvolutionChart({
       ctx.stroke()
 
       // Score label above point
-      ctx.fillStyle = '#1E1310'
+      ctx.fillStyle = textColor
       ctx.font = '600 12px system-ui, sans-serif'
       ctx.textAlign = 'center'
       ctx.fillText(String(p.score), x, y - 14)

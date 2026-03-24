@@ -36,6 +36,17 @@ Evoluciones del mapa (día 3-90), emails automáticos, analytics custom en Supab
   - Historial de sesiones (completadas, canceladas, no-show) — migracion 003
   - Emails con diseno premium (header, cards con borde, footer, tipografia)
 
+- ✅ **v3 — Rediseño Mapa Vivo** (24 Mar 2026):
+  - Arquitectura 4 zonas: Estado + Foco + Mapa Completo + Camino
+  - FocusBanner con lógica visit-aware (NEW > PENDING > unpaid > teaser)
+  - MapaAccordion para profundidad organizada (solo 1 abierto a la vez)
+  - AspiracionalTimeline con lenguaje de transformación del cliente (5 puntos)
+  - Puentes líquidos eliminados (reemplazados por estructura del acordeón)
+  - Badge pills con animación scale-in, timeline con stagger por punto
+  - HOY dot con pulse scale 1→1.3→1
+  - Todos los estados de evolución verificados (Day 0→3→7→10→14→21→30→90)
+  - Sin cambios a map-evolution.ts, fast-forward API, ni schema de BD
+
 ### Pendiente (no bloquea lanzamiento)
 - Testimonios: siguen siendo placeholder — pendiente de testimonios reales de Javier
 - Stripe: en modo test — pasar a LIVE cuando esté listo

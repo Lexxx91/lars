@@ -171,6 +171,7 @@ function AccordionRow({
           {/* Badge */}
           {badge && BADGE_STYLES[badge] && (
             <span
+              className="badge-scale-in"
               style={{
                 padding: '3px 10px',
                 borderRadius: 'var(--radius-pill)',
