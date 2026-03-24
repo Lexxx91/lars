@@ -160,7 +160,7 @@ export default function GatewayBloque2({
   const microEspejo2Content = getMicroEspejo2(p6 || 'A')
 
   const progress = PROGRESS[step]
-  const progressLabel = `Tu diagnóstico: ${progress}% completo`
+  const progressLabel = `Tu regulación: ${progress}% completo`
 
   // ── Ajuste de tono según P4 (personalización invisible) ──
   // Fuerte (P4=D): contexto más directo

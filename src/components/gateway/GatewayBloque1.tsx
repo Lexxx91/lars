@@ -165,7 +165,7 @@ export default function GatewayBloque1({
   const microEspejo1Content = getMicroEspejo1(p3Selections, p4 || 'A')
 
   const progress = PROGRESS[step]
-  const progressLabel = `Tu diagnóstico: ${progress}% completo`
+  const progressLabel = `Tu regulación: ${progress}% completo`
 
   // ─── RENDER ───────────────────────────────────────────────────────────────
 

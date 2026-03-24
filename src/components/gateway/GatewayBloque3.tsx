@@ -92,7 +92,7 @@ export default function GatewayBloque3({
   )
 
   const progress = PROGRESS[step]
-  const progressLabel = `Tu diagnóstico: ${progress}% completo`
+  const progressLabel = `Tu regulación: ${progress}% completo`
 
   return (
     <div
