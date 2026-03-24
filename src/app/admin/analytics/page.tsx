@@ -6,6 +6,7 @@
  */
 
 import AnalyticsDashboard from './AnalyticsDashboard'
+import SiteHeader from '@/components/SiteHeader'
 
 export const metadata = {
   title: 'Panel L.A.R.S. · Analytics',
@@ -14,14 +15,17 @@ export const metadata = {
 
 export default function AnalyticsPage() {
   return (
-    <div style={{
-      minHeight: '100vh',
-      backgroundColor: 'var(--color-bg-primary)',
-      padding: 'var(--space-8) var(--space-6)',
-    }}>
-      <div style={{ maxWidth: '960px', margin: '0 auto' }}>
-        <AnalyticsDashboard />
+    <>
+      <SiteHeader variant="admin" />
+      <div style={{
+        minHeight: '100vh',
+        backgroundColor: 'var(--color-bg-primary)',
+        padding: 'var(--space-8) var(--space-6)',
+      }}>
+        <div style={{ maxWidth: '960px', margin: '0 auto' }}>
+          <AnalyticsDashboard />
+        </div>
       </div>
-    </div>
+    </>
   )
 }

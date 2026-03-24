@@ -16,6 +16,7 @@ import { useState, useEffect, useCallback, Fragment } from 'react'
 import Button from '@/components/ui/Button'
 import Card from '@/components/ui/Card'
 import Input from '@/components/ui/Input'
+import SiteHeader from '@/components/SiteHeader'
 import Badge from '@/components/ui/Badge'
 import Separator from '@/components/ui/Separator'
 
@@ -339,6 +340,8 @@ export default function DisponibilidadPage() {
   // ─── Panel principal ───────────────────────────────────────────────────
 
   return (
+    <>
+    <SiteHeader variant="admin" />
     <main
       className="container"
       style={{
@@ -985,6 +988,7 @@ export default function DisponibilidadPage() {
         )}
       </section>
     </main>
+    </>
   )
 }
 

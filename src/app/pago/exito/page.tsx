@@ -9,6 +9,7 @@
 
 import { Metadata } from 'next'
 import SuccessClient from './SuccessClient'
+import SiteHeader from '@/components/SiteHeader'
 
 export const metadata: Metadata = {
   title: 'Tu Semana 1 ha comenzado · L.A.R.S.',
@@ -41,10 +42,13 @@ export default async function PagoExitoPage({
   }
 
   return (
-    <SuccessClient
-      hash={hash ?? null}
-      email={email}
-      sessionId={session_id ?? null}
-    />
+    <>
+      <SiteHeader variant="default" />
+      <SuccessClient
+        hash={hash ?? null}
+        email={email}
+        sessionId={session_id ?? null}
+      />
+    </>
   )
 }

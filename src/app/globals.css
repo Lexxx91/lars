@@ -711,3 +711,100 @@ input[type="range"]::-moz-range-track {
 }
 
 /* prefers-reduced-motion ya definido arriba en sección ACCESIBILIDAD */
+
+/* ============================================================
+   SITE HEADER
+   ============================================================ */
+
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  height: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 24px;
+  background: var(--color-bg-primary);
+  border-bottom: var(--border-subtle);
+  transition: background 300ms ease, border-color 300ms ease;
+}
+
+/* Landing variant: transparent by default */
+.site-header[data-variant="landing"] {
+  background: transparent;
+  border-bottom-color: transparent;
+}
+
+.site-header[data-variant="landing"] .site-header__logo {
+  opacity: 0.5;
+  transition: opacity 300ms ease;
+}
+
+/* Landing opaque state (scroll or gateway active) */
+.site-header[data-variant="landing"].site-header--opaque {
+  background: var(--color-bg-primary);
+  border-bottom-color: rgba(255, 255, 255, 0.06);
+}
+
+.site-header[data-variant="landing"].site-header--opaque .site-header__logo {
+  opacity: 1;
+}
+
+.site-header__container {
+  width: 100%;
+  max-width: 1280px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.site-header__logo-link {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+}
+
+.site-header__logo {
+  height: 24px;
+  width: auto;
+}
+
+/* ── Responsive ─── */
+
+@media (min-width: 640px) {
+  .site-header {
+    height: 64px;
+    padding: 0 40px;
+  }
+  .site-header__logo {
+    height: 28px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .site-header {
+    height: 72px;
+    padding: 0 64px;
+  }
+  .site-header__logo {
+    height: 32px;
+  }
+}
+
+/* ── Print ─── */
+
+@media print {
+  .site-header {
+    display: none;
+  }
+}
+
+/* ── Reduced motion ─── */
+
+@media (prefers-reduced-motion: reduce) {
+  .site-header,
+  .site-header[data-variant="landing"] .site-header__logo {
+    transition: none;
+  }
+}

@@ -6,6 +6,7 @@ import Separator from "@/components/ui/Separator";
 import ProgressBar from "@/components/ui/ProgressBar";
 import MicroEspejo from "@/components/ui/MicroEspejo";
 import Bisagra from "@/components/ui/Bisagra";
+import SiteHeader from "@/components/SiteHeader";
 
 function Section({
   title,
@@ -36,6 +37,8 @@ function Section({
 
 export default function ShowcasePage() {
   return (
+    <>
+    <SiteHeader variant="default" />
     <main className="container" style={{ paddingTop: "var(--space-16)", paddingBottom: "var(--space-24)" }}>
       {/* Header */}
       <div style={{ marginBottom: "var(--space-16)" }}>
@@ -336,5 +339,6 @@ export default function ShowcasePage() {
         </div>
       </Section>
     </main>
+    </>
   );
 }

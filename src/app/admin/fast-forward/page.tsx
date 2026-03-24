@@ -10,6 +10,7 @@
  */
 
 import { useState } from 'react'
+import SiteHeader from '@/components/SiteHeader'
 
 interface EvolutionResult {
   previousCreatedAt: string
@@ -80,6 +81,8 @@ export default function FastForwardPage() {
   }
 
   return (
+    <>
+    <SiteHeader variant="admin" />
     <main
       style={{
         minHeight: '100vh',
@@ -316,5 +319,6 @@ export default function FastForwardPage() {
         )}
       </div>
     </main>
+    </>
   )
 }

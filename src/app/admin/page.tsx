@@ -9,6 +9,7 @@
 
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
+import SiteHeader from '@/components/SiteHeader'
 
 const SECTIONS = [
   {
@@ -156,6 +157,8 @@ export default function AdminHome() {
 
   // ── Hub autenticado ──
   return (
+    <>
+    <SiteHeader variant="admin" />
     <div style={{
       minHeight: '100vh',
       backgroundColor: 'var(--color-bg-primary)',
@@ -233,5 +236,6 @@ export default function AdminHome() {
         </div>
       </div>
     </div>
+    </>
   )
 }

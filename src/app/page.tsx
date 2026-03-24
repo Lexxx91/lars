@@ -10,6 +10,7 @@
 
 import ClientShell from '@/components/ClientShell'
 import GatewayController from '@/components/GatewayController'
+import SiteHeader from '@/components/SiteHeader'
 
 export default function Home() {
   return (
@@ -18,6 +19,8 @@ export default function Home() {
       <a href="#p1-section" className="skip-link">
         Ir al diagnóstico
       </a>
+
+      <SiteHeader variant="landing" />
 
       <main id="main-content">
         <GatewayController />
