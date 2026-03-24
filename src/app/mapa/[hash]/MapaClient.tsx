@@ -93,15 +93,6 @@ function roundRect(
   ctx.closePath()
 }
 
-// ─── PUENTES LÍQUIDOS (solo primera visita, se eliminan en Session 2) ────────
-
-const PUENTES = {
-  p1: 'Este mapa es una foto fija. El programa lo convierte en un sistema que se adapta cada semana según cómo respondes.',
-  p2: 'Esta dimensión tiene 3 subdimensiones que solo emergen con observación continua.',
-  p3: 'Tu puntuación vs. 72 es la foto de hoy. El programa mide tu evolución semana a semana.',
-  p4: 'Este patrón usa datos de miles de personas. El programa aprende TUS patrones — en 2 semanas sabe más de ti que tú.',
-  p5: 'Tu mapa es individual. El programa incluye 12 personas en tu misma situación — las brechas compartidas revelan lo que ningún diagnóstico individual puede ver.',
-}
 
 // ─── COMPONENTE PRINCIPAL ─────────────────────────────────────────────────────
 
@@ -378,7 +369,6 @@ export default function MapaClient({
                 d7Insight={dimD7Insight}
                 d7IsNew={dimD7IsNew}
                 subdimensionScores={dimSubScores}
-                puente={null}
               />
             )
           })}
@@ -575,16 +565,6 @@ export default function MapaClient({
           animation-delay: 50ms;
         }
         .mapa-priority { animation: mapaPriorityPulse 2s ease 0.1s 2; }
-        .mapa-puente {
-          font-family: var(--font-inter, system-ui);
-          font-size: var(--text-caption, 0.75rem);
-          line-height: var(--lh-caption, 1.4);
-          color: var(--color-text-tertiary);
-          margin-top: var(--space-3);
-          padding-top: var(--space-3);
-          border-top: var(--border-subtle);
-          font-style: italic;
-        }
         .mapa-detail-toggle {
           width: 100%; display: flex; align-items: center;
           justify-content: space-between;
@@ -746,7 +726,6 @@ export default function MapaClient({
                   Diagnóstico realizado {relativeTime(createdAt)}
                 </p>
 
-                {isFirstVisit && <p className="mapa-puente">{PUENTES.p3}</p>}
               </Card>
             </div>
 
@@ -786,16 +765,11 @@ export default function MapaClient({
                     if (visibleDims < i) return null
 
                     const isMostCompromised = dim.key === mostCompromisedKey
-                    const isD3orD4 = dim.key === 'd3' || dim.key === 'd4'
                     const showPriorityTag = isMostCompromised && showPriority
 
                     const dimD7Insight = isMostCompromised && evolution.insightD7.unlocked ? d7Insight : null
                     const dimD7IsNew = isMostCompromised && evolution.insightD7.isNew
                     const dimSubScores = isMostCompromised ? subdimScoresForCard : null
-
-                    let puente: string | null = null
-                    if (isMostCompromised) puente = PUENTES.p2
-                    else if (isD3orD4) puente = PUENTES.p4
 
                     return (
                       <DimensionCard
@@ -806,34 +780,11 @@ export default function MapaClient({
                         d7Insight={dimD7Insight}
                         d7IsNew={dimD7IsNew}
                         subdimensionScores={dimSubScores}
-                        puente={puente}
                       />
                     )
                   })}
                 </div>
 
-                {visibleDims >= 4 && (
-                  <div
-                    className="mapa-fade-up"
-                    style={{
-                      padding: 'var(--space-4) var(--space-5)',
-                      marginBottom: 'var(--space-8)',
-                      borderRadius: 'var(--radius-md)',
-                      background: 'var(--color-accent-subtle)',
-                      border: 'var(--border-accent)',
-                    }}
-                  >
-                    <p style={{
-                      fontFamily: 'var(--font-inter)',
-                      fontSize: 'var(--text-caption)',
-                      lineHeight: 'var(--lh-body)',
-                      color: 'var(--color-text-tertiary)',
-                      fontStyle: 'italic',
-                    }}>
-                      {PUENTES.p5}
-                    </p>
-                  </div>
-                )}
               </>
             )}
 

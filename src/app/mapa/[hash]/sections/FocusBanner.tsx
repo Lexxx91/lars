@@ -11,6 +11,7 @@
  */
 
 import Button from '@/components/ui/Button'
+import EvolutionArchetype from './EvolutionArchetype'
 import type { EvolutionState } from '@/lib/map-evolution'
 import type { ArchetypeData } from '@/lib/content/archetypes'
 import type { SubdimensionConfig } from '@/lib/content/subdimensions'
@@ -181,11 +182,24 @@ export function selectFocus(props: FocusBannerProps): FocusItem {
 // ─── COMPONENTE ──────────────────────────────────────────────────────────────
 
 export default function FocusBanner(props: FocusBannerProps) {
+  const { evolution, archetype } = props
   const focus = selectFocus(props)
 
   const handleCTA = () => {
     const el = document.getElementById(focus.scrollTo)
     if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' })
+  }
+
+  // Archetype focus: render EvolutionArchetype in summary mode
+  if (evolution.archetype.isNew && archetype) {
+    return (
+      <EvolutionArchetype
+        mode="summary"
+        archetype={archetype}
+        isNew={true}
+        onExpandRequest={handleCTA}
+      />
+    )
   }
 
   return (

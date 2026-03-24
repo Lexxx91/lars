@@ -13,13 +13,109 @@ import type { ArchetypeData } from '@/lib/content/archetypes'
 interface Props {
   archetype: ArchetypeData
   isNew: boolean
+  mode?: 'summary' | 'full'
+  onExpandRequest?: () => void
 }
 
-export default function EvolutionArchetype({ archetype, isNew }: Props) {
+export default function EvolutionArchetype({ archetype, isNew, mode = 'full', onExpandRequest }: Props) {
   const [patternsOpen, setPatternsOpen] = useState(false)
   const [needsOpen, setNeedsOpen] = useState(false)
   const [fearsOpen, setFearsOpen] = useState(false)
 
+  // ── SUMMARY MODE ──
+  if (mode === 'summary') {
+    return (
+      <div
+        className="mapa-fade-up"
+        style={{
+          background: 'var(--color-bg-secondary)',
+          borderLeft: '3px solid var(--color-accent)',
+          borderRadius: '0 var(--radius-lg) var(--radius-lg) 0',
+          padding: 'var(--space-6)',
+        }}
+      >
+        {/* Tag */}
+        <p
+          style={{
+            fontFamily: 'var(--font-inter)',
+            fontSize: 'var(--text-caption)',
+            fontWeight: 500,
+            letterSpacing: '0.08em',
+            textTransform: 'uppercase' as const,
+            color: 'var(--color-accent)',
+            marginBottom: 'var(--space-2)',
+          }}
+        >
+          {isNew ? 'NUEVO DESDE TU ÚLTIMA VISITA' : 'TU IDENTIDAD'}
+        </p>
+
+        {/* Overline */}
+        <p
+          style={{
+            fontFamily: 'var(--font-inter)',
+            fontSize: 'var(--text-overline)',
+            letterSpacing: 'var(--ls-overline)',
+            textTransform: 'uppercase' as const,
+            color: 'var(--color-text-tertiary)',
+            marginBottom: 'var(--space-4)',
+          }}
+        >
+          Tu Arquetipo del Sistema Nervioso
+        </p>
+
+        {/* Archetype name */}
+        <h3
+          style={{
+            fontFamily: 'var(--font-lora)',
+            fontSize: 'var(--text-h3)',
+            fontWeight: 700,
+            color: 'var(--color-text-primary)',
+            lineHeight: 1.3,
+            marginBottom: 'var(--space-3)',
+          }}
+        >
+          {archetype.name}
+        </h3>
+
+        {/* Impact phrase (teaser) */}
+        <p
+          style={{
+            fontFamily: 'var(--font-inter)',
+            fontSize: 'var(--text-body)',
+            fontStyle: 'italic',
+            lineHeight: 1.6,
+            color: 'var(--color-text-secondary)',
+            maxWidth: '42rem',
+            marginBottom: 'var(--space-5)',
+          }}
+        >
+          {archetype.teaser}
+        </p>
+
+        {/* CTA */}
+        {onExpandRequest && (
+          <button
+            onClick={onExpandRequest}
+            style={{
+              background: 'transparent',
+              border: 'none',
+              fontFamily: 'var(--font-inter)',
+              fontSize: 'var(--text-body-sm)',
+              fontWeight: 500,
+              color: 'var(--color-accent)',
+              cursor: 'pointer',
+              padding: 0,
+              transition: 'opacity var(--transition-base)',
+            }}
+          >
+            Descubrir tu perfil completo →
+          </button>
+        )}
+      </div>
+    )
+  }
+
+  // ── FULL MODE ──
   // Dividir la narrativa en párrafos
   const narrativeParagraphs = archetype.narrative.split('\n\n')
 

@@ -25,8 +25,6 @@ interface Props {
   d7IsNew?: boolean
   /** Subdimensiones completadas */
   subdimensionScores?: SubdimensionScore[] | null
-  /** Puente líquido (si aplica) */
-  puente?: string | null
 }
 
 export default function DimensionCard({
@@ -36,7 +34,6 @@ export default function DimensionCard({
   d7Insight,
   d7IsNew,
   subdimensionScores,
-  puente,
 }: Props) {
   const isD2 = dim.key === 'd2'
 
@@ -251,8 +248,6 @@ export default function DimensionCard({
         </div>
       )}
 
-      {/* Puente líquido */}
-      {puente && <p className="mapa-puente">{puente}</p>}
     </div>
   )
 }

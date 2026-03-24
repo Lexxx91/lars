@@ -1,5 +1,13 @@
 # Instrucciones para Claude Code
 
+## REGLAS CRÍTICAS DE BUILD Y DEPLOY (NO NEGOCIABLE)
+- **NUNCA ejecutes `npm run build` localmente.** El build revienta la memoria del Mac (OOM a 4GB). El build de producción lo hace Vercel automáticamente al hacer push a GitHub.
+- **NUNCA ejecutes `rm -rf node_modules` ni `rm -rf .next`.** Estas operaciones se cuelgan por problemas del filesystem de macOS y bloquean todo el sistema.
+- Para verificar que el código compila, usa `npx tsc --noEmit` (solo verifica tipos, no consume memoria).
+- Para desarrollo local, usa `npm run dev` (servidor de desarrollo, consume poca memoria).
+- Para desplegar: haz `git push` a la rama correspondiente. Vercel se encarga del resto.
+- Si necesitas reinstalar dependencias, hazlo con `npm install` solamente (sin borrar node_modules antes).
+
 ## Contexto
 Soy Javier A. Martín Ramos, director del Instituto Epigenético. Alex es el fundador y estratega que diseñó este sistema. No somos desarrolladores.
 Estamos construyendo el sistema de adquisición del Programa L.A.R.S.© — un protocolo de 12 semanas para ejecutivos con burnout.
