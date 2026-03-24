@@ -93,30 +93,33 @@ export default function P1Cards({ onSelect, animateEntrance = false }: P1CardsPr
       className={isPulsing ? 'p1-pulse' : ''}
       style={{ width: '100%' }}
     >
-      {/* Pregunta */}
+      {/* Pregunta — centrada */}
       <p
         className={animateEntrance ? `hero-reveal${labelRevealed ? ' hero-animate-fade-in' : ''}` : ''}
         style={{
-          fontFamily: 'var(--font-inter)',
+          fontFamily: 'var(--font-lora)',
           fontSize: 'var(--text-h3)',
           lineHeight: 'var(--lh-h3)',
           letterSpacing: 'var(--ls-h3)',
-          fontWeight: 600,
+          fontWeight: 700,
           color: 'var(--color-text-primary)',
-          marginBottom: 'var(--space-4)',
+          marginBottom: 'var(--space-5)',
+          textAlign: 'center',
         }}
       >
         ¿Qué te trajo hasta aquí?
       </p>
 
-      {/* Cards */}
+      {/* Cards — centradas con max-width */}
       <div
         role="radiogroup"
         aria-label="¿Qué te trajo hasta aquí?"
         style={{
           display: 'flex',
           flexDirection: 'column',
-          gap: 'var(--space-3)',
+          gap: 'var(--space-2)',
+          maxWidth: '640px',
+          margin: '0 auto',
         }}
       >
         {options.map((option, index) => {
@@ -140,7 +143,7 @@ export default function P1Cards({ onSelect, animateEntrance = false }: P1CardsPr
                   ? '1px solid var(--color-accent)'
                   : 'var(--border-subtle)',
                 borderRadius: 'var(--radius-lg)',
-                padding: 'var(--space-4) var(--space-5)',
+                padding: 'var(--space-3) var(--space-5)',
                 cursor: selected && !isSelected ? 'default' : 'pointer',
                 transition:
                   'background var(--transition-fast), border-color var(--transition-fast), opacity 200ms ease',

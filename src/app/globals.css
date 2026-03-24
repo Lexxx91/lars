@@ -842,3 +842,96 @@ input[type="range"]::-moz-range-track {
     transition: none;
   }
 }
+
+/* ============================================================
+   BELOW-THE-FOLD — Four Seasons Upgrade
+   ============================================================ */
+
+/* Overline accent — reusable terracota overline */
+.overline-accent {
+  font-family: var(--font-inter);
+  font-size: var(--text-overline);
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--color-accent);
+  line-height: var(--lh-caption);
+  margin-bottom: var(--space-4);
+}
+
+/* Section gradient transitions */
+.section-gradient {
+  height: 64px;
+  pointer-events: none;
+}
+
+/* Testimonials grid */
+.testimonials-grid {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+}
+
+@media (min-width: 768px) {
+  .testimonials-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--space-5);
+  }
+}
+
+/* Footer grid */
+.footer-grid {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-8);
+}
+
+@media (min-width: 768px) {
+  .footer-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--space-8);
+  }
+}
+
+/* Organic blobs — hidden on mobile */
+.organic-blob {
+  position: absolute;
+  background: var(--color-surface-peach);
+  opacity: 0.5;
+  border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%;
+  z-index: 0;
+  pointer-events: none;
+  display: none;
+}
+
+@media (min-width: 768px) {
+  .organic-blob {
+    display: block;
+  }
+}
+
+/* Credentials card grid */
+.credentials-grid {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+  text-align: center;
+}
+
+@media (min-width: 768px) {
+  .credentials-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--space-6);
+    text-align: left;
+  }
+}
+
+/* prefers-reduced-motion for below-fold */
+@media (prefers-reduced-motion: reduce) {
+  .organic-blob {
+    display: none !important;
+  }
+}
