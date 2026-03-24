@@ -53,11 +53,11 @@ export default function MultiSelectStep({
       {/* Pregunta */}
       <p
         style={{
-          fontFamily: 'var(--font-inter-tight)',
+          fontFamily: 'var(--font-inter)',
           fontSize: 'var(--text-h3)',
           lineHeight: 'var(--lh-h3)',
           letterSpacing: 'var(--ls-h3)',
-          fontWeight: 500,
+          fontWeight: 600,
           color: 'var(--color-text-primary)',
           marginBottom: context ? 'var(--space-3)' : 'var(--space-5)',
         }}
@@ -143,10 +143,10 @@ export default function MultiSelectStep({
               <div style={{ flex: 1 }}>
                 <p
                   style={{
-                    fontFamily: 'var(--font-inter-tight)',
+                    fontFamily: 'var(--font-inter)',
                     fontSize: 'var(--text-body)',
                     lineHeight: 'var(--lh-body)',
-                    fontWeight: 500,
+                    fontWeight: 600,
                     color: isSelected
                       ? 'var(--color-text-primary)'
                       : 'var(--color-text-secondary)',
@@ -181,7 +181,7 @@ export default function MultiSelectStep({
                   borderRadius: 'var(--radius-sm)',
                   border: isSelected
                     ? '1.5px solid var(--color-accent)'
-                    : '1.5px solid rgba(255,255,255,0.15)',
+                    : '1.5px solid rgba(30,19,16,0.15)',
                   background: isSelected
                     ? 'var(--color-accent-subtle)'
                     : 'transparent',
@@ -233,9 +233,9 @@ export default function MultiSelectStep({
             border: '1px solid var(--color-accent)',
             background: 'var(--color-accent-subtle)',
             color: 'var(--color-accent)',
-            fontFamily: 'var(--font-inter-tight)',
+            fontFamily: 'var(--font-inter)',
             fontSize: 'var(--text-body)',
-            fontWeight: 500,
+            fontWeight: 600,
             cursor: 'pointer',
             transition: 'background var(--transition-fast)',
             minHeight: '44px',

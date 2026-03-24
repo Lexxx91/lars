@@ -46,11 +46,11 @@ export default function SingleSelectStep({
       {/* Pregunta */}
       <p
         style={{
-          fontFamily: 'var(--font-inter-tight)',
+          fontFamily: 'var(--font-inter)',
           fontSize: 'var(--text-h3)',
           lineHeight: 'var(--lh-h3)',
           letterSpacing: 'var(--ls-h3)',
-          fontWeight: 500,
+          fontWeight: 600,
           color: 'var(--color-text-primary)',
           marginBottom: context ? 'var(--space-3)' : 'var(--space-5)',
         }}
@@ -126,7 +126,10 @@ export default function SingleSelectStep({
                 cursor: isDimmed ? 'default' : 'pointer',
                 transition:
                   'background var(--transition-fast), border-color var(--transition-fast), opacity var(--transition-fast)',
-                opacity: isDimmed ? 0.35 : 1,
+                opacity: isDimmed ? 0.5 : 1,
+                animation: isSelected
+                  ? 'selectPulse 300ms cubic-bezier(0.34, 1.56, 0.64, 1)'
+                  : 'none',
                 display: 'flex',
                 justifyContent: 'space-between',
                 alignItems: 'flex-start',
@@ -137,10 +140,10 @@ export default function SingleSelectStep({
               <div style={{ flex: 1 }}>
                 <p
                   style={{
-                    fontFamily: 'var(--font-inter-tight)',
+                    fontFamily: 'var(--font-inter)',
                     fontSize: reinforced ? 'var(--text-h4)' : 'var(--text-body)',
                     lineHeight: reinforced ? 'var(--lh-h4)' : 'var(--lh-body)',
-                    fontWeight: 500,
+                    fontWeight: 600,
                     color: isSelected
                       ? 'var(--color-text-primary)'
                       : 'var(--color-text-secondary)',

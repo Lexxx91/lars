@@ -22,7 +22,8 @@ export default function MapaNotFound() {
     }}>
       <div style={{ maxWidth: '400px', textAlign: 'center' }}>
         <p style={{
-          fontFamily: 'var(--font-inter-tight)',
+          fontFamily: 'var(--font-inter)',
+          fontWeight: 600,
           fontSize: 'var(--text-overline)',
           letterSpacing: 'var(--ls-overline)',
           textTransform: 'uppercase',
@@ -32,7 +33,7 @@ export default function MapaNotFound() {
           L.A.R.S.©
         </p>
         <h1 style={{
-          fontFamily: 'var(--font-plus-jakarta)',
+          fontFamily: 'var(--font-lora)',
           fontSize: 'var(--text-h2)',
           lineHeight: 'var(--lh-h2)',
           letterSpacing: 'var(--ls-h2)',
@@ -53,7 +54,7 @@ export default function MapaNotFound() {
         </p>
         <a href="/">
           <Button variant="primary" size="large">
-            Hacer el diagnóstico de nuevo
+            Hacer la evaluación de nuevo
           </Button>
         </a>
       </div>

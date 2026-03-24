@@ -25,6 +25,8 @@ interface CounterProps {
   startDelay?: number
   /** Clase CSS extra */
   className?: string
+  /** Saltar IntersectionObserver y arrancar inmediatamente (tras startDelay). Usar cuando el elemento ya está en viewport. */
+  autoStart?: boolean
 }
 
 /** Curva ease-out-expo: rápida al inicio, frena al llegar */
@@ -40,6 +42,7 @@ export default function Counter({
   suffix = '',
   startDelay = 0,
   className,
+  autoStart = false,
 }: CounterProps) {
   const [value, setValue] = useState(from)
   const [started, setStarted] = useState(false)
@@ -48,6 +51,11 @@ export default function Counter({
 
   /* ─── IntersectionObserver: dispara cuando el elemento entra en viewport ─── */
   useEffect(() => {
+    if (autoStart) {
+      const t = setTimeout(() => setStarted(true), startDelay)
+      return () => clearTimeout(t)
+    }
+
     const el = ref.current
     if (!el) return
 
@@ -64,7 +72,14 @@ export default function Counter({
     )
     observer.observe(el)
     return () => observer.disconnect()
-  }, [started, startDelay])
+  }, [started, startDelay, autoStart])
+
+  /* ─── Fallback: si IntersectionObserver no dispara en 2s, forzar inicio ─── */
+  useEffect(() => {
+    if (started || autoStart) return
+    const fallback = setTimeout(() => setStarted(true), 2000)
+    return () => clearTimeout(fallback)
+  }, [started, autoStart])
 
   /* ─── requestAnimationFrame: anima el número ─── */
   useEffect(() => {
@@ -73,17 +88,27 @@ export default function Counter({
     const startTime = performance.now()
     const range = to - from
 
+    // Garantía: si rAF no dispara (tab oculto, headless), forzar valor final
+    const safeguard = setTimeout(() => setValue(Math.round(to)), duration + 200)
+
     function update(now: number) {
       const elapsed = now - startTime
       const t = Math.min(elapsed / duration, 1)
-      setValue(Math.round(from + range * easeOutExpo(t)))
+      const current = Math.round(from + range * easeOutExpo(t))
+      setValue(current)
       if (t < 1) {
         rafRef.current = requestAnimationFrame(update)
+      } else {
+        clearTimeout(safeguard)
+        setValue(Math.round(to))
       }
     }
 
     rafRef.current = requestAnimationFrame(update)
-    return () => cancelAnimationFrame(rafRef.current)
+    return () => {
+      cancelAnimationFrame(rafRef.current)
+      clearTimeout(safeguard)
+    }
   }, [started, from, to, duration])
 
   return (

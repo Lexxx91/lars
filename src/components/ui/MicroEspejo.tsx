@@ -2,15 +2,18 @@
  * MicroEspejo — Componente de reflexión del gateway.
  *
  * ZONA 2 (reflexión): Cormorant Garamond italic, borde izquierdo acento,
- * fondo bg-secondary. La tipografía es parte de la transición emocional.
+ * fondo transparente (la zona proporciona la atmósfera).
+ *
+ * Sprint 2: Stagger animation sequence — cada elemento aparece en secuencia:
+ *   T+0ms:   Label (controlado por padre con .mirror-stagger-label)
+ *   T+150ms: Observación slide-in desde izquierda
+ *   T+550ms: Dato colectivo fade-in
+ *   T+750ms: Botón (controlado por padre con .mirror-stagger-button)
  *
  * A-06: El primer número del dato colectivo (el %) se anima con Counter.
- * El texto del dato colectivo hace fade-in 300ms después de la slide-in (400ms).
- *
- * Entra con animación mirror-enter (slide desde izquierda, definida en globals.css).
  *
  * Props opcionales:
- *   intensified — Micro-espejo 2: fondo más oscuro, texto más grande, delay botón mayor.
+ *   intensified — Micro-espejo 2: fondo más oscuro, texto más grande.
  */
 
 import Counter from './Counter'
@@ -49,54 +52,56 @@ export default function MicroEspejo({
   const parsed = collectiveData ? parseFirstNumber(collectiveData) : null
 
   return (
-    <div
-      className="mirror-enter"
-      style={{
-        backgroundColor: intensified
-          ? 'rgba(15, 48, 55, 0.92)' /* bg-secondary + overlay oscuro */
-          : 'var(--color-bg-secondary)',
-        borderLeft: '3px solid var(--color-accent)',
-        borderRadius: '0 var(--radius-md) var(--radius-md) 0',
-        padding: 'var(--space-6) var(--space-6)',
-        marginBottom: 'var(--space-6)',
-      }}
-    >
-      {/* Observación — Cormorant Garamond italic */}
-      <p
+    <div>
+      {/* Observación — Cormorant Garamond italic con borde izquierdo acento */}
+      <div
+        className="mirror-stagger-observation"
         style={{
-          fontFamily: 'var(--font-cormorant)',
-          fontSize: intensified ? '1.72rem' : 'var(--text-h3)',
-          lineHeight: 'var(--lh-h3)',
-          letterSpacing: 'var(--ls-h3)',
-          fontWeight: 400,
-          color: 'var(--color-text-primary)',
-          fontStyle: 'italic',
+          borderLeft: '3px solid var(--color-accent)',
+          borderRadius: '0 var(--radius-md) var(--radius-md) 0',
+          padding: 'var(--space-6) var(--space-6)',
+          marginBottom: 'var(--space-4)',
+          backgroundColor: intensified
+            ? 'rgba(30, 19, 16, 0.06)'
+            : 'transparent',
         }}
       >
-        {observation}
-      </p>
+        <p
+          style={{
+            fontFamily: 'var(--font-cormorant)',
+            fontSize: intensified ? '1.72rem' : 'var(--text-h3)',
+            lineHeight: 'var(--lh-h3)',
+            letterSpacing: 'var(--ls-h3)',
+            fontWeight: 400,
+            color: 'var(--color-text-primary)',
+            fontStyle: 'italic',
+          }}
+        >
+          {observation}
+        </p>
+      </div>
 
-      {/* Dato colectivo — fade-in con delay para que aparezca DESPUÉS de la observación */}
+      {/* Dato colectivo — aparece después de la observación */}
       {collectiveData && (
         <p
+          className="mirror-stagger-data"
           style={{
             fontFamily: 'var(--font-inter)',
             fontSize: 'var(--text-body-sm)',
             lineHeight: 'var(--lh-body-sm)',
             color: 'var(--color-text-secondary)',
-            marginTop: 'var(--space-4)',
-            /* Aparece 400ms después del slide-in de la observación */
-            animation: 'fade-in-quick 300ms ease 400ms both',
+            paddingLeft: 'var(--space-6)',
+            marginBottom: 'var(--space-6)',
           }}
         >
           {parsed ? (
             <>
               {parsed.before}
-              {/* Counter: empieza a contar 400ms después (cuando el texto se hace visible) */}
+              {/* Counter: empieza a contar 550ms después del mount (cuando el texto se hace visible) */}
               <Counter
                 to={parsed.num}
                 duration={900}
-                startDelay={400}
+                startDelay={550}
               />
               {parsed.after}
             </>

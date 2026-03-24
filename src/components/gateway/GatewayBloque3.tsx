@@ -15,22 +15,20 @@
  * Al completar email, llama onComplete(email).
  */
 
-import { useState, useCallback } from 'react'
-import ZoneWrapper from './ZoneWrapper'
-import CalculandoScreen from './CalculandoScreen'
-import BisagraScreen from './BisagraScreen'
+import { useState, useCallback, useEffect } from 'react'
+import BisagraSequence from './BisagraSequence'
 import EmailCapture from './EmailCapture'
 import ProgressBar from '@/components/ui/ProgressBar'
+import { useNervousSystem } from '@/contexts/NervousSystemContext'
 import { computeScores } from '@/lib/scoring'
 import type { Bloque1Answers } from './GatewayBloque1'
 import type { Bloque2Answers } from '@/lib/gateway-bloque2-data'
 
 // ─── TIPOS ────────────────────────────────────────────────────────────────────
 
-type Step = 'calculando' | 'bisagra' | 'email'
+type Step = 'bisagra' | 'email'
 
 const PROGRESS: Record<Step, number> = {
-  calculando: 90,
   bisagra: 90,
   email: 95,
 }
@@ -54,12 +52,23 @@ export default function GatewayBloque3({
   onComplete,
   onClose,
 }: GatewayBloque3Props) {
-  const [step, setStep] = useState<Step>('calculando')
+  const [step, setStep] = useState<Step>('bisagra')
   const [stepKey, setStepKey] = useState(0)
   const [isExiting, setIsExiting] = useState(false)
+  const { setState: setNervousState, setScore: setNervousScore } = useNervousSystem()
 
   /* Score calculado una sola vez al montar — antes del typing */
   const [scores] = useState(() => computeScores(p1, bloque1, bloque2))
+
+  /* Nervous system: frozen during bisagra (includes calc phase), resolved on email */
+  useEffect(() => {
+    if (step === 'bisagra') {
+      setNervousState('frozen')
+    } else if (step === 'email') {
+      setNervousScore(scores.global)
+      setNervousState('resolved')
+    }
+  }, [step, scores.global, setNervousState, setNervousScore])
 
   /* cross-fade A-04 */
   const changeStep = useCallback((newStep: Step) => {
@@ -68,12 +77,8 @@ export default function GatewayBloque3({
       setStep(newStep)
       setStepKey((k) => k + 1)
       setIsExiting(false)
-    }, 200)
+    }, 400)
   }, [])
-
-  const handleCalculandoComplete = useCallback(() => {
-    changeStep('bisagra')
-  }, [changeStep, scores.global])
 
   const handleBisagraContinue = useCallback(() => {
     changeStep('email')
@@ -87,13 +92,13 @@ export default function GatewayBloque3({
   )
 
   const progress = PROGRESS[step]
-  const progressLabel = `Tu diagnóstico: ${progress}% completo`
+  const progressLabel = `Tu regulación: ${progress}% completo`
 
   return (
     <div
       className="gateway-overlay"
       role="main"
-      aria-label="Diagnóstico — Gateway L.A.R.S. Bloque 3"
+      aria-label="Evaluación — Gateway L.A.R.S. Bloque 3"
       style={{
         position: 'fixed',
         inset: 0,
@@ -102,7 +107,7 @@ export default function GatewayBloque3({
         flexDirection: 'column',
         overflowY: 'auto',
         overflowX: 'hidden',
-        backgroundColor: '#07181d', /* ZONA 3 — máxima oscuridad */
+        background: 'var(--bg-reveal-gradient)', /* ZONA 3 — REVEAL gradient */
       }}
     >
       {/* ── Barra de progreso sticky ── */}
@@ -111,8 +116,8 @@ export default function GatewayBloque3({
           position: 'sticky',
           top: 0,
           zIndex: 10,
-          backgroundColor: '#07181d',
-          transition: 'background-color 600ms ease',
+          backgroundColor: 'var(--bg-reveal-solid)', /* Solid for sticky header */
+          transition: 'background-color 800ms var(--ease-zone)',
           padding: 'var(--space-4) var(--container-padding-mobile)',
           paddingBottom: 'var(--space-3)',
           borderBottom: 'var(--border-subtle)',
@@ -155,7 +160,7 @@ export default function GatewayBloque3({
           flex: 1,
           display: 'flex',
           flexDirection: 'column',
-          justifyContent: step === 'calculando' ? 'center' : 'flex-start',
+          justifyContent: step === 'bisagra' ? 'center' : 'flex-start',
           padding: 'var(--space-8) var(--container-padding-mobile)',
         }}
       >
@@ -164,11 +169,8 @@ export default function GatewayBloque3({
             key={stepKey}
             className={isExiting ? 'step-exit' : 'step-enter'}
           >
-            {step === 'calculando' && (
-              <CalculandoScreen onComplete={handleCalculandoComplete} />
-            )}
             {step === 'bisagra' && (
-              <BisagraScreen scores={scores} onContinue={handleBisagraContinue} />
+              <BisagraSequence scores={scores} onContinue={handleBisagraContinue} />
             )}
             {step === 'email' && (
               <EmailCapture scores={scores} onComplete={handleEmailComplete} />

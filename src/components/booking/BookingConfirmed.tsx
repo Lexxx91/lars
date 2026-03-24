@@ -105,7 +105,7 @@ export default function BookingConfirmed({ slotStart, meetUrl, mapHash, onCancel
           width: '40px',
           height: '40px',
           borderRadius: '50%',
-          background: 'rgba(74,222,128,0.12)',
+          background: 'rgba(61,154,95,0.12)',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
@@ -123,16 +123,16 @@ export default function BookingConfirmed({ slotStart, meetUrl, mapHash, onCancel
         </div>
         <div>
           <p style={{
-            fontFamily: 'var(--font-inter-tight)',
+            fontFamily: 'var(--font-inter)',
             fontSize: 'var(--text-body-sm)',
-            fontWeight: 500,
+            fontWeight: 600,
             color: 'var(--color-success)',
             margin: 0,
           }}>
             Sesión confirmada
           </p>
           <p style={{
-            fontFamily: 'var(--font-plus-jakarta)',
+            fontFamily: 'var(--font-lora)',
             fontSize: 'var(--text-h4)',
             fontWeight: 600,
             color: 'var(--color-text-primary)',
@@ -208,9 +208,9 @@ export default function BookingConfirmed({ slotStart, meetUrl, mapHash, onCancel
                 border: '1px solid rgba(248,113,113,0.3)',
                 background: 'rgba(248,113,113,0.08)',
                 color: 'var(--color-error)',
-                fontFamily: 'var(--font-inter-tight)',
+                fontFamily: 'var(--font-inter)',
                 fontSize: 'var(--text-caption)',
-                fontWeight: 500,
+                fontWeight: 600,
                 cursor: cancelling ? 'wait' : 'pointer',
               }}
             >
@@ -224,7 +224,7 @@ export default function BookingConfirmed({ slotStart, meetUrl, mapHash, onCancel
                 border: 'var(--border-subtle)',
                 background: 'transparent',
                 color: 'var(--color-text-tertiary)',
-                fontFamily: 'var(--font-inter-tight)',
+                fontFamily: 'var(--font-inter)',
                 fontSize: 'var(--text-caption)',
                 cursor: 'pointer',
               }}

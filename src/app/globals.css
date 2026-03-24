@@ -4,30 +4,50 @@
    ============================================================ */
 
 :root {
+  /* ---- HEADER ---- */
+  --header-height: 56px;
+
   /* ---- COLORES BASE ---- */
-  --color-bg-primary: #0a252c;
-  --color-bg-secondary: #0f3037;
-  --color-bg-tertiary: #0c2a48;
-  --color-bg-elevated: #0f2e56;
-  --color-surface-subtle: #133364;
+  --color-bg-primary: #FFFBEF;
+  --color-bg-secondary: #F9F1DE;
+  --color-bg-tertiary: #FFFFFF;
+  --color-bg-elevated: #F3EDD8;
+  --color-surface-subtle: #E8E2D0;
+  --color-bg-dark: #1E130F;
 
   /* ---- COLORES DE TEXTO ---- */
-  --color-text-primary: #F5F5F0;
-  --color-text-secondary: #A8B0AC;
-  --color-text-tertiary: #6B7572;
-  --color-text-inverse: #0a252c;
+  --color-text-primary: #1E1310;
+  --color-text-secondary: #4B413C;
+  --color-text-tertiary: #8A7E75;
+  --color-text-inverse: #FFFBEF;
+  --color-text-inverse-muted: #EBCDB9;
 
-  /* ---- COLOR DE ACENTO (Lavanda) ---- */
-  --color-accent: #c6c8ee;
-  --color-accent-hover: #d8daf5;
-  --color-accent-subtle: rgba(198, 200, 238, 0.15);
-  --color-accent-muted: #8b8db8;
+  /* ---- COLOR DE ACENTO (Terracota) ---- */
+  --color-accent: #B45A32;
+  --color-accent-hover: #9A4D2A;
+  --color-accent-subtle: rgba(180, 90, 50, 0.08);
+  --color-accent-muted: #D4895C;
+
+  /* ---- COLOR DE ACCIÓN (Lima) ---- */
+  --color-cta: #F5F564;
+  --color-cta-hover: #E8E84E;
+  --color-cta-text: #1E1310;
+
+  /* ---- COLOR SECUNDARIO (Marrón Cálido) ---- */
+  --color-secondary: #6E5032;
+  --color-secondary-light: #8B6B4A;
+
+  /* ---- SUPERFICIES DECORATIVAS ---- */
+  --color-surface-lavender: #F3E8F6;
+  --color-surface-cream: #F9F1DE;
+  --color-surface-lime: #FBFAC1;
+  --color-surface-peach: #FFCA9E;
 
   /* ---- COLORES FUNCIONALES ---- */
-  --color-success: #4ADE80;
-  --color-warning: #FACC15;
-  --color-error: #F87171;
-  --color-info: #60A5FA;
+  --color-success: #3D9A5F;
+  --color-warning: #D4A017;
+  --color-error: #C44040;
+  --color-info: #4A8DB7;
 
   /* ---- TIPOGRAFÍA — Escala (base 16px, ratio 1.250 Major Third) ---- */
   --text-display: 3.5rem;       /* 56px */
@@ -96,11 +116,11 @@
   --transition-expressive: 600ms cubic-bezier(0.16, 1, 0.3, 1);
 
   /* ---- BORDES ---- */
-  --border-subtle: 1px solid rgba(255, 255, 255, 0.06);
-  --border-medium: 1px solid rgba(255, 255, 255, 0.08);
-  --border-interactive: 1px solid rgba(255, 255, 255, 0.10);
-  --border-accent: 1px solid rgba(198, 200, 238, 0.12);
-  --border-accent-strong: 1px solid rgba(198, 200, 238, 0.15);
+  --border-subtle: 1px solid rgba(30, 19, 16, 0.06);
+  --border-medium: 1px solid rgba(30, 19, 16, 0.08);
+  --border-interactive: 1px solid rgba(30, 19, 16, 0.10);
+  --border-accent: 1px solid rgba(180, 90, 50, 0.12);
+  --border-accent-strong: 1px solid rgba(180, 90, 50, 0.15);
 }
 
 /* ---- RESPONSIVE TYPOGRAPHY ---- */
@@ -264,6 +284,13 @@ svg {
   --ease-out-expo:  cubic-bezier(0.16, 1, 0.3, 1);
   --ease-out-quart: cubic-bezier(0.25, 1, 0.5, 1);
   --ease-in-out:    cubic-bezier(0.4, 0, 0.2, 1);
+
+  /* Zone transition easings — EXPERIENCE_STANDARDS.md §1 */
+  --ease-zone: cubic-bezier(0.65, 0, 0.35, 1);
+
+  /* REVEAL zone gradient */
+  --bg-reveal-gradient: linear-gradient(180deg, #F9F1DE 0%, #FFFFFF 100%);
+  --bg-reveal-solid: #F9F1DE;
 }
 
 /* ============================================================
@@ -310,12 +337,6 @@ svg {
    ANIMACIONES — Fase 1
    ============================================================ */
 
-/* SVG sistema nervioso — pulso suave */
-@keyframes nervePulse {
-  0%, 100% { opacity: 0.22; }
-  50%       { opacity: 0.42; }
-}
-
 /* Secciones below-the-fold — entrada con desplazamiento */
 @keyframes fadeInUp {
   from {
@@ -331,7 +352,7 @@ svg {
 /* P1 — pulse sutil al recibir foco desde CTA */
 @keyframes p1Pulse {
   0%   { background-color: transparent; }
-  35%  { background-color: rgba(198, 200, 238, 0.04); }
+  35%  { background-color: rgba(180, 90, 50, 0.04); }
   100% { background-color: transparent; }
 }
 
@@ -360,20 +381,22 @@ svg {
   animation: gateway-enter 400ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
-/* Entrada de cada paso (ZONA 1 — exploración) */
-@keyframes step-fade-in {
+/* Entrada de cada paso — slide horizontal desde la derecha (A-04) */
+@keyframes questionEnter {
   from {
     opacity: 0;
-    transform: translateY(10px);
+    transform: translateX(30px);
   }
   to {
     opacity: 1;
-    transform: translateY(0);
+    transform: translateX(0);
   }
 }
 
 .step-enter {
-  animation: step-fade-in 350ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  animation: questionEnter 400ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  animation-delay: 100ms; /* the breath — 100ms gap between exit and enter */
+  opacity: 0;
 }
 
 /* Entrada del micro-espejo (ZONA 2 — reflexión): slide desde izquierda */
@@ -429,8 +452,8 @@ svg {
 
 /* Botón Continuar de P3 — pulse cuando ≥4 ítems */
 @keyframes button-attractor {
-  0%, 100% { box-shadow: 0 0 0 0 rgba(198, 200, 238, 0); }
-  50%       { box-shadow: 0 0 0 6px rgba(198, 200, 238, 0.12); }
+  0%, 100% { box-shadow: 0 0 0 0 rgba(180, 90, 50, 0); }
+  50%       { box-shadow: 0 0 0 6px rgba(180, 90, 50, 0.12); }
 }
 
 .button-attract {
@@ -448,16 +471,25 @@ svg {
 }
 
 /* ============================================================
-   STEP-EXIT — A-04 cross-fade entre preguntas
+   STEP-EXIT — A-04 horizontal slide left
    ============================================================ */
-@keyframes step-fade-out {
-  from { opacity: 1; transform: translateY(0); }
-  to   { opacity: 0; transform: translateY(-8px); }
+@keyframes questionExit {
+  from { opacity: 1; transform: translateX(0); }
+  to   { opacity: 0; transform: translateX(-30px); }
 }
 
 .step-exit {
-  animation: step-fade-out 200ms var(--ease-in-out) forwards;
+  animation: questionExit 300ms ease-in forwards;
   pointer-events: none;
+}
+
+/* ============================================================
+   CARD SELECTION PULSE — A-02
+   ============================================================ */
+@keyframes selectPulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.02); }
+  100% { transform: scale(1); }
 }
 
 /* ============================================================
@@ -487,42 +519,419 @@ svg {
 }
 
 /* ============================================================
+   BISAGRA BOX — Radial glow + scale-in (A-10)
+   ============================================================ */
+.bisagra-box {
+  position: relative;
+}
+
+.bisagra-box::before {
+  content: '';
+  position: absolute;
+  inset: -40px;
+  border-radius: 24px;
+  background: radial-gradient(ellipse at center, rgba(180,90,50,0.08) 0%, transparent 70%);
+  opacity: 0;
+  z-index: -1;
+  transition: opacity 600ms var(--ease-out-expo);
+  pointer-events: none;
+}
+
+.bisagra-box.bisagra-glow-active::before {
+  opacity: 1;
+  animation: bisagra-pulse 2s ease-in-out infinite;
+}
+
+@keyframes bisagra-pulse {
+  0%, 100% { opacity: 0.5; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.04); }
+}
+
+@keyframes bisagra-scale-in {
+  from { opacity: 0; transform: scale(0.95); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+/* ============================================================
    SLIDER RANGE — thumb styling cross-browser
+   Hidden by default, revealed on first interaction via .slider-touched
    ============================================================ */
 input[type="range"] {
   -webkit-appearance: none;
   appearance: none;
 }
 
+/* --- Thumb: HIDDEN by default --- */
 input[type="range"]::-webkit-slider-thumb {
   -webkit-appearance: none;
   width: 20px;
   height: 20px;
   border-radius: 50%;
-  background: var(--color-text-primary);
+  background: #FFFFFF;
   cursor: pointer;
-  border: 2px solid var(--color-bg-primary);
-  margin-top: 0;
+  border: none;
+  margin-top: -8px; /* center on 4px track */
+  box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+  opacity: 0;
+  transform: scale(0);
+  transition: transform 150ms ease;
 }
 
 input[type="range"]::-moz-range-thumb {
   width: 20px;
   height: 20px;
   border-radius: 50%;
-  background: var(--color-text-primary);
+  background: #FFFFFF;
   cursor: pointer;
-  border: 2px solid var(--color-bg-primary);
+  border: none;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+  opacity: 0;
+  transform: scale(0);
+  transition: transform 150ms ease;
 }
 
+/* --- Thumb: VISIBLE when slider touched --- */
+.slider-touched input[type="range"]::-webkit-slider-thumb {
+  opacity: 1;
+  transform: scale(1);
+  animation: slider-thumb-in 200ms cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.slider-touched input[type="range"]::-moz-range-thumb {
+  opacity: 1;
+  transform: scale(1);
+  animation: slider-thumb-in 200ms cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* --- Thumb: ACTIVE (pressed) state --- */
+.slider-touched input[type="range"]:active::-webkit-slider-thumb {
+  transform: scale(1.2);
+}
+
+.slider-touched input[type="range"]:active::-moz-range-thumb {
+  transform: scale(1.2);
+}
+
+/* --- Thumb: PULSE on boundary crossing --- */
+.slider-pulse input[type="range"]::-webkit-slider-thumb {
+  animation: slider-boundary-pulse 300ms ease;
+}
+
+.slider-pulse input[type="range"]::-moz-range-thumb {
+  animation: slider-boundary-pulse 300ms ease;
+}
+
+/* --- Track: 4px height --- */
 input[type="range"]::-webkit-slider-runnable-track {
   background: transparent;
-  height: 8px;
+  height: 4px;
 }
 
 input[type="range"]::-moz-range-track {
   background: transparent;
-  height: 8px;
-  border-radius: 4px;
+  height: 4px;
+  border-radius: 2px;
+}
+
+/* --- Animations --- */
+@keyframes slider-thumb-in {
+  from { opacity: 0; transform: scale(0); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+@keyframes slider-boundary-pulse {
+  0% { transform: scale(1); }
+  40% { transform: scale(1.35); }
+  100% { transform: scale(1); }
+}
+
+/* ============================================================
+   MICRO-MIRROR STAGGER — Sprint 2 Emotional Zones
+   Each element in the micro-mirror appears sequentially:
+   label → observation → collective data → continue button
+   ============================================================ */
+
+/* Slide-in from left for observation text */
+@keyframes slideInLeft {
+  from { opacity: 0; transform: translateX(-20px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
+/* Stagger classes for micro-mirror elements */
+.mirror-stagger-label {
+  opacity: 0;
+  animation: fade-in-quick 300ms var(--ease-out-expo) forwards;
+}
+
+.mirror-stagger-observation {
+  opacity: 0;
+  animation: slideInLeft 400ms var(--ease-out-expo) 150ms forwards;
+}
+
+.mirror-stagger-data {
+  opacity: 0;
+  animation: fade-in-quick 300ms var(--ease-out-expo) 550ms forwards;
+}
+
+.mirror-stagger-button {
+  opacity: 0;
+  animation: fade-in-quick 300ms var(--ease-out-expo) 750ms forwards;
+}
+
+/* Intensified micro-mirror 2: longer button delay (person processes P6) */
+.mirror-stagger-button-intensified {
+  opacity: 0;
+  animation: fade-in-quick 300ms var(--ease-out-expo) 3000ms forwards;
+}
+
+/* ============================================================
+   HERO ENTRANCE — Staggered reveal sequence (Sprint 3)
+   ============================================================ */
+
+/* Hero fade-in-up: 600ms for SHOCK, 500ms for headline */
+.hero-reveal {
+  opacity: 0;
+}
+
+.hero-reveal.hero-animate-fade-in-up {
+  animation: heroFadeInUp 600ms var(--ease-out-expo) forwards;
+}
+
+.hero-reveal.hero-animate-fade-in-up-fast {
+  animation: heroFadeInUp 500ms var(--ease-out-expo) forwards;
+}
+
+.hero-reveal.hero-animate-fade-in {
+  animation: heroFadeIn 400ms var(--ease-out-expo) forwards;
+}
+
+@keyframes heroFadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes heroFadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+/* P1 cards stagger entrance */
+.p1-card-reveal {
+  opacity: 0;
+}
+
+.p1-card-reveal.p1-card-animate {
+  animation: heroFadeInUp 400ms var(--ease-out-expo) forwards;
 }
 
 /* prefers-reduced-motion ya definido arriba en sección ACCESIBILIDAD */
+
+/* ============================================================
+   SITE HEADER
+   ============================================================ */
+
+.site-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+  height: var(--header-height, 56px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 24px;
+  background: var(--color-bg-primary);
+  border-bottom: var(--border-subtle);
+  transition: background 300ms ease, border-color 300ms ease;
+}
+
+/* Pages with fixed header need padding-top on their main content.
+   Applied via .page-content class or inline calc(--header-height + spacing). */
+
+/* Gateway overlays start below the fixed header */
+.gateway-overlay {
+  top: var(--header-height, 56px) !important;
+}
+
+/* Landing variant: transparent by default, overlaps hero */
+.site-header[data-variant="landing"] {
+  background: transparent;
+  border-bottom-color: transparent;
+}
+
+.site-header[data-variant="landing"] + * {
+  padding-top: 0;
+}
+
+.site-header[data-variant="landing"] .site-header__logo {
+  opacity: 0.5;
+  transition: opacity 300ms ease;
+}
+
+/* Landing opaque state (scroll or gateway active) */
+.site-header[data-variant="landing"].site-header--opaque {
+  background: var(--color-bg-primary);
+  border-bottom-color: rgba(30, 19, 16, 0.06);
+}
+
+.site-header[data-variant="landing"].site-header--opaque .site-header__logo {
+  opacity: 1;
+}
+
+.site-header__container {
+  width: 100%;
+  max-width: 1280px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.site-header__logo-link {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+}
+
+.site-header__logo {
+  height: 24px;
+  width: auto;
+}
+
+/* ── Responsive ─── */
+
+@media (min-width: 640px) {
+  :root { --header-height: 64px; }
+  .site-header {
+    padding: 0 40px;
+  }
+  .site-header__logo {
+    height: 28px;
+  }
+}
+
+@media (min-width: 1024px) {
+  :root { --header-height: 72px; }
+  .site-header {
+    padding: 0 64px;
+  }
+  .site-header__logo {
+    height: 32px;
+  }
+}
+
+/* ── Print ─── */
+
+@media print {
+  .site-header {
+    display: none;
+  }
+}
+
+/* ── Reduced motion ─── */
+
+@media (prefers-reduced-motion: reduce) {
+  .site-header,
+  .site-header[data-variant="landing"] .site-header__logo {
+    transition: none;
+  }
+}
+
+/* ============================================================
+   BELOW-THE-FOLD — Four Seasons Upgrade
+   ============================================================ */
+
+/* Overline accent — reusable terracota overline */
+.overline-accent {
+  font-family: var(--font-inter);
+  font-size: var(--text-overline);
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--color-accent);
+  line-height: var(--lh-caption);
+  margin-bottom: var(--space-4);
+}
+
+/* Section gradient transitions */
+.section-gradient {
+  height: 64px;
+  pointer-events: none;
+}
+
+/* Testimonials grid */
+.testimonials-grid {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+}
+
+@media (min-width: 768px) {
+  .testimonials-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--space-5);
+  }
+}
+
+/* Footer grid */
+.footer-grid {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-8);
+}
+
+@media (min-width: 768px) {
+  .footer-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--space-8);
+  }
+}
+
+/* Organic blobs — hidden on mobile */
+.organic-blob {
+  position: absolute;
+  background: var(--color-surface-peach);
+  opacity: 0.5;
+  border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%;
+  z-index: 0;
+  pointer-events: none;
+  display: none;
+}
+
+@media (min-width: 768px) {
+  .organic-blob {
+    display: block;
+  }
+}
+
+/* Credentials card grid */
+.credentials-grid {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+  text-align: center;
+}
+
+@media (min-width: 768px) {
+  .credentials-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--space-6);
+    text-align: left;
+  }
+}
+
+/* prefers-reduced-motion for below-fold */
+@media (prefers-reduced-motion: reduce) {
+  .organic-blob {
+    display: none !important;
+  }
+}

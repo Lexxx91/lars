@@ -10,22 +10,22 @@ interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
 
 const variantStyles: Record<ButtonVariant, React.CSSProperties> = {
   primary: {
-    backgroundColor: "var(--color-accent)",
+    backgroundColor: "var(--color-cta)",
+    color: "var(--color-cta-text)",
+    border: "1px solid var(--color-cta)",
+    borderRadius: "var(--radius-pill)",
+  },
+  secondary: {
+    backgroundColor: "var(--color-text-primary)",
     color: "var(--color-text-inverse)",
     border: "none",
     borderRadius: "var(--radius-pill)",
   },
-  secondary: {
+  ghost: {
     backgroundColor: "transparent",
     color: "var(--color-text-primary)",
     border: "1px solid var(--color-surface-subtle)",
     borderRadius: "var(--radius-pill)",
-  },
-  ghost: {
-    backgroundColor: "transparent",
-    color: "var(--color-accent)",
-    border: "none",
-    borderRadius: "var(--radius-sm)",
   },
 };
 

@@ -2,25 +2,29 @@
 
 /**
  * SocialProofSection — Sección PRUEBA SOCIAL.
- * A-15: Testimonios con scroll reveal + stagger (200ms entre cada uno).
+ * Cards pastel diferenciadas (lavanda, crema, lima) con comillas decorativas y badges.
+ * Headline con overline. Stagger 200ms.
  * IMPORTANTE: Textos son PLANTILLA — pendiente de testimonios reales de Javier.
  */
 
 import { useRef, useEffect, useState } from 'react'
 
-const testimonials = [
+const testimonials: { quote: string; author: string; bg: string; border?: string }[] = [
   {
-    quote: 'En 3 minutos entendí lo que llevaba 2 años sin ver.',
-    author: 'Director de operaciones, 47 años',
+    quote: 'Creía que necesitaba más disciplina. En 3 minutos descubrí que necesitaba regulación.',
+    author: 'Director de operaciones, 47',
+    bg: 'var(--color-surface-lavender)',
   },
   {
-    quote:
-      'Pensaba que era estrés normal. El mapa me mostró que mi sistema nervioso llevaba meses en modo alarma.',
-    author: 'CEO, 52 años',
+    quote: 'No le conté a nadie que lo hice. Los datos me explicaron lo que yo no quería ver.',
+    author: 'CEO, 52',
+    bg: 'var(--color-surface-cream)',
+    border: '1px solid rgba(30, 19, 16, 0.08)',
   },
   {
-    quote: 'Lo hice por curiosidad. Los resultados me cambiaron la conversación conmigo mismo.',
-    author: 'Socia fundadora, 39 años',
+    quote: 'Lo hice por curiosidad científica. Los resultados me desarmaron.',
+    author: 'Socia fundadora, 39',
+    bg: 'var(--color-surface-lime)',
   },
 ]
 
@@ -36,7 +40,7 @@ export default function SocialProofSection() {
           observer.disconnect()
         }
       },
-      { threshold: 0.1 }
+      { threshold: 0.15 }
     )
     const el = sectionRef.current
     if (el) observer.observe(el)
@@ -48,89 +52,118 @@ export default function SocialProofSection() {
       ref={sectionRef}
       aria-label="Testimonios"
       style={{
-        paddingTop: 'var(--space-4)',
+        paddingTop: 'var(--space-8)',
         paddingBottom: 'var(--space-16)',
         paddingLeft: 'var(--container-padding-mobile)',
         paddingRight: 'var(--container-padding-mobile)',
+        position: 'relative',
+        zIndex: 1,
       }}
     >
-      {/* Aviso PLANTILLA — solo visible en desarrollo */}
-      {process.env.NODE_ENV === 'development' && (
-        <div
+      <div style={{ maxWidth: '960px', margin: '0 auto' }}>
+        {/* Overline */}
+        <p
+          className="overline-accent"
           style={{
-            background: 'rgba(250, 204, 21, 0.1)',
-            border: '1px solid rgba(250, 204, 21, 0.3)',
-            borderRadius: 'var(--radius-md)',
-            padding: 'var(--space-3) var(--space-4)',
-            maxWidth: '680px',
-            margin: '0 auto var(--space-6)',
+            textAlign: 'center',
+            opacity: visible ? 1 : 0,
+            transition: 'opacity 500ms var(--ease-out-expo)',
           }}
         >
-          <p
-            style={{
-              fontFamily: 'var(--font-inter)',
-              fontSize: 'var(--text-caption)',
-              color: 'var(--color-warning)',
-              textAlign: 'center',
-              letterSpacing: '0.05em',
-              textTransform: 'uppercase',
-            }}
-          >
-            ⚠ PLANTILLA — Pendiente de testimonios reales de Javier
-          </p>
-        </div>
-      )}
+          PRUEBA SOCIAL
+        </p>
 
-      <div
-        style={{
-          maxWidth: '680px',
-          margin: '0 auto',
-          display: 'flex',
-          flexDirection: 'column',
-          gap: 'var(--space-5)',
-        }}
-      >
-        {testimonials.map((t, index) => (
-          <blockquote
-            key={index}
-            style={{
-              background: 'var(--color-bg-tertiary)',
-              borderLeft: '3px solid rgba(198, 200, 238, 0.4)',
-              borderRadius: '0 var(--radius-md) var(--radius-md) 0',
-              padding: 'var(--space-5) var(--space-6)',
-              margin: 0,
-              /* Stagger: cada testimonio entra 200ms después del anterior */
-              opacity: visible ? 1 : 0,
-              transform: visible ? 'none' : 'translateY(20px)',
-              transition: `opacity 500ms var(--ease-out-expo) ${index * 200}ms,
-                           transform 500ms var(--ease-out-expo) ${index * 200}ms`,
-            }}
-          >
-            <p
+        {/* Headline */}
+        <h2
+          style={{
+            fontFamily: 'var(--font-lora)',
+            fontSize: 'var(--text-h2)',
+            lineHeight: 1.2,
+            letterSpacing: '-0.01em',
+            fontWeight: 400,
+            color: 'var(--color-text-primary)',
+            textAlign: 'center',
+            marginBottom: 'var(--space-10)',
+            opacity: visible ? 1 : 0,
+            transform: visible ? 'translateY(0)' : 'translateY(12px)',
+            transition: 'opacity 500ms var(--ease-out-expo) 100ms, transform 500ms var(--ease-out-expo) 100ms',
+          }}
+        >
+          Lo que dicen quienes ya pasaron por aquí.
+        </h2>
+
+        {/* Testimonial cards */}
+        <div className="testimonials-grid">
+          {testimonials.map((t, index) => (
+            <div
+              key={index}
               style={{
-                fontFamily: 'var(--font-inter)',
-                fontSize: 'var(--text-body)',
-                lineHeight: 'var(--lh-body)',
-                fontStyle: 'italic',
-                color: 'var(--color-text-primary)',
-                marginBottom: 'var(--space-3)',
+                background: t.bg,
+                border: t.border || '1px solid rgba(30, 19, 16, 0.08)',
+                borderRadius: '20px',
+                padding: 'var(--space-8)',
+                display: 'flex',
+                flexDirection: 'column',
+                gap: 'var(--space-4)',
+                opacity: visible ? 1 : 0,
+                transform: visible ? 'none' : 'translateY(20px)',
+                transition: `opacity 500ms var(--ease-out-expo) ${200 + index * 200}ms,
+                             transform 500ms var(--ease-out-expo) ${200 + index * 200}ms`,
               }}
             >
-              &ldquo;{t.quote}&rdquo;
-            </p>
-            <cite
-              style={{
-                fontFamily: 'var(--font-inter)',
-                fontSize: 'var(--text-body-sm)',
-                lineHeight: 'var(--lh-body-sm)',
-                fontStyle: 'normal',
-                color: 'var(--color-text-secondary)',
-              }}
-            >
-              — {t.author}
-            </cite>
-          </blockquote>
-        ))}
+              {/* Icono comillas — círculo 40px */}
+              <div
+                aria-hidden="true"
+                style={{
+                  width: '40px',
+                  height: '40px',
+                  borderRadius: '50%',
+                  border: '1px solid rgba(30, 19, 16, 0.12)',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  fontFamily: 'var(--font-inter)',
+                  fontSize: '1.25rem',
+                  fontWeight: 500,
+                  color: 'var(--color-text-primary)',
+                  flexShrink: 0,
+                }}
+              >
+                &ldquo;&rdquo;
+              </div>
+
+              {/* Cita */}
+              <p
+                style={{
+                  fontFamily: 'var(--font-inter)',
+                  fontSize: 'var(--text-body)',
+                  lineHeight: 'var(--lh-body)',
+                  color: 'var(--color-text-primary)',
+                  flex: 1,
+                }}
+              >
+                &ldquo;{t.quote}&rdquo;
+              </p>
+
+              {/* Badge pill oscuro */}
+              <span
+                style={{
+                  display: 'inline-block',
+                  alignSelf: 'flex-start',
+                  backgroundColor: 'var(--color-text-secondary)',
+                  color: 'var(--color-text-inverse)',
+                  borderRadius: 'var(--radius-pill)',
+                  padding: '6px 16px',
+                  fontFamily: 'var(--font-inter)',
+                  fontSize: 'var(--text-caption)',
+                  fontWeight: 500,
+                }}
+              >
+                {t.author}
+              </span>
+            </div>
+          ))}
+        </div>
       </div>
     </section>
   )

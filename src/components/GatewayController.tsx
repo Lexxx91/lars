@@ -10,7 +10,7 @@
  *   bloque3  → Calculando → Bisagra → Email
  *
  * P1 se responde en el hero (GatewayController la recibe via onP1Select).
- * Al completar email, redirige a /mapa/[hash] con el diagnóstico completo.
+ * Al completar email, redirige a /mapa/[hash] con la evaluación completa.
  */
 
 import { useState, useCallback, useEffect } from 'react'
@@ -20,6 +20,7 @@ import GatewayBloque1 from '@/components/gateway/GatewayBloque1'
 import GatewayBloque2 from '@/components/gateway/GatewayBloque2'
 import GatewayBloque3 from '@/components/gateway/GatewayBloque3'
 import OfflineBanner from '@/components/ui/OfflineBanner'
+import { useNervousSystem } from '@/contexts/NervousSystemContext'
 import type { Bloque1Answers } from '@/components/gateway/GatewayBloque1'
 import type { Bloque2Answers } from '@/lib/gateway-bloque2-data'
 
@@ -76,6 +77,13 @@ export default function GatewayController() {
   const [bloque2Answers, setBloque2Answers] = useState<Bloque2Answers | null>(restored?.bloque2Answers ?? null)
   const [duplicateHash, setDuplicateHash] = useState<string | null>(null)
   const [duplicateEmail, setDuplicateEmail] = useState<string | null>(null)
+  const [landingExiting, setLandingExiting] = useState(false)
+  const { setState: setNervousState } = useNervousSystem()
+
+  /* Nervous system: fragmented on landing */
+  useEffect(() => {
+    if (phase === 'landing') setNervousState('fragmented')
+  }, [phase, setNervousState])
 
   /* Persistir estado en localStorage cada vez que cambia */
   useEffect(() => {
@@ -83,10 +91,15 @@ export default function GatewayController() {
     saveState({ phase, p1, bloque1Answers, bloque2Answers })
   }, [phase, p1, bloque1Answers, bloque2Answers])
 
-  /* P1 seleccionada en el hero → directo al diagnóstico completo */
+  /* P1 seleccionada en el hero → fade out landing, then mount gateway */
   const handleP1Select = useCallback((id: string) => {
     setP1(id)
-    setPhase('bloque1')
+    // 600ms delay already happens in P1Cards (selection feedback).
+    // Now fade out landing content, then mount gateway.
+    setLandingExiting(true)
+    setTimeout(() => {
+      setPhase('bloque1')
+    }, 400) // 400ms = landing fade-out duration
   }, [])
 
   /* Bloque1 completo → pasa a bloque2 */
@@ -175,20 +188,19 @@ export default function GatewayController() {
       <OfflineBanner />
 
       {/* Landing — siempre montada debajo de los overlays */}
-      <HeroSection onP1Select={handleP1Select} />
-
       <div
-        aria-hidden="true"
         style={{
-          height: '80px',
-          background: `linear-gradient(to bottom, var(--color-bg-primary), var(--color-bg-secondary))`,
-          marginTop: '-1px',
+          opacity: landingExiting ? 0 : 1,
+          transition: 'opacity 400ms ease',
+          pointerEvents: landingExiting ? 'none' : 'auto',
         }}
-      />
+      >
+        <HeroSection onP1Select={handleP1Select} />
 
-      <BelowTheFold />
+        <BelowTheFold />
+      </div>
 
-      {/* ── Flujo diagnóstico completo ── */}
+      {/* ── Flujo evaluación completa ── */}
       {phase === 'bloque1' && p1 && (
         <GatewayBloque1
           p1={p1}
@@ -226,7 +238,7 @@ export default function GatewayController() {
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            background: 'rgba(7,24,29,0.92)',
+            background: 'rgba(30,19,16,0.80)',
             padding: 'var(--space-6)',
           }}
         >
@@ -244,9 +256,9 @@ export default function GatewayController() {
           >
             <p
               style={{
-                fontFamily: 'var(--font-inter-tight)',
+                fontFamily: 'var(--font-inter)',
                 fontSize: 'var(--text-h3)',
-                fontWeight: 500,
+                fontWeight: 600,
                 color: 'var(--color-text-primary)',
                 marginBottom: 'var(--space-3)',
               }}

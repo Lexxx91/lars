@@ -25,12 +25,12 @@ export default function OfflineBanner() {
         right: 0,
         zIndex: 60,
         padding: 'var(--space-3) var(--space-4)',
-        background: 'rgba(7,24,29,0.95)',
-        borderBottom: '1px solid rgba(249,115,22,0.3)',
+        background: 'rgba(30,19,16,0.95)',
+        borderBottom: '1px solid rgba(196,64,64,0.3)',
         textAlign: 'center',
         fontFamily: 'var(--font-inter)',
         fontSize: 'var(--text-caption)',
-        color: '#F97316',
+        color: 'var(--color-text-inverse)',
         animation: 'slideDown 300ms ease',
       }}
     >

@@ -1,26 +1,19 @@
 import type { Metadata, Viewport } from "next";
-import { Plus_Jakarta_Sans, Inter, Inter_Tight, Cormorant_Garamond } from "next/font/google";
+import { Lora, Inter, Cormorant_Garamond } from "next/font/google";
 import "./globals.css";
 
-const plusJakartaSans = Plus_Jakarta_Sans({
+const lora = Lora({
   subsets: ["latin"],
-  weight: ["600", "700"],
+  weight: ["400", "700"],
   display: "swap",
-  variable: "--font-plus-jakarta",
+  variable: "--font-lora",
 });
 
 const inter = Inter({
   subsets: ["latin"],
-  weight: ["400", "500"],
+  weight: ["400", "500", "600"],
   display: "swap",
   variable: "--font-inter",
-});
-
-const interTight = Inter_Tight({
-  subsets: ["latin"],
-  weight: ["500"],
-  display: "swap",
-  variable: "--font-inter-tight",
 });
 
 const cormorantGaramond = Cormorant_Garamond({
@@ -34,7 +27,7 @@ const cormorantGaramond = Cormorant_Garamond({
 export const metadata: Metadata = {
   title: "Descubre el estado de tu sistema nervioso | Instituto Epigenético",
   description:
-    "Un diagnóstico de 3 minutos calibrado con más de 25.000 evaluaciones reales. Tu resultado es personal, confidencial y tuyo.",
+    "Una evaluación de 3 minutos calibrada con más de 25.000 evaluaciones reales. Tu resultado es personal, confidencial y tuyo.",
   robots: {
     index: true,
     follow: true,
@@ -42,7 +35,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Descubre el estado de tu sistema nervioso",
     description:
-      "Un diagnóstico de 3 minutos calibrado con más de 25.000 evaluaciones reales.",
+      "Una evaluación de 3 minutos calibrada con más de 25.000 evaluaciones reales.",
     type: "website",
     locale: "es_ES",
   },
@@ -51,7 +44,7 @@ export const metadata: Metadata = {
 export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
-  themeColor: "#0a252c",
+  themeColor: "#FFFBEF",
 };
 
 export default function RootLayout({
@@ -62,7 +55,7 @@ export default function RootLayout({
   return (
     <html
       lang="es"
-      className={`${plusJakartaSans.variable} ${inter.variable} ${interTight.variable} ${cormorantGaramond.variable}`}
+      className={`${lora.variable} ${inter.variable} ${cormorantGaramond.variable}`}
     >
       <body>
         {children}

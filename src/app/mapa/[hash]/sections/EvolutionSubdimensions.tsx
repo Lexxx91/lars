@@ -191,7 +191,7 @@ export default function EvolutionSubdimensions({
                       ? '1px solid var(--color-accent)'
                       : 'var(--border-subtle)',
                     background: selected
-                      ? 'rgba(198,200,238,0.08)'
+                      ? 'rgba(180,90,50,0.08)'
                       : 'transparent',
                     fontFamily: 'var(--font-inter)',
                     fontSize: 'var(--text-body-sm)',
@@ -234,7 +234,7 @@ export default function EvolutionSubdimensions({
         disabled={!allAnswered || submitting}
         style={{ width: '100%' }}
       >
-        {submitting ? 'Calculando...' : 'Profundizar mi diagnóstico'}
+        {submitting ? 'Calculando...' : 'Profundizar mi evaluación'}
       </Button>
     </div>
   )

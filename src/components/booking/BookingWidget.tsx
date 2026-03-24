@@ -167,7 +167,7 @@ export default function BookingWidget({ mapHash, onBooked }: Props) {
       {/* ─── Paso 1: Selector de día ──────────────────────────────────────── */}
       <div style={{ marginBottom: 'var(--space-5)' }}>
         <p style={{
-          fontFamily: 'var(--font-inter-tight)',
+          fontFamily: 'var(--font-inter)',
           fontSize: 'var(--text-overline)',
           letterSpacing: 'var(--ls-overline)',
           color: 'var(--color-accent)',
@@ -221,7 +221,7 @@ export default function BookingWidget({ mapHash, onBooked }: Props) {
                 }}
               >
                 <span style={{
-                  fontFamily: 'var(--font-inter-tight)',
+                  fontFamily: 'var(--font-inter)',
                   fontSize: 'var(--text-caption)',
                   letterSpacing: '0.04em',
                   textTransform: 'uppercase',
@@ -230,7 +230,7 @@ export default function BookingWidget({ mapHash, onBooked }: Props) {
                   {weekday}
                 </span>
                 <span style={{
-                  fontFamily: 'var(--font-plus-jakarta)',
+                  fontFamily: 'var(--font-lora)',
                   fontSize: 'var(--text-h3)',
                   fontWeight: 600,
                   lineHeight: 1.1,
@@ -239,7 +239,7 @@ export default function BookingWidget({ mapHash, onBooked }: Props) {
                   {dayNum}
                 </span>
                 <span style={{
-                  fontFamily: 'var(--font-inter-tight)',
+                  fontFamily: 'var(--font-inter)',
                   fontSize: '10px',
                   color: isSelected ? 'var(--color-accent-muted)' : 'var(--color-text-tertiary)',
                 }}>
@@ -255,7 +255,7 @@ export default function BookingWidget({ mapHash, onBooked }: Props) {
       {selectedDayData && !selectedSlot && (
         <div style={{ animation: 'fadeInUp 0.3s var(--ease-out-expo) both' }}>
           <p style={{
-            fontFamily: 'var(--font-inter-tight)',
+            fontFamily: 'var(--font-inter)',
             fontSize: 'var(--text-overline)',
             letterSpacing: 'var(--ls-overline)',
             color: 'var(--color-accent)',
@@ -283,9 +283,9 @@ export default function BookingWidget({ mapHash, onBooked }: Props) {
                   border: 'var(--border-subtle)',
                   backgroundColor: 'var(--color-bg-tertiary)',
                   color: 'var(--color-text-primary)',
-                  fontFamily: 'var(--font-inter-tight)',
+                  fontFamily: 'var(--font-inter)',
                   fontSize: 'var(--text-body-sm)',
-                  fontWeight: 500,
+                  fontWeight: 600,
                   cursor: 'pointer',
                   transition: 'all var(--transition-base)',
                   textAlign: 'center',
@@ -319,7 +319,7 @@ export default function BookingWidget({ mapHash, onBooked }: Props) {
           }}
         >
           <p style={{
-            fontFamily: 'var(--font-inter-tight)',
+            fontFamily: 'var(--font-inter)',
             fontSize: 'var(--text-overline)',
             letterSpacing: 'var(--ls-overline)',
             color: 'var(--color-accent)',
@@ -330,7 +330,7 @@ export default function BookingWidget({ mapHash, onBooked }: Props) {
           </p>
 
           <p style={{
-            fontFamily: 'var(--font-plus-jakarta)',
+            fontFamily: 'var(--font-lora)',
             fontSize: 'var(--text-h4)',
             fontWeight: 600,
             color: 'var(--color-text-primary)',

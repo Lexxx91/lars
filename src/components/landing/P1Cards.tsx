@@ -4,6 +4,8 @@
  * P1Cards — Primera pregunta del gateway, visible en el hero sin botón intermedio.
  * Fase 1: feedback visual al seleccionar. Transición a P2 se conecta en Fase 2.
  * Emite evento 'scrollToP1' para el CTA del below-the-fold.
+ *
+ * Sprint 3: animateEntrance prop — question label + cards fade in with 150ms stagger.
  */
 
 import { useState, useEffect, useCallback } from 'react'
@@ -39,11 +41,17 @@ const options = [
 interface P1CardsProps {
   /** Callback externo — activa el gateway cuando P1 está respondida */
   onSelect?: (id: string) => void
+  /** Sprint 3: when true, cards animate in with stagger */
+  animateEntrance?: boolean
 }
 
-export default function P1Cards({ onSelect }: P1CardsProps) {
+export default function P1Cards({ onSelect, animateEntrance = false }: P1CardsProps) {
   const [selected, setSelected] = useState<string | null>(null)
   const [isPulsing, setIsPulsing] = useState(false)
+  // Track which cards have been revealed (for stagger)
+  const [revealedCards, setRevealedCards] = useState<number>(-1)
+  // Track if the question label is revealed
+  const [labelRevealed, setLabelRevealed] = useState(false)
 
   // Escucha el evento del CTA de below-the-fold para hacer pulse
   useEffect(() => {
@@ -55,6 +63,22 @@ export default function P1Cards({ onSelect }: P1CardsProps) {
     window.addEventListener('scrollToP1', handler)
     return () => window.removeEventListener('scrollToP1', handler)
   }, [])
+
+  // Stagger entrance when animateEntrance becomes true
+  useEffect(() => {
+    if (!animateEntrance) return
+
+    // Label appears first
+    setLabelRevealed(true)
+
+    // Cards stagger in 150ms apart, starting 100ms after label
+    const timers: ReturnType<typeof setTimeout>[] = []
+    options.forEach((_, i) => {
+      timers.push(setTimeout(() => setRevealedCards(i), 100 + i * 150))
+    })
+
+    return () => timers.forEach(clearTimeout)
+  }, [animateEntrance])
 
   const handleSelect = useCallback((id: string) => {
     if (selected === id) return
@@ -69,39 +93,46 @@ export default function P1Cards({ onSelect }: P1CardsProps) {
       className={isPulsing ? 'p1-pulse' : ''}
       style={{ width: '100%' }}
     >
-      {/* Pregunta */}
+      {/* Pregunta — centrada */}
       <p
+        className={animateEntrance ? `hero-reveal${labelRevealed ? ' hero-animate-fade-in' : ''}` : ''}
         style={{
-          fontFamily: 'var(--font-inter-tight)',
+          fontFamily: 'var(--font-lora)',
           fontSize: 'var(--text-h3)',
           lineHeight: 'var(--lh-h3)',
           letterSpacing: 'var(--ls-h3)',
-          fontWeight: 500,
+          fontWeight: 700,
           color: 'var(--color-text-primary)',
-          marginBottom: 'var(--space-4)',
+          marginBottom: 'var(--space-5)',
+          textAlign: 'center',
         }}
       >
         ¿Qué te trajo hasta aquí?
       </p>
 
-      {/* Cards */}
+      {/* Cards — centradas con max-width */}
       <div
         role="radiogroup"
         aria-label="¿Qué te trajo hasta aquí?"
         style={{
           display: 'flex',
           flexDirection: 'column',
-          gap: 'var(--space-3)',
+          gap: 'var(--space-2)',
+          maxWidth: '640px',
+          margin: '0 auto',
         }}
       >
-        {options.map((option) => {
+        {options.map((option, index) => {
           const isSelected = selected === option.id
+          const shouldAnimate = animateEntrance
+          const isRevealed = !shouldAnimate || index <= revealedCards
           return (
             <button
               key={option.id}
               role="radio"
               aria-checked={isSelected}
               onClick={() => handleSelect(option.id)}
+              className={shouldAnimate ? `p1-card-reveal${isRevealed ? ' p1-card-animate' : ''}` : ''}
               style={{
                 width: '100%',
                 textAlign: 'left',
@@ -112,24 +143,29 @@ export default function P1Cards({ onSelect }: P1CardsProps) {
                   ? '1px solid var(--color-accent)'
                   : 'var(--border-subtle)',
                 borderRadius: 'var(--radius-lg)',
-                padding: 'var(--space-4) var(--space-5)',
-                cursor: 'pointer',
+                padding: 'var(--space-3) var(--space-5)',
+                cursor: selected && !isSelected ? 'default' : 'pointer',
                 transition:
-                  'background var(--transition-fast), border-color var(--transition-fast)',
+                  'background var(--transition-fast), border-color var(--transition-fast), opacity 200ms ease',
                 display: 'flex',
                 justifyContent: 'space-between',
                 alignItems: 'flex-start',
                 gap: 'var(--space-4)',
                 minHeight: '44px',
+                /* Dimming: unselected cards fade when one is selected */
+                opacity: selected && !isSelected ? 0.5 : 1,
+                pointerEvents: selected && !isSelected ? 'none' : 'auto',
+                /* Pulse: selected card gets spring scale animation */
+                animation: isSelected ? 'selectPulse 300ms cubic-bezier(0.34, 1.56, 0.64, 1)' : 'none',
               }}
             >
               <div style={{ flex: 1 }}>
                 <p
                   style={{
-                    fontFamily: 'var(--font-inter-tight)',
+                    fontFamily: 'var(--font-inter)',
                     fontSize: 'var(--text-body)',
                     lineHeight: 'var(--lh-body)',
-                    fontWeight: 500,
+                    fontWeight: 600,
                     color: 'var(--color-text-primary)',
                     marginBottom: 'var(--space-1)',
                   }}

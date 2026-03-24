@@ -86,7 +86,7 @@ export default function DimensionCard({
               display: 'inline-block',
               padding: '3px 10px',
               borderRadius: 'var(--radius-pill)',
-              background: 'rgba(74,222,128,0.1)',
+              background: 'rgba(61,154,95,0.1)',
               color: 'var(--color-success)',
               fontFamily: 'var(--font-inter)',
               fontSize: 'var(--text-caption)',
@@ -112,9 +112,9 @@ export default function DimensionCard({
       >
         <span
           style={{
-            fontFamily: 'var(--font-inter-tight)',
+            fontFamily: 'var(--font-inter)',
             fontSize: 'var(--text-h4)',
-            fontWeight: 500,
+            fontWeight: 600,
             color: 'var(--color-text-primary)',
             lineHeight: 'var(--lh-h4)',
           }}
@@ -123,7 +123,7 @@ export default function DimensionCard({
         </span>
         <span
           style={{
-            fontFamily: 'var(--font-plus-jakarta)',
+            fontFamily: 'var(--font-lora)',
             fontSize: 'var(--text-h3)',
             fontWeight: 700,
             color: dim.color,
@@ -148,7 +148,7 @@ export default function DimensionCard({
         style={{
           height: '6px',
           borderRadius: '3px',
-          background: 'rgba(255,255,255,0.08)',
+          background: 'rgba(30,19,16,0.08)',
           marginBottom: 'var(--space-4)',
           overflow: 'hidden',
         }}
@@ -178,8 +178,8 @@ export default function DimensionCard({
             marginTop: 'var(--space-4)',
             padding: 'var(--space-4)',
             borderRadius: 'var(--radius-md)',
-            background: 'rgba(198,200,238,0.06)',
-            border: '1px solid rgba(198,200,238,0.12)',
+            background: 'rgba(180,90,50,0.06)',
+            border: '1px solid rgba(180,90,50,0.12)',
           }}
         >
           <p
@@ -232,7 +232,7 @@ export default function DimensionCard({
                 style={{
                   height: '3px',
                   borderRadius: '2px',
-                  background: 'rgba(255,255,255,0.06)',
+                  background: 'rgba(30,19,16,0.06)',
                   overflow: 'hidden',
                 }}
               >

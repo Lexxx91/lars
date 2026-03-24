@@ -10,13 +10,14 @@
  * para que GatewayController pase al Bloque 2.
  */
 
-import { useState, useCallback } from 'react'
-import ZoneWrapper from './ZoneWrapper'
+import { useState, useCallback, useEffect } from 'react'
+import ZoneWrapper, { getZoneBg } from './ZoneWrapper'
 import AnalyzingScreen from './AnalyzingScreen'
 import SingleSelectStep from './SingleSelectStep'
 import MultiSelectStep from './MultiSelectStep'
 import MicroEspejo from '@/components/ui/MicroEspejo'
 import ProgressBar from '@/components/ui/ProgressBar'
+import { useNervousSystem } from '@/contexts/NervousSystemContext'
 import {
   P2_OPTIONS,
   P3_OPTIONS,
@@ -37,13 +38,14 @@ export interface Bloque1Answers {
 }
 
 // Progreso no lineal — pausa en revelaciones (barra no avanza)
+// Sprint 3: new values — mirrors PAUSE at same % as preceding question
 const PROGRESS: Record<Step, number> = {
-  p2: 20,
-  analyzing: 20,
-  'primera-verdad': 20,
-  p3: 35,
-  p4: 45,
-  'micro-espejo-1': 50,
+  p2: 22,
+  analyzing: 22,
+  'primera-verdad': 22,    // PAUSE — bar stays at 22% during first truth
+  p3: 38,
+  p4: 48,
+  'micro-espejo-1': 48,   // PAUSE — bar stays at 48% during micro-mirror 1
 }
 
 // ─── PROPS ────────────────────────────────────────────────────────────────────
@@ -92,6 +94,14 @@ export default function GatewayBloque1({
   const [step, setStep] = useState<Step>('p2')
   const [stepKey, setStepKey] = useState(0)
   const [isExiting, setIsExiting] = useState(false)
+  const { setState: setNervousState } = useNervousSystem()
+
+  // Nervous system: awakening from P3 onward
+  useEffect(() => {
+    if (step === 'p3' || step === 'p4' || step === 'micro-espejo-1') {
+      setNervousState('awakening')
+    }
+  }, [step, setNervousState])
 
   // ── Zona y respuestas ──
   const [zone, setZone] = useState<Zone>('exploracion')
@@ -100,13 +110,14 @@ export default function GatewayBloque1({
   const [p4, setP4] = useState('')
 
   // ── changeStep: fade-out 200ms → nuevo paso con step-enter ──
+  // A-04: exit 300ms + breath 100ms = 400ms before new step mounts
   const changeStep = useCallback((newStep: Step) => {
     setIsExiting(true)
     setTimeout(() => {
       setStep(newStep)
       setStepKey((k) => k + 1)
       setIsExiting(false)
-    }, 200)
+    }, 400)
   }, [])
 
   // ── Handlers ──
@@ -154,7 +165,7 @@ export default function GatewayBloque1({
   const microEspejo1Content = getMicroEspejo1(p3Selections, p4 || 'A')
 
   const progress = PROGRESS[step]
-  const progressLabel = `Tu diagnóstico: ${progress}% completo`
+  const progressLabel = `Tu regulación: ${progress}% completo`
 
   // ─── RENDER ───────────────────────────────────────────────────────────────
 
@@ -162,7 +173,7 @@ export default function GatewayBloque1({
     <div
       className="gateway-overlay"
       role="main"
-      aria-label="Diagnóstico — Gateway L.A.R.S."
+      aria-label="Evaluación — Gateway L.A.R.S."
       style={{
         position: 'fixed',
         inset: 0,
@@ -171,7 +182,8 @@ export default function GatewayBloque1({
         flexDirection: 'column',
         overflowY: 'auto',
         overflowX: 'hidden',
-        backgroundColor: 'var(--color-bg-primary)',
+        backgroundColor: getZoneBg(zone),
+        transition: 'background-color 600ms var(--ease-zone)',
       }}
     >
       {/* ── Barra de progreso sticky ── */}
@@ -180,11 +192,8 @@ export default function GatewayBloque1({
           position: 'sticky',
           top: 0,
           zIndex: 10,
-          backgroundColor:
-            zone === 'reflexion'
-              ? 'var(--color-bg-secondary)'
-              : 'var(--color-bg-primary)',
-          transition: 'background-color 600ms ease',
+          backgroundColor: getZoneBg(zone),
+          transition: 'background-color 600ms var(--ease-zone)',
           padding: 'var(--space-4) var(--container-padding-mobile)',
           paddingBottom: 'var(--space-3)',
           borderBottom: 'var(--border-subtle)',
@@ -250,19 +259,20 @@ export default function GatewayBloque1({
             <AnalyzingScreen onComplete={handleAnalyzingComplete} />
           )}
 
-          {/* Primera Verdad */}
+          {/* Primera Verdad — stagger: label → observation → data → button */}
           {step === 'primera-verdad' && (
             <div>
-              <p style={overlineStyle}>Lo que revelan tus respuestas</p>
+              <p className="mirror-stagger-label" style={overlineStyle}>Lo que revelan tus respuestas</p>
               <MicroEspejo
                 observation={primeraVerdad.text}
                 collectiveData={primeraVerdad.collectiveData}
               />
               <button
+                className="mirror-stagger-button"
                 onClick={handlePrimeraVerdadContinue}
                 style={continueButtonStyle}
               >
-                Seguir con mi diagnóstico →
+                Seguir con mi evaluación →
               </button>
             </div>
           )}
@@ -289,19 +299,20 @@ export default function GatewayBloque1({
             />
           )}
 
-          {/* Micro-espejo 1 */}
+          {/* Micro-espejo 1 — stagger: label → observation → data → button */}
           {step === 'micro-espejo-1' && (
             <div>
-              <p style={overlineStyle}>Tu patrón — 50% completado</p>
+              <p className="mirror-stagger-label" style={overlineStyle}>Tu patrón — 50% completado</p>
               <MicroEspejo
                 observation={microEspejo1Content.text}
                 collectiveData={microEspejo1Content.collectiveData}
               />
               <button
+                className="mirror-stagger-button"
                 onClick={handleMicroEspejo1Continue}
                 style={continueButtonStyle}
               >
-                Continuar el diagnóstico →
+                Continuar la evaluación →
               </button>
             </div>
           )}

@@ -52,7 +52,7 @@ type Period = '1d' | '7d' | '30d' | 'all'
 
 function scoreColor(score: number): string {
   if (score <= 39) return 'var(--color-error)'
-  if (score <= 59) return '#F97316'
+  if (score <= 59) return '#D4895C'
   if (score <= 79) return 'var(--color-warning)'
   return 'var(--color-success)'
 }
@@ -119,7 +119,7 @@ export default function AnalyticsDashboard() {
 
   const { funnel, metrics, recent } = data
   const funnelSteps = [
-    { label: 'Diagnósticos', value: funnel.diagnostics, pct: 100 },
+    { label: 'Evaluaciones', value: funnel.diagnostics, pct: 100 },
     { label: 'Empezaron P1', value: funnel.p1_started, pct: funnel.diagnostics > 0 ? Math.round((funnel.p1_started / funnel.diagnostics) * 100) : 0 },
     { label: 'Dieron email', value: funnel.email_captured, pct: funnel.p1_started > 0 ? Math.round((funnel.email_captured / funnel.p1_started) * 100) : 0 },
     { label: 'Visitaron mapa', value: funnel.map_visited, pct: funnel.email_captured > 0 ? Math.round((funnel.map_visited / funnel.email_captured) * 100) : 0 },
@@ -139,7 +139,7 @@ export default function AnalyticsDashboard() {
       }}>
         <div>
           <h1 style={{
-            fontFamily: 'var(--font-plus-jakarta)',
+            fontFamily: 'var(--font-lora)',
             fontSize: 'var(--text-h2)',
             fontWeight: 700,
             color: 'var(--color-text-primary)',
@@ -197,7 +197,7 @@ export default function AnalyticsDashboard() {
           const isLast = i === funnelSteps.length - 1
           const barColor = isLast
             ? 'var(--color-success)'
-            : `rgba(198,200,238,${1 - i * 0.18})`
+            : `rgba(180,90,50,${1 - i * 0.18})`
 
           return (
             <div
@@ -214,7 +214,7 @@ export default function AnalyticsDashboard() {
             >
               {/* Número */}
               <div style={{
-                fontFamily: 'var(--font-plus-jakarta)',
+                fontFamily: 'var(--font-lora)',
                 fontSize: 'var(--text-h2)',
                 fontWeight: 700,
                 color: 'var(--color-text-primary)',
@@ -241,7 +241,7 @@ export default function AnalyticsDashboard() {
                   </span>
                   {!isFirst && (
                     <span style={{
-                      fontFamily: 'var(--font-inter-tight)',
+                      fontFamily: 'var(--font-inter)',
                       fontSize: 'var(--text-caption)',
                       fontWeight: 600,
                       color: conversionColor(step.pct),
@@ -253,7 +253,7 @@ export default function AnalyticsDashboard() {
                 <div style={{
                   height: '6px',
                   borderRadius: '3px',
-                  background: 'rgba(255,255,255,0.06)',
+                  background: 'rgba(30,19,16,0.06)',
                   overflow: 'hidden',
                 }}>
                   <div style={{
@@ -275,8 +275,8 @@ export default function AnalyticsDashboard() {
             textAlign: 'center',
             padding: 'var(--space-4)',
             borderRadius: 'var(--radius-lg)',
-            background: 'rgba(74,222,128,0.06)',
-            border: '1px solid rgba(74,222,128,0.15)',
+            background: 'rgba(61,154,95,0.06)',
+            border: '1px solid rgba(61,154,95,0.15)',
           }}>
             <span style={{
               fontFamily: 'var(--font-inter)',
@@ -286,7 +286,7 @@ export default function AnalyticsDashboard() {
               Conversión total:{' '}
             </span>
             <span style={{
-              fontFamily: 'var(--font-plus-jakarta)',
+              fontFamily: 'var(--font-lora)',
               fontSize: 'var(--text-h3)',
               fontWeight: 700,
               color: 'var(--color-success)',
@@ -318,7 +318,7 @@ export default function AnalyticsDashboard() {
           </p>
           <div style={{ display: 'flex', alignItems: 'baseline', gap: 'var(--space-2)' }}>
             <span style={{
-              fontFamily: 'var(--font-plus-jakarta)',
+              fontFamily: 'var(--font-lora)',
               fontSize: 'var(--text-h1)',
               fontWeight: 700,
               color: scoreColor(metrics.avg_score),
@@ -349,7 +349,7 @@ export default function AnalyticsDashboard() {
             Sesiones agendadas
           </p>
           <span style={{
-            fontFamily: 'var(--font-plus-jakarta)',
+            fontFamily: 'var(--font-lora)',
             fontSize: 'var(--text-h1)',
             fontWeight: 700,
             color: 'var(--color-accent)',
@@ -372,7 +372,7 @@ export default function AnalyticsDashboard() {
             Vuelven al mapa
           </p>
           <span style={{
-            fontFamily: 'var(--font-plus-jakarta)',
+            fontFamily: 'var(--font-lora)',
             fontSize: 'var(--text-h1)',
             fontWeight: 700,
             color: metrics.return_rate > 30 ? 'var(--color-success)' : 'var(--color-warning)',
@@ -397,7 +397,7 @@ export default function AnalyticsDashboard() {
           {metrics.worst_dimension ? (
             <>
               <span style={{
-                fontFamily: 'var(--font-plus-jakarta)',
+                fontFamily: 'var(--font-lora)',
                 fontSize: 'var(--text-h1)',
                 fontWeight: 700,
                 color: scoreColor(metrics.worst_dimension.avg),
@@ -420,7 +420,7 @@ export default function AnalyticsDashboard() {
         </Card>
       </div>
 
-      {/* ── ÚLTIMOS DIAGNÓSTICOS ── */}
+      {/* ── ÚLTIMAS EVALUACIONES ── */}
       <Card style={{ padding: 'var(--space-6)', overflow: 'hidden' }}>
         <p style={{
           fontFamily: 'var(--font-inter)',
@@ -430,7 +430,7 @@ export default function AnalyticsDashboard() {
           color: 'var(--color-text-tertiary)',
           marginBottom: 'var(--space-4)',
         }}>
-          Últimos diagnósticos
+          Últimas evaluaciones
         </p>
 
         {recent.length === 0 ? (
@@ -441,7 +441,7 @@ export default function AnalyticsDashboard() {
             textAlign: 'center',
             padding: 'var(--space-8)',
           }}>
-            No hay diagnósticos en este periodo.
+            No hay evaluaciones en este periodo.
           </p>
         ) : (
           <div style={{ overflowX: 'auto' }}>
@@ -481,7 +481,7 @@ export default function AnalyticsDashboard() {
                     </td>
                     <td style={{ padding: 'var(--space-3)' }}>
                       <span style={{
-                        fontFamily: 'var(--font-inter-tight)',
+                        fontFamily: 'var(--font-inter)',
                         fontWeight: 600,
                         color: scoreColor(r.score),
                       }}>

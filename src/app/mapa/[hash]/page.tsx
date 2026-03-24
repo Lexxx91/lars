@@ -23,12 +23,13 @@ import { getD7Insight } from '@/lib/content/collective-insights-d7'
 import { getSubdimensionConfig } from '@/lib/content/subdimensions'
 import { getBookExcerpt } from '@/lib/content/book-excerpts'
 import MapaClient from './MapaClient'
+import SiteHeader from '@/components/SiteHeader'
 
 // ─── METADATA ─────────────────────────────────────────────────────────────────
 
 export const metadata: Metadata = {
   title: 'Tu Mapa de Regulación · L.A.R.S.',
-  description: 'Tu diagnóstico personal de regulación nerviosa.',
+  description: 'Tu evaluación personal de regulación nerviosa.',
   robots: { index: false, follow: false },
 }
 
@@ -177,6 +178,8 @@ export default async function MapaPage({
   const worstDimResult = dimensionResults.find((d) => d.key === mostCompromisedKey)
 
   return (
+    <>
+    <SiteHeader variant="default" />
     <MapaClient
       global={global}
       dimensionResults={dimensionResults}
@@ -200,5 +203,6 @@ export default async function MapaPage({
       worstScore={worstScore}
       hasPaid={funnel?.converted_week1 === true || funnel?.paid === true}
     />
+    </>
   )
 }

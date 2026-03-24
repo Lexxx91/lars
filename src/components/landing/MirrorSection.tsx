@@ -2,18 +2,40 @@
 
 /**
  * MirrorSection — Sección ESPEJO (Normalización).
- * A-15: scroll reveal con IntersectionObserver.
+ * Rediseño editorial: overline + headline Lora + separador + frase impacto + párrafos fragmentados.
+ * Animación stagger escalonada al entrar en viewport.
  */
 
-import { useScrollReveal } from '@/hooks/useScrollReveal'
+import { useRef, useEffect, useState } from 'react'
 
 export default function MirrorSection() {
-  const ref = useScrollReveal<HTMLElement>(0.15)
+  const sectionRef = useRef<HTMLElement>(null)
+  const [visible, setVisible] = useState(false)
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setVisible(true)
+          observer.disconnect()
+        }
+      },
+      { threshold: 0.15 }
+    )
+    const el = sectionRef.current
+    if (el) observer.observe(el)
+    return () => observer.disconnect()
+  }, [])
+
+  const stagger = (delayMs: number) => ({
+    opacity: visible ? 1 : 0,
+    transform: visible ? 'translateY(0)' : 'translateY(20px)',
+    transition: `opacity 600ms var(--ease-out-expo) ${delayMs}ms, transform 600ms var(--ease-out-expo) ${delayMs}ms`,
+  })
 
   return (
     <section
-      ref={ref}
-      className="scroll-reveal"
+      ref={sectionRef}
       aria-label="Normalización"
       style={{
         paddingTop: 'var(--space-16)',
@@ -23,20 +45,71 @@ export default function MirrorSection() {
       }}
     >
       <div style={{ maxWidth: '680px', margin: '0 auto' }}>
+        {/* Overline */}
+        <p className="overline-accent" style={stagger(0)}>
+          LO QUE SIENTES
+        </p>
+
+        {/* Headline — Lora Bold, --text-h2 */}
         <h2
           style={{
-            fontFamily: 'var(--font-inter-tight)',
-            fontSize: 'var(--text-h3)',
-            lineHeight: 'var(--lh-h3)',
-            letterSpacing: 'var(--ls-h3)',
-            fontWeight: 500,
+            fontFamily: 'var(--font-lora)',
+            fontSize: 'var(--text-h2)',
+            lineHeight: 1.2,
+            letterSpacing: '-0.01em',
+            fontWeight: 700,
             color: 'var(--color-text-primary)',
             marginBottom: 'var(--space-6)',
+            ...stagger(150),
           }}
         >
           Lo que sientes tiene nombre. Y tiene solución.
         </h2>
 
+        {/* Separador sutil — 60px centrado */}
+        <div
+          style={{
+            width: '60px',
+            height: '1px',
+            background: 'var(--color-surface-subtle)',
+            margin: '0 auto',
+            marginBottom: 'var(--space-6)',
+            transform: visible ? 'scaleX(1)' : 'scaleX(0)',
+            transition: `transform 600ms var(--ease-out-expo) 300ms`,
+          }}
+        />
+
+        {/* Frase de impacto aislada — Lora italic, --text-h4 */}
+        <p
+          style={{
+            fontFamily: 'var(--font-lora)',
+            fontSize: 'var(--text-h4)',
+            lineHeight: 1.35,
+            fontStyle: 'italic',
+            color: 'var(--color-text-primary)',
+            marginBottom: 'var(--space-6)',
+            ...stagger(450),
+          }}
+        >
+          No es falta de voluntad.
+        </p>
+
+        {/* Párrafo 1 — explicación concreta */}
+        <p
+          style={{
+            fontFamily: 'var(--font-inter)',
+            fontSize: 'var(--text-body)',
+            lineHeight: 'var(--lh-body)',
+            color: 'var(--color-text-secondary)',
+            marginBottom: 'var(--space-5)',
+            maxWidth: 'var(--text-max-width)',
+            ...stagger(600),
+          }}
+        >
+          Es un sistema nervioso que lleva meses&nbsp;— quizá años&nbsp;— operando en modo alarma. Cuando eso pasa, no importa cuánto descanses: tu sueño se fragmenta, tus decisiones pierden claridad, tu paciencia desaparece antes de llegar a casa.
+        </p>
+
+        {/* Párrafo 2 — reframe biológico */}
         <p
           style={{
             fontFamily: 'var(--font-inter)',
@@ -44,13 +117,27 @@ export default function MirrorSection() {
             lineHeight: 'var(--lh-body)',
             color: 'var(--color-text-secondary)',
             maxWidth: 'var(--text-max-width)',
+            ...stagger(750),
           }}
         >
-          No es falta de voluntad. No es que &ldquo;no puedas con todo.&rdquo; Es un
-          sistema nervioso que lleva meses&nbsp;— quizá años&nbsp;— en modo alarma. Y cuando
-          eso pasa, tu sueño se rompe, tus decisiones se nublan, tu paciencia desaparece y tu
-          energía no vuelve por mucho que descanses. No estás roto. Tu biología está
-          respondiendo exactamente como debería ante una carga que ya no puede sostener.
+          No estás roto. Tu biología está haciendo exactamente lo que sabe hacer cuando la carga supera el diseño.
+        </p>
+
+        {/* Pull-quote — cierre emocional */}
+        <p
+          style={{
+            fontFamily: 'var(--font-cormorant)',
+            fontSize: 'var(--text-h4)',
+            lineHeight: 1.5,
+            fontStyle: 'italic',
+            color: 'var(--color-accent)',
+            borderLeft: '3px solid var(--color-accent)',
+            paddingLeft: 'var(--space-5)',
+            marginTop: 'var(--space-8)',
+            ...stagger(900),
+          }}
+        >
+          Tu cuerpo lleva meses hablándote. Esta es la primera vez que alguien te traduce lo que dice.
         </p>
       </div>
     </section>

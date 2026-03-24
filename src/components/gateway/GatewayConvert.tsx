@@ -82,13 +82,13 @@ export default function GatewayConvert({
     : null
 
   const progress = PROGRESS[step]
-  const progressLabel = `Diagnóstico rápido: ${progress}%`
+  const progressLabel = `Evaluación rápida: ${progress}%`
 
   return (
     <div
       className="gateway-overlay"
       role="main"
-      aria-label="Diagnóstico rápido — L.A.R.S."
+      aria-label="Evaluación rápida — L.A.R.S."
       style={{
         position: 'fixed',
         inset: 0,
@@ -98,9 +98,9 @@ export default function GatewayConvert({
         overflowY: 'auto',
         overflowX: 'hidden',
         backgroundColor: step === 'bisagra' || step === 'email'
-          ? '#07181d'
+          ? 'var(--bg-reveal-solid)'
           : 'var(--color-bg-primary)',
-        transition: 'background-color 600ms ease',
+        transition: 'background-color 600ms var(--ease-zone)',
       }}
     >
       {/* ── Barra de progreso sticky ── */}
@@ -110,9 +110,9 @@ export default function GatewayConvert({
           top: 0,
           zIndex: 10,
           backgroundColor: step === 'bisagra' || step === 'email'
-            ? '#07181d'
+            ? 'var(--bg-reveal-solid)'
             : 'var(--color-bg-primary)',
-          transition: 'background-color 600ms ease',
+          transition: 'background-color 600ms var(--ease-zone)',
           padding: 'var(--space-4) var(--container-padding-mobile)',
           paddingBottom: 'var(--space-3)',
           borderBottom: 'var(--border-subtle)',

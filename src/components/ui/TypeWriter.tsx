@@ -19,6 +19,8 @@ interface TypeWriterProps {
   delay?: number
   /** Callback cuando termina de escribir + pausa del cursor */
   onComplete?: () => void
+  /** Ms que el cursor parpadea tras completar el typing, antes de llamar onComplete (default 800) */
+  cursorPostDelay?: number
   /** Clase CSS extra para el contenedor */
   className?: string
   style?: React.CSSProperties
@@ -29,6 +31,7 @@ export default function TypeWriter({
   speed = 40,
   delay = 0,
   onComplete,
+  cursorPostDelay = 800,
   className,
   style,
 }: TypeWriterProps) {
@@ -53,11 +56,11 @@ export default function TypeWriter({
         const t = setTimeout(typeNext, speed)
         timeoutsRef.current.push(t)
       } else {
-        // Typing completo — cursor sigue parpadeando 800ms, luego llama onComplete
+        // Typing completo — cursor sigue parpadeando, luego llama onComplete
         const t = setTimeout(() => {
           setDone(true)
           onComplete?.()
-        }, 800)
+        }, cursorPostDelay)
         timeoutsRef.current.push(t)
       }
     }

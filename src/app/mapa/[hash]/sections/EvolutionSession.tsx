@@ -56,9 +56,9 @@ export default function EvolutionSession({ isNew, booked: initialBooked, mapHash
       {/* Título */}
       <p
         style={{
-          fontFamily: 'var(--font-inter-tight)',
+          fontFamily: 'var(--font-inter)',
           fontSize: 'var(--text-h4)',
-          fontWeight: 500,
+          fontWeight: 600,
           color: 'var(--color-text-primary)',
           lineHeight: 'var(--lh-h4)',
           marginBottom: 'var(--space-3)',
