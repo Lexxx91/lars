@@ -13,9 +13,9 @@ export default function Card({
   return (
     <div
       style={{
-        backgroundColor: "var(--color-bg-secondary)",
-        border: "var(--border-subtle)",
-        borderRadius: "var(--radius-lg)",
+        backgroundColor: "var(--color-bg-tertiary)",
+        border: "1px solid rgba(30, 19, 16, 0.06)",
+        borderRadius: "var(--radius-xl)",
         padding: "var(--space-6)",
         transition: "all var(--transition-base)",
         cursor: interactive ? "pointer" : "default",

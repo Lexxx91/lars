@@ -71,7 +71,7 @@ export default function CompressedBisagra({ scores, onContinue }: CompressedBisa
         <div style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'center', gap: 'var(--space-2)' }}>
           {showScore && (
             <span style={{
-              fontFamily: 'var(--font-inter-tight)',
+              fontFamily: 'var(--font-inter)',
               fontSize: 'var(--text-display)',
               fontWeight: 600,
               color: 'var(--color-text-primary)',

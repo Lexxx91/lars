@@ -29,11 +29,11 @@ export default function Bisagra({
       {/* Score principal */}
       <p
         style={{
-          fontFamily: "var(--font-plus-jakarta)",
+          fontFamily: "var(--font-lora)",
           fontSize: "var(--text-display)",
           lineHeight: "var(--lh-display)",
           color: "var(--color-text-primary)",
-          fontWeight: 600,
+          fontWeight: 700,
         }}
       >
         {score}
@@ -42,7 +42,8 @@ export default function Bisagra({
       {/* Benchmark */}
       <p
         style={{
-          fontFamily: "var(--font-inter-tight)",
+          fontFamily: "var(--font-inter)",
+          fontWeight: 600,
           fontSize: "var(--text-h3)",
           lineHeight: "var(--lh-h3)",
           color: "var(--color-text-secondary)",
@@ -72,7 +73,7 @@ export default function Bisagra({
             fontFamily: "var(--font-inter)",
             fontSize: "var(--text-body-sm)",
             color: "var(--color-text-secondary)",
-            borderTop: "1px solid rgba(255, 255, 255, 0.06)",
+            borderTop: "1px solid rgba(30, 19, 16, 0.06)",
             paddingTop: "var(--space-4)",
             marginTop: "var(--space-4)",
           }}

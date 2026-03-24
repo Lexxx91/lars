@@ -25,11 +25,11 @@ export default function MirrorSection() {
       <div style={{ maxWidth: '680px', margin: '0 auto' }}>
         <h2
           style={{
-            fontFamily: 'var(--font-inter-tight)',
+            fontFamily: 'var(--font-inter)',
             fontSize: 'var(--text-h3)',
             lineHeight: 'var(--lh-h3)',
             letterSpacing: 'var(--ls-h3)',
-            fontWeight: 500,
+            fontWeight: 600,
             color: 'var(--color-text-primary)',
             marginBottom: 'var(--space-6)',
           }}

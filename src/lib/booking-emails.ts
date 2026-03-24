@@ -39,8 +39,8 @@ function buildBookingEmail(params: {
 }): string {
   const button = params.buttonText && params.buttonUrl ? `
     <table cellpadding="0" cellspacing="0" style="margin: 32px auto;">
-      <tr><td style="background: #c6c8ee; border-radius: 100px; padding: 16px 40px;">
-        <a href="${params.buttonUrl}" style="color: #0a252c; font-family: 'Plus Jakarta Sans', Inter, system-ui, sans-serif; font-size: 15px; font-weight: 600; text-decoration: none; display: block; white-space: nowrap; text-align: center;">
+      <tr><td style="background: #B45A32; border-radius: 100px; padding: 16px 40px;">
+        <a href="${params.buttonUrl}" style="color: #FFFBEF; font-family: Lora, Inter, system-ui, sans-serif; font-size: 15px; font-weight: 600; text-decoration: none; display: block; white-space: nowrap; text-align: center;">
           ${params.buttonText}
         </a>
       </td></tr>
@@ -52,27 +52,27 @@ function buildBookingEmail(params: {
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Inter:wght@400;500&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Lora:wght@400;500;600;700&family=Inter:wght@400;500&display=swap" rel="stylesheet" />
 </head>
 <body style="
   margin: 0; padding: 0;
-  background-color: #0a252c;
-  font-family: 'Plus Jakarta Sans', Inter, system-ui, sans-serif;
-  color: #F5F5F0;
+  background-color: #1E130F;
+  font-family: Lora, Inter, system-ui, sans-serif;
+  color: #FFFBEF;
 ">
   <table width="100%" cellpadding="0" cellspacing="0" style="max-width: 560px; margin: 0 auto; padding: 48px 24px;">
     <tr><td>
       <!-- Header: overline + linea decorativa -->
-      <p style="font-family: 'Plus Jakarta Sans', system-ui, sans-serif; font-size: 12px; letter-spacing: 0.2em; text-transform: uppercase; color: #c6c8ee; margin: 0 0 12px 0; font-weight: 600;">
+      <p style="font-family: Lora, system-ui, sans-serif; font-size: 12px; letter-spacing: 0.2em; text-transform: uppercase; color: #B45A32; margin: 0 0 12px 0; font-weight: 600;">
         INSTITUTO EPIGENETICO
       </p>
-      <div style="width: 40px; height: 2px; background: linear-gradient(90deg, #c6c8ee, transparent); margin: 0 0 32px 0;"></div>
+      <div style="width: 40px; height: 2px; background: linear-gradient(90deg, #B45A32, transparent); margin: 0 0 32px 0;"></div>
 
       ${params.content}
       ${button}
 
       <!-- Footer -->
-      <div style="margin-top: 48px; padding-top: 24px; border-top: 1px solid rgba(198,200,238,0.12);">
+      <div style="margin-top: 48px; padding-top: 24px; border-top: 1px solid rgba(180,90,50,0.12);">
         <p style="font-family: Inter, system-ui, sans-serif; font-size: 12px; color: #6B7572; margin: 0; line-height: 1.6;">
           Instituto Epigenetico<br/>
           regulacion@institutoepigenetico.com
@@ -127,12 +127,12 @@ export async function sendBookingConfirmationEmail({
   const cancelUrl = `${getBaseUrl()}/mapa/${mapHash}?cancelBooking=true`
 
   const meetBlock = meetUrl ? `
-    <p style="font-family: 'Plus Jakarta Sans', system-ui, sans-serif; font-size: 12px; letter-spacing: 0.12em; text-transform: uppercase; color: #A8B0AC; margin: 28px 0 10px 0; font-weight: 500;">
+    <p style="font-family: Lora, system-ui, sans-serif; font-size: 12px; letter-spacing: 0.12em; text-transform: uppercase; color: #A8B0AC; margin: 28px 0 10px 0; font-weight: 500;">
       ENLACE DE VIDEOLLAMADA
     </p>
     <table cellpadding="0" cellspacing="0" width="100%" style="margin: 0 0 8px 0;">
-      <tr><td style="background: rgba(198,200,238,0.06); border: 1px solid rgba(198,200,238,0.12); border-radius: 12px; padding: 14px 18px;">
-        <a href="${meetUrl}" style="font-family: Inter, system-ui, sans-serif; color: #c6c8ee; font-size: 14px; text-decoration: none; word-break: break-all;">
+      <tr><td style="background: rgba(180,90,50,0.06); border: 1px solid rgba(180,90,50,0.12); border-radius: 12px; padding: 14px 18px;">
+        <a href="${meetUrl}" style="font-family: Inter, system-ui, sans-serif; color: #B45A32; font-size: 14px; text-decoration: none; word-break: break-all;">
           ${meetUrl}
         </a>
       </td></tr>
@@ -140,22 +140,22 @@ export async function sendBookingConfirmationEmail({
 
   const html = buildBookingEmail({
     content: `
-      <p style="font-family: 'Plus Jakarta Sans', system-ui, sans-serif; font-size: 28px; font-weight: 700; color: #F5F5F0; margin: 0 0 8px 0; line-height: 1.2;">
+      <p style="font-family: Lora, system-ui, sans-serif; font-size: 28px; font-weight: 700; color: #FFFBEF; margin: 0 0 8px 0; line-height: 1.2;">
         Tu sesion con Javier
       </p>
-      <p style="font-family: 'Plus Jakarta Sans', system-ui, sans-serif; font-size: 28px; font-weight: 700; color: #F5F5F0; margin: 0 0 28px 0; line-height: 1.2;">
+      <p style="font-family: Lora, system-ui, sans-serif; font-size: 28px; font-weight: 700; color: #FFFBEF; margin: 0 0 28px 0; line-height: 1.2;">
         esta confirmada.
       </p>
 
-      <div style="background: rgba(198,200,238,0.06); border: 1px solid rgba(198,200,238,0.12); border-radius: 12px; padding: 24px; margin-bottom: 24px;">
+      <div style="background: rgba(180,90,50,0.06); border: 1px solid rgba(180,90,50,0.12); border-radius: 12px; padding: 24px; margin-bottom: 24px;">
         <p style="font-family: Inter, system-ui, sans-serif; font-size: 13px; color: #A8B0AC; margin: 0 0 4px 0;">Fecha</p>
-        <p style="font-family: 'Plus Jakarta Sans', system-ui, sans-serif; font-size: 18px; color: #F5F5F0; font-weight: 600; margin: 0 0 20px 0;">${date}</p>
+        <p style="font-family: Lora, system-ui, sans-serif; font-size: 18px; color: #FFFBEF; font-weight: 600; margin: 0 0 20px 0;">${date}</p>
 
         <p style="font-family: Inter, system-ui, sans-serif; font-size: 13px; color: #A8B0AC; margin: 0 0 4px 0;">Hora</p>
-        <p style="font-family: 'Plus Jakarta Sans', system-ui, sans-serif; font-size: 18px; color: #F5F5F0; font-weight: 600; margin: 0 0 20px 0;">${time}</p>
+        <p style="font-family: Lora, system-ui, sans-serif; font-size: 18px; color: #FFFBEF; font-weight: 600; margin: 0 0 20px 0;">${time}</p>
 
         <p style="font-family: Inter, system-ui, sans-serif; font-size: 13px; color: #A8B0AC; margin: 0 0 4px 0;">Duracion</p>
-        <p style="font-family: 'Plus Jakarta Sans', system-ui, sans-serif; font-size: 18px; color: #F5F5F0; font-weight: 600; margin: 0;">20 minutos</p>
+        <p style="font-family: Lora, system-ui, sans-serif; font-size: 18px; color: #FFFBEF; font-weight: 600; margin: 0;">20 minutos</p>
       </div>
 
       ${meetBlock}
@@ -201,17 +201,17 @@ export async function sendBookingReminderEmail({
   const mapUrl = `${getBaseUrl()}/mapa/${mapHash}`
 
   const meetLine = meetUrl
-    ? `<p style="font-family: Inter, system-ui, sans-serif; font-size: 14px; color: #F5F5F0; margin: 16px 0;"><a href="${meetUrl}" style="color: #c6c8ee; text-decoration: none;">Enlace a la videollamada →</a></p>`
+    ? `<p style="font-family: Inter, system-ui, sans-serif; font-size: 14px; color: #FFFBEF; margin: 16px 0;"><a href="${meetUrl}" style="color: #B45A32; text-decoration: none;">Enlace a la videollamada →</a></p>`
     : ''
 
   const html = buildBookingEmail({
     content: `
-      <p style="font-family: 'Plus Jakarta Sans', system-ui, sans-serif; font-size: 28px; font-weight: 700; color: #F5F5F0; margin: 0 0 28px 0; line-height: 1.2;">
+      <p style="font-family: Lora, system-ui, sans-serif; font-size: 28px; font-weight: 700; color: #FFFBEF; margin: 0 0 28px 0; line-height: 1.2;">
         Manana: tu sesion con Javier
       </p>
 
-      <div style="background: rgba(198,200,238,0.06); border: 1px solid rgba(198,200,238,0.12); border-radius: 12px; padding: 24px; margin-bottom: 24px;">
-        <p style="font-family: 'Plus Jakarta Sans', system-ui, sans-serif; font-size: 18px; color: #F5F5F0; font-weight: 600; margin: 0;">
+      <div style="background: rgba(180,90,50,0.06); border: 1px solid rgba(180,90,50,0.12); border-radius: 12px; padding: 24px; margin-bottom: 24px;">
+        <p style="font-family: Lora, system-ui, sans-serif; font-size: 18px; color: #FFFBEF; font-weight: 600; margin: 0;">
           ${date} a las ${time}
         </p>
       </div>
@@ -251,16 +251,16 @@ export async function sendBookingNotificationToJavier({
 
   const html = buildBookingEmail({
     content: `
-      <p style="font-family: 'Plus Jakarta Sans', system-ui, sans-serif; font-size: 28px; font-weight: 700; color: #F5F5F0; margin: 0 0 28px 0; line-height: 1.2;">
+      <p style="font-family: Lora, system-ui, sans-serif; font-size: 28px; font-weight: 700; color: #FFFBEF; margin: 0 0 28px 0; line-height: 1.2;">
         Nueva sesion agendada
       </p>
 
-      <div style="background: rgba(198,200,238,0.06); border: 1px solid rgba(198,200,238,0.12); border-radius: 12px; padding: 24px; margin-bottom: 24px;">
+      <div style="background: rgba(180,90,50,0.06); border: 1px solid rgba(180,90,50,0.12); border-radius: 12px; padding: 24px; margin-bottom: 24px;">
         <p style="font-family: Inter, system-ui, sans-serif; font-size: 13px; color: #A8B0AC; margin: 0 0 4px 0;">Persona</p>
-        <p style="font-family: 'Plus Jakarta Sans', system-ui, sans-serif; font-size: 16px; color: #F5F5F0; font-weight: 600; margin: 0 0 20px 0;">${userEmail}</p>
+        <p style="font-family: Lora, system-ui, sans-serif; font-size: 16px; color: #FFFBEF; font-weight: 600; margin: 0 0 20px 0;">${userEmail}</p>
 
         <p style="font-family: Inter, system-ui, sans-serif; font-size: 13px; color: #A8B0AC; margin: 0 0 4px 0;">Fecha y hora</p>
-        <p style="font-family: 'Plus Jakarta Sans', system-ui, sans-serif; font-size: 16px; color: #F5F5F0; font-weight: 600; margin: 0;">${date} a las ${time}</p>
+        <p style="font-family: Lora, system-ui, sans-serif; font-size: 16px; color: #FFFBEF; font-weight: 600; margin: 0;">${date} a las ${time}</p>
       </div>
 
       <p style="font-family: Inter, system-ui, sans-serif; font-size: 14px; color: #A8B0AC; line-height: 1.6; margin: 0;">

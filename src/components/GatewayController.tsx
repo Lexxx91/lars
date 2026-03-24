@@ -247,7 +247,7 @@ export default function GatewayController() {
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            background: 'rgba(7,24,29,0.92)',
+            background: 'rgba(30,19,16,0.80)',
             padding: 'var(--space-6)',
           }}
         >
@@ -265,9 +265,9 @@ export default function GatewayController() {
           >
             <p
               style={{
-                fontFamily: 'var(--font-inter-tight)',
+                fontFamily: 'var(--font-inter)',
                 fontSize: 'var(--text-h3)',
-                fontWeight: 500,
+                fontWeight: 600,
                 color: 'var(--color-text-primary)',
                 marginBottom: 'var(--space-3)',
               }}

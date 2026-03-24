@@ -97,11 +97,11 @@ export default function P1Cards({ onSelect, animateEntrance = false }: P1CardsPr
       <p
         className={animateEntrance ? `hero-reveal${labelRevealed ? ' hero-animate-fade-in' : ''}` : ''}
         style={{
-          fontFamily: 'var(--font-inter-tight)',
+          fontFamily: 'var(--font-inter)',
           fontSize: 'var(--text-h3)',
           lineHeight: 'var(--lh-h3)',
           letterSpacing: 'var(--ls-h3)',
-          fontWeight: 500,
+          fontWeight: 600,
           color: 'var(--color-text-primary)',
           marginBottom: 'var(--space-4)',
         }}
@@ -159,10 +159,10 @@ export default function P1Cards({ onSelect, animateEntrance = false }: P1CardsPr
               <div style={{ flex: 1 }}>
                 <p
                   style={{
-                    fontFamily: 'var(--font-inter-tight)',
+                    fontFamily: 'var(--font-inter)',
                     fontSize: 'var(--text-body)',
                     lineHeight: 'var(--lh-body)',
-                    fontWeight: 500,
+                    fontWeight: 600,
                     color: 'var(--color-text-primary)',
                     marginBottom: 'var(--space-1)',
                   }}

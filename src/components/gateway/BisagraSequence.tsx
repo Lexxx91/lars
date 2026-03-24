@@ -35,9 +35,9 @@ interface BisagraSequenceProps {
 }
 
 function getSeverity(score: number): { label: string; color: string } {
-  if (score < 30) return { label: 'CRÍTICO', color: '#F87171' }
-  if (score <= 50) return { label: 'MODERADO', color: '#FACC15' }
-  return { label: 'EN RANGO', color: '#4ADE80' }
+  if (score < 30) return { label: 'CRÍTICO', color: '#C44040' }
+  if (score <= 50) return { label: 'MODERADO', color: '#D4A017' }
+  return { label: 'EN RANGO', color: '#3D9A5F' }
 }
 
 /** Fade-in con estado booleano */
@@ -121,8 +121,8 @@ export default function BisagraSequence({ scores, onContinue }: BisagraSequenceP
       <div
         className={`bisagra-box${calcPhase ? ' bisagra-glow-active' : ''}`}
         style={{
-          background: 'linear-gradient(135deg, #060d10 0%, #0a1820 100%)',
-          border: '1px solid rgba(198,200,238,0.1)',
+          background: 'linear-gradient(135deg, #F3EDD8 0%, #FFFBEF 100%)',
+          border: '1px solid rgba(180,90,50,0.1)',
           borderRadius: '16px',
           padding: '48px 32px',
           maxWidth: '520px',
@@ -163,7 +163,7 @@ export default function BisagraSequence({ scores, onContinue }: BisagraSequenceP
                   width: '64px',
                   height: '64px',
                   borderRadius: '50%',
-                  background: 'radial-gradient(circle, rgba(198,200,238,0.18) 0%, transparent 70%)',
+                  background: 'radial-gradient(circle, rgba(180,90,50,0.18) 0%, transparent 70%)',
                   animation: 'pulse-glow 2.5s ease-in-out infinite',
                 }}
               />
@@ -217,7 +217,7 @@ export default function BisagraSequence({ scores, onContinue }: BisagraSequenceP
             >
               <span
                 style={{
-                  fontFamily: 'var(--font-plus-jakarta)',
+                  fontFamily: 'var(--font-lora)',
                   fontSize: '4rem',
                   lineHeight: 1,
                   letterSpacing: 'var(--ls-display)',
@@ -251,7 +251,7 @@ export default function BisagraSequence({ scores, onContinue }: BisagraSequenceP
             <p
               style={{
                 ...fadeStyle(showSeverity),
-                fontFamily: 'var(--font-plus-jakarta)',
+                fontFamily: 'var(--font-lora)',
                 fontSize: 'var(--text-h4)',
                 fontWeight: 700,
                 letterSpacing: 'var(--ls-overline)',
@@ -268,7 +268,7 @@ export default function BisagraSequence({ scores, onContinue }: BisagraSequenceP
               style={{
                 ...fadeStyle(showBenchmark),
                 height: '1px',
-                background: 'rgba(255,255,255,0.06)',
+                background: 'rgba(30,19,16,0.06)',
                 margin: '0 0 var(--space-5)',
                 display: fadeTyping ? 'block' : 'none',
               }}
@@ -299,7 +299,7 @@ export default function BisagraSequence({ scores, onContinue }: BisagraSequenceP
             >
               <span
                 style={{
-                  fontFamily: 'var(--font-plus-jakarta)',
+                  fontFamily: 'var(--font-lora)',
                   fontSize: 'var(--text-display)',
                   lineHeight: 1,
                   letterSpacing: 'var(--ls-display)',
@@ -362,7 +362,7 @@ export default function BisagraSequence({ scores, onContinue }: BisagraSequenceP
           maxWidth: '520px',
           padding: 'var(--space-4) var(--space-6)',
           borderRadius: 'var(--radius-lg)',
-          border: '1px solid rgba(198,200,238,0.25)',
+          border: '1px solid rgba(180,90,50,0.25)',
           background: 'transparent',
           color: 'var(--color-text-secondary)',
           fontFamily: 'var(--font-inter)',
@@ -374,11 +374,11 @@ export default function BisagraSequence({ scores, onContinue }: BisagraSequenceP
         }}
         onMouseEnter={(e) => {
           e.currentTarget.style.color = 'var(--color-text-primary)'
-          e.currentTarget.style.borderColor = 'rgba(198,200,238,0.5)'
+          e.currentTarget.style.borderColor = 'rgba(180,90,50,0.5)'
         }}
         onMouseLeave={(e) => {
           e.currentTarget.style.color = 'var(--color-text-secondary)'
-          e.currentTarget.style.borderColor = 'rgba(198,200,238,0.25)'
+          e.currentTarget.style.borderColor = 'rgba(180,90,50,0.25)'
         }}
       >
         Ver mi diagnóstico completo →

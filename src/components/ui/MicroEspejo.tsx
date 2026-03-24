@@ -62,7 +62,7 @@ export default function MicroEspejo({
           padding: 'var(--space-6) var(--space-6)',
           marginBottom: 'var(--space-4)',
           backgroundColor: intensified
-            ? 'rgba(15, 48, 55, 0.4)'
+            ? 'rgba(30, 19, 16, 0.06)'
             : 'transparent',
         }}
       >

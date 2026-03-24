@@ -43,7 +43,7 @@ export default function EvolutionArchetype({ archetype, isNew }: Props) {
       {/* Overline */}
       <p
         style={{
-          fontFamily: 'var(--font-inter-tight)',
+          fontFamily: 'var(--font-inter)',
           fontSize: 'var(--text-overline)',
           letterSpacing: 'var(--ls-overline)',
           textTransform: 'uppercase',
@@ -57,7 +57,7 @@ export default function EvolutionArchetype({ archetype, isNew }: Props) {
       {/* Nombre */}
       <h3
         style={{
-          fontFamily: 'var(--font-plus-jakarta)',
+          fontFamily: 'var(--font-lora)',
           fontSize: 'var(--text-h2)',
           fontWeight: 700,
           color: 'var(--color-text-primary)',
@@ -112,7 +112,7 @@ export default function EvolutionArchetype({ archetype, isNew }: Props) {
       >
         <p
           style={{
-            fontFamily: 'var(--font-inter-tight)',
+            fontFamily: 'var(--font-inter)',
             fontSize: 'var(--text-overline)',
             letterSpacing: 'var(--ls-overline)',
             textTransform: 'uppercase',
@@ -145,7 +145,7 @@ export default function EvolutionArchetype({ archetype, isNew }: Props) {
       >
         <p
           style={{
-            fontFamily: 'var(--font-inter-tight)',
+            fontFamily: 'var(--font-inter)',
             fontSize: 'var(--text-overline)',
             letterSpacing: 'var(--ls-overline)',
             textTransform: 'uppercase',
@@ -171,7 +171,7 @@ export default function EvolutionArchetype({ archetype, isNew }: Props) {
       {/* Herida + Armadura + Estado SN */}
       <div
         style={{
-          backgroundColor: 'rgba(255,255,255,0.03)',
+          backgroundColor: 'rgba(30,19,16,0.03)',
           borderRadius: 'var(--radius-md)',
           padding: 'var(--space-4)',
           marginBottom: 'var(--space-4)',
@@ -290,9 +290,9 @@ export default function EvolutionArchetype({ archetype, isNew }: Props) {
             <div key={p.name} style={{ marginBottom: 'var(--space-4)' }}>
               <p
                 style={{
-                  fontFamily: 'var(--font-inter-tight)',
+                  fontFamily: 'var(--font-inter)',
                   fontSize: 'var(--text-body-sm)',
-                  fontWeight: 500,
+                  fontWeight: 600,
                   color: 'var(--color-text-primary)',
                   marginBottom: 'var(--space-1)',
                 }}
@@ -401,9 +401,9 @@ function NeedLayerSection({
       >
         <span
           style={{
-            fontFamily: 'var(--font-inter-tight)',
+            fontFamily: 'var(--font-inter)',
             fontSize: 'var(--text-body-sm)',
-            fontWeight: 500,
+            fontWeight: 600,
             color: 'var(--color-text-primary)',
           }}
         >

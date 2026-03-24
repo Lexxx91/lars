@@ -47,9 +47,9 @@ const SLIDER_KEYS = ['d1', 'd2', 'd3', 'd4', 'd5'] as const
 /** Color dinámico del slider según valor (1-10) — misma lógica que gateway */
 function getSliderColor(value: number): string {
   if (value <= 2) return '#EF4444'       // rojo
-  if (value <= 4) return '#F97316'       // naranja
-  if (value <= 6) return '#FBBF24'       // amarillo
-  if (value <= 8) return '#4ADE80'       // verde claro
+  if (value <= 4) return '#D4895C'       // naranja
+  if (value <= 6) return '#D4A017'       // amarillo
+  if (value <= 8) return '#3D9A5F'       // verde claro
   return '#22C55E'                        // verde
 }
 
@@ -57,7 +57,7 @@ function getSliderColor(value: number): string {
 function getSliderBackground(value: number): string {
   const color = getSliderColor(value)
   const pct = ((value - 1) / 9) * 100
-  return `linear-gradient(to right, ${color} ${pct}%, rgba(255,255,255,0.08) ${pct}%)`
+  return `linear-gradient(to right, ${color} ${pct}%, rgba(30,19,16,0.08) ${pct}%)`
 }
 
 export default function EvolutionReevaluation({
@@ -165,7 +165,7 @@ export default function EvolutionReevaluation({
           {/* Título */}
           <p
             style={{
-              fontFamily: 'var(--font-plus-jakarta)',
+              fontFamily: 'var(--font-lora)',
               fontSize: 'var(--text-h4)',
               fontWeight: 600,
               color: 'var(--color-text-primary)',
@@ -229,7 +229,7 @@ export default function EvolutionReevaluation({
                   </span>
                   <span
                     style={{
-                      fontFamily: 'var(--font-plus-jakarta)',
+                      fontFamily: 'var(--font-lora)',
                       fontSize: 'var(--text-body-sm)',
                       fontWeight: 600,
                       color: color,
@@ -319,7 +319,7 @@ function ComparisonView({
       {/* Headline */}
       <p
         style={{
-          fontFamily: 'var(--font-plus-jakarta)',
+          fontFamily: 'var(--font-lora)',
           fontSize: 'var(--text-h3)',
           fontWeight: 700,
           color:
@@ -402,7 +402,7 @@ function ComparisonView({
               </span>
               <span
                 style={{
-                  fontFamily: 'var(--font-plus-jakarta)',
+                  fontFamily: 'var(--font-lora)',
                   fontSize: 'var(--text-body-sm)',
                   fontWeight: 600,
                   color: delta.color,

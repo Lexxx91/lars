@@ -23,9 +23,9 @@ interface SlidersStepProps {
 
 /** Color del fill según valor 1-10 */
 function getSliderColor(value: number): string {
-  if (value <= 3) return '#F87171'
-  if (value <= 6) return '#FACC15'
-  return '#4ADE80'
+  if (value <= 3) return '#C44040'
+  if (value <= 6) return '#D4A017'
+  return '#3D9A5F'
 }
 
 /** Porcentaje del fill para el track gradient (valor 1-10) */
@@ -124,11 +124,11 @@ export default function SlidersStep({ question, sliders, onContinue }: SlidersSt
       {/* Pregunta */}
       <p
         style={{
-          fontFamily: 'var(--font-inter-tight)',
+          fontFamily: 'var(--font-inter)',
           fontSize: 'var(--text-h4)',
           lineHeight: 'var(--lh-h4)',
           letterSpacing: 'var(--ls-h4)',
-          fontWeight: 500,
+          fontWeight: 600,
           color: 'var(--color-text-primary)',
           marginBottom: 'var(--space-3)',
         }}
@@ -162,7 +162,7 @@ export default function SlidersStep({ question, sliders, onContinue }: SlidersSt
         {sliders.map((slider) => {
           const val = values[slider.id]
           const isTouched = touched.has(slider.id)
-          const color = isTouched ? getSliderColor(val!) : 'rgba(255,255,255,0.1)'
+          const color = isTouched ? getSliderColor(val!) : 'rgba(30,19,16,0.1)'
           const percent = isTouched ? fillPercent(val!) : 0
           const isPulsing = pulsingSlider === slider.id
 
@@ -202,7 +202,7 @@ export default function SlidersStep({ question, sliders, onContinue }: SlidersSt
                 <span
                   aria-live="polite"
                   style={{
-                    fontFamily: 'var(--font-inter-tight)',
+                    fontFamily: 'var(--font-inter)',
                     fontSize: 'var(--text-h4)',
                     fontWeight: 600,
                     color: isTouched ? color : 'var(--color-text-tertiary)',
@@ -239,8 +239,8 @@ export default function SlidersStep({ question, sliders, onContinue }: SlidersSt
                     background: `linear-gradient(to right,
                       ${color} 0%,
                       ${color} ${percent}%,
-                      rgba(255,255,255,0.1) ${percent}%,
-                      rgba(255,255,255,0.1) 100%)`,
+                      rgba(30,19,16,0.1) ${percent}%,
+                      rgba(30,19,16,0.1) 100%)`,
                     transition: 'background 200ms ease',
                     pointerEvents: 'none',
                   }}

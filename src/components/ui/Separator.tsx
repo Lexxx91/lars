@@ -8,7 +8,7 @@ export default function Separator({ style }: SeparatorProps) {
       role="separator"
       style={{
         height: "1px",
-        backgroundColor: "rgba(255, 255, 255, 0.06)",
+        backgroundColor: "rgba(30, 19, 16, 0.06)",
         margin: "var(--space-8) 0",
         ...style,
       }}

@@ -83,7 +83,7 @@ export default function AdminHome() {
       }}>
         <div style={{ maxWidth: '360px', width: '100%', textAlign: 'center' }}>
           <h1 style={{
-            fontFamily: 'var(--font-plus-jakarta)',
+            fontFamily: 'var(--font-lora)',
             fontSize: 'var(--text-h2)',
             fontWeight: 700,
             color: 'var(--color-text-primary)',
@@ -110,7 +110,7 @@ export default function AdminHome() {
               width: '100%',
               padding: '14px 16px',
               borderRadius: 'var(--radius-md)',
-              border: error ? '1px solid var(--color-error)' : '1px solid rgba(255,255,255,0.10)',
+              border: error ? '1px solid var(--color-error)' : '1px solid rgba(30,19,16,0.10)',
               background: 'var(--color-bg-tertiary)',
               color: 'var(--color-text-primary)',
               fontFamily: 'var(--font-inter)',
@@ -166,7 +166,7 @@ export default function AdminHome() {
     }}>
       <div style={{ maxWidth: '640px', margin: '0 auto' }}>
         <h1 style={{
-          fontFamily: 'var(--font-plus-jakarta)',
+          fontFamily: 'var(--font-lora)',
           fontSize: 'var(--text-h2)',
           fontWeight: 700,
           color: 'var(--color-text-primary)',
@@ -214,9 +214,9 @@ export default function AdminHome() {
               </span>
               <div>
                 <p style={{
-                  fontFamily: 'var(--font-plus-jakarta)',
+                  fontFamily: 'var(--font-lora)',
                   fontSize: 'var(--text-h4)',
-                  fontWeight: 600,
+                  fontWeight: 700,
                   color: 'var(--color-text-primary)',
                   marginBottom: 'var(--space-1)',
                 }}>

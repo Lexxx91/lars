@@ -2,7 +2,7 @@
  * email.ts — Envío de emails con Resend
  *
  * Email día 0: se envía inmediatamente al capturar el email.
- * Template minimalista, dark, personal — per spec Four Seasons.
+ * Template minimalista, warm cream, personal — per spec Four Seasons.
  * Sin logos agresivos, sin footer corporativo. El email es un mensajero.
  *
  * Requiere: RESEND_API_KEY en variables de entorno
@@ -103,7 +103,7 @@ export async function sendDia0Email({
 
   const firstStep = firstStepByKey[worstKey]
 
-  // Template HTML minimal, dark, personal
+  // Template HTML minimal, warm cream, personal
   const html = `
 <!DOCTYPE html>
 <html lang="es">
@@ -115,9 +115,9 @@ export async function sendDia0Email({
 <body style="
   margin: 0;
   padding: 0;
-  background-color: #0a252c;
-  font-family: 'Plus Jakarta Sans', Inter, system-ui, sans-serif;
-  color: #F5F5F0;
+  background-color: #1E130F;
+  font-family: Lora, Inter, system-ui, sans-serif;
+  color: #FFFBEF;
 ">
   <table width="100%" cellpadding="0" cellspacing="0" style="max-width: 560px; margin: 0 auto; padding: 48px 24px;">
     <tr>
@@ -128,14 +128,14 @@ export async function sendDia0Email({
           font-size: 13px;
           letter-spacing: 0.12em;
           text-transform: uppercase;
-          color: #c6c8ee;
+          color: #B45A32;
           margin: 0 0 8px 0;
         ">TU MAPA DE REGULACIÓN</p>
 
         <p style="
           font-size: 48px;
           font-weight: 600;
-          color: #F5F5F0;
+          color: #FFFBEF;
           margin: 0 0 4px 0;
           line-height: 1;
         ">${globalScore}<span style="font-size: 24px; font-weight: 400; color: #A8B0AC;">/100</span></p>
@@ -147,7 +147,7 @@ export async function sendDia0Email({
         ">Score global de regulación</p>
 
         <!-- Separador -->
-        <div style="height: 1px; background: rgba(255,255,255,0.06); margin-bottom: 32px;"></div>
+        <div style="height: 1px; background: rgba(30,19,16,0.06); margin-bottom: 32px;"></div>
 
         <!-- Dimensión más comprometida -->
         <p style="
@@ -174,12 +174,12 @@ export async function sendDia0Email({
         <!-- Primer paso -->
         <p style="
           font-size: 14px;
-          color: #F5F5F0;
+          color: #FFFBEF;
           line-height: 1.6;
           margin: 0 0 40px 0;
           padding: 20px 24px;
-          background: rgba(198, 200, 238, 0.08);
-          border-left: 3px solid #8b8db8;
+          background: rgba(180,90,50,0.08);
+          border-left: 3px solid #9A4D2A;
           border-radius: 8px;
         ">${firstStep}</p>
 
@@ -187,12 +187,12 @@ export async function sendDia0Email({
         <table cellpadding="0" cellspacing="0" style="margin-bottom: 40px;">
           <tr>
             <td style="
-              background: #c6c8ee;
+              background: #B45A32;
               border-radius: 100px;
               padding: 16px 32px;
             ">
               <a href="${mapUrl}" style="
-                color: #0a252c;
+                color: #FFFBEF;
                 font-size: 15px;
                 font-weight: 500;
                 text-decoration: none;
@@ -204,7 +204,7 @@ export async function sendDia0Email({
         </table>
 
         <!-- Separador -->
-        <div style="height: 1px; background: rgba(255,255,255,0.06); margin-bottom: 32px;"></div>
+        <div style="height: 1px; background: rgba(30,19,16,0.06); margin-bottom: 32px;"></div>
 
         <!-- Footer minimal -->
         <p style="
@@ -258,21 +258,21 @@ function buildEvolutionEmail(params: {
 </head>
 <body style="
   margin: 0; padding: 0;
-  background-color: #0a252c;
-  font-family: 'Plus Jakarta Sans', Inter, system-ui, sans-serif;
-  color: #F5F5F0;
+  background-color: #1E130F;
+  font-family: Lora, Inter, system-ui, sans-serif;
+  color: #FFFBEF;
 ">
   <table width="100%" cellpadding="0" cellspacing="0" style="max-width: 560px; margin: 0 auto; padding: 48px 24px;">
     <tr><td>
       ${params.content}
       <table cellpadding="0" cellspacing="0" style="margin: 32px 0;">
-        <tr><td style="background: #c6c8ee; border-radius: 100px; padding: 16px 32px;">
-          <a href="${params.mapUrl}" style="color: #0a252c; font-size: 15px; font-weight: 500; text-decoration: none; display: block; white-space: nowrap;">
+        <tr><td style="background: #B45A32; border-radius: 100px; padding: 16px 32px;">
+          <a href="${params.mapUrl}" style="color: #FFFBEF; font-size: 15px; font-weight: 500; text-decoration: none; display: block; white-space: nowrap;">
             ${params.buttonText}
           </a>
         </td></tr>
       </table>
-      <div style="height: 1px; background: rgba(255,255,255,0.06); margin-bottom: 24px;"></div>
+      <div style="height: 1px; background: rgba(30,19,16,0.06); margin-bottom: 24px;"></div>
       <p style="font-size: 13px; color: #6B7572; line-height: 1.6; margin: 0;">
         Este mapa es tuyo. Confidencial. Solo tú puedes verlo.
       </p>
@@ -290,7 +290,7 @@ export async function sendDia3Email(to: string, mapHash: string): Promise<void> 
 
   const html = buildEvolutionEmail({
     content: `
-      <p style="font-size: 14px; color: #F5F5F0; line-height: 1.6; margin: 0 0 16px 0;">
+      <p style="font-size: 14px; color: #FFFBEF; line-height: 1.6; margin: 0 0 16px 0;">
         Tu arquetipo del sistema nervioso está disponible. Es la pieza que faltaba para entender por qué tu cuerpo responde como responde.
       </p>`,
     buttonText: 'Ver mi mapa',
@@ -310,7 +310,7 @@ export async function sendDia7Email(to: string, mapHash: string): Promise<void> 
 
   const html = buildEvolutionEmail({
     content: `
-      <p style="font-size: 14px; color: #F5F5F0; line-height: 1.6; margin: 0 0 16px 0;">
+      <p style="font-size: 14px; color: #FFFBEF; line-height: 1.6; margin: 0 0 16px 0;">
         Nuevo insight sobre tu dimensión más comprometida. Un dato que no existía cuando hiciste tu diagnóstico.
       </p>`,
     buttonText: 'Ver mi mapa',
@@ -330,7 +330,7 @@ export async function sendDia10Email(to: string, mapHash: string): Promise<void>
 
   const html = buildEvolutionEmail({
     content: `
-      <p style="font-size: 14px; color: #F5F5F0; line-height: 1.6; margin: 0 0 16px 0;">
+      <p style="font-size: 14px; color: #FFFBEF; line-height: 1.6; margin: 0 0 16px 0;">
         20 minutos. Sin compromiso. Ya tiene tus datos.
       </p>`,
     buttonText: 'Agendar sesión',
@@ -350,7 +350,7 @@ export async function sendDia14Email(to: string, mapHash: string): Promise<void>
 
   const html = buildEvolutionEmail({
     content: `
-      <p style="font-size: 14px; color: #F5F5F0; line-height: 1.6; margin: 0 0 16px 0;">
+      <p style="font-size: 14px; color: #FFFBEF; line-height: 1.6; margin: 0 0 16px 0;">
         2 preguntas más para aumentar la resolución de tu diagnóstico.
       </p>`,
     buttonText: 'Ver mi mapa',
@@ -370,7 +370,7 @@ export async function sendDia21Email(to: string, mapHash: string): Promise<void>
 
   const html = buildEvolutionEmail({
     content: `
-      <p style="font-size: 14px; color: #F5F5F0; line-height: 1.6; margin: 0 0 16px 0;">
+      <p style="font-size: 14px; color: #FFFBEF; line-height: 1.6; margin: 0 0 16px 0;">
         Basado en tu dimensión más comprometida. Del libro "Burnout: El Renacimiento del Líder Fénix."
       </p>`,
     buttonText: 'Ver mi mapa',
@@ -390,7 +390,7 @@ export async function sendDia30Email(to: string, mapHash: string): Promise<void>
 
   const html = buildEvolutionEmail({
     content: `
-      <p style="font-size: 14px; color: #F5F5F0; line-height: 1.6; margin: 0 0 16px 0;">
+      <p style="font-size: 14px; color: #FFFBEF; line-height: 1.6; margin: 0 0 16px 0;">
         Actualiza tu mapa en 30 segundos. Tus scores anteriores se guardan para que veas la evolución.
       </p>`,
     buttonText: 'Actualizar mi mapa',
@@ -418,18 +418,18 @@ export async function sendPostPagoEmail(to: string, mapHash: string): Promise<vo
 </head>
 <body style="
   margin: 0; padding: 0;
-  background-color: #0a252c;
-  font-family: 'Plus Jakarta Sans', Inter, system-ui, sans-serif;
-  color: #F5F5F0;
+  background-color: #1E130F;
+  font-family: Lora, Inter, system-ui, sans-serif;
+  color: #FFFBEF;
 ">
   <table width="100%" cellpadding="0" cellspacing="0" style="max-width: 560px; margin: 0 auto; padding: 48px 24px;">
     <tr><td>
 
-      <p style="font-size: 13px; letter-spacing: 0.12em; text-transform: uppercase; color: #c6c8ee; margin: 0 0 8px 0;">
+      <p style="font-size: 13px; letter-spacing: 0.12em; text-transform: uppercase; color: #B45A32; margin: 0 0 8px 0;">
         SEMANA 1
       </p>
 
-      <p style="font-size: 28px; font-weight: 600; color: #F5F5F0; margin: 0 0 8px 0; line-height: 1.2;">
+      <p style="font-size: 28px; font-weight: 600; color: #FFFBEF; margin: 0 0 8px 0; line-height: 1.2;">
         Tu Semana 1 ha comenzado.
       </p>
 
@@ -438,7 +438,7 @@ export async function sendPostPagoEmail(to: string, mapHash: string): Promise<vo
       </p>
 
       <!-- Separador -->
-      <div style="height: 1px; background: rgba(255,255,255,0.06); margin-bottom: 32px;"></div>
+      <div style="height: 1px; background: rgba(30,19,16,0.06); margin-bottom: 32px;"></div>
 
       <!-- Protocolo -->
       <p style="font-size: 13px; letter-spacing: 0.08em; text-transform: uppercase; color: #A8B0AC; margin: 0 0 8px 0;">
@@ -446,8 +446,8 @@ export async function sendPostPagoEmail(to: string, mapHash: string): Promise<vo
       </p>
 
       <table cellpadding="0" cellspacing="0" style="margin: 0 0 8px 0;">
-        <tr><td style="background: #c6c8ee; border-radius: 100px; padding: 14px 28px;">
-          <a href="${mapUrl}" style="color: #0a252c; font-size: 14px; font-weight: 500; text-decoration: none; display: block; white-space: nowrap;">
+        <tr><td style="background: #B45A32; border-radius: 100px; padding: 14px 28px;">
+          <a href="${mapUrl}" style="color: #FFFBEF; font-size: 14px; font-weight: 500; text-decoration: none; display: block; white-space: nowrap;">
             Descargar el Protocolo
           </a>
         </td></tr>
@@ -459,7 +459,7 @@ export async function sendPostPagoEmail(to: string, mapHash: string): Promise<vo
       </p>
 
       <!-- Separador -->
-      <div style="height: 1px; background: rgba(255,255,255,0.06); margin-bottom: 32px;"></div>
+      <div style="height: 1px; background: rgba(30,19,16,0.06); margin-bottom: 32px;"></div>
 
       <!-- Sesión -->
       <p style="font-size: 13px; letter-spacing: 0.08em; text-transform: uppercase; color: #A8B0AC; margin: 0 0 8px 0;">
@@ -467,8 +467,8 @@ export async function sendPostPagoEmail(to: string, mapHash: string): Promise<vo
       </p>
 
       <table cellpadding="0" cellspacing="0" style="margin: 0 0 8px 0;">
-        <tr><td style="background: #c6c8ee; border-radius: 100px; padding: 14px 28px;">
-          <a href="${bookingUrl}" style="color: #0a252c; font-size: 14px; font-weight: 500; text-decoration: none; display: block; white-space: nowrap;">
+        <tr><td style="background: #B45A32; border-radius: 100px; padding: 14px 28px;">
+          <a href="${bookingUrl}" style="color: #FFFBEF; font-size: 14px; font-weight: 500; text-decoration: none; display: block; white-space: nowrap;">
             Agendar mi sesión
           </a>
         </td></tr>
@@ -480,7 +480,7 @@ export async function sendPostPagoEmail(to: string, mapHash: string): Promise<vo
       </p>
 
       <!-- Separador -->
-      <div style="height: 1px; background: rgba(255,255,255,0.06); margin-bottom: 32px;"></div>
+      <div style="height: 1px; background: rgba(30,19,16,0.06); margin-bottom: 32px;"></div>
 
       <!-- MNN -->
       <p style="font-size: 13px; letter-spacing: 0.08em; text-transform: uppercase; color: #A8B0AC; margin: 0 0 8px 0;">
@@ -492,21 +492,21 @@ export async function sendPostPagoEmail(to: string, mapHash: string): Promise<vo
       </p>
 
       <!-- Separador -->
-      <div style="height: 1px; background: rgba(255,255,255,0.06); margin-bottom: 32px;"></div>
+      <div style="height: 1px; background: rgba(30,19,16,0.06); margin-bottom: 32px;"></div>
 
       <!-- Garantía -->
       <p style="font-size: 14px; color: #A8B0AC; line-height: 1.6; margin: 0 0 8px 0;">
         Recuerda: si tu sueño no mejora en 7 días, te devolvemos los 97€. Sin preguntas.
       </p>
-      <p style="font-size: 14px; color: #F5F5F0; font-weight: 500; margin: 0 0 40px 0;">
+      <p style="font-size: 14px; color: #FFFBEF; font-weight: 500; margin: 0 0 40px 0;">
         Pero no los vas a necesitar.
       </p>
 
       <!-- Separador -->
-      <div style="height: 1px; background: rgba(255,255,255,0.06); margin-bottom: 32px;"></div>
+      <div style="height: 1px; background: rgba(30,19,16,0.06); margin-bottom: 32px;"></div>
 
       <!-- Firma -->
-      <p style="font-size: 14px; color: #F5F5F0; margin: 0 0 4px 0;">
+      <p style="font-size: 14px; color: #FFFBEF; margin: 0 0 4px 0;">
         Javier A. Martín Ramos
       </p>
       <p style="font-size: 13px; color: #6B7572; margin: 0;">
@@ -535,7 +535,7 @@ export async function sendDia90Email(to: string, mapHash: string): Promise<void>
 
   const html = buildEvolutionEmail({
     content: `
-      <p style="font-size: 14px; color: #F5F5F0; line-height: 1.6; margin: 0 0 16px 0;">
+      <p style="font-size: 14px; color: #FFFBEF; line-height: 1.6; margin: 0 0 16px 0;">
         ¿Ha cambiado algo?
       </p>
       <p style="font-size: 14px; color: #A8B0AC; line-height: 1.6; margin: 0 0 16px 0;">

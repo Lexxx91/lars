@@ -62,16 +62,16 @@ export default function TensionSection() {
             transform: visible
               ? hoveredCard === 0 ? 'translateY(-2px)' : 'none'
               : 'translateY(20px)',
-            boxShadow: hoveredCard === 0 ? '0 4px 20px rgba(198, 200, 238, 0.1)' : 'none',
+            boxShadow: hoveredCard === 0 ? '0 4px 20px rgba(180, 90, 50, 0.1)' : 'none',
             transition: 'opacity 400ms ease 0ms, transform 400ms ease 0ms, box-shadow 200ms ease',
           }}
         >
           <p
             style={{
-              fontFamily: 'var(--font-inter-tight)',
+              fontFamily: 'var(--font-inter)',
               fontSize: 'var(--text-body)',
               lineHeight: 'var(--lh-body)',
-              fontWeight: 500,
+              fontWeight: 600,
               color: 'var(--color-text-primary)',
               marginBottom: 'var(--space-3)',
             }}
@@ -106,16 +106,16 @@ export default function TensionSection() {
             transform: visible
               ? hoveredCard === 1 ? 'translateY(-2px)' : 'none'
               : 'translateY(20px)',
-            boxShadow: hoveredCard === 1 ? '0 4px 20px rgba(198, 200, 238, 0.1)' : 'none',
+            boxShadow: hoveredCard === 1 ? '0 4px 20px rgba(180, 90, 50, 0.1)' : 'none',
             transition: 'opacity 400ms ease 150ms, transform 400ms ease 150ms, box-shadow 200ms ease',
           }}
         >
           <p
             style={{
-              fontFamily: 'var(--font-inter-tight)',
+              fontFamily: 'var(--font-inter)',
               fontSize: 'var(--text-body)',
               lineHeight: 'var(--lh-body)',
-              fontWeight: 500,
+              fontWeight: 600,
               color: 'var(--color-text-primary)',
               marginBottom: 'var(--space-3)',
             }}
@@ -151,16 +151,16 @@ export default function TensionSection() {
             transform: visible
               ? hoveredCard === 2 ? 'translateY(-2px)' : 'none'
               : 'translateY(20px)',
-            boxShadow: hoveredCard === 2 ? '0 4px 20px rgba(198, 200, 238, 0.1)' : 'none',
+            boxShadow: hoveredCard === 2 ? '0 4px 20px rgba(180, 90, 50, 0.1)' : 'none',
             transition: 'opacity 400ms ease 300ms, transform 400ms ease 300ms, box-shadow 200ms ease',
           }}
         >
           <p
             style={{
-              fontFamily: 'var(--font-inter-tight)',
+              fontFamily: 'var(--font-inter)',
               fontSize: 'var(--text-body)',
               lineHeight: 'var(--lh-body)',
-              fontWeight: 500,
+              fontWeight: 600,
               color: 'var(--color-text-primary)',
               marginBottom: 'var(--space-3)',
             }}

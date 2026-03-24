@@ -59,7 +59,7 @@ export default function EvolutionBookExcerpt({
       {/* Título del capítulo */}
       <h4
         style={{
-          fontFamily: 'var(--font-plus-jakarta)',
+          fontFamily: 'var(--font-lora)',
           fontSize: 'var(--text-h4)',
           fontWeight: 600,
           color: 'var(--color-text-primary)',

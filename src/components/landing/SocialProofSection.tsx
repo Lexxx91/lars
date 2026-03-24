@@ -58,8 +58,8 @@ export default function SocialProofSection() {
       {process.env.NODE_ENV === 'development' && (
         <div
           style={{
-            background: 'rgba(250, 204, 21, 0.1)',
-            border: '1px solid rgba(250, 204, 21, 0.3)',
+            background: 'rgba(212, 160, 23, 0.1)',
+            border: '1px solid rgba(212, 160, 23, 0.3)',
             borderRadius: 'var(--radius-md)',
             padding: 'var(--space-3) var(--space-4)',
             maxWidth: '680px',
@@ -96,7 +96,7 @@ export default function SocialProofSection() {
             style={{
               position: 'relative',
               background: 'var(--color-bg-tertiary)',
-              borderLeft: '3px solid rgba(198, 200, 238, 0.4)',
+              borderLeft: '3px solid rgba(180, 90, 50, 0.4)',
               borderRadius: '0 var(--radius-md) var(--radius-md) 0',
               padding: 'var(--space-5) var(--space-6)',
               margin: 0,
@@ -117,7 +117,7 @@ export default function SocialProofSection() {
                 fontFamily: 'var(--font-cormorant)',
                 fontSize: '3.5rem',
                 lineHeight: 1,
-                color: 'rgba(198, 200, 238, 0.15)',
+                color: 'rgba(180, 90, 50, 0.15)',
                 pointerEvents: 'none',
                 userSelect: 'none',
               }}

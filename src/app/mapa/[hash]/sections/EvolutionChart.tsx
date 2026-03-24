@@ -71,7 +71,7 @@ export default function EvolutionChart({
       pad.top + plotH - ((score - minScore) / (maxScore - minScore)) * plotH
 
     // Grid lines (horizontal)
-    ctx.strokeStyle = 'rgba(255,255,255,0.06)'
+    ctx.strokeStyle = 'rgba(30,19,16,0.06)'
     ctx.lineWidth = 1
     for (let s = Math.ceil(minScore / 20) * 20; s <= maxScore; s += 20) {
       const y = yScale(s)
@@ -81,14 +81,14 @@ export default function EvolutionChart({
       ctx.stroke()
 
       // Label
-      ctx.fillStyle = 'rgba(255,255,255,0.25)'
+      ctx.fillStyle = 'rgba(30,19,16,0.25)'
       ctx.font = '10px system-ui, sans-serif'
       ctx.textAlign = 'right'
       ctx.fillText(String(s), pad.left - 6, y + 3)
     }
 
     // Line
-    ctx.strokeStyle = '#c6c8ee'
+    ctx.strokeStyle = '#B45A32'
     ctx.lineWidth = 2
     ctx.lineJoin = 'round'
     ctx.beginPath()
@@ -102,8 +102,8 @@ export default function EvolutionChart({
 
     // Gradient fill under line
     const gradient = ctx.createLinearGradient(0, pad.top, 0, H - pad.bottom)
-    gradient.addColorStop(0, 'rgba(198,200,238,0.15)')
-    gradient.addColorStop(1, 'rgba(198,200,238,0.0)')
+    gradient.addColorStop(0, 'rgba(180,90,50,0.15)')
+    gradient.addColorStop(1, 'rgba(180,90,50,0.0)')
     ctx.fillStyle = gradient
     ctx.beginPath()
     points.forEach((p, i) => {
@@ -123,26 +123,26 @@ export default function EvolutionChart({
       const y = yScale(p.score)
 
       // Point
-      ctx.fillStyle = i === 0 ? '#c6c8ee' : '#4ADE80'
+      ctx.fillStyle = i === 0 ? '#B45A32' : '#3D9A5F'
       ctx.beginPath()
       ctx.arc(x, y, 4, 0, Math.PI * 2)
       ctx.fill()
 
       // Outer ring
-      ctx.strokeStyle = i === 0 ? 'rgba(198,200,238,0.3)' : 'rgba(74,222,128,0.3)'
+      ctx.strokeStyle = i === 0 ? 'rgba(180,90,50,0.3)' : 'rgba(61,154,95,0.3)'
       ctx.lineWidth = 2
       ctx.beginPath()
       ctx.arc(x, y, 7, 0, Math.PI * 2)
       ctx.stroke()
 
       // Score label above point
-      ctx.fillStyle = '#E8EAE9'
+      ctx.fillStyle = '#1E1310'
       ctx.font = '600 12px system-ui, sans-serif'
       ctx.textAlign = 'center'
       ctx.fillText(String(p.score), x, y - 14)
 
       // Day label below
-      ctx.fillStyle = 'rgba(255,255,255,0.4)'
+      ctx.fillStyle = 'rgba(30,19,16,0.4)'
       ctx.font = '10px system-ui, sans-serif'
       ctx.fillText(p.label, x, H - pad.bottom + 16)
     })
@@ -151,7 +151,7 @@ export default function EvolutionChart({
     if (maxScore >= 72) {
       const y72 = yScale(72)
       ctx.setLineDash([4, 4])
-      ctx.strokeStyle = 'rgba(74,222,128,0.3)'
+      ctx.strokeStyle = 'rgba(61,154,95,0.3)'
       ctx.lineWidth = 1
       ctx.beginPath()
       ctx.moveTo(pad.left, y72)
@@ -159,7 +159,7 @@ export default function EvolutionChart({
       ctx.stroke()
       ctx.setLineDash([])
 
-      ctx.fillStyle = 'rgba(74,222,128,0.5)'
+      ctx.fillStyle = 'rgba(61,154,95,0.5)'
       ctx.font = '10px system-ui, sans-serif'
       ctx.textAlign = 'left'
       ctx.fillText('Objetivo: 72', W - pad.right - 60, y72 - 5)
@@ -179,7 +179,7 @@ export default function EvolutionChart({
     >
       <p
         style={{
-          fontFamily: 'var(--font-inter-tight)',
+          fontFamily: 'var(--font-inter)',
           fontSize: 'var(--text-overline)',
           letterSpacing: 'var(--ls-overline)',
           textTransform: 'uppercase',

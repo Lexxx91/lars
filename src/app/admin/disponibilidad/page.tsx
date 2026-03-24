@@ -289,9 +289,9 @@ export default function DisponibilidadPage() {
         }}
       >
         <h1 style={{
-          fontFamily: 'var(--font-plus-jakarta)',
+          fontFamily: 'var(--font-lora)',
           fontSize: 'var(--text-h2)',
-          fontWeight: 600,
+          fontWeight: 700,
           lineHeight: 'var(--lh-h2)',
           letterSpacing: 'var(--ls-h2)',
           color: 'var(--color-text-primary)',
@@ -353,7 +353,7 @@ export default function DisponibilidadPage() {
       {/* Header */}
       <div style={{ marginBottom: 'var(--space-10)' }}>
         <h1 style={{
-          fontFamily: 'var(--font-plus-jakarta)',
+          fontFamily: 'var(--font-lora)',
           fontSize: 'var(--text-h1)',
           fontWeight: 700,
           lineHeight: 'var(--lh-h1)',
@@ -394,8 +394,8 @@ export default function DisponibilidadPage() {
       )}
       {success && (
         <Card style={{
-          background: 'rgba(74,222,128,0.08)',
-          border: '1px solid rgba(74,222,128,0.2)',
+          background: 'rgba(61,154,95,0.08)',
+          border: '1px solid rgba(61,154,95,0.2)',
           padding: 'var(--space-3) var(--space-4)',
           marginBottom: 'var(--space-5)',
         }}>
@@ -413,7 +413,7 @@ export default function DisponibilidadPage() {
       {/* ═══ Sección 1: Horario semanal ═══════════════════════════════════ */}
       <section style={{ marginBottom: 'var(--space-12)' }}>
         <p style={{
-          fontFamily: 'var(--font-inter-tight)',
+          fontFamily: 'var(--font-inter)',
           fontSize: 'var(--text-overline)',
           letterSpacing: 'var(--ls-overline)',
           color: 'var(--color-accent)',
@@ -438,7 +438,7 @@ export default function DisponibilidadPage() {
             <thead>
               <tr>
                 <th style={{
-                  fontFamily: 'var(--font-inter-tight)',
+                  fontFamily: 'var(--font-inter)',
                   fontSize: '11px',
                   fontWeight: 500,
                   color: 'var(--color-text-tertiary)',
@@ -448,7 +448,7 @@ export default function DisponibilidadPage() {
                 }} />
                 {DAYS_OF_WEEK.map((day) => (
                   <th key={day.value} style={{
-                    fontFamily: 'var(--font-inter-tight)',
+                    fontFamily: 'var(--font-inter)',
                     fontSize: '11px',
                     fontWeight: 600,
                     color: 'var(--color-text-secondary)',
@@ -478,9 +478,9 @@ export default function DisponibilidadPage() {
                           }}
                         >
                           <div style={{
-                            borderTop: '1px dashed rgba(255,255,255,0.08)',
+                            borderTop: '1px dashed rgba(30,19,16,0.08)',
                             fontSize: '10px',
-                            fontFamily: 'var(--font-inter-tight)',
+                            fontFamily: 'var(--font-inter)',
                             color: 'var(--color-text-tertiary)',
                             paddingTop: 'var(--space-1)',
                             opacity: 0.6,
@@ -492,7 +492,7 @@ export default function DisponibilidadPage() {
                     )}
                     <tr key={block.start}>
                       <td style={{
-                        fontFamily: 'var(--font-inter-tight)',
+                        fontFamily: 'var(--font-inter)',
                         fontSize: '11px',
                         color: 'var(--color-text-tertiary)',
                         padding: '2px 4px',
@@ -514,13 +514,13 @@ export default function DisponibilidadPage() {
                                 borderRadius: 'var(--radius-sm)',
                                 border: active
                                   ? '1px solid rgba(96,165,250,0.5)'
-                                  : '1px solid rgba(255,255,255,0.06)',
+                                  : '1px solid rgba(30,19,16,0.06)',
                                 backgroundColor: active
                                   ? 'rgba(96,165,250,0.25)'
-                                  : 'rgba(255,255,255,0.03)',
-                                color: active ? '#93c5fd' : 'rgba(255,255,255,0.15)',
+                                  : 'rgba(30,19,16,0.03)',
+                                color: active ? '#93c5fd' : 'rgba(30,19,16,0.15)',
                                 cursor: loading ? 'wait' : 'pointer',
-                                fontFamily: 'var(--font-inter-tight)',
+                                fontFamily: 'var(--font-inter)',
                                 fontSize: '10px',
                                 fontWeight: 600,
                                 transition: 'all var(--transition-base)',
@@ -561,7 +561,7 @@ export default function DisponibilidadPage() {
       {/* ═══ Sección 2: Bloquear fechas ═══════════════════════════════════ */}
       <section style={{ marginBottom: 'var(--space-12)' }}>
         <p style={{
-          fontFamily: 'var(--font-inter-tight)',
+          fontFamily: 'var(--font-inter)',
           fontSize: 'var(--text-overline)',
           letterSpacing: 'var(--ls-overline)',
           color: 'var(--color-accent)',
@@ -596,7 +596,7 @@ export default function DisponibilidadPage() {
               fontFamily: 'var(--font-inter)',
               fontSize: 'var(--text-body-sm)',
               outline: 'none',
-              colorScheme: 'dark',
+              colorScheme: 'light',
             }}
           />
           <Button
@@ -624,7 +624,7 @@ export default function DisponibilidadPage() {
                 onClick={() => setBlockMode(mode)}
                 style={{
                   padding: 'var(--space-2) var(--space-3)',
-                  fontFamily: 'var(--font-inter-tight)',
+                  fontFamily: 'var(--font-inter)',
                   fontSize: '12px',
                   fontWeight: 500,
                   border: 'none',
@@ -655,7 +655,7 @@ export default function DisponibilidadPage() {
                   fontFamily: 'var(--font-inter)',
                   fontSize: '12px',
                   outline: 'none',
-                  colorScheme: 'dark',
+                  colorScheme: 'light',
                 }}
               />
               <span style={{ color: 'var(--color-text-tertiary)', fontSize: '12px' }}>a</span>
@@ -673,7 +673,7 @@ export default function DisponibilidadPage() {
                   fontFamily: 'var(--font-inter)',
                   fontSize: '12px',
                   outline: 'none',
-                  colorScheme: 'dark',
+                  colorScheme: 'light',
                 }}
               />
             </div>
@@ -735,7 +735,7 @@ export default function DisponibilidadPage() {
       {/* ═══ Sección 3: Próximas sesiones ═════════════════════════════════ */}
       <section style={{ marginBottom: 'var(--space-12)' }}>
         <p style={{
-          fontFamily: 'var(--font-inter-tight)',
+          fontFamily: 'var(--font-inter)',
           fontSize: 'var(--text-overline)',
           letterSpacing: 'var(--ls-overline)',
           color: 'var(--color-accent)',
@@ -761,7 +761,7 @@ export default function DisponibilidadPage() {
                     marginBottom: 'var(--space-2)',
                   }}>
                     <span style={{
-                      fontFamily: 'var(--font-plus-jakarta)',
+                      fontFamily: 'var(--font-lora)',
                       fontSize: 'var(--text-body)',
                       fontWeight: 600,
                       color: 'var(--color-text-primary)',
@@ -788,7 +788,7 @@ export default function DisponibilidadPage() {
                       target="_blank"
                       rel="noopener noreferrer"
                       style={{
-                        fontFamily: 'var(--font-inter-tight)',
+                        fontFamily: 'var(--font-inter)',
                         fontSize: 'var(--text-caption)',
                         color: 'var(--color-accent)',
                         textDecoration: 'none',
@@ -822,7 +822,7 @@ export default function DisponibilidadPage() {
                     gap: 'var(--space-2)',
                     marginTop: 'var(--space-3)',
                     paddingTop: 'var(--space-3)',
-                    borderTop: '1px solid rgba(255,255,255,0.06)',
+                    borderTop: '1px solid rgba(30,19,16,0.06)',
                   }}>
                     {!isPast && (
                       <button
@@ -832,9 +832,9 @@ export default function DisponibilidadPage() {
                           borderRadius: 'var(--radius-sm)',
                           border: '1px solid rgba(248,113,113,0.3)',
                           backgroundColor: 'rgba(248,113,113,0.08)',
-                          color: '#f87171',
+                          color: '#C44040',
                           cursor: 'pointer',
-                          fontFamily: 'var(--font-inter-tight)',
+                          fontFamily: 'var(--font-inter)',
                           fontSize: '12px',
                           fontWeight: 500,
                           transition: 'all var(--transition-base)',
@@ -850,11 +850,11 @@ export default function DisponibilidadPage() {
                           style={{
                             padding: 'var(--space-2) var(--space-3)',
                             borderRadius: 'var(--radius-sm)',
-                            border: '1px solid rgba(74,222,128,0.3)',
-                            backgroundColor: 'rgba(74,222,128,0.08)',
-                            color: '#4ade80',
+                            border: '1px solid rgba(61,154,95,0.3)',
+                            backgroundColor: 'rgba(61,154,95,0.08)',
+                            color: '#3D9A5F',
                             cursor: 'pointer',
-                            fontFamily: 'var(--font-inter-tight)',
+                            fontFamily: 'var(--font-inter)',
                             fontSize: '12px',
                             fontWeight: 500,
                             transition: 'all var(--transition-base)',
@@ -867,11 +867,11 @@ export default function DisponibilidadPage() {
                           style={{
                             padding: 'var(--space-2) var(--space-3)',
                             borderRadius: 'var(--radius-sm)',
-                            border: '1px solid rgba(250,204,21,0.3)',
-                            backgroundColor: 'rgba(250,204,21,0.08)',
-                            color: '#facc15',
+                            border: '1px solid rgba(212,160,23,0.3)',
+                            backgroundColor: 'rgba(212,160,23,0.08)',
+                            color: '#D4A017',
                             cursor: 'pointer',
-                            fontFamily: 'var(--font-inter-tight)',
+                            fontFamily: 'var(--font-inter)',
                             fontSize: '12px',
                             fontWeight: 500,
                             transition: 'all var(--transition-base)',
@@ -900,7 +900,7 @@ export default function DisponibilidadPage() {
       {/* ═══ Sección 4: Historial de sesiones ═══════════════════════════════ */}
       <section>
         <p style={{
-          fontFamily: 'var(--font-inter-tight)',
+          fontFamily: 'var(--font-inter)',
           fontSize: 'var(--text-overline)',
           letterSpacing: 'var(--ls-overline)',
           color: 'var(--color-accent)',
@@ -915,9 +915,9 @@ export default function DisponibilidadPage() {
           <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-3)' }}>
             {pastBookings.map((booking) => {
               const statusConfig = {
-                completed: { label: 'Completada', color: '#4ade80', bg: 'rgba(74,222,128,0.08)', border: 'rgba(74,222,128,0.2)' },
-                cancelled: { label: 'Cancelada', color: '#f87171', bg: 'rgba(248,113,113,0.08)', border: 'rgba(248,113,113,0.2)' },
-                no_show: { label: 'No-show', color: '#facc15', bg: 'rgba(250,204,21,0.08)', border: 'rgba(250,204,21,0.2)' },
+                completed: { label: 'Completada', color: '#3D9A5F', bg: 'rgba(61,154,95,0.08)', border: 'rgba(61,154,95,0.2)' },
+                cancelled: { label: 'Cancelada', color: '#C44040', bg: 'rgba(248,113,113,0.08)', border: 'rgba(248,113,113,0.2)' },
+                no_show: { label: 'No-show', color: '#D4A017', bg: 'rgba(212,160,23,0.08)', border: 'rgba(212,160,23,0.2)' },
               }[booking.status] ?? { label: booking.status, color: 'var(--color-text-tertiary)', bg: 'transparent', border: 'var(--border-medium)' }
 
               return (
@@ -933,7 +933,7 @@ export default function DisponibilidadPage() {
                   }}>
                     <div>
                       <span style={{
-                        fontFamily: 'var(--font-plus-jakarta)',
+                        fontFamily: 'var(--font-lora)',
                         fontSize: 'var(--text-body-sm)',
                         fontWeight: 600,
                         color: 'var(--color-text-primary)',
@@ -951,7 +951,7 @@ export default function DisponibilidadPage() {
                     </div>
                     <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-3)' }}>
                       <span style={{
-                        fontFamily: 'var(--font-inter-tight)',
+                        fontFamily: 'var(--font-inter)',
                         fontSize: '11px',
                         fontWeight: 600,
                         color: statusConfig.color,
@@ -963,7 +963,7 @@ export default function DisponibilidadPage() {
                         target="_blank"
                         rel="noopener noreferrer"
                         style={{
-                          fontFamily: 'var(--font-inter-tight)',
+                          fontFamily: 'var(--font-inter)',
                           fontSize: 'var(--text-caption)',
                           color: 'var(--color-accent)',
                           textDecoration: 'none',

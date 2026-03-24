@@ -2,14 +2,14 @@
 
 ## Filosofía de Diseño
 
-Estética premium-editorial sobre fondo oscuro. La experiencia transmite autoridad científica sin frialdad clínica: un espacio donde un ejecutivo de alto nivel se siente en un entorno a su medida. Cada decisión visual refuerza calma, profundidad y confianza.
+Estética cálida-editorial sobre fondo crema suave. La experiencia transmite confianza clínica y cercanía humana sin frialdad hospitalaria: un espacio donde la persona se siente acogida, segura y en manos de profesionales. Cada decisión visual refuerza calidez, apertura y credibilidad.
 
 **Principios rectores:**
-- Oscuridad cálida, nunca fría ni técnica
-- Tipografía editorial como voz principal
-- Máximo contraste funcional sin agresividad
-- Espacio generoso: el blanco (vacío) es un elemento de diseño, no desperdicio
-- Cero decoración gratuita: cada elemento visual tiene función
+- Luminosidad cálida sobre crema, nunca blanca estéril ni gris frío
+- Tipografía serif con carácter editorial para headlines, sans-serif limpia para cuerpo
+- Contraste orgánico: colores terrosos, formas redondeadas, espacio generoso
+- El vacío respira: margen amplio como señal de calma y profesionalismo
+- Cero decoración sin función: cada elemento visual comunica o guía
 
 ---
 
@@ -17,9 +17,11 @@ Estética premium-editorial sobre fondo oscuro. La experiencia transmite autorid
 
 | Fuente | Qué se toma | Qué NO se toma |
 |--------|-------------|-----------------|
-| **Function Health** (functionhealth.com) | Jerarquía tipográfica con itálicas para énfasis, layout limpio y generoso, CTAs prominentes sobre fondo oscuro, patrón de steps numerados | El blanco puro de algunas secciones interiores, la densidad informativa de las tablas de tests, la paleta de colores concreta |
-| **Pitch Deck oscuro** (Imagen 2) | Fondos oliva/teal oscuro, tipografía grande y bold para datos/headlines, cards con bordes redondeados, jerarquía de información con números prominentes | Los colores arena/crema como color de texto primario (se usa blanco), el layout de presentación tipo slide |
-| **Noha Furniture** (Imagen 1) | Fondos oscuros cálidos, grid modular, sensación editorial premium, secciones claramente delimitadas | La paleta marrón exacta, las fotos de producto como protagonistas |
+| **Hero / Landing** (Imagen 1) | Fondo crema cálido (#FFFBEF), headline serif grande y expresivo, overline en uppercase como contexto, CTA pill con borde y flecha, layout asimétrico con imágenes y texto en columnas | La densidad de secciones visibles simultáneamente, el badge de "Support" flotante |
+| **Grid de terapeutas** (Imagen 2) | Cards blancas redondeadas con foto circular, badges "Available" en pill oscuro, stat cards en terracota con texto blanco, grid orgánico con tamaños mixtos, fondo crema uniforme | El desalineamiento visual del grid masonry, la cantidad de cards simultáneas |
+| **Testimonios** (Imagen 3) | Cards con fondos de color pastel diferenciados (lavanda, crema, lima), icono de comillas como apertura, badges pill oscuros para atribución, formas orgánicas decorativas en peach | Los colores pastel como fondos principales de sección, las comillas como icono protagonista |
+| **FAQ** (Imagen 4) | Acordeón con bordes sutiles sobre fondo crema, headline serif grande a la izquierda, layout split (título + acordeón), chevrons como indicadores de expansión | El ancho excesivo de las preguntas, la falta de padding interno |
+| **Footer** (Imagen 5) | Fondo oscuro cálido (#1E130F), columnas organizadas con headings en uppercase dorado/tan, links en tono claro cálido, separación clara de categorías | La densidad de links sin agrupación visual, la falta de jerarquía visual entre columnas |
 
 ---
 
@@ -29,46 +31,75 @@ Estética premium-editorial sobre fondo oscuro. La experiencia transmite autorid
 
 | Token | Hex | Uso |
 |-------|-----|-----|
-| `--color-bg-primary` | `#0a252c` | Fondo principal de la aplicación |
-| `--color-bg-secondary` | `#0f3037` | Fondo de cards, secciones alternadas |
-| `--color-bg-tertiary` | `#0c2a48` | Fondo de inputs, elementos interactivos en reposo |
-| `--color-bg-elevated` | `#0f2e56` | Hover de cards, tooltips, dropdowns |
-| `--color-surface-subtle` | `#133364` | Bordes sutiles, separadores |
+| `--color-bg-primary` | `#FFFBEF` | Fondo principal de la aplicación (crema cálido luminoso) |
+| `--color-bg-secondary` | `#F9F1DE` | Fondo de cards alternadas, secciones secundarias |
+| `--color-bg-tertiary` | `#FFFFFF` | Fondo de cards principales, inputs, elementos sobre crema |
+| `--color-bg-elevated` | `#F3EDD8` | Hover de cards, tooltips, dropdowns |
+| `--color-surface-subtle` | `#E8E2D0` | Bordes sutiles de acordeones, separadores, outlines de cards |
+| `--color-bg-dark` | `#1E130F` | Footer, secciones de impacto oscuro (marrón espresso) |
 
 ### Colores de Texto
 
 | Token | Hex | Uso |
 |-------|-----|-----|
-| `--color-text-primary` | `#F5F5F0` | Texto principal (off-white cálido, nunca #FFFFFF puro) |
-| `--color-text-secondary` | `#A8B0AC` | Texto secundario, labels, metadata |
-| `--color-text-tertiary` | `#6B7572` | Placeholders, texto deshabilitado |
-| `--color-text-inverse` | `#0a252c` | Texto sobre fondos claros (botones primarios) |
+| `--color-text-primary` | `#1E1310` | Texto principal (marrón espresso profundo, máxima legibilidad) |
+| `--color-text-secondary` | `#4B413C` | Texto secundario, labels, metadata, badges |
+| `--color-text-tertiary` | `#8A7E75` | Placeholders, texto deshabilitado, captions |
+| `--color-text-inverse` | `#FFFBEF` | Texto sobre fondos oscuros (footer, badges dark) |
+| `--color-text-inverse-muted` | `#EBCDB9` | Headings de categoría sobre fondo oscuro (dorado/tan) |
 
-### Color de Acento (Lavanda)
+### Color de Acento (Terracota)
 
 | Token | Hex | Uso |
 |-------|-----|-----|
-| `--color-accent` | `#c6c8ee` | Acento principal: CTAs, links, estados activos |
-| `--color-accent-hover` | `#d8daf5` | Hover del acento |
-| `--color-accent-subtle` | `#c6c8ee15` | Fondo sutil de badges, highlights (15% opacidad) |
-| `--color-accent-muted` | `#8b8db8` | Bordes activos, indicadores secundarios |
+| `--color-accent` | `#B45A32` | Acento principal: logo, stat cards de impacto, links, overlines |
+| `--color-accent-hover` | `#9A4D2A` | Hover del acento (más oscuro) |
+| `--color-accent-subtle` | `#B45A3215` | Fondo sutil de highlights, badges informativos (15% opacidad) |
+| `--color-accent-muted` | `#D4895C` | Bordes activos, indicadores secundarios |
+
+### Color de Acción (Lima/Amarillo-Verde)
+
+| Token | Hex | Uso |
+|-------|-----|-----|
+| `--color-cta` | `#F5F564` | CTA primario: botón "Find A Therapist", acciones principales |
+| `--color-cta-hover` | `#E8E84E` | Hover del CTA (ligeramente más saturado) |
+| `--color-cta-text` | `#1E1310` | Texto sobre CTA (siempre oscuro para contraste) |
+
+### Color Secundario (Marrón Cálido)
+
+| Token | Hex | Uso |
+|-------|-----|-----|
+| `--color-secondary` | `#6E5032` | Stat cards secundarias, badges de contexto, elementos de profundidad |
+| `--color-secondary-light` | `#8B6B4A` | Variante más clara para hover o elementos suaves |
+
+### Colores de Superficie (Testimonios / Cards Decorativas)
+
+| Token | Hex | Uso |
+|-------|-----|-----|
+| `--color-surface-lavender` | `#F3E8F6` | Fondo de card testimonial / variante decorativa 1 |
+| `--color-surface-cream` | `#F9F1DE` | Fondo de card testimonial / variante decorativa 2 |
+| `--color-surface-lime` | `#FBFAC1` | Fondo de card testimonial / variante decorativa 3 |
+| `--color-surface-peach` | `#FFCA9E` | Formas orgánicas decorativas, acentos suaves |
 
 ### Colores Funcionales
 
 | Token | Hex | Uso |
 |-------|-----|-----|
-| `--color-success` | `#4ADE80` | Confirmaciones, progreso completado (semáforo clásico) |
-| `--color-warning` | `#FACC15` | Alertas, valores que requieren atención |
-| `--color-error` | `#F87171` | Errores, valores críticos |
-| `--color-info` | `#60A5FA` | Información contextual, tooltips |
+| `--color-success` | `#3D9A5F` | Confirmaciones, estado activo, disponibilidad |
+| `--color-warning` | `#D4A017` | Alertas, valores que requieren atención |
+| `--color-error` | `#C44040` | Errores, valores críticos |
+| `--color-info` | `#4A8DB7` | Información contextual, tooltips |
 
 ### Reglas de Uso de Color
 
-- **Nunca usar `#000000` ni `#FFFFFF` puros.** Siempre las variantes cálidas definidas arriba.
-- **El acento lavanda se usa con moderación.** Solo para CTAs primarios, links, e indicadores de estado activo. Si todo es lavanda, nada destaca.
+- **Nunca usar `#000000` ni `#FFFFFF` puros como fondos principales.** Siempre las variantes crema/cálida. `#FFFFFF` solo para cards y elementos puntuales elevados sobre fondo crema.
+- **El terracota (`--color-accent`) es identidad de marca.** Se usa para el logo, stat cards de impacto, overlines y links. No para CTAs primarios — esos usan el lima.
+- **El lima (`--color-cta`) se reserva exclusivamente para el CTA principal.** Un solo CTA lima por pantalla visible. Si todo es lima, nada destaca.
 - **Contraste mínimo WCAG AA:** texto primario sobre fondo primario = ratio ≥ 7:1. Texto secundario ≥ 4.5:1.
-- **Bordes:** usar `--color-surface-subtle` a 40-60% opacidad. Nunca bordes blancos ni de alto contraste.
-- **Semáforo funcional independiente del acento:** success (verde), warning (amarillo), error (rojo) nunca cambian aunque cambie el acento.
+- **Bordes:** usar `--color-surface-subtle` a 40-60% opacidad. Nunca bordes oscuros de alto contraste.
+- **Semáforo funcional independiente del acento:** success (verde), warning (amarillo), error (rojo) nunca cambian.
+- **Cards de color pastel:** los fondos lavanda, crema y lima se usan solo para testimonios y elementos decorativos puntuales. Nunca como fondo principal de sección.
+- **Footer y secciones oscuras:** usar `--color-bg-dark` (#1E130F). Headings en `--color-text-inverse-muted`, links en `--color-text-inverse`.
 
 ---
 
@@ -78,13 +109,14 @@ Estética premium-editorial sobre fondo oscuro. La experiencia transmite autorid
 
 | Rol | Fuente | Fallback | Peso |
 |-----|--------|----------|------|
-| **Headlines / Display** | Plus Jakarta Sans | system-ui, sans-serif | 600 (Semibold), 700 (Bold) |
+| **Headlines / Display** | Lora | Georgia, serif | 400 (Regular), 700 (Bold) |
 | **Cuerpo de texto** | Inter | system-ui, sans-serif | 400 (Regular), 500 (Medium) |
-| **Datos / Métricas** | Plus Jakarta Sans | system-ui, sans-serif | 700 (Bold) |
-| **Subtítulos / UI** | Inter Tight | system-ui, sans-serif | 500 (Medium) |
-| **Código / Monospace** | JetBrains Mono | monospace | 400 |
+| **Datos / Métricas** | Lora | Georgia, serif | 700 (Bold) |
+| **Subtítulos / UI** | Inter | system-ui, sans-serif | 500 (Medium), 600 (SemiBold) |
+| **Labels / Nav** | Inter | system-ui, sans-serif | 400 (Regular), 500 (Medium) |
+| **Overlines** | Inter | system-ui, sans-serif | 500 (Medium) |
 
-> **Decisión tipográfica:** Todo sans-serif. Plus Jakarta Sans para headlines: geométrica, limpia, con personalidad suficiente para diferenciarse de Inter sin necesitar serif. La jerarquía se crea por peso y tamaño, no por contraste de familias tipográficas. Referencia directa: Acorn Property Invest — headlines grandes y bold que transmiten confianza y modernidad. Inter se mantiene para cuerpo y UI: máxima legibilidad. Plus Jakarta Sans está disponible en Google Fonts (gratis).
+> **Decisión tipográfica:** Sistema dual serif + sans-serif. Los headlines usan una serif editorial (Lora) que transmite calidez, tradición y confianza clínica — el tipo de autoridad suave que un paciente busca en su terapeuta. El cuerpo y la interfaz usan una sans-serif contemporánea (Inter) para máxima legibilidad y limpieza funcional. El contraste entre familias crea jerarquía visual inmediata sin depender de peso extremo. Ambas fuentes disponibles en Google Fonts con soporte completo para caracteres latinos extendidos.
 
 ### Escala Tipográfica
 
@@ -92,11 +124,11 @@ Base: `16px` (1rem). Ratio: `1.250` (Major Third).
 
 | Token | Tamaño | Line Height | Letter Spacing | Uso |
 |-------|--------|-------------|----------------|-----|
-| `--text-display` | 3.5rem (56px) | 1.1 | -0.03em | Hero, números grandes de impacto |
-| `--text-h1` | 2.488rem (40px) | 1.15 | -0.025em | Títulos de página |
-| `--text-h2` | 1.99rem (32px) | 1.2 | -0.02em | Títulos de sección |
-| `--text-h3` | 1.59rem (25px) | 1.3 | -0.015em | Subtítulos, títulos de card |
-| `--text-h4` | 1.25rem (20px) | 1.35 | -0.01em | Labels prominentes |
+| `--text-display` | 3.5rem (56px) | 1.1 | -0.02em | Hero headlines, números de impacto |
+| `--text-h1` | 2.488rem (40px) | 1.15 | -0.015em | Títulos de página |
+| `--text-h2` | 1.99rem (32px) | 1.2 | -0.01em | Títulos de sección |
+| `--text-h3` | 1.59rem (25px) | 1.3 | -0.005em | Subtítulos, títulos de card |
+| `--text-h4` | 1.25rem (20px) | 1.35 | 0 | Labels prominentes |
 | `--text-body` | 1rem (16px) | 1.6 | 0 | Texto principal |
 | `--text-body-sm` | 0.875rem (14px) | 1.5 | 0.005em | Texto secundario, captions |
 | `--text-caption` | 0.75rem (12px) | 1.4 | 0.02em | Metadata, timestamps, badges |
@@ -104,12 +136,12 @@ Base: `16px` (1rem). Ratio: `1.250` (Major Third).
 
 ### Reglas Tipográficas
 
-- **Headlines:** siempre `Plus Jakarta Sans`, peso Semibold o Bold. Letter-spacing negativo. La jerarquía se marca por tamaño y peso, no por familia tipográfica.
-- **Subtítulos y UI:** `Inter Tight`, peso Medium. Más compacta que Inter regular, ideal para labels y navegación.
-- **Énfasis en headlines:** usar peso Bold para palabras clave dentro de un headline Semibold. Nunca itálicas en headlines — la referencia no las usa.
+- **Headlines:** siempre Lora Regular (400) o Bold (700). El propio carácter de la serif genera presencia sin necesitar pesos extremos.
+- **Cuerpo y UI:** Inter Regular (400) para texto largo, Medium (500) para labels y navegación.
+- **Contraste serif/sans crea jerarquía:** el cambio de familia entre headline y cuerpo es la señal principal de jerarquía. No depender de tamaño excesivo.
 - **NUNCA subrayar** texto que no sea un link.
-- **Overlines:** siempre uppercase + tracking amplio (`0.1em`). Color `--color-text-secondary` o `--color-accent`.
-- **Números de impacto:** usar `--text-display` + `Plus Jakarta Sans` Bold. Son el protagonista visual de la sección.
+- **Overlines:** siempre Inter Medium uppercase + tracking amplio (`0.1em`). Color `--color-text-secondary` o `--color-accent`.
+- **Números de impacto en stat cards:** usar Lora Bold `--text-display` sobre fondo terracota o marrón. Texto blanco.
 - **Longitud de línea máxima:** 65-75 caracteres para cuerpo de texto. Usar `max-width: 42rem` en contenedores de texto.
 
 ---
@@ -135,10 +167,11 @@ Base: `4px`. Sistema de múltiplos de 4.
 
 ### Reglas de Espaciado
 
-- **Generosidad:** preferir más espacio que menos. El espacio vacío transmite premium.
+- **Generosidad extrema:** el espacio vacío es la señal principal de calma. Más espacio del que parece necesario.
 - **Secciones:** mínimo `--space-16` entre secciones principales. En móvil, mínimo `--space-12`.
 - **Cards:** padding interno `--space-6`. Gap entre cards `--space-5`.
-- **Consistencia vertical:** los márgenes entre elementos dentro de una sección siguen la jerarquía: headline → `--space-4` → párrafo → `--space-8` → siguiente bloque.
+- **Hero:** padding vertical `--space-20` mínimo. El headline necesita aire para respirar.
+- **Consistencia vertical:** headline → `--space-4` → párrafo → `--space-8` → siguiente bloque.
 
 ---
 
@@ -147,27 +180,28 @@ Base: `4px`. Sistema de múltiplos de 4.
 ### Contenedor Principal
 
 ```
-Max-width: 1200px
+Max-width: 1280px
 Padding lateral: 24px (móvil), 40px (tablet), 64px (desktop)
 Centrado horizontal: margin 0 auto
 ```
 
-### Grid System
+### Grid
 
-| Breakpoint | Nombre | Columnas | Gap | Padding lateral |
-|------------|--------|----------|-----|-----------------|
-| < 640px | `mobile` | 1 | 16px | 24px |
-| 640-1024px | `tablet` | 2 | 20px | 40px |
-| > 1024px | `desktop` | 12 | 24px | 64px |
+```
+Desktop: 12 columnas, gap 24px
+Tablet: 6 columnas, gap 20px
+Móvil: 4 columnas, gap 16px
+```
 
-### Patrones de Layout Recurrentes
+### Patrones de Layout
 
-1. **Hero full-width:** texto centrado, ancho máximo 800px, padding vertical generoso (`--space-20`)
-2. **Grid de cards 2-up / 3-up:** cards de igual altura, gap `--space-5`
-3. **Split 50/50:** texto a un lado, visual al otro. Alineación vertical centrada
-4. **Lista de pasos numerados:** número grande a la izquierda (`--text-display`), contenido a la derecha
-5. **Testimonial strip:** fondo ligeramente diferente (`--color-bg-secondary`), texto centrado con comillas
-6. **Stats row:** 3-4 métricas en línea con número grande + label pequeño debajo
+- **Hero:** texto a la izquierda (60%) + espacio o imagen a la derecha (40%). Overline + headline + CTA pill.
+- **Features (2 columnas):** grid simétrico, cada columna con headline serif + párrafo + imagen. Gap generoso.
+- **Grid de cards:** masonry orgánico o grid uniforme 3 columnas en desktop. Cards blancas con bordes redondeados.
+- **Stat cards intercaladas:** cards de color (terracota, marrón) mezcladas con cards blancas en el grid. Crean ritmo visual.
+- **Testimonios:** carrusel horizontal o grid 3 columnas. Cada card con fondo pastel diferente.
+- **FAQ:** layout split — headline serif a la izquierda (30%), acordeón a la derecha (70%).
+- **Footer:** grid 5 columnas sobre fondo oscuro. Headings uppercase en dorado/tan.
 
 ---
 
@@ -175,275 +209,229 @@ Centrado horizontal: margin 0 auto
 
 ### Botones
 
-| Variante | Fondo | Texto | Borde | Border-radius |
-|----------|-------|-------|-------|---------------|
-| **Primario** | `--color-accent` | `--color-text-inverse` | ninguno | 9999px (pill) |
-| **Secundario** | transparent | `--color-text-primary` | 1px `--color-surface-subtle` | 9999px |
-| **Ghost** | transparent | `--color-accent` | ninguno | 8px |
+```
+Primario (CTA Lima):
+  Background: --color-cta (#F5F564)
+  Color: --color-cta-text (#1E1310)
+  Border: 1px solid --color-cta
+  Border-radius: 9999px (pill)
+  Padding: 12px 28px
+  Font: Inter Medium 500, --text-body
+  Hover: --color-cta-hover, scale(1.02)
+  
+Secundario (Outline oscuro):
+  Background: --color-text-primary (#1E1310)
+  Color: --color-text-inverse (#FFFBEF)
+  Border-radius: 9999px (pill)
+  Padding: 12px 28px
+  Font: Inter Medium 500, --text-body
+  Hover: opacity 0.9
 
-- **Padding:** `12px 28px` (default), `10px 20px` (small), `16px 36px` (large)
-- **Hover primario:** fondo `--color-accent-hover`, transición 200ms ease
-- **Hover secundario:** fondo `--color-bg-elevated`, transición 200ms ease
-- **Nunca** usar sombras en botones. El contraste viene del color, no de la elevación.
-- **Texto del botón:** `--text-body-sm`, peso Medium (500), sin uppercase
+Terciario (Outline ghost):
+  Background: transparent
+  Color: --color-text-primary
+  Border: 1px solid --color-surface-subtle
+  Border-radius: 9999px (pill)
+  Padding: 12px 28px
+  Font: Inter Medium 500, --text-body
+  Hover: --color-bg-elevated
+  Incluye flecha → al final del texto
+```
+
+- **Todos los botones son pill** (border-radius máximo). Nunca esquinas rectas.
+- **Un solo CTA lima por viewport visible.** El resto son outline o dark.
+- **Flecha →** en botones terciarios de navegación ("Our Approach →").
 
 ### Cards
 
 ```
-Background: --color-bg-secondary
-Border: 1px solid rgba(255, 255, 255, 0.06)
-Border-radius: 16px
-Padding: --space-6 (24px)
-Hover: background --color-bg-elevated, border rgba(255, 255, 255, 0.10)
-Transition: all 200ms ease
-```
+Card base:
+  Background: --color-bg-tertiary (#FFFFFF)
+  Border: 1px solid rgba(30, 19, 16, 0.06)
+  Border-radius: 20px
+  Padding: --space-6
+  Overflow: hidden (para imágenes internas)
 
-- **Cards con datos:** el número o métrica principal va en `--text-display` o `--text-h1`, prominente, arriba o a la izquierda. El contexto/label va debajo en `--text-body-sm` + `--color-text-secondary`.
-- **Cards interactivas:** añadir `cursor: pointer` y transición de hover.
-- **Nunca** usar box-shadow para elevación. La jerarquía se crea con diferencias sutiles de fondo.
+Card de stat (terracota):
+  Background: --color-accent (#B45A32)
+  Color: --color-text-inverse
+  Border-radius: 20px
+  Padding: --space-6
+  Texto de stat: Lora Bold, --text-display
 
-### Inputs
+Card de stat (marrón):
+  Background: --color-secondary (#6E5032)
+  Color: --color-text-inverse
+  Border-radius: 20px
+  Padding: --space-6
+  Texto de stat: Lora Bold, --text-h1
 
-```
-Background: --color-bg-tertiary
-Border: 1px solid rgba(255, 255, 255, 0.08)
-Border-radius: 12px
-Padding: 14px 16px
-Color texto: --color-text-primary
-Color placeholder: --color-text-tertiary
-Focus: border --color-accent, box-shadow 0 0 0 3px rgba(198, 200, 238, 0.15)
-```
-
-### Tags / Badges
-
-```
-Background: --color-accent-subtle (lavanda al 15% opacidad)
-Color texto: --color-accent
-Border-radius: 9999px
-Padding: 4px 12px
-Font: --text-caption, peso Medium, uppercase, letter-spacing 0.05em
-```
-
-### Separadores
-
-```
-Color: rgba(255, 255, 255, 0.06)
-Grosor: 1px
-Margin vertical: --space-8
-```
-
-- Nunca usar `<hr>` visible. Los separadores son sutiles y opcionales.
-- Preferir espacio vacío sobre líneas divisorias.
-
-### Progreso (Gateway)
-
-Indicador de avance durante el diagnóstico. El progreso debe sentirse como descubrimiento, no como formulario.
-
-**Barra de progreso:**
-```
-Contenedor:
-  Background: --color-bg-tertiary
-  Height: 3px
-  Border-radius: 9999px
-  Width: 100%
-
-Relleno:
-  Background: --color-accent
-  Height: 3px
-  Border-radius: 9999px
-  Transition: width 600ms cubic-bezier(0.16, 1, 0.3, 1)
-```
-
-**Label de progreso:**
-```
-Font: --text-caption
-Color: --color-text-secondary
-Formato: "Tu diagnóstico: 40% completo"
-Posición: debajo de la barra, alineado a la derecha
-```
-
-- **La barra es sutil, no protagonista.** 3px de alto, nunca más. El protagonista es el contenido que se revela, no el porcentaje.
-- **El label usa lenguaje de descubrimiento:** "Tu diagnóstico: 40% completo" — no "Paso 3 de 7". El progreso es sobre lo que están construyendo, no sobre lo que les falta por rellenar.
-- **El avance NO es lineal visualmente.** Los primeros pasos avanzan rápido (momentum), los últimos más despacio (tensión antes de la revelación). Esto se calibra con la cascada de mecánicas del gateway.
-
-### Micro-espejo (Gateway)
-
-Momentos donde el sistema devuelve una observación sobre la persona entre bloques de preguntas. Es el componente más importante del gateway: donde la confianza se construye.
-
-```
-Contenedor:
-  Background: --color-bg-secondary
-  Border-left: 3px solid --color-accent-muted
-  Border-radius: 0 12px 12px 0
-  Padding: --space-5 --space-6
-  Margin: --space-6 0
-  Animación entrada: fade-in + slide-right sutil (desde -12px), 400ms ease-out
-
-Texto principal:
-  Font: --text-body
-  Color: --color-text-primary
-  Style: italic (solo la observación, no el dato)
-
-Dato colectivo:
-  Font: --text-body-sm
-  Color: --color-text-secondary
-  Margin-top: --space-2
-  Formato: "El 73% de personas en tu situación..."
-```
-
-- **El borde izquierdo acento indica que el sistema habla.** Es sutil pero inconfundible: esto no es una pregunta, es una revelación.
-- **La observación va en itálica.** Diferencia visualmente lo que la persona dice (preguntas) de lo que el sistema devuelve (espejos).
-- **El dato colectivo va debajo, más pequeño.** No compite con la observación — la valida.
-- **Animación de entrada obligatoria.** El micro-espejo no "aparece" — se revela. Fade-in con desplazamiento lateral sutil desde la izquierda (porque el borde acento marca la dirección).
-
-### Bisagra (Gateway)
-
-El momento de mayor impacto emocional del gateway. Donde la persona ve la brecha entre dónde está y dónde podría estar. Necesita un tratamiento visual diferenciado.
-
-```
-Contenedor:
-  Background: linear-gradient(135deg, --color-bg-secondary, --color-bg-tertiary)
-  Border: 1px solid rgba(198, 200, 238, 0.12)
-  Border-radius: 16px
-  Padding: --space-8
-  Margin: --space-8 0
-
-Número / Score principal:
-  Font: --text-display (Plus Jakarta Sans)
-  Color: --color-text-primary
-  Peso: 600
-  Animación: counter que sube desde 0, 1200ms ease-out
-
-Benchmark / Comparativa:
-  Font: --text-h3 (Inter Tight)
-  Color: --color-text-secondary
-
-Brecha:
-  Font: --text-body
-  Color: --color-accent
-  Peso: 500
-
-Amplificador social:
-  Font: --text-body-sm
-  Color: --color-text-secondary
-  Border-top: 1px solid rgba(255, 255, 255, 0.06)
-  Padding-top: --space-4
-  Margin-top: --space-4
-```
-
-- **El score principal es el protagonista visual absoluto.** Tamaño display, Bold, con animación de contador. Es el número que la persona va a recordar.
-- **La comparativa va al lado o debajo, en peso Regular y color secundario.** No compite con el score — lo contextualiza.
-- **La brecha se marca en color acento.** Es la distancia entre ambos números. Es lo que crea la tensión que el CTA resuelve.
-- **El amplificador social se separa con línea sutil.** Es dato de refuerzo, no protagonista: "De las 847 personas con tu patrón, las que actuaron en la primera semana mejoraron un 34% más rápido."
-- **Animación de entrada más lenta que el resto.** 400ms de delay tras la aparición del contenedor, luego el counter sube en 1200ms. La persona espera — y eso amplifica el impacto.
-
-### Resultado / Mapa (Gateway)
-
-El resultado final del diagnóstico. Es un mapa explorable, no un informe estático. La persona debe sentir que lo que tiene delante es SUYO — construido con SUS datos.
-
-```
-Contenedor principal:
-  Background: --color-bg-secondary
-  Border: 1px solid rgba(255, 255, 255, 0.08)
+Card de testimonio:
+  Background: --color-surface-lavender | --color-surface-cream | --color-surface-lime
   Border-radius: 20px
   Padding: --space-8
-
-Header del resultado:
-  Overline: "TU DIAGNÓSTICO" en --text-overline + --color-accent
-  Título: Plus Jakarta Sans, --text-h2
-  Subtítulo: Inter, --text-body, --color-text-secondary
-
-Dimensiones (cards internas):
-  Background: --color-bg-tertiary
-  Border-radius: 12px
-  Padding: --space-5
-  Grid: 2 columnas en desktop, 1 en móvil
-  Cada dimensión muestra:
-    - Label: --text-overline, --color-text-secondary
-    - Score: --text-h3, --color-text-primary
-    - Barra visual: height 4px, fondo --color-bg-elevated,
-      relleno con color según nivel:
-      Verde (--color-success) = bien
-      Amarillo (--color-warning) = atención
-      Rojo (--color-error) = crítico
-    - Insight: --text-body-sm, --color-text-secondary, italic
-
-Primer paso recomendado:
-  Background: rgba(198, 200, 238, 0.08)
-  Border: 1px solid rgba(198, 200, 238, 0.15)
-  Border-radius: 12px
-  Padding: --space-5
-  Icono: flecha o paso, --color-accent, 20px
-  Texto: --text-body, --color-text-primary
+  Icono comillas: círculo con "" en --color-text-primary
+  Texto: Inter Regular, --text-body, --color-text-primary
+  Badge inferior: pill oscuro "Octave Patient"
 ```
 
-- **El overline "TU DIAGNÓSTICO" usa color acento.** Marca que esto es personal, no genérico.
-- **Las dimensiones usan barras de color semáforo.** Verde/amarillo/rojo es universalmente entendido y no requiere explicación. El ejecutivo lo lee como un dashboard.
-- **Cada dimensión tiene un insight en itálica.** No es solo un número — es lo que el número significa para esta persona.
-- **El primer paso recomendado tiene fondo acento sutil.** Destaca visualmente del resto como la acción a tomar. Es el puente al CTA.
+- **Border-radius generoso (20px)** en todas las cards. Nunca menos de 16px.
+- **Sin sombra** por defecto. El fondo crema ya crea suficiente separación con las cards blancas.
+- **Hover sutil:** translate-y -2px + sombra suave (0 4px 12px rgba(30,19,16,0.06)).
 
-### CTA como Alivio (Gateway)
+### Badges / Pills
 
-El CTA del gateway no pide — ofrece. Visualmente debe sentirse como resolución, no como venta.
+```
+Badge oscuro:
+  Background: --color-text-secondary (#4B413C)
+  Color: --color-text-inverse (#FFFBEF)
+  Border-radius: 9999px
+  Padding: 6px 16px
+  Font: Inter Medium 500, --text-caption
+  Uso: "Available", "Octave Patient", "Take charge..."
+
+Badge outline:
+  Background: transparent
+  Border: 1px solid --color-surface-subtle
+  Color: --color-text-secondary
+  Border-radius: 9999px
+  Padding: 6px 16px
+  Font: Inter Medium 500, --text-caption
+```
+
+### Acordeón (FAQ)
 
 ```
 Contenedor:
   Background: transparent
-  Padding: --space-8 0
-  Text-align: center
+  Border: 1px solid rgba(30, 19, 16, 0.08)
+  Border-radius: 16px
+  Margin-bottom: --space-3
 
-Texto pre-CTA:
-  Font: Plus Jakarta Sans, --text-h3, weight 600
+Header del acordeón:
+  Padding: --space-5 --space-6
+  Font: Inter Regular 400, --text-body o --text-h4
   Color: --color-text-primary
-  Max-width: 500px
-  Margin: 0 auto --space-5
-  Ejemplo: "Tu sistema nervioso lleva años pidiendo esto."
+  Cursor: pointer
+  Display: flex, justify-content: space-between, align-items: center
 
-Botón CTA:
-  Variante: Primario (pill acento)
-  Tamaño: Large (16px 36px)
-  Texto: "Empieza la Semana 1" (nunca "Comprar", "Suscribirse", "Registrarse")
-
-Texto post-CTA:
-  Font: --text-body-sm
+Chevron:
+  Tamaño: 20px
   Color: --color-text-tertiary
-  Margin-top: --space-3
-  Ejemplo: "97€ · Garantía de 7 días · Sin compromiso"
+  Rotación: 0° cerrado, 180° abierto
+  Transición: transform 300ms ease
+
+Contenido expandido:
+  Padding: 0 --space-6 --space-5
+  Font: Inter Regular, --text-body
+  Color: --color-text-secondary
 ```
 
-- **El texto pre-CTA usa la fuente de headlines, peso Semibold.** Es la voz de Javier, no la voz del sistema. Es empatía, no instrucción.
-- **El botón usa lenguaje de acción, no de transacción.** "Empieza la Semana 1" es movimiento. "Comprar" es comercio.
-- **El texto post-CTA disuelve fricción.** Precio + garantía + sin compromiso. En terciario para que no compita con el botón pero esté visible para el Controlador que necesita esos datos antes de hacer clic.
+### Navegación
+
+```
+Nav bar:
+  Background: --color-bg-primary (#FFFBEF)
+  Border-bottom: 1px solid rgba(30, 19, 16, 0.06)
+  Height: 72px
+  Padding: 0 --space-8
+  Position: sticky, top: 0, z-index: 100
+
+Logo:
+  Font: serif (Lora o custom), lowercase
+  Color: --color-accent (#B45A32)
+  Tamaño: ~24px
+
+Links de nav:
+  Font: Inter Regular 400, --text-body
+  Color: --color-text-primary
+  Hover: --color-text-secondary
+  Dropdown chevron: inline, 12px
+
+Acciones derecha:
+  Login: botón secundario (dark pill)
+  CTA: botón primario (lima pill)
+  Gap: --space-3
+```
+
+### Footer
+
+```
+Background: --color-bg-dark (#1E130F)
+Padding: --space-16 --space-8 --space-8
+
+Logo:
+  Color: --color-text-inverse
+  Font: serif, lowercase
+  Margin-bottom: --space-10
+
+Columnas:
+  Grid: 5 columnas en desktop, 2 en tablet, 1 en móvil
+  Gap: --space-8
+
+Heading de columna:
+  Font: Inter Medium 500, --text-overline
+  Color: --color-text-inverse-muted (#EBCDB9)
+  Text-transform: uppercase
+  Letter-spacing: 0.1em
+  Margin-bottom: --space-4
+
+Links:
+  Font: Inter Regular 400, --text-body-sm
+  Color: --color-text-inverse (#FFFBEF)
+  Opacity: 0.85
+  Hover: opacity 1
+  Line-height: 2.2 (espacio generoso entre links)
+```
+
+---
+
+## Formas Orgánicas Decorativas
+
+El diseño incluye formas blobby/orgánicas como elementos decorativos de fondo:
+
+- **Color:** `--color-surface-peach` (#FFCA9E) o variantes pastel
+- **Tamaño:** grandes, parcialmente fuera del viewport (overflow hidden)
+- **Border-radius:** valores irregulares altos (30% 70% 70% 30% / 30% 30% 70% 70%)
+- **Opacidad:** 0.6-0.8 para que no compitan con el contenido
+- **Posición:** absolute, detrás del contenido (z-index negativo)
+- **Uso:** solo en secciones de testimonios y áreas emocionales. Nunca en UI funcional.
 
 ---
 
 ## Iconografía
 
 - **Estilo:** outline/stroke, peso 1.5px. Nunca filled/solid.
-- **Tamaños:** 16px (inline con texto), 20px (en botones), 24px (standalone), 32px (feature icons)
+- **Tamaños:** 16px (inline con texto), 20px (en botones/acordeones), 24px (standalone), 32px (feature icons)
 - **Color:** heredan el color del texto padre por defecto. Iconos de acento usan `--color-accent`.
 - **Librería recomendada:** Lucide Icons (consistente con el estilo outline limpio)
-- **Nunca** usar iconos decorativos sin función. Cada icono comunica algo.
+- **Flechas →:** usadas como indicador de navegación en botones terciarios. Siempre a la derecha del texto.
+- **Chevrons ˅:** usadas en dropdowns de nav y acordeones FAQ. Rotación animada.
+- **Comillas "":** icono circular con comillas para abrir testimonios. Estilo outline.
+- **Nunca** usar iconos decorativos sin función.
 
 ---
 
 ## Imágenes y Media
 
-- **Fotos:** siempre con overlay oscuro si llevan texto encima. Mínimo 40% opacidad de overlay.
-- **Border-radius:** 16px para imágenes en cards. 24px para imágenes hero standalone.
-- **Aspect ratios consistentes:** 16:9 para banners/hero, 4:3 para cards, 1:1 para avatares.
-- **Avatares:** border-radius 9999px (circular), borde sutil `2px solid rgba(255, 255, 255, 0.1)`.
-- **Gradientes:** solo oscuros, para fondos de sección. De `--color-bg-primary` a `--color-bg-secondary`. Nunca gradientes de color vivo.
+- **Fotos de personas:** protagonistas del diseño. Retratos cálidos, iluminación natural, fondo neutro o desenfocado.
+- **Border-radius:** 20px para imágenes en cards. 9999px (circular) para avatares de terapeutas.
+- **Aspect ratios:** 16:9 para banners/hero, 4:3 para cards de contenido, 1:1 para avatares circulares.
+- **Avatares:** border-radius 9999px (circular), tamaño consistente (120px en cards, 48px en listas), sin borde visible.
+- **Overlay:** si llevan texto encima sobre fondo oscuro, overlay al 40% mínimo. Preferir texto debajo o al lado.
+- **Gradientes:** solo sutiles, para fondos de sección. De `--color-bg-primary` a `--color-bg-secondary`. Nunca gradientes vivos.
 
 ---
 
 ## Animación y Transiciones
 
-- **Duración base:** 200ms para hover/focus, 300ms para apariciones, 400ms para transiciones de layout.
+- **Duración base:** 200ms para hover/focus, 300ms para apariciones/acordeones, 400ms para transiciones de layout.
 - **Easing:** `ease` para la mayoría. `cubic-bezier(0.16, 1, 0.3, 1)` para entradas (ease-out expresivo).
-- **Scroll animations:** fade-in + translate-y sutil (de 20px abajo hacia posición final). Solo en secciones principales, no en cada elemento.
+- **Scroll animations:** fade-in + translate-y sutil (de 20px abajo). Solo en secciones principales.
+- **Acordeones:** height auto con transición suave. Chevron rota 180° con ease.
+- **Cards hover:** translate-y -2px + aparición de sombra suave. 200ms ease.
 - **Nunca:** animaciones que bloqueen interacción, bounces, ni efectos que distraigan del contenido.
-- **Principio:** si la animación no ayuda a entender la jerarquía o la transición de estado, no se incluye.
+- **Principio:** la calma visual es prioritaria. Las animaciones deben sentirse como respiración, no como excitación.
 
 ---
 
@@ -453,31 +441,36 @@ Texto post-CTA:
 
 | Nombre | Valor | Comportamiento |
 |--------|-------|----------------|
-| `mobile` | < 640px | Stack vertical, nav colapsada, tipografía reducida 1 nivel |
+| `mobile` | < 640px | Stack vertical, nav hamburger, tipografía reducida 1 nivel |
 | `tablet` | 640-1024px | Grid 2 columnas, nav visible, tipografía intermedia |
-| `desktop` | > 1024px | Layout completo, grid 12 columnas |
+| `desktop` | > 1024px | Layout completo, grid hasta 5 columnas en footer |
 
 ### Reglas Responsive
 
-- **Tipografía:** en móvil, `--text-display` baja a `2.5rem`, `--text-h1` a `2rem`. El resto mantiene su escala.
+- **Tipografía:** en móvil, `--text-display` baja a `2.5rem`, `--text-h1` a `2rem`. El resto mantiene escala.
 - **Cards:** en móvil, siempre stack vertical (1 columna). En tablet, grid 2 columnas.
-- **Hero:** en móvil, padding vertical se reduce a `--space-12`. Texto siempre centrado.
+- **Hero:** en móvil, texto centrado, padding reducido a `--space-12`.
+- **FAQ:** en móvil, layout stack (headline arriba, acordeón abajo). En desktop, split horizontal.
+- **Footer:** en móvil, columnas stack 1. En tablet, grid 2.
 - **Imágenes:** todas con `width: 100%` y `height: auto`. Nunca dimensiones fijas.
 - **Touch targets:** mínimo 44px × 44px para todos los elementos interactivos en móvil.
+- **Formas decorativas:** se ocultan o reducen significativamente en móvil para no interferir.
 
 ---
 
-## Modo Claro (Futuro)
+## Modo Oscuro (Futuro)
 
-El sistema está diseñado dark-first. Si se implementa modo claro:
+El sistema está diseñado light-first. Si se implementa modo oscuro:
 
-| Token dark | Equivalente light |
-|------------|-------------------|
-| `--color-bg-primary` (#0a252c) | `#FAFAF8` |
-| `--color-bg-secondary` (#0e2885) | `#F0F0EC` |
-| `--color-text-primary` (#F5F5F0) | `#1A1A1A` |
-| `--color-text-secondary` (#A8B0AC) | `#6B6B6B` |
-| `--color-accent` (#c6c8ee) | `#253149` (más saturado para contraste sobre claro) |
+| Token light | Equivalente dark |
+|-------------|------------------|
+| `--color-bg-primary` (#FFFBEF) | `#1E130F` |
+| `--color-bg-secondary` (#F9F1DE) | `#2A1F18` |
+| `--color-bg-tertiary` (#FFFFFF) | `#352A22` |
+| `--color-text-primary` (#1E1310) | `#FFFBEF` |
+| `--color-text-secondary` (#4B413C) | `#B5A99F` |
+| `--color-accent` (#B45A32) | `#D47A52` (más luminoso para contraste) |
+| `--color-cta` (#F5F564) | `#E8E84E` (ligeramente más apagado) |
 
 ---
 
@@ -486,12 +479,15 @@ El sistema está diseñado dark-first. Si se implementa modo claro:
 Antes de aprobar cualquier pantalla, verificar:
 
 - [ ] ¿Los colores vienen exclusivamente de los tokens definidos aquí?
-- [ ] ¿La jerarquía tipográfica es clara? (se distingue headline → subtítulo → cuerpo → caption)
-- [ ] ¿El espaciado entre secciones es generoso y consistente?
+- [ ] ¿La jerarquía tipográfica es clara? (headline serif → subtítulo → cuerpo sans → caption)
+- [ ] ¿El espaciado entre secciones es generoso y transmite calma?
 - [ ] ¿Los elementos interactivos tienen estados hover/focus/active definidos?
 - [ ] ¿El contraste cumple WCAG AA mínimo?
 - [ ] ¿Funciona en móvil sin scroll horizontal?
-- [ ] ¿Las cards mantienen altura consistente en su fila?
-- [ ] ¿No hay sombras, gradientes de color, ni bordes de alto contraste?
-- [ ] ¿El acento lavanda se usa solo donde debe (CTAs, links, estados activos)?
-- [ ] ¿Los números/métricas están visualmente prominentes cuando son el dato principal?
+- [ ] ¿Las cards tienen border-radius ≥ 16px y se sienten orgánicas?
+- [ ] ¿No hay sombras agresivas, gradientes vivos, ni bordes de alto contraste?
+- [ ] ¿El CTA lima se usa solo una vez por viewport visible?
+- [ ] ¿El terracota se usa como identidad (logo, stats, overlines) y no como CTA?
+- [ ] ¿Los botones son todos pill (border-radius máximo)?
+- [ ] ¿Las formas decorativas orgánicas no interfieren con el contenido funcional?
+- [ ] ¿El footer oscuro usa los tonos dorado/tan para headings y crema para links?

@@ -148,32 +148,32 @@ const STATE_TARGETS: Record<NervousSystemState, StateTarget> = {
   fragmented: {
     coherence: 0.2, energy: 0.3, connectionVisibility: 0.4,
     particleCount: 10, particleSpeed: 0.002,
-    color: { r: 140, g: 142, b: 165 }, // muted lavender-gray — visible on dark teal
-    opacity: 0.28,
+    color: { r: 180, g: 90, b: 50 }, // muted terracotta — visible on cream
+    opacity: 0.12,
   },
   awakening: {
     coherence: 0.5, energy: 0.55, connectionVisibility: 0.65,
     particleCount: 20, particleSpeed: 0.003,
-    color: { r: 198, g: 200, b: 238 }, // #c6c8ee accent
-    opacity: 0.32,
+    color: { r: 180, g: 90, b: 50 }, // #B45A32 terracotta accent
+    opacity: 0.13,
   },
   flowing: {
     coherence: 0.75, energy: 0.7, connectionVisibility: 0.85,
     particleCount: 32, particleSpeed: 0.005,
-    color: { r: 198, g: 200, b: 238 }, // #c6c8ee accent
-    opacity: 0.38,
+    color: { r: 180, g: 90, b: 50 }, // #B45A32 terracotta accent
+    opacity: 0.15,
   },
   frozen: {
     coherence: 0.75, energy: 0.05, connectionVisibility: 1.0,
     particleCount: 32, particleSpeed: 0,
-    color: { r: 198, g: 200, b: 238 }, // #c6c8ee accent
-    opacity: 0.30,
+    color: { r: 180, g: 90, b: 50 }, // #B45A32 terracotta accent
+    opacity: 0.12,
   },
   resolved: {
     coherence: 0.5, energy: 0.55, connectionVisibility: 0.65,
     particleCount: 20, particleSpeed: 0.003,
-    color: { r: 198, g: 200, b: 238 }, // placeholder, overridden by score
-    opacity: 0.30,
+    color: { r: 180, g: 90, b: 50 }, // placeholder, overridden by score
+    opacity: 0.12,
   },
 }
 
@@ -614,22 +614,22 @@ export class NervousSystemEngine {
       return {
         coherence: 0.25, energy: 0.35, connectionVisibility: 0.4,
         particleCount: 12, particleSpeed: 0.002,
-        color: { r: 248, g: 113, b: 113 }, // #F87171
-        opacity: 0.15,
+        color: { r: 196, g: 64, b: 64 }, // #C44040
+        opacity: 0.12,
       }
     } else if (score <= 50) {
       return {
         coherence: 0.5, energy: 0.55, connectionVisibility: 0.65,
         particleCount: 20, particleSpeed: 0.003,
-        color: { r: 222, g: 214, b: 134 }, // blend accent/yellow
-        opacity: 0.20,
+        color: { r: 212, g: 160, b: 23 }, // blend terracotta/warning
+        opacity: 0.13,
       }
     } else {
       return {
         coherence: 0.85, energy: 0.8, connectionVisibility: 0.95,
         particleCount: 35, particleSpeed: 0.004,
-        color: { r: 74, g: 222, b: 128 }, // #4ADE80
-        opacity: 0.22,
+        color: { r: 61, g: 154, b: 95 }, // #3D9A5F
+        opacity: 0.14,
       }
     }
   }

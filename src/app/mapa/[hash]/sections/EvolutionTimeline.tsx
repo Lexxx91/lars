@@ -128,7 +128,7 @@ export default function EvolutionTimeline({ evolution }: Props) {
       >
         <p
           style={{
-            fontFamily: 'var(--font-inter-tight)',
+            fontFamily: 'var(--font-inter)',
             fontSize: 'var(--text-overline)',
             letterSpacing: 'var(--ls-overline)',
             textTransform: 'uppercase',
@@ -155,7 +155,7 @@ export default function EvolutionTimeline({ evolution }: Props) {
             top: '8px',
             bottom: '8px',
             width: '2px',
-            background: 'rgba(255,255,255,0.08)',
+            background: 'rgba(30,19,16,0.08)',
           }}
         />
 
@@ -189,14 +189,14 @@ export default function EvolutionTimeline({ evolution }: Props) {
                     ? 'var(--color-accent)'
                     : isActive
                       ? 'var(--color-success)'
-                      : 'rgba(255,255,255,0.15)',
+                      : 'rgba(30,19,16,0.15)',
                   border: isNew
                     ? '2px solid var(--color-accent)'
                     : 'none',
                   marginTop: isNew ? '-2px' : '0',
                   marginLeft: isNew ? '-2px' : '0',
                   boxShadow: isNew
-                    ? '0 0 8px rgba(198,200,238,0.4)'
+                    ? '0 0 8px rgba(180,90,50,0.4)'
                     : 'none',
                 }}
               />

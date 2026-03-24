@@ -28,13 +28,13 @@ interface EvolutionResult {
 }
 
 const PRESETS = [
-  { label: 'Día 4 → Arquetipo', days: 4, color: '#c6c8ee' },
-  { label: 'Día 8 → Insight D7', days: 4, color: '#c6c8ee' },
-  { label: 'Día 11 → Sesión', days: 3, color: '#4ADE80' },
-  { label: 'Día 15 → Subdimensiones', days: 4, color: '#c6c8ee' },
-  { label: 'Día 22 → Libro', days: 7, color: '#4ADE80' },
-  { label: 'Día 31 → Reevaluación', days: 9, color: '#FBBF24' },
-  { label: 'Día 91 → Trimestral', days: 60, color: '#FBBF24' },
+  { label: 'Día 4 → Arquetipo', days: 4, color: '#B45A32' },
+  { label: 'Día 8 → Insight D7', days: 4, color: '#B45A32' },
+  { label: 'Día 11 → Sesión', days: 3, color: '#3D9A5F' },
+  { label: 'Día 15 → Subdimensiones', days: 4, color: '#B45A32' },
+  { label: 'Día 22 → Libro', days: 7, color: '#3D9A5F' },
+  { label: 'Día 31 → Reevaluación', days: 9, color: '#D4A017' },
+  { label: 'Día 91 → Trimestral', days: 60, color: '#D4A017' },
 ]
 
 export default function FastForwardPage() {
@@ -134,8 +134,8 @@ export default function FastForwardPage() {
               width: '100%',
               padding: '12px 16px',
               borderRadius: '8px',
-              border: '1px solid rgba(255,255,255,0.12)',
-              background: 'rgba(255,255,255,0.04)',
+              border: '1px solid rgba(30,19,16,0.12)',
+              background: 'rgba(30,19,16,0.04)',
               color: '#E8EAE9',
               fontSize: '16px',
               fontFamily: 'monospace',
@@ -217,8 +217,8 @@ export default function FastForwardPage() {
             style={{
               padding: '16px 20px',
               borderRadius: '8px',
-              background: 'rgba(255,255,255,0.04)',
-              border: '1px solid rgba(255,255,255,0.08)',
+              background: 'rgba(30,19,16,0.04)',
+              border: '1px solid rgba(30,19,16,0.08)',
               marginBottom: '24px',
             }}
           >
@@ -254,7 +254,7 @@ export default function FastForwardPage() {
                       width: '8px',
                       height: '8px',
                       borderRadius: '50%',
-                      background: unlocked ? '#4ADE80' : '#506258',
+                      background: unlocked ? '#3D9A5F' : '#506258',
                     }}
                   />
                   <span
@@ -278,7 +278,7 @@ export default function FastForwardPage() {
                 marginTop: '16px',
                 padding: '10px 20px',
                 borderRadius: '100px',
-                background: '#4ADE80',
+                background: '#3D9A5F',
                 color: '#0B0F0E',
                 fontSize: '14px',
                 fontWeight: 500,
