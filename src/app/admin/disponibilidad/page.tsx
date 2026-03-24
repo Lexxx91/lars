@@ -513,12 +513,12 @@ export default function DisponibilidadPage() {
                                 height: '30px',
                                 borderRadius: 'var(--radius-sm)',
                                 border: active
-                                  ? '1px solid rgba(96,165,250,0.5)'
+                                  ? '1px solid rgba(61,154,95,0.4)'
                                   : '1px solid rgba(30,19,16,0.06)',
                                 backgroundColor: active
-                                  ? 'rgba(96,165,250,0.25)'
+                                  ? 'rgba(61,154,95,0.15)'
                                   : 'rgba(30,19,16,0.03)',
-                                color: active ? '#93c5fd' : 'rgba(30,19,16,0.15)',
+                                color: active ? 'var(--color-success)' : 'rgba(30,19,16,0.15)',
                                 cursor: loading ? 'wait' : 'pointer',
                                 fontFamily: 'var(--font-inter)',
                                 fontSize: '10px',
@@ -629,8 +629,8 @@ export default function DisponibilidadPage() {
                   fontWeight: 500,
                   border: 'none',
                   cursor: 'pointer',
-                  backgroundColor: blockMode === mode ? 'rgba(96,165,250,0.25)' : 'transparent',
-                  color: blockMode === mode ? '#93c5fd' : 'var(--color-text-tertiary)',
+                  backgroundColor: blockMode === mode ? 'var(--color-accent-subtle)' : 'transparent',
+                  color: blockMode === mode ? 'var(--color-accent)' : 'var(--color-text-tertiary)',
                   transition: 'all var(--transition-base)',
                 }}
               >
