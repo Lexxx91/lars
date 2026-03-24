@@ -19,7 +19,6 @@
 import { useEffect, useState, useRef, useCallback } from 'react'
 import Button from '@/components/ui/Button'
 import Card from '@/components/ui/Card'
-import Badge from '@/components/ui/Badge'
 import type { DimensionResult, DimensionKey } from '@/lib/insights'
 import { getScoreColor, getScoreLabel } from '@/lib/insights'
 import type { EvolutionState, ReevaluationScores, ReevaluationEntry } from '@/lib/map-evolution'
@@ -37,6 +36,7 @@ import EvolutionBookExcerpt from './sections/EvolutionBookExcerpt'
 import EvolutionReevaluation from './sections/EvolutionReevaluation'
 import FocusBanner, { selectFocus } from './sections/FocusBanner'
 import MapaAccordion, { type AccordionSection } from './sections/MapaAccordion'
+import AspiracionalTimeline from './sections/AspiracionalTimeline'
 
 // ─── TIPOS ────────────────────────────────────────────────────────────────────
 
@@ -135,9 +135,7 @@ export default function MapaClient({
   const [displayScore, setDisplayScore] = useState(isFirstVisit ? 0 : global)
   const [visibleDims, setVisibleDims] = useState(isFirstVisit ? -1 : 4)
   const [showPriority, setShowPriority] = useState(!isFirstVisit)
-  const [showFirstStep, setShowFirstStep] = useState(!isFirstVisit)
   const [showZona4, setShowZona4] = useState(!isFirstVisit)
-  const [detailOpen, setDetailOpen] = useState(false)
   const [shareToast, setShareToast] = useState<string | null>(null)
   const [checkoutLoading, setCheckoutLoading] = useState(false)
   const [checkoutError, setCheckoutError] = useState<string | null>(null)
@@ -171,7 +169,6 @@ export default function MapaClient({
     if (!isFirstVisit) {
       setVisibleDims(4)
       setShowPriority(true)
-      setShowFirstStep(true)
       setShowZona4(true)
       return
     }
@@ -182,7 +179,6 @@ export default function MapaClient({
       setTimeout(() => setVisibleDims(3), 5000),
       setTimeout(() => setVisibleDims(4), 6000),
       setTimeout(() => setShowPriority(true), 7000),
-      setTimeout(() => setShowFirstStep(true), 8000),
       setTimeout(() => setShowZona4(true), 9500),
     ]
     return () => timers.forEach(clearTimeout)
@@ -856,480 +852,39 @@ export default function MapaClient({
              ══════════════════════════════════════════════════════════════════ */}
           <section id="zona-camino" style={{ marginBottom: 'var(--space-12)' }}>
 
-            {/* Primer paso */}
-            {showFirstStep && (
-              <div className="mapa-fade-up" style={{ marginBottom: 'var(--space-12)' }}>
-                <Card style={{
-                  border: '1px solid rgba(74,222,128,0.18)',
-                  background: 'rgba(74,222,128,0.04)',
-                }}>
-                  <p style={{
-                    fontFamily: 'var(--font-inter-tight)',
-                    fontSize: 'var(--text-overline)',
-                    letterSpacing: 'var(--ls-overline)',
-                    textTransform: 'uppercase',
-                    color: 'var(--color-success)',
-                    marginBottom: 'var(--space-3)',
-                  }}>
-                    Tu primer paso
-                  </p>
-                  <p style={{
-                    fontFamily: 'var(--font-inter)',
-                    fontSize: 'var(--text-body)',
-                    lineHeight: 'var(--lh-body)',
-                    color: 'var(--color-text-primary)',
-                  }}>
-                    {firstStep}
-                  </p>
-                  {isFirstVisit && <p className="mapa-puente">{PUENTES.p1}</p>}
-                </Card>
-              </div>
+            {/* Timeline aspiracional + CTA contextual */}
+            {showZona4 && (
+              <AspiracionalTimeline
+                score={global}
+                hasPaid={hasPaid}
+                daysSinceCreation={evolution.daysSinceCreation}
+                reevaluationScore={reevaluationScores?.global ?? null}
+                onStartWeek1={handleStripeCheckout}
+                checkoutLoading={checkoutLoading}
+                checkoutError={checkoutError}
+                onRetryCheckout={() => { setCheckoutError(null); handleStripeCheckout() }}
+              />
             )}
 
-            {/* Timeline de 3 fases */}
+            {/* Compartir + Descarga */}
             {showZona4 && (
-              <div className="mapa-fade-up" style={{ marginBottom: 'var(--space-12)' }}>
-                <h3 style={{
-                  fontFamily: 'var(--font-plus-jakarta)',
-                  fontSize: 'var(--text-h3)',
-                  lineHeight: 'var(--lh-h3)',
-                  fontWeight: 600,
-                  color: 'var(--color-text-primary)',
-                  marginBottom: 'var(--space-8)',
-                }}>
-                  Tu regulación es un proceso de 12 semanas. Tu primer paso son los próximos 7 días.
-                </h3>
-
-                <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-4)' }}>
-                  {/* Fase 1 — El Despertar (activa) */}
-                  <div className="mapa-timeline-phase">
-                    <Card style={{
-                      border: '1px solid rgba(74,222,128,0.18)',
-                      background: 'rgba(74,222,128,0.04)',
-                      display: 'flex', alignItems: 'flex-start', gap: 'var(--space-5)',
-                    }}>
-                      <div style={{ flexShrink: 0, display: 'flex', flexDirection: 'column', alignItems: 'center', paddingTop: 2 }}>
-                        <div style={{
-                          width: 14, height: 14, borderRadius: '50%',
-                          backgroundColor: 'var(--color-success)',
-                        }} />
-                        <div style={{ width: 2, height: 32, backgroundColor: 'rgba(74,222,128,0.18)', marginTop: 4 }} />
-                      </div>
-                      <div style={{ flex: 1 }}>
-                        <div style={{ marginBottom: 'var(--space-2)' }}>
-                          <Badge status="disponible">AQUÍ EMPIEZAS</Badge>
-                        </div>
-                        <p style={{
-                          fontFamily: 'var(--font-inter)',
-                          fontSize: 'var(--text-body-lg, 1.125rem)',
-                          fontWeight: 600,
-                          color: 'var(--color-text-primary)',
-                          marginBottom: 'var(--space-1)',
-                        }}>El Despertar</p>
-                        <p style={{
-                          fontFamily: 'var(--font-inter)',
-                          fontSize: 'var(--text-caption)',
-                          color: 'var(--color-text-secondary)',
-                          marginBottom: 'var(--space-3)',
-                        }}>Semanas 1–4 · Reconocer y estabilizar</p>
-                        <p style={{
-                          fontFamily: 'var(--font-inter)',
-                          fontSize: 'var(--text-body-sm)',
-                          lineHeight: 'var(--lh-body-sm)',
-                          color: 'var(--color-text-tertiary)',
-                        }}>
-                          Entenderás qué le pasa a tu biología: neurotransmisores, función hormonal, inflamación. Restaurarás tu sueño con un protocolo diseñado por un médico. En la semana 4, tu primer balance formal confirmará lo que tu cuerpo ya empieza a notar.
-                        </p>
-                      </div>
-                    </Card>
-                  </div>
-
-                  {/* Fase 2 — La Metamorfosis (atenuada) */}
-                  <div className="mapa-timeline-phase" style={{ opacity: 0.5 }}>
-                    <Card style={{
-                      display: 'flex', alignItems: 'flex-start', gap: 'var(--space-5)',
-                    }}>
-                      <div style={{ flexShrink: 0, display: 'flex', flexDirection: 'column', alignItems: 'center', paddingTop: 2 }}>
-                        <div style={{
-                          width: 14, height: 14, borderRadius: '50%',
-                          border: '2px solid var(--color-text-tertiary)',
-                        }} />
-                        <div style={{ width: 2, height: 32, backgroundColor: 'rgba(255,255,255,0.06)', marginTop: 4 }} />
-                      </div>
-                      <div style={{ flex: 1 }}>
-                        <p style={{
-                          fontFamily: 'var(--font-inter)',
-                          fontSize: 'var(--text-body-lg, 1.125rem)',
-                          fontWeight: 600,
-                          color: 'var(--color-text-secondary)',
-                          marginBottom: 'var(--space-1)',
-                        }}>La Metamorfosis</p>
-                        <p style={{
-                          fontFamily: 'var(--font-inter)',
-                          fontSize: 'var(--text-caption)',
-                          color: 'var(--color-text-tertiary)',
-                          marginBottom: 'var(--space-3)',
-                        }}>Semanas 5–8 · Activar y procesar</p>
-                        <p style={{
-                          fontFamily: 'var(--font-inter)',
-                          fontSize: 'var(--text-body-sm)',
-                          lineHeight: 'var(--lh-body-sm)',
-                          color: 'var(--color-text-tertiary)',
-                        }}>
-                          Desmontarás las creencias y patrones que sostienen el ciclo. Conocerás las partes internas que dirigen tus decisiones sin que lo sepas — el perfeccionista, el controlador, el crítico — y aprenderás a liderarlas. Lo que el burnout congeló empieza a procesarse.
-                        </p>
-                      </div>
-                    </Card>
-                  </div>
-
-                  {/* Fase 3 — Volar Alto (atenuada) */}
-                  <div className="mapa-timeline-phase" style={{ opacity: 0.5 }}>
-                    <Card style={{
-                      display: 'flex', alignItems: 'flex-start', gap: 'var(--space-5)',
-                    }}>
-                      <div style={{ flexShrink: 0, display: 'flex', flexDirection: 'column', alignItems: 'center', paddingTop: 2 }}>
-                        <div style={{
-                          width: 14, height: 14, borderRadius: '50%',
-                          border: '2px solid var(--color-text-tertiary)',
-                        }} />
-                      </div>
-                      <div style={{ flex: 1 }}>
-                        <p style={{
-                          fontFamily: 'var(--font-inter)',
-                          fontSize: 'var(--text-body-lg, 1.125rem)',
-                          fontWeight: 600,
-                          color: 'var(--color-text-secondary)',
-                          marginBottom: 'var(--space-1)',
-                        }}>Volar Alto</p>
-                        <p style={{
-                          fontFamily: 'var(--font-inter)',
-                          fontSize: 'var(--text-caption)',
-                          color: 'var(--color-text-tertiary)',
-                          marginBottom: 'var(--space-3)',
-                        }}>Semanas 9–12 · Conectar y reconstruir</p>
-                        <p style={{
-                          fontFamily: 'var(--font-inter)',
-                          fontSize: 'var(--text-body-sm)',
-                          lineHeight: 'var(--lh-body-sm)',
-                          color: 'var(--color-text-tertiary)',
-                        }}>
-                          Repararás los vínculos que el burnout dañó, pondrás límites desde tus valores y diseñarás tu nueva arquitectura vital. Un sistema de alertas tempranas para que el burnout no vuelva.
-                        </p>
-                      </div>
-                    </Card>
-                  </div>
-                </div>
-              </div>
-            )}
-
-            {/* Reencuadre de precio */}
-            {showZona4 && (
-              <div className="mapa-fade-up" style={{ marginBottom: 'var(--space-12)' }}>
-                <p style={{
-                  fontFamily: 'var(--font-inter)',
-                  fontSize: 'var(--text-body)',
-                  lineHeight: 'var(--lh-body)',
-                  color: 'var(--color-text-primary)',
-                  marginBottom: 'var(--space-4)',
-                }}>
-                  El programa completo tiene tres niveles de acompañamiento desde 2.500€, según la profundidad que necesites. La elección del plan viene después — cuando hayas comprobado con tu propio cuerpo que esto funciona.
-                </p>
+              <div className="mapa-fade-up" style={{ marginTop: 'var(--space-8)' }}>
                 <p style={{
                   fontFamily: 'var(--font-inter)',
                   fontSize: 'var(--text-body-sm)',
-                  lineHeight: 'var(--lh-body-sm)',
                   color: 'var(--color-text-secondary)',
+                  marginBottom: 'var(--space-4)',
                 }}>
-                  Por eso existe la Semana 1.
+                  ¿Conoces a alguien que podría necesitar ver su mapa?
                 </p>
-              </div>
-            )}
-
-            {/* CTA + Urgencia + Compartir */}
-            {showZona4 && (
-              <div className="mapa-fade-up">
-
-                <div style={{ height: '1px', background: 'var(--color-surface-subtle)', marginBottom: 'var(--space-12)' }} />
-
-                {/* Benchmark */}
-                <div style={{ textAlign: 'center', marginBottom: 'var(--space-12)' }}>
-                  <p style={{
-                    fontFamily: 'var(--font-inter)',
-                    fontSize: 'var(--text-body-sm)',
-                    color: 'var(--color-text-secondary)',
-                    lineHeight: 'var(--lh-body)',
-                    marginBottom: 'var(--space-2)',
-                  }}>
-                    El promedio de personas que completaron 4+ semanas del programa
-                  </p>
-                  <p style={{
-                    fontFamily: 'var(--font-plus-jakarta)',
-                    fontSize: 'var(--text-display)',
-                    fontWeight: 700,
-                    color: 'var(--color-success)',
-                    lineHeight: 'var(--lh-display)',
-                    marginBottom: 'var(--space-2)',
-                  }}>
-                    72
-                    <span style={{
-                      fontSize: 'var(--text-h3)',
-                      fontWeight: 400,
-                      color: 'var(--color-text-tertiary)',
-                      fontFamily: 'var(--font-inter)',
-                    }}>/100</span>
-                  </p>
-                  <p style={{
-                    fontFamily: 'var(--font-inter)',
-                    fontSize: 'var(--text-caption)',
-                    color: 'var(--color-text-tertiary)',
-                  }}>
-                    La distancia entre tu {global} y el 72 es donde está tu oportunidad.
-                  </p>
+                <div style={{ display: 'flex', gap: 'var(--space-3)', flexWrap: 'wrap' }}>
+                  <Button variant="secondary" size="small" onClick={handleShare}>
+                    ↗ Enviar el diagnóstico
+                  </Button>
+                  <Button variant="secondary" size="small" onClick={handleDownloadPNG}>
+                    ↓ Descargar mi mapa
+                  </Button>
                 </div>
-
-                {hasPaid ? (
-                  /* ── SEMANA 1 EN MARCHA (ya pagó) ── */
-                  <div style={{
-                    padding: 'var(--space-6)',
-                    borderRadius: 'var(--radius-lg)',
-                    background: 'rgba(74,222,128,0.04)',
-                    border: '1px solid rgba(74,222,128,0.18)',
-                    marginBottom: 'var(--space-6)',
-                    textAlign: 'center',
-                  }}>
-                    <span style={{
-                      display: 'inline-block',
-                      padding: 'var(--space-1) var(--space-4)',
-                      borderRadius: 'var(--radius-pill)',
-                      background: 'rgba(74,222,128,0.1)',
-                      color: 'var(--color-success)',
-                      fontFamily: 'var(--font-inter-tight)',
-                      fontSize: 'var(--text-caption)',
-                      fontWeight: 500,
-                      textTransform: 'uppercase',
-                      letterSpacing: '0.05em',
-                      marginBottom: 'var(--space-3)',
-                    }}>
-                      Semana 1
-                    </span>
-                    <p style={{
-                      fontFamily: 'var(--font-inter-tight)',
-                      fontSize: 'var(--text-h4)',
-                      fontWeight: 500,
-                      color: 'var(--color-text-primary)',
-                      marginBottom: 'var(--space-2)',
-                    }}>
-                      Tu Semana 1 está en marcha
-                    </p>
-                    <p style={{
-                      fontFamily: 'var(--font-inter)',
-                      fontSize: 'var(--text-body-sm)',
-                      color: 'var(--color-text-secondary)',
-                      lineHeight: 'var(--lh-body)',
-                    }}>
-                      Siguiente: agendar tu sesión con Javier. Revisa tu email para el Protocolo de Sueño de Emergencia.
-                    </p>
-                  </div>
-                ) : (
-                  /* ── CTA STRIPE (no ha pagado) ── */
-                  <>
-                    <p style={{
-                      fontFamily: 'var(--font-plus-jakarta)',
-                      fontSize: 'var(--text-h2)',
-                      lineHeight: 'var(--lh-h2)',
-                      letterSpacing: 'var(--ls-h2)',
-                      fontWeight: 600,
-                      color: 'var(--color-text-primary)',
-                      marginBottom: 'var(--space-5)',
-                    }}>
-                      Tu sistema nervioso lleva años sosteniendo lo que tú no podías soltar. Ahora tienes el mapa.
-                    </p>
-
-                    <p style={{
-                      fontFamily: 'var(--font-inter)',
-                      fontSize: 'var(--text-body)',
-                      lineHeight: 'var(--lh-body)',
-                      color: 'var(--color-text-primary)',
-                      marginBottom: 'var(--space-8)',
-                    }}>
-                      Los primeros cambios llegan en 72 horas. No en meses — en 3 días.
-                      El Protocolo de Sueño de Emergencia está diseñado para que tu cuerpo
-                      note la diferencia antes de que tu mente decida si confía.
-                    </p>
-
-                    <Button
-                      variant="primary"
-                      size="large"
-                      onClick={handleStripeCheckout}
-                      disabled={checkoutLoading}
-                      style={{ width: '100%', marginBottom: 'var(--space-3)' }}
-                    >
-                      {checkoutLoading ? 'Redirigiendo…' : 'Empieza la Semana 1'}
-                    </Button>
-
-                    {checkoutError && (
-                      <div style={{
-                        padding: 'var(--space-4)',
-                        borderRadius: 'var(--radius-md)',
-                        border: '1px solid rgba(239,68,68,0.3)',
-                        background: 'rgba(239,68,68,0.08)',
-                        marginBottom: 'var(--space-3)',
-                        textAlign: 'center',
-                      }}>
-                        <p style={{
-                          fontFamily: 'var(--font-inter)',
-                          fontSize: 'var(--text-body-sm)',
-                          color: 'var(--color-text-primary)',
-                          marginBottom: 'var(--space-2)',
-                        }}>
-                          No se pudo conectar con el sistema de pago. Tus datos están a salvo.
-                        </p>
-                        <button
-                          onClick={() => { setCheckoutError(null); handleStripeCheckout() }}
-                          style={{
-                            padding: 'var(--space-2) var(--space-4)',
-                            borderRadius: 'var(--radius-pill)',
-                            border: 'var(--border-subtle)',
-                            background: 'transparent',
-                            color: 'var(--color-accent)',
-                            fontFamily: 'var(--font-inter)',
-                            fontSize: 'var(--text-caption)',
-                            cursor: 'pointer',
-                          }}
-                        >
-                          Intentar de nuevo
-                        </button>
-                      </div>
-                    )}
-
-                    <p style={{
-                      fontFamily: 'var(--font-inter)',
-                      fontSize: 'var(--text-body-sm)',
-                      color: 'var(--color-text-tertiary)',
-                      textAlign: 'center',
-                      lineHeight: 'var(--lh-body-sm)',
-                      marginBottom: 'var(--space-2)',
-                    }}>
-                      97€ · Protocolo de Sueño de Emergencia + Sesión 1:1 con Javier + Mapa de Niveles de Neurotransmisores (MNN©) · Garantía de 7 días
-                    </p>
-                    <p style={{
-                      fontFamily: 'var(--font-inter)',
-                      fontSize: 'var(--text-caption)',
-                      color: 'var(--color-text-tertiary)',
-                      textAlign: 'center',
-                      marginBottom: 'var(--space-6)',
-                      opacity: 0.7,
-                    }}>
-                      Si tu sueño no mejora en 7 días, te devolvemos los 97€. Sin preguntas.
-                    </p>
-                  </>
-                )}
-
-                {/* Card colapsable — Qué incluye (solo si no ha pagado) */}
-                {!hasPaid && <div style={{
-                  border: 'var(--border-subtle)',
-                  borderRadius: 'var(--radius-lg)',
-                  overflow: 'hidden',
-                  marginBottom: 'var(--space-12)',
-                }}>
-                  <button
-                    className="mapa-detail-toggle"
-                    onClick={() => setDetailOpen(o => !o)}
-                  >
-                    <span>¿Qué incluye la Semana 1?</span>
-                    <span style={{
-                      display: 'inline-block',
-                      transform: detailOpen ? 'rotate(180deg)' : 'none',
-                      transition: 'transform var(--transition-base)',
-                      fontSize: '16px',
-                    }}>↓</span>
-                  </button>
-                  {detailOpen && (
-                    <div style={{
-                      padding: 'var(--space-1) var(--space-5) var(--space-5)',
-                      borderTop: 'var(--border-subtle)',
-                      background: 'var(--color-bg-secondary)',
-                    }}>
-                      {[
-                        ['Protocolo de Sueño de Emergencia', 'Diseñado por el Dr. Carlos Alvear. Un plan concreto para ganar hasta una hora más de sueño al día. Resultados en 72 horas.'],
-                        ['Sesión 1:1 con Javier A. Martín Ramos', 'Director del Instituto Epigenético. Ya tiene tu mapa — la sesión arranca desde tus datos, no desde cero.'],
-                        ['Mapa de Niveles de Neurotransmisores (MNN©)', 'Tu primer análisis bioquímico real: qué sustancias produce tu cerebro, cuáles le faltan y qué significa eso para tu sueño, tu energía y tu claridad mental.'],
-                        ['Garantía total', '7 días. Si no notas mejora en tu sueño, devolución íntegra. Sin preguntas. Sin formularios.'],
-                      ].map(([title, desc]) => (
-                        <div key={title} style={{ marginTop: 'var(--space-4)' }}>
-                          <p style={{
-                            fontFamily: 'var(--font-inter-tight)',
-                            fontSize: 'var(--text-body-sm)',
-                            fontWeight: 500,
-                            color: 'var(--color-text-primary)',
-                            marginBottom: 'var(--space-1)',
-                          }}>
-                            → {title}
-                          </p>
-                          <p style={{
-                            fontFamily: 'var(--font-inter)',
-                            fontSize: 'var(--text-body-sm)',
-                            color: 'var(--color-text-secondary)',
-                            lineHeight: 'var(--lh-body-sm)',
-                          }}>
-                            {desc}
-                          </p>
-                        </div>
-                      ))}
-                    </div>
-                  )}
-                </div>}
-
-                {/* M8 — Urgencia natural */}
-                <div style={{ marginBottom: 'var(--space-12)' }}>
-                  <p style={{
-                    fontFamily: 'var(--font-inter)',
-                    fontSize: 'var(--text-body-sm)',
-                    lineHeight: 'var(--lh-body)',
-                    color: 'var(--color-text-secondary)',
-                    marginBottom: 'var(--space-3)',
-                  }}>
-                    Tu mapa está guardado en tu página personal. Evoluciona con el tiempo — cada semana hay algo nuevo.
-                  </p>
-                  <p style={{
-                    fontFamily: 'var(--font-inter)',
-                    fontSize: 'var(--text-body-sm)',
-                    lineHeight: 'var(--lh-body)',
-                    color: 'var(--color-text-tertiary)',
-                    marginBottom: 'var(--space-3)',
-                  }}>
-                    Cada semana sin regulación, tu cuerpo profundiza el patrón actual. No es opinión — es lo que confirman los datos de +5.000 personas. Cuanto antes, más rápida la recuperación.
-                  </p>
-                  <p style={{
-                    fontFamily: 'var(--font-inter)',
-                    fontSize: 'var(--text-caption)',
-                    color: 'var(--color-text-tertiary)',
-                    opacity: 0.7,
-                  }}>
-                    142 personas completaron este diagnóstico esta semana · 5.247 en total
-                  </p>
-                </div>
-
-                {/* Compartir + Descarga */}
-                <div style={{ marginBottom: 'var(--space-16)' }}>
-                  <p style={{
-                    fontFamily: 'var(--font-inter)',
-                    fontSize: 'var(--text-body-sm)',
-                    color: 'var(--color-text-secondary)',
-                    marginBottom: 'var(--space-4)',
-                  }}>
-                    ¿Conoces a alguien que podría necesitar ver su mapa?
-                  </p>
-                  <div style={{ display: 'flex', gap: 'var(--space-3)', flexWrap: 'wrap' }}>
-                    <Button variant="secondary" size="small" onClick={handleShare}>
-                      ↗ Enviar el diagnóstico
-                    </Button>
-                    <Button variant="secondary" size="small" onClick={handleDownloadPNG}>
-                      ↓ Descargar mi mapa
-                    </Button>
-                  </div>
-                </div>
-
               </div>
             )}
 
