@@ -13,6 +13,7 @@ import { createAdminClient } from '@/lib/supabase'
 import {
   calculateHeatScore,
   getProfileIntelligence,
+  getSuggestedAction,
   getDaysSince,
   type LeadData,
 } from '@/lib/profile-intelligence'
@@ -409,6 +410,63 @@ export async function GET(req: NextRequest) {
   activity.sort((a, b) => new Date(b.at).getTime() - new Date(a.at).getTime())
   const topActivity = activity.slice(0, 15)
 
+  // ── Pending actions ─────────────────────────────────────────────────────
+  // Leads with a suggested action that haven't had a personal action in 3 days
+
+  interface PendingAction {
+    hash: string
+    email: string
+    profile: string
+    profileColor: string
+    heat: string
+    actionType: string
+    actionReason: string
+    urgency: string
+  }
+
+  const pendingActions: PendingAction[] = []
+  for (const row of leadsWithEmail) {
+    if (row.funnel?.converted_week1 || row.funnel?.unsubscribed) continue
+
+    const lead: LeadData = {
+      created_at: row.created_at,
+      scores: row.scores,
+      profile: row.profile,
+      funnel: row.funnel,
+      map_evolution: row.map_evolution,
+      personal_actions: row.personal_actions ?? [],
+    }
+
+    const action = getSuggestedAction(lead)
+    if (!action) continue
+
+    // Skip if recent personal action exists (within 3 days)
+    const actions = row.personal_actions ?? []
+    const hasRecentAction = actions.some(
+      (a: { created_at: string }) => a.created_at >= now3d
+    )
+    if (hasRecentAction) continue
+
+    const heat = calculateHeatScore(lead)
+    const profile = getProfileIntelligence(row.profile?.ego_primary)
+
+    pendingActions.push({
+      hash: row.hash,
+      email: shortEmail(row.email),
+      profile: profile?.shortLabel ?? '—',
+      profileColor: profile?.color ?? '#8A7E75',
+      heat: heat.level,
+      actionType: action.type,
+      actionReason: action.reason,
+      urgency: action.urgency,
+    })
+  }
+
+  // Sort: high urgency first, then hot leads
+  const urgencyOrder: Record<string, number> = { high: 0, medium: 1, low: 2 }
+  pendingActions.sort((a, b) => (urgencyOrder[a.urgency] ?? 2) - (urgencyOrder[b.urgency] ?? 2))
+  const topPendingActions = pendingActions.slice(0, 8)
+
   // ── Response ──────────────────────────────────────────────────────────────
 
   return NextResponse.json({
@@ -421,6 +479,7 @@ export async function GET(req: NextRequest) {
       next_session: nextSession,
     },
     alerts: topAlerts,
+    pending_actions: topPendingActions,
     funnel_30d: funnel30d,
     activity: topActivity,
   })

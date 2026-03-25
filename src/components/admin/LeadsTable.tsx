@@ -82,6 +82,20 @@ const PERIODS = [
   { key: 'all', label: 'Todos' },
 ]
 
+const ACTION_LABELS: Record<string, { label: string; icon: string }> = {
+  personal_note: { label: 'Nota', icon: '✉️' },
+  video: { label: 'Video', icon: '🎬' },
+  early_unlock: { label: 'Desbloqueo', icon: '🔓' },
+  express_session: { label: 'Sesión', icon: '📞' },
+  manual_email: { label: 'Email', icon: '📧' },
+}
+
+const URGENCY_COLORS: Record<string, string> = {
+  high: 'var(--color-error)',
+  medium: '#D97706',
+  low: 'var(--color-text-tertiary)',
+}
+
 const PAGE_SIZE = 20
 
 function scoreColor(score: number): string {
@@ -115,6 +129,7 @@ function SkeletonRow({ delay }: { delay: number }) {
       <td style={{ padding: '12px 8px' }}><div style={{ ...base, width: 32, height: 20 }} /></td>
       <td style={{ padding: '12px 8px' }}><div style={{ ...base, width: 24, height: 14 }} /></td>
       <td style={{ padding: '12px 8px' }}><div style={{ ...base, width: 24, height: 14 }} /></td>
+      <td style={{ padding: '12px 8px' }}><div style={{ ...base, width: 48, height: 14 }} /></td>
       <td style={{ padding: '12px 8px' }}><div style={{ ...base, width: 56, height: 14 }} /></td>
     </tr>
   )
@@ -488,6 +503,24 @@ export default function LeadsTable({
                   <span style={{ fontFamily: 'var(--font-inter)', fontSize: '12px', color: 'var(--color-text-tertiary)' }}>
                     {funnelStatus(lead)}
                   </span>
+                  {lead.suggested_action && !lead.funnel.converted_week1 && !lead.funnel.unsubscribed && (
+                    <span
+                      style={{
+                        display: 'inline-flex',
+                        alignItems: 'center',
+                        gap: 2,
+                        padding: '1px 6px',
+                        borderRadius: 'var(--radius-pill)',
+                        background: `${URGENCY_COLORS[lead.suggested_action.urgency] ?? 'var(--color-text-tertiary)'}12`,
+                        color: URGENCY_COLORS[lead.suggested_action.urgency] ?? 'var(--color-text-tertiary)',
+                        fontSize: '10px',
+                        fontWeight: 600,
+                      }}
+                    >
+                      {ACTION_LABELS[lead.suggested_action.type]?.icon ?? '📋'}{' '}
+                      {ACTION_LABELS[lead.suggested_action.type]?.label ?? ''}
+                    </span>
+                  )}
                 </div>
               </button>
             )
@@ -513,6 +546,7 @@ export default function LeadsTable({
                   { key: 'profile', label: 'Perfil', width: '64px', sortable: false },
                   { key: 'days', label: 'Día', width: '48px', sortable: true },
                   { key: 'map', label: 'Mapa', width: '48px', sortable: false },
+                  { key: 'action', label: 'Acción', width: '90px', sortable: false },
                   { key: 'status', label: 'Estado', width: '80px', sortable: false },
                 ].map((col) => (
                   <th
@@ -626,6 +660,31 @@ export default function LeadsTable({
                       }}
                     >
                       {lead.funnel.map_visits}x
+                    </td>
+                    <td style={{ padding: '10px 8px' }}>
+                      {lead.suggested_action && !lead.funnel.converted_week1 && !lead.funnel.unsubscribed ? (
+                        <span
+                          title={lead.suggested_action.reason}
+                          style={{
+                            display: 'inline-flex',
+                            alignItems: 'center',
+                            gap: 3,
+                            padding: '2px 8px',
+                            borderRadius: 'var(--radius-pill)',
+                            background: `${URGENCY_COLORS[lead.suggested_action.urgency] ?? 'var(--color-text-tertiary)'}12`,
+                            color: URGENCY_COLORS[lead.suggested_action.urgency] ?? 'var(--color-text-tertiary)',
+                            fontFamily: 'var(--font-inter)',
+                            fontSize: '11px',
+                            fontWeight: 600,
+                            whiteSpace: 'nowrap',
+                          }}
+                        >
+                          {ACTION_LABELS[lead.suggested_action.type]?.icon ?? '📋'}{' '}
+                          {ACTION_LABELS[lead.suggested_action.type]?.label ?? lead.suggested_action.type}
+                        </span>
+                      ) : (
+                        <span style={{ color: 'var(--color-text-tertiary)', fontSize: '12px' }}>—</span>
+                      )}
                     </td>
                     <td
                       style={{

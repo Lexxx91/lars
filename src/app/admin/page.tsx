@@ -15,6 +15,7 @@ import AdminLayout from '@/components/admin/AdminLayout'
 import HubStatCards from '@/components/admin/HubStatCards'
 import HubAlerts from '@/components/admin/HubAlerts'
 import HubFunnel from '@/components/admin/HubFunnel'
+import HubPendingActions from '@/components/admin/HubPendingActions'
 import HubActivity from '@/components/admin/HubActivity'
 
 // ── Types ───────────────────────────────────────────────────────────────────
@@ -35,6 +36,16 @@ interface HubData {
     action?: { label: string; href: string }
     priority: number
     profileColor?: string
+  }[]
+  pending_actions: {
+    hash: string
+    email: string
+    profile: string
+    profileColor: string
+    heat: string
+    actionType: string
+    actionReason: string
+    urgency: string
   }[]
   funnel_30d: {
     diagnostics: number
@@ -198,6 +209,9 @@ export default function AdminHub() {
 
         {/* Alerts */}
         <HubAlerts alerts={data?.alerts ?? null} loading={loading} />
+
+        {/* Pending Actions */}
+        <HubPendingActions actions={data?.pending_actions ?? null} loading={loading} />
 
         {/* Funnel */}
         <HubFunnel data={data?.funnel_30d ?? null} loading={loading} />
