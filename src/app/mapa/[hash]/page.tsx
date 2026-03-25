@@ -66,6 +66,13 @@ interface FunnelRow {
   [key: string]: unknown
 }
 
+interface PersonalActionRow {
+  type: string
+  content: string
+  created_at: string
+  notify_lead?: boolean
+}
+
 interface DiagnosticoRow {
   scores: ScoreRow
   meta: MetaRow
@@ -74,6 +81,7 @@ interface DiagnosticoRow {
   map_evolution: MapEvolutionData
   profile: Record<string, unknown>
   funnel: FunnelRow
+  personal_actions?: PersonalActionRow[]
 }
 
 // ─── PÁGINA ───────────────────────────────────────────────────────────────────
@@ -90,7 +98,7 @@ export default async function MapaPage({
     const supabase = createAdminClient()
     const result = await supabase
       .from('diagnosticos')
-      .select('scores, meta, created_at, responses, map_evolution, profile, funnel')
+      .select('scores, meta, created_at, responses, map_evolution, profile, funnel, personal_actions')
       .eq('hash', hash)
       .single<DiagnosticoRow>()
     if (result.error) {
@@ -107,7 +115,7 @@ export default async function MapaPage({
     notFound()
   }
 
-  const { scores, meta, created_at, responses, map_evolution, profile, funnel } = data!
+  const { scores, meta, created_at, responses, map_evolution, profile, funnel, personal_actions } = data!
 
   const d1 = scores.d1_regulacion
   const d2 = scores.d2_sueno
@@ -202,6 +210,7 @@ export default async function MapaPage({
       worstDimensionName={worstDimResult?.name ?? ''}
       worstScore={worstScore}
       hasPaid={funnel?.converted_week1 === true || funnel?.paid === true}
+      personalActions={personal_actions ?? []}
     />
     </>
   )

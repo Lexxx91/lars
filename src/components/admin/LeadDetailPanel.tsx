@@ -16,6 +16,7 @@ import HeatIndicator from './HeatIndicator'
 import LeadDimensions from './LeadDimensions'
 import LeadTimeline from './LeadTimeline'
 import LeadEmailStatus from './LeadEmailStatus'
+import ActionModal from './ActionModal'
 import type { HeatLevel, ProfileIntelligence } from '@/lib/profile-intelligence'
 
 // ── Types ──────────────────────────────────────────────────────────────────
@@ -72,6 +73,7 @@ interface LeadDetailPanelProps {
   data: LeadDetail | null
   loading: boolean
   onClose: () => void
+  onRefresh?: () => void
 }
 
 // ── Constants ──────────────────────────────────────────────────────────────
@@ -207,8 +209,9 @@ function SectionHeader({ title }: { title: string }) {
 
 // ── Component ──────────────────────────────────────────────────────────────
 
-export default function LeadDetailPanel({ hash, data, loading, onClose }: LeadDetailPanelProps) {
+export default function LeadDetailPanel({ hash, data, loading, onClose, onRefresh }: LeadDetailPanelProps) {
   const [isMobile, setIsMobile] = useState(false)
+  const [actionModalOpen, setActionModalOpen] = useState(false)
   const isOpen = hash !== null
 
   useEffect(() => {
@@ -495,8 +498,7 @@ export default function LeadDetailPanel({ hash, data, loading, onClose }: LeadDe
                     {data.suggested_action!.reason}
                   </p>
                   <button
-                    disabled
-                    title="Disponible en Sprint 4"
+                    onClick={() => setActionModalOpen(true)}
                     style={{
                       padding: '8px 20px',
                       borderRadius: 'var(--radius-pill)',
@@ -506,8 +508,7 @@ export default function LeadDetailPanel({ hash, data, loading, onClose }: LeadDe
                       fontFamily: 'var(--font-inter)',
                       fontSize: '13px',
                       fontWeight: 500,
-                      cursor: 'not-allowed',
-                      opacity: 0.5,
+                      cursor: 'pointer',
                     }}
                   >
                     Tomar acción →
@@ -608,6 +609,19 @@ export default function LeadDetailPanel({ hash, data, loading, onClose }: LeadDe
           </div>
         )}
       </div>
+
+      {/* Action Modal */}
+      {data && (
+        <ActionModal
+          lead={data}
+          isOpen={actionModalOpen}
+          onClose={() => setActionModalOpen(false)}
+          onActionComplete={() => {
+            setActionModalOpen(false)
+            onRefresh?.()
+          }}
+        />
+      )}
     </>
   )
 }

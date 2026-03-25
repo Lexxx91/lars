@@ -38,7 +38,19 @@ import FocusBanner, { selectFocus } from './sections/FocusBanner'
 import MapaAccordion, { type AccordionSection } from './sections/MapaAccordion'
 import AspiracionalTimeline from './sections/AspiracionalTimeline'
 
+// Personal action components
+import PersonalNote from '@/components/mapa/PersonalNote'
+import PersonalVideo from '@/components/mapa/PersonalVideo'
+import ExpressSessionOffer from '@/components/mapa/ExpressSessionOffer'
+
 // ─── TIPOS ────────────────────────────────────────────────────────────────────
+
+interface PersonalActionData {
+  type: string
+  content: string
+  created_at: string
+  notify_lead?: boolean
+}
 
 interface Props {
   global: number
@@ -62,6 +74,7 @@ interface Props {
   worstDimensionName: string
   worstScore: number
   hasPaid: boolean
+  personalActions?: PersonalActionData[]
 }
 
 // ─── HELPERS ──────────────────────────────────────────────────────────────────
@@ -118,6 +131,7 @@ export default function MapaClient({
   worstDimensionName,
   worstScore,
   hasPaid,
+  personalActions,
 }: Props) {
   const isFirstVisit = !lastVisitedAt
 
@@ -735,6 +749,26 @@ export default function MapaClient({
 
               </Card>
             </div>
+
+            {/* Personal actions from Javi */}
+            {personalActions && personalActions.length > 0 && (
+              <div style={{
+                display: 'flex',
+                flexDirection: 'column',
+                gap: 'var(--space-4)',
+                marginTop: 'var(--space-6)',
+              }}>
+                {personalActions.map((action, i) => {
+                  if (action.type === 'personal_note')
+                    return <PersonalNote key={`pa-${i}`} content={action.content} createdAt={action.created_at} />
+                  if (action.type === 'video')
+                    return <PersonalVideo key={`pa-${i}`} videoUrl={action.content} createdAt={action.created_at} />
+                  if (action.type === 'express_session')
+                    return <ExpressSessionOffer key={`pa-${i}`} content={action.content} createdAt={action.created_at} />
+                  return null
+                })}
+              </div>
+            )}
 
           </section>
 

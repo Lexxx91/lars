@@ -234,6 +234,7 @@ function LeadsPageInner() {
         data={detailData}
         loading={detailLoading}
         onClose={handleClosePanel}
+        onRefresh={() => { if (selectedHash) fetchDetail(selectedHash) }}
       />
     </AdminLayout>
   )
