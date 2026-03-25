@@ -3,10 +3,12 @@
 /**
  * AdminSidebar — Collapsible dark sidebar for desktop admin.
  *
- * - Collapsed: 64px (icons only). Expanded: 220px (icon + label).
- * - Hover on collapsed → temporary expand via CSS :hover.
- * - Toggle persisted in localStorage('admin_sidebar_collapsed').
- * - Badges: red dot on Leads (hot), green dot on Agenda (session today).
+ * Two states, toggled ONLY by clicking the chevron button:
+ * - Collapsed: 64px wide, icons only, centered.
+ * - Expanded: 220px wide, icons + labels.
+ *
+ * No auto-expand on hover. Manual toggle only, persisted in localStorage.
+ * Badges: red dot on Leads (hot), green dot on Agenda (session today).
  */
 
 import Link from 'next/link'
@@ -82,7 +84,6 @@ export default function AdminSidebar({
 
   return (
     <nav
-      className="admin-sidebar"
       style={{
         position: 'fixed',
         top: 0,
@@ -97,44 +98,81 @@ export default function AdminSidebar({
         overflow: 'hidden',
       }}
     >
-      {/* Hover expand style for collapsed state */}
+      {/* Item hover style */}
       <style>{`
-        @media (min-width: 768px) {
-          .admin-sidebar:hover {
-            width: ${WIDTH_EXPANDED}px !important;
-          }
-        }
         .admin-sidebar-item:hover {
           background-color: ${HOVER_BG};
         }
       `}</style>
 
-      {/* Logo area */}
+      {/* Logo + toggle button */}
       <div
         style={{
           height: 64,
           display: 'flex',
           alignItems: 'center',
-          justifyContent: collapsed ? 'center' : 'flex-start',
-          padding: collapsed ? '0' : '0 20px',
+          justifyContent: 'space-between',
+          padding: '0 12px',
           borderBottom: '1px solid rgba(249, 241, 222, 0.08)',
           flexShrink: 0,
-          transition: `padding ${TRANSITION}`,
-          overflow: 'hidden',
-          whiteSpace: 'nowrap',
         }}
       >
-        <span
+        {/* Logo */}
+        <div
           style={{
-            fontFamily: 'var(--font-lora)',
-            fontWeight: 700,
-            fontSize: collapsed ? '18px' : '16px',
-            color: ACTIVE_TEXT,
-            transition: `font-size ${TRANSITION}`,
+            display: 'flex',
+            alignItems: 'center',
+            overflow: 'hidden',
+            whiteSpace: 'nowrap',
           }}
         >
-          {collapsed ? 'IE' : 'Instituto Epigenético'}
-        </span>
+          <span
+            style={{
+              fontFamily: 'var(--font-lora)',
+              fontWeight: 700,
+              fontSize: collapsed ? '18px' : '16px',
+              color: ACTIVE_TEXT,
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              width: collapsed ? '40px' : 'auto',
+              paddingLeft: collapsed ? 0 : '8px',
+              transition: `font-size ${TRANSITION}`,
+            }}
+          >
+            {collapsed ? 'IE' : 'Instituto Epigenético'}
+          </span>
+        </div>
+
+        {/* Toggle chevron */}
+        <button
+          onClick={onToggle}
+          style={{
+            width: 28,
+            height: 28,
+            borderRadius: '50%',
+            border: '1px solid rgba(249, 241, 222, 0.12)',
+            background: 'rgba(249, 241, 222, 0.04)',
+            color: SIDEBAR_TEXT_MUTED,
+            cursor: 'pointer',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            flexShrink: 0,
+            transition: `background 150ms ease, border-color 150ms ease`,
+          }}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.background = 'rgba(249, 241, 222, 0.1)'
+            e.currentTarget.style.borderColor = 'rgba(249, 241, 222, 0.25)'
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.background = 'rgba(249, 241, 222, 0.04)'
+            e.currentTarget.style.borderColor = 'rgba(249, 241, 222, 0.12)'
+          }}
+          aria-label={collapsed ? 'Expandir sidebar' : 'Colapsar sidebar'}
+        >
+          {collapsed ? <IconChevronRight size={14} /> : <IconChevronLeft size={14} />}
+        </button>
       </div>
 
       {/* Main nav items */}
@@ -156,7 +194,7 @@ export default function AdminSidebar({
         ))}
       </div>
 
-      {/* Bottom section: Tools + Toggle */}
+      {/* Bottom section: Tools */}
       <div
         style={{
           borderTop: '1px solid rgba(249, 241, 222, 0.08)',
@@ -172,35 +210,6 @@ export default function AdminSidebar({
             collapsed={collapsed}
           />
         ))}
-
-        {/* Toggle button */}
-        <button
-          onClick={onToggle}
-          className="admin-sidebar-item"
-          style={{
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: collapsed ? 'center' : 'flex-start',
-            gap: 12,
-            width: '100%',
-            height: 44,
-            padding: collapsed ? '0' : '0 20px',
-            background: 'none',
-            border: 'none',
-            color: SIDEBAR_TEXT_MUTED,
-            cursor: 'pointer',
-            fontFamily: 'var(--font-inter)',
-            fontSize: '13px',
-            transition: `padding ${TRANSITION}, color 150ms ease`,
-            overflow: 'hidden',
-            whiteSpace: 'nowrap',
-          }}
-        >
-          <span style={{ flexShrink: 0, display: 'flex', width: 20, justifyContent: 'center' }}>
-            {collapsed ? <IconChevronRight size={18} /> : <IconChevronLeft size={18} />}
-          </span>
-          <span>Colapsar</span>
-        </button>
       </div>
     </nav>
   )
@@ -222,6 +231,7 @@ function SidebarItem({ item, active, collapsed, badge }: SidebarItemProps) {
     <Link
       href={item.href}
       className="admin-sidebar-item"
+      title={collapsed ? item.label : undefined}
       style={{
         display: 'flex',
         alignItems: 'center',
@@ -243,7 +253,15 @@ function SidebarItem({ item, active, collapsed, badge }: SidebarItemProps) {
         whiteSpace: 'nowrap',
       }}
     >
-      <span style={{ flexShrink: 0, display: 'flex', width: 20, justifyContent: 'center', position: 'relative' }}>
+      <span
+        style={{
+          flexShrink: 0,
+          display: 'flex',
+          width: 20,
+          justifyContent: 'center',
+          position: 'relative',
+        }}
+      >
         <Icon size={20} />
         {badge && (
           <span
@@ -261,7 +279,7 @@ function SidebarItem({ item, active, collapsed, badge }: SidebarItemProps) {
           />
         )}
       </span>
-      <span>{item.label}</span>
+      {!collapsed && <span>{item.label}</span>}
     </Link>
   )
 }
