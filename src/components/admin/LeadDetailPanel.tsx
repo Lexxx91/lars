@@ -105,6 +105,93 @@ function scoreColor(score: number): string {
   return '#059669'
 }
 
+// ── Map URL Copy ────────────────────────────────────────────────────────────
+
+function MapUrlCopy({ hash }: { hash: string }) {
+  const [copied, setCopied] = useState(false)
+
+  const handleCopy = async () => {
+    try {
+      await navigator.clipboard.writeText(hash)
+      setCopied(true)
+      setTimeout(() => setCopied(false), 2000)
+    } catch {
+      const input = document.createElement('input')
+      input.value = hash
+      document.body.appendChild(input)
+      input.select()
+      document.execCommand('copy')
+      document.body.removeChild(input)
+      setCopied(true)
+      setTimeout(() => setCopied(false), 2000)
+    }
+  }
+
+  return (
+    <div style={{
+      display: 'flex',
+      alignItems: 'center',
+      gap: 6,
+      marginTop: 8,
+      padding: '6px 10px',
+      borderRadius: 'var(--radius-md)',
+      background: 'var(--color-bg-secondary)',
+      border: '1px solid rgba(30, 19, 16, 0.06)',
+    }}>
+      <span style={{
+        fontFamily: 'var(--font-inter)',
+        fontSize: '11px',
+        color: 'var(--color-text-tertiary)',
+        whiteSpace: 'nowrap',
+      }}>
+        Hash mapa:
+      </span>
+      <code style={{
+        fontFamily: 'monospace',
+        fontSize: '12px',
+        color: 'var(--color-text-primary)',
+        overflow: 'hidden',
+        textOverflow: 'ellipsis',
+        whiteSpace: 'nowrap',
+        flex: 1,
+        minWidth: 0,
+        letterSpacing: '0.02em',
+      }}>
+        {hash}
+      </code>
+      <button
+        onClick={handleCopy}
+        title="Copiar hash para fast-forward"
+        style={{
+          display: 'inline-flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          width: 28,
+          height: 28,
+          borderRadius: 'var(--radius-md)',
+          border: 'none',
+          background: copied ? 'rgba(61, 154, 95, 0.1)' : 'rgba(30, 19, 16, 0.04)',
+          color: copied ? 'var(--color-success)' : 'var(--color-text-tertiary)',
+          cursor: 'pointer',
+          transition: 'all 150ms ease',
+          flexShrink: 0,
+        }}
+      >
+        {copied ? (
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+            <polyline points="20 6 9 17 4 12" />
+          </svg>
+        ) : (
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2" />
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
+          </svg>
+        )}
+      </button>
+    </div>
+  )
+}
+
 // ── Behavior determination ─────────────────────────────────────────────────
 
 type BehaviorKey = keyof ProfileIntelligence['behaviors']
@@ -412,6 +499,9 @@ export default function LeadDetailPanel({ hash, data, loading, onClose, onRefres
                   </span>
                 )}
               </div>
+
+              {/* Mapa vivo URL con clipboard */}
+              <MapUrlCopy hash={data.hash} />
             </div>
 
             {/* ── Lo que está pasando ── */}
