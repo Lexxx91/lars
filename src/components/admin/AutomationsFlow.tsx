@@ -22,9 +22,16 @@ interface EmailData {
   open_rate: number
 }
 
+interface TemplateInfo {
+  email_key: string
+  is_customized: boolean
+}
+
 interface AutomationsFlowProps {
   emails: EmailData[] | null
   loading: boolean
+  templates?: TemplateInfo[]
+  onEditTemplate?: (emailKey: string) => void
 }
 
 // ── Email content metadata (descriptions + CTAs from email.ts) ──────────────
@@ -232,7 +239,7 @@ function SectionHeader({ title }: { title: string }) {
 
 // ── Component ───────────────────────────────────────────────────────────────
 
-export default function AutomationsFlow({ emails, loading }: AutomationsFlowProps) {
+export default function AutomationsFlow({ emails, loading, templates, onEditTemplate }: AutomationsFlowProps) {
   if (loading || !emails) {
     return (
       <div>
@@ -245,6 +252,9 @@ export default function AutomationsFlow({ emails, loading }: AutomationsFlowProp
   // Split: nurturing emails (d0–d90) vs goodbye
   const nurturingEmails = emails.filter((e) => e.key !== 'goodbye')
   const goodbyeEmail = emails.find((e) => e.key === 'goodbye')
+
+  const isCustomized = (key: string) =>
+    templates?.some((t) => t.email_key === key && t.is_customized) ?? false
 
   return (
     <div>
@@ -261,6 +271,8 @@ export default function AutomationsFlow({ emails, loading }: AutomationsFlowProp
             description={meta.description}
             cta={meta.cta}
             conditions={meta.conditions}
+            onEdit={onEditTemplate}
+            isCustomized={isCustomized(email.key)}
           />
         )
       })}
@@ -276,6 +288,8 @@ export default function AutomationsFlow({ emails, loading }: AutomationsFlowProp
           cta={EMAIL_META.goodbye.cta}
           conditions={EMAIL_META.goodbye.conditions}
           isLast
+          onEdit={onEditTemplate}
+          isCustomized={isCustomized('goodbye')}
         />
       )}
 
@@ -293,6 +307,8 @@ export default function AutomationsFlow({ emails, loading }: AutomationsFlowProp
             cta={meta.cta}
             isSpecial
             isLast={i === SPECIAL_EMAILS.length - 1}
+            onEdit={email.key === 'post_pago' ? onEditTemplate : undefined}
+            isCustomized={isCustomized(email.key)}
           />
         )
       })}

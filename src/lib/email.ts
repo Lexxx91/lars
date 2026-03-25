@@ -11,6 +11,28 @@
 
 import { Resend } from 'resend'
 import { getMostCompromised, getScoreColor } from './insights'
+import { createAdminClient } from './supabase'
+import { EMAIL_DEFAULTS, escapeHtml, textToHtmlParagraphs } from './email-defaults'
+
+// ─── Template override lookup ─────────────────────────────────────────────────
+
+async function getTemplateOverride(emailKey: string): Promise<{
+  subject: string | null
+  body_content: string | null
+  cta_text: string | null
+} | null> {
+  try {
+    const supabase = createAdminClient()
+    const { data } = await supabase
+      .from('email_templates')
+      .select('subject, body_content, cta_text')
+      .eq('email_key', emailKey)
+      .single()
+    return data
+  } catch {
+    return null
+  }
+}
 
 let _resend: Resend | null = null
 function getResend(): Resend {
@@ -79,6 +101,7 @@ export async function sendDia0Email({
   mapHash,
 }: SendDia0EmailParams): Promise<void> {
   const mapUrl = `${getBaseUrl()}/mapa/${mapHash}`
+  const override0 = await getTemplateOverride('d0')
 
   const { key: worstKey, score: worstScore } = getMostCompromised(d1, d2, d3, d4, d5)
   const worstColor = getScoreColor(worstScore)
@@ -201,7 +224,7 @@ export async function sendDia0Email({
                 text-decoration: none;
                 display: block;
                 white-space: nowrap;
-              ">Ver mi mapa completo</a>
+              ">${escapeHtml(override0?.cta_text ?? EMAIL_DEFAULTS.d0.ctaText)}</a>
             </td>
           </tr>
         </table>
@@ -233,7 +256,7 @@ export async function sendDia0Email({
   await getResend().emails.send({
     from: getFromEmail(),
     to,
-    subject: 'Tu Mapa de Regulación',
+    subject: override0?.subject ?? EMAIL_DEFAULTS.d0.subject,
     html,
     headers: listUnsubscribeHeaders(mapHash),
   })
@@ -291,19 +314,22 @@ function buildEvolutionEmail(params: {
 /** Día 3: Arquetipo del Sistema Nervioso */
 export async function sendDia3Email(to: string, mapHash: string): Promise<void> {
   const mapUrl = `${getBaseUrl()}/mapa/${mapHash}`
+  const override = await getTemplateOverride('d3')
+  const defaults = EMAIL_DEFAULTS.d3
 
+  const bodyText = override?.body_content ?? defaults.bodyContent
   const html = buildEvolutionEmail({
     content: `
       <p style="font-size: 14px; color: #1E1310; line-height: 1.6; margin: 0 0 16px 0;">
-        Tu arquetipo del sistema nervioso está disponible. Es la pieza que faltaba para entender por qué tu cuerpo responde como responde.
+        ${escapeHtml(bodyText)}
       </p>`,
-    buttonText: 'Ver mi mapa',
+    buttonText: override?.cta_text ?? defaults.ctaText,
     mapUrl, mapHash, emailKey: 'd3',
   })
 
   await getResend().emails.send({
     from: getFromEmail(), to,
-    subject: 'Hay algo nuevo en tu mapa de regulación',
+    subject: override?.subject ?? defaults.subject,
     html, headers: listUnsubscribeHeaders(mapHash),
   })
 }
@@ -311,19 +337,22 @@ export async function sendDia3Email(to: string, mapHash: string): Promise<void> 
 /** Día 7: Insight de inteligencia colectiva */
 export async function sendDia7Email(to: string, mapHash: string): Promise<void> {
   const mapUrl = `${getBaseUrl()}/mapa/${mapHash}`
+  const override = await getTemplateOverride('d7')
+  const defaults = EMAIL_DEFAULTS.d7
 
+  const bodyText = override?.body_content ?? defaults.bodyContent
   const html = buildEvolutionEmail({
     content: `
       <p style="font-size: 14px; color: #1E1310; line-height: 1.6; margin: 0 0 16px 0;">
-        Nuevo insight sobre tu dimensión más comprometida. Un dato que no existía cuando hiciste tu diagnóstico.
+        ${escapeHtml(bodyText)}
       </p>`,
-    buttonText: 'Ver mi mapa',
+    buttonText: override?.cta_text ?? defaults.ctaText,
     mapUrl, mapHash, emailKey: 'd7',
   })
 
   await getResend().emails.send({
     from: getFromEmail(), to,
-    subject: 'Tu mapa se ha actualizado',
+    subject: override?.subject ?? defaults.subject,
     html, headers: listUnsubscribeHeaders(mapHash),
   })
 }
@@ -331,19 +360,22 @@ export async function sendDia7Email(to: string, mapHash: string): Promise<void> 
 /** Día 10: Sesión con Javier */
 export async function sendDia10Email(to: string, mapHash: string): Promise<void> {
   const mapUrl = `${getBaseUrl()}/mapa/${mapHash}`
+  const override = await getTemplateOverride('d10')
+  const defaults = EMAIL_DEFAULTS.d10
 
+  const bodyText = override?.body_content ?? defaults.bodyContent
   const html = buildEvolutionEmail({
     content: `
       <p style="font-size: 14px; color: #1E1310; line-height: 1.6; margin: 0 0 16px 0;">
-        20 minutos. Sin compromiso. Ya tiene tus datos.
+        ${escapeHtml(bodyText)}
       </p>`,
-    buttonText: 'Agendar sesión',
+    buttonText: override?.cta_text ?? defaults.ctaText,
     mapUrl, mapHash, emailKey: 'd10',
   })
 
   await getResend().emails.send({
     from: getFromEmail(), to,
-    subject: 'Javier puede revisar tu mapa contigo',
+    subject: override?.subject ?? defaults.subject,
     html, headers: listUnsubscribeHeaders(mapHash),
   })
 }
@@ -351,19 +383,22 @@ export async function sendDia10Email(to: string, mapHash: string): Promise<void>
 /** Día 14: Subdimensiones */
 export async function sendDia14Email(to: string, mapHash: string): Promise<void> {
   const mapUrl = `${getBaseUrl()}/mapa/${mapHash}`
+  const override = await getTemplateOverride('d14')
+  const defaults = EMAIL_DEFAULTS.d14
 
+  const bodyText = override?.body_content ?? defaults.bodyContent
   const html = buildEvolutionEmail({
     content: `
       <p style="font-size: 14px; color: #1E1310; line-height: 1.6; margin: 0 0 16px 0;">
-        2 preguntas más para aumentar la resolución de tu diagnóstico.
+        ${escapeHtml(bodyText)}
       </p>`,
-    buttonText: 'Ver mi mapa',
+    buttonText: override?.cta_text ?? defaults.ctaText,
     mapUrl, mapHash, emailKey: 'd14',
   })
 
   await getResend().emails.send({
     from: getFromEmail(), to,
-    subject: 'Hay 3 subdimensiones nuevas disponibles',
+    subject: override?.subject ?? defaults.subject,
     html, headers: listUnsubscribeHeaders(mapHash),
   })
 }
@@ -371,19 +406,22 @@ export async function sendDia14Email(to: string, mapHash: string): Promise<void>
 /** Día 21: Extracto del libro */
 export async function sendDia21Email(to: string, mapHash: string): Promise<void> {
   const mapUrl = `${getBaseUrl()}/mapa/${mapHash}`
+  const override = await getTemplateOverride('d21')
+  const defaults = EMAIL_DEFAULTS.d21
 
+  const bodyText = override?.body_content ?? defaults.bodyContent
   const html = buildEvolutionEmail({
     content: `
       <p style="font-size: 14px; color: #1E1310; line-height: 1.6; margin: 0 0 16px 0;">
-        Basado en tu dimensión más comprometida. Del libro "Burnout: El Renacimiento del Líder Fénix."
+        ${escapeHtml(bodyText)}
       </p>`,
-    buttonText: 'Ver mi mapa',
+    buttonText: override?.cta_text ?? defaults.ctaText,
     mapUrl, mapHash, emailKey: 'd21',
   })
 
   await getResend().emails.send({
     from: getFromEmail(), to,
-    subject: 'Un capítulo escrito para tu situación',
+    subject: override?.subject ?? defaults.subject,
     html, headers: listUnsubscribeHeaders(mapHash),
   })
 }
@@ -391,19 +429,22 @@ export async function sendDia21Email(to: string, mapHash: string): Promise<void>
 /** Día 30: Reevaluación */
 export async function sendDia30Email(to: string, mapHash: string): Promise<void> {
   const mapUrl = `${getBaseUrl()}/mapa/${mapHash}`
+  const override = await getTemplateOverride('d30')
+  const defaults = EMAIL_DEFAULTS.d30
 
+  const bodyText = override?.body_content ?? defaults.bodyContent
   const html = buildEvolutionEmail({
     content: `
       <p style="font-size: 14px; color: #1E1310; line-height: 1.6; margin: 0 0 16px 0;">
-        Actualiza tu mapa en 30 segundos. Tus scores anteriores se guardan para que veas la evolución.
+        ${escapeHtml(bodyText)}
       </p>`,
-    buttonText: 'Actualizar mi mapa',
+    buttonText: override?.cta_text ?? defaults.ctaText,
     mapUrl, mapHash, emailKey: 'd30',
   })
 
   await getResend().emails.send({
     from: getFromEmail(), to,
-    subject: 'Un mes desde tu diagnóstico — ¿ha cambiado algo?',
+    subject: override?.subject ?? defaults.subject,
     html, headers: listUnsubscribeHeaders(mapHash),
   })
 }
@@ -412,6 +453,11 @@ export async function sendDia30Email(to: string, mapHash: string): Promise<void>
 export async function sendPostPagoEmail(to: string, mapHash: string): Promise<void> {
   const mapUrl = `${getBaseUrl()}/mapa/${mapHash}`
   const bookingUrl = `${mapUrl}#section-session`
+  const overridePP = await getTemplateOverride('post_pago')
+  const defaultsPP = EMAIL_DEFAULTS.post_pago
+
+  const ppBodyText = overridePP?.body_content ?? defaultsPP.bodyContent
+  const ppCtaText = overridePP?.cta_text ?? defaultsPP.ctaText
 
   const html = `
 <!DOCTYPE html>
@@ -440,7 +486,7 @@ export async function sendPostPagoEmail(to: string, mapHash: string): Promise<vo
       </p>
 
       <p style="font-size: 14px; color: #4B413C; line-height: 1.6; margin: 0 0 40px 0;">
-        Has dado el paso que el 97% no da. Lo que sigue es que tu cuerpo note la diferencia.
+        ${escapeHtml(ppBodyText)}
       </p>
 
       <!-- Separador -->
@@ -475,7 +521,7 @@ export async function sendPostPagoEmail(to: string, mapHash: string): Promise<vo
       <table cellpadding="0" cellspacing="0" style="margin: 0 0 8px 0;">
         <tr><td style="background: #F5F564; border-radius: 100px; padding: 14px 28px;">
           <a href="${bookingUrl}" style="color: #1E1310; font-size: 14px; font-weight: 500; text-decoration: none; display: block; white-space: nowrap;">
-            Agendar mi sesión
+            ${escapeHtml(ppCtaText)}
           </a>
         </td></tr>
       </table>
@@ -529,7 +575,7 @@ export async function sendPostPagoEmail(to: string, mapHash: string): Promise<vo
   await getResend().emails.send({
     from: getFromEmail(),
     to,
-    subject: 'Tu Semana 1 empieza ahora — aquí tienes todo',
+    subject: overridePP?.subject ?? defaultsPP.subject,
     html,
     headers: listUnsubscribeHeaders(mapHash),
   })
@@ -538,22 +584,20 @@ export async function sendPostPagoEmail(to: string, mapHash: string): Promise<vo
 /** Día 90+: Reevaluación trimestral */
 export async function sendDia90Email(to: string, mapHash: string): Promise<void> {
   const mapUrl = `${getBaseUrl()}/mapa/${mapHash}`
+  const override = await getTemplateOverride('d90')
+  const defaults = EMAIL_DEFAULTS.d90
 
+  const bodyText = override?.body_content ?? defaults.bodyContent
+  const bodyStyle = 'font-size: 14px; color: #1E1310; line-height: 1.6; margin: 0 0 16px 0;'
   const html = buildEvolutionEmail({
-    content: `
-      <p style="font-size: 14px; color: #1E1310; line-height: 1.6; margin: 0 0 16px 0;">
-        ¿Ha cambiado algo?
-      </p>
-      <p style="font-size: 14px; color: #4B413C; line-height: 1.6; margin: 0 0 16px 0;">
-        Tu mapa sigue aquí. Actualízalo en 30 segundos y compara.
-      </p>`,
-    buttonText: 'Actualizar mi mapa',
+    content: textToHtmlParagraphs(bodyText, bodyStyle),
+    buttonText: override?.cta_text ?? defaults.ctaText,
     mapUrl, mapHash, emailKey: 'd90',
   })
 
   await getResend().emails.send({
     from: getFromEmail(), to,
-    subject: '3 meses desde tu mapa — una pregunta',
+    subject: override?.subject ?? defaults.subject,
     html, headers: listUnsubscribeHeaders(mapHash),
   })
 }
@@ -564,6 +608,13 @@ export async function sendDia90Email(to: string, mapHash: string): Promise<void>
 export async function sendGoodbyeEmail(to: string, mapHash: string): Promise<void> {
   const reactivateUrl = `${getBaseUrl()}/api/email/reactivate?h=${mapHash}`
   const mapUrl = `${getBaseUrl()}/mapa/${mapHash}`
+  const overrideGb = await getTemplateOverride('goodbye')
+  const defaultsGb = EMAIL_DEFAULTS.goodbye
+
+  const gbBodyText = overrideGb?.body_content ?? defaultsGb.bodyContent
+  const gbCtaText = overrideGb?.cta_text ?? defaultsGb.ctaText
+  const gbBodyStyle = 'font-size: 14px; color: #4B413C; line-height: 1.8; margin: 0 0 16px 0;'
+  const gbBodyHtml = textToHtmlParagraphs(gbBodyText, gbBodyStyle)
 
   const html = `
 <!DOCTYPE html>
@@ -583,17 +634,7 @@ export async function sendGoodbyeEmail(to: string, mapHash: string): Promise<voi
 
       <img src="${getBaseUrl()}/img/logo-instituto-epigenetico.png" alt="Instituto Epigenético" width="220" style="display: block; width: 220px; height: auto; margin: 0 0 32px 0;" />
 
-      <p style="font-size: 14px; color: #1E1310; line-height: 1.8; margin: 0 0 16px 0;">
-        Tu mapa de regulación sigue evolucionando.
-      </p>
-
-      <p style="font-size: 14px; color: #4B413C; line-height: 1.8; margin: 0 0 16px 0;">
-        No necesitas abrir estos emails para que eso ocurra. Tu diagnóstico trabaja por ti en segundo plano — y lo que revele estará ahí cuando lo necesites.
-      </p>
-
-      <p style="font-size: 14px; color: #4B413C; line-height: 1.8; margin: 0 0 32px 0;">
-        Vamos a dejar de enviarte actualizaciones para no añadir ruido a tu bandeja. Pero hay algo que no cambia:
-      </p>
+      ${gbBodyHtml}
 
       <p style="
         font-size: 16px;
@@ -614,7 +655,7 @@ export async function sendGoodbyeEmail(to: string, mapHash: string): Promise<voi
       <table cellpadding="0" cellspacing="0" style="margin: 0 0 16px 0;">
         <tr><td style="background: #F5F564; border-radius: 100px; padding: 16px 32px;">
           <a href="${reactivateUrl}" style="color: #1E1310; font-size: 15px; font-weight: 500; text-decoration: none; display: block; white-space: nowrap;">
-            Seguir recibiendo actualizaciones
+            ${escapeHtml(gbCtaText)}
           </a>
         </td></tr>
       </table>
@@ -646,7 +687,7 @@ export async function sendGoodbyeEmail(to: string, mapHash: string): Promise<voi
 
   await getResend().emails.send({
     from: getFromEmail(), to,
-    subject: 'Tu mapa sigue aquí',
+    subject: overrideGb?.subject ?? defaultsGb.subject,
     html,
   })
 }

@@ -27,6 +27,8 @@ interface EmailFlowNodeProps {
   conditions?: string
   isLast?: boolean
   isSpecial?: boolean
+  onEdit?: (emailKey: string) => void
+  isCustomized?: boolean
 }
 
 export default function EmailFlowNode({
@@ -36,6 +38,8 @@ export default function EmailFlowNode({
   conditions,
   isLast = false,
   isSpecial = false,
+  onEdit,
+  isCustomized = false,
 }: EmailFlowNodeProps) {
   const [expanded, setExpanded] = useState(false)
 
@@ -148,6 +152,53 @@ export default function EmailFlowNode({
           >
             {email.name}
           </span>
+          {isCustomized && (
+            <span
+              style={{
+                fontFamily: 'var(--font-inter)',
+                fontSize: '10px',
+                fontWeight: 600,
+                color: 'var(--color-success)',
+                background: 'rgba(61, 154, 95, 0.08)',
+                padding: '2px 8px',
+                borderRadius: '100px',
+                whiteSpace: 'nowrap',
+              }}
+            >
+              Editado
+            </span>
+          )}
+          {onEdit && (
+            <button
+              onClick={(e) => {
+                e.stopPropagation()
+                onEdit(email.key)
+              }}
+              style={{
+                marginLeft: 'auto',
+                background: 'none',
+                border: 'none',
+                fontFamily: 'var(--font-inter)',
+                fontSize: '12px',
+                fontWeight: 500,
+                color: 'var(--color-text-tertiary)',
+                cursor: 'pointer',
+                padding: '2px 8px',
+                borderRadius: 'var(--radius-md)',
+                transition: 'color 150ms ease, background 150ms ease',
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.color = 'var(--color-accent)'
+                e.currentTarget.style.background = 'rgba(180, 90, 50, 0.06)'
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.color = 'var(--color-text-tertiary)'
+                e.currentTarget.style.background = 'none'
+              }}
+            >
+              Editar
+            </button>
+          )}
         </div>
 
         {/* Row 2: Subject */}

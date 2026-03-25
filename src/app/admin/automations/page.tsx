@@ -14,6 +14,7 @@ import { useState, useEffect, useCallback } from 'react'
 import AdminLayout from '@/components/admin/AdminLayout'
 import AutomationsStats from '@/components/admin/AutomationsStats'
 import AutomationsFlow from '@/components/admin/AutomationsFlow'
+import EmailTemplateEditor from '@/components/admin/EmailTemplateEditor'
 
 // ── Types ───────────────────────────────────────────────────────────────────
 
@@ -35,6 +36,11 @@ interface GlobalStats {
   unsubscribe_rate: number
 }
 
+interface TemplateInfo {
+  email_key: string
+  is_customized: boolean
+}
+
 interface AutomationsData {
   emails: EmailData[]
   global_stats: GlobalStats
@@ -46,6 +52,8 @@ export default function AutomationsPage() {
   const [data, setData] = useState<AutomationsData | null>(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
+  const [templates, setTemplates] = useState<TemplateInfo[]>([])
+  const [editingKey, setEditingKey] = useState<string | null>(null)
 
   const fetchAutomations = useCallback(async () => {
     const secret = sessionStorage.getItem('admin_secret')
@@ -53,18 +61,24 @@ export default function AutomationsPage() {
 
     try {
       setLoading(true)
-      const res = await fetch('/api/admin/automations', {
-        headers: { 'x-admin-secret': secret },
-      })
+      const [automRes, tplRes] = await Promise.all([
+        fetch('/api/admin/automations', { headers: { 'x-admin-secret': secret } }),
+        fetch('/api/admin/templates', { headers: { 'x-admin-secret': secret } }),
+      ])
 
-      if (!res.ok) {
+      if (!automRes.ok) {
         setError('Error cargando datos de automations')
         return
       }
 
-      const json = await res.json()
+      const json = await automRes.json()
       setData(json)
       setError(null)
+
+      if (tplRes.ok) {
+        const tplJson = await tplRes.json()
+        setTemplates(tplJson.templates ?? [])
+      }
     } catch {
       setError('Error de conexión')
     } finally {
@@ -176,8 +190,23 @@ export default function AutomationsPage() {
         <AutomationsStats data={data?.global_stats ?? null} loading={loading} />
 
         {/* Flow */}
-        <AutomationsFlow emails={data?.emails ?? null} loading={loading} />
+        <AutomationsFlow
+          emails={data?.emails ?? null}
+          loading={loading}
+          templates={templates}
+          onEditTemplate={(key) => setEditingKey(key)}
+        />
       </div>
+
+      {/* Template editor modal */}
+      {editingKey && (
+        <EmailTemplateEditor
+          emailKey={editingKey}
+          isOpen={!!editingKey}
+          onClose={() => setEditingKey(null)}
+          onSave={fetchAutomations}
+        />
+      )}
     </AdminLayout>
   )
 }
