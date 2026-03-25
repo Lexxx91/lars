@@ -28,6 +28,9 @@ export const metadata: Metadata = {
   title: "Descubre el estado de tu sistema nervioso | Instituto Epigenético",
   description:
     "Una evaluación de 3 minutos calibrada con más de 25.000 evaluaciones reales. Tu resultado es personal, confidencial y tuyo.",
+  icons: {
+    icon: "/favicon.svg",
+  },
   robots: {
     index: true,
     follow: true,

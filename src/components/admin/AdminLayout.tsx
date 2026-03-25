@@ -171,6 +171,16 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
         }}
       >
         <div style={{ maxWidth: '360px', width: '100%', textAlign: 'center' }}>
+          {/* Logo */}
+          <img
+            src="/img/logo-instituto-epigenetico.png"
+            alt="Instituto Epigenético"
+            style={{
+              height: 32,
+              marginBottom: 'var(--space-6)',
+              opacity: 0.85,
+            }}
+          />
           <h1
             style={{
               fontFamily: 'var(--font-lora)',
