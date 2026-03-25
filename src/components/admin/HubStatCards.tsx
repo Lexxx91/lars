@@ -3,7 +3,7 @@
 /**
  * HubStatCards — 4 stat cards for the Hub dashboard.
  *
- * 1. Diagnósticos hoy (+ vs ayer)
+ * 1. Análisis hoy (+ vs ayer)
  * 2. Próxima sesión (hora + email)
  * 3. Leads calientes (count + link)
  * 4. Conversión 7d (% + delta)
@@ -165,10 +165,10 @@ export default function HubStatCards({ data, loading }: HubStatCardsProps) {
         gap: 'var(--space-5)',
       }}
     >
-      {/* Card 1: Diagnósticos hoy */}
+      {/* Card 1: Análisis hoy */}
       <div style={cardBase}>
         <div>
-          <p style={overlineStyle}>Diagnósticos hoy</p>
+          <p style={overlineStyle}>Análisis hoy</p>
           <p style={numberStyle}>{data.diagnostics_today}</p>
         </div>
         <CompBadge current={data.diagnostics_today} previous={data.diagnostics_yesterday} />

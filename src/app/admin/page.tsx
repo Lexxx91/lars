@@ -4,7 +4,7 @@
  * /admin — Hub (Centro de Comando)
  *
  * Primera pantalla del admin. Javi abre esto cada mañana y en 30 segundos
- * sabe qué está pasando: diagnósticos, leads calientes, alertas inteligentes,
+ * sabe qué está pasando: análisis, leads calientes, alertas inteligentes,
  * embudo y actividad reciente.
  *
  * Auth centralizada en AdminLayout.
@@ -113,9 +113,19 @@ export default function AdminHub() {
   }, [])
 
   useEffect(() => {
-    // Small delay to allow AdminLayout auth to settle
-    const timer = setTimeout(fetchHub, 100)
-    return () => clearTimeout(timer)
+    // Retry until sessionStorage has the admin secret (AdminLayout sets it)
+    const attempt = () => {
+      const s = sessionStorage.getItem('admin_secret')
+      if (s) { fetchHub(); return true }
+      return false
+    }
+
+    if (!attempt()) {
+      const interval = setInterval(() => {
+        if (attempt()) clearInterval(interval)
+      }, 200)
+      return () => clearInterval(interval)
+    }
   }, [fetchHub])
 
   return (

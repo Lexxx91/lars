@@ -3,7 +3,7 @@
 /**
  * AnalyticsFunnel — Embudo mejorado de 4 pasos con barras proporcionales.
  *
- * Evaluaciones → Email capturado → Mapa visitado → Pagado
+ * Análisis → Email capturado → Mapa visitado → Pagado
  * Barras terracotta con opacidad decreciente + animación stagger.
  */
 
@@ -23,7 +23,7 @@ interface AnalyticsFunnelProps {
 }
 
 const STEPS = [
-  { key: 'diagnostics' as const, label: 'Evaluaciones' },
+  { key: 'diagnostics' as const, label: 'Análisis' },
   { key: 'email_captured' as const, label: 'Email capturado' },
   { key: 'map_visited' as const, label: 'Mapa visitado' },
   { key: 'paid' as const, label: 'Pagaron' },
@@ -85,7 +85,7 @@ export default function AnalyticsFunnel({ funnel, counterKey }: AnalyticsFunnelP
           return (
             <div
               key={step.key}
-              title={i > 0 ? `${value} de ${prevValue} (${pctVsPrev}%)` : `${value} evaluaciones totales`}
+              title={i > 0 ? `${value} de ${prevValue} (${pctVsPrev}%)` : `${value} análisis totales`}
               style={{
                 position: 'relative',
                 background: 'var(--color-bg-secondary)',

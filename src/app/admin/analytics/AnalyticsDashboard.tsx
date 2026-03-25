@@ -332,7 +332,7 @@ export default function AnalyticsDashboard() {
           color: 'var(--color-text-tertiary)',
           marginBottom: 'var(--space-4)',
         }}>
-          Últimas evaluaciones
+          Últimos análisis
         </p>
 
         {recent.length === 0 ? (

@@ -18,6 +18,7 @@ interface PendingAction {
   actionType: string
   actionReason: string
   urgency: string
+  hasRecentAction?: boolean
 }
 
 interface HubPendingActionsProps {
@@ -93,7 +94,7 @@ export default function HubPendingActions({ actions, loading }: HubPendingAction
         >
           Acciones pendientes
         </h2>
-        {!loading && actions && actions.length > 0 && (
+        {!loading && actions && actions.filter(a => !a.hasRecentAction).length > 0 && (
           <span
             style={{
               display: 'inline-flex',
@@ -110,7 +111,7 @@ export default function HubPendingActions({ actions, loading }: HubPendingAction
               padding: '0 6px',
             }}
           >
-            {actions.length}
+            {actions.filter(a => !a.hasRecentAction).length}
           </span>
         )}
         <div
@@ -161,6 +162,7 @@ export default function HubPendingActions({ actions, loading }: HubPendingAction
           {actions.map((action) => {
             const actionInfo = ACTION_LABELS[action.actionType] ?? { label: action.actionType, icon: '📋' }
             const urgency = URGENCY_CONFIG[action.urgency] ?? URGENCY_CONFIG.low
+            const dimmed = action.hasRecentAction
 
             return (
               <Link
@@ -173,13 +175,14 @@ export default function HubPendingActions({ actions, loading }: HubPendingAction
                     background: 'var(--color-bg-tertiary)',
                     border: 'var(--border-subtle)',
                     borderRadius: 'var(--radius-md)',
-                    borderLeft: `3px solid ${action.profileColor}`,
+                    borderLeft: `3px solid ${dimmed ? 'var(--color-text-tertiary)' : action.profileColor}`,
                     padding: 'var(--space-4)',
                     display: 'flex',
                     alignItems: 'center',
                     gap: 'var(--space-4)',
                     transition: 'all 150ms ease',
                     cursor: 'pointer',
+                    opacity: dimmed ? 0.55 : 1,
                   }}
                   onMouseEnter={(e) => {
                     e.currentTarget.style.background = 'var(--color-bg-elevated)'
@@ -263,30 +266,49 @@ export default function HubPendingActions({ actions, loading }: HubPendingAction
                       flexShrink: 0,
                     }}
                   >
-                    <span
-                      style={{
-                        padding: '3px 10px',
-                        borderRadius: 'var(--radius-pill)',
-                        background: urgency.bg,
-                        color: urgency.color,
-                        fontFamily: 'var(--font-inter)',
-                        fontSize: '11px',
-                        fontWeight: 600,
-                        whiteSpace: 'nowrap',
-                      }}
-                    >
-                      {actionInfo.label}
-                    </span>
-                    <span
-                      style={{
-                        fontFamily: 'var(--font-inter)',
-                        fontSize: '10px',
-                        color: urgency.color,
-                        fontWeight: 500,
-                      }}
-                    >
-                      {urgency.label}
-                    </span>
+                    {dimmed ? (
+                      <span
+                        style={{
+                          padding: '3px 10px',
+                          borderRadius: 'var(--radius-pill)',
+                          background: 'rgba(61, 154, 95, 0.08)',
+                          color: 'var(--color-success)',
+                          fontFamily: 'var(--font-inter)',
+                          fontSize: '11px',
+                          fontWeight: 600,
+                          whiteSpace: 'nowrap',
+                        }}
+                      >
+                        Atendido
+                      </span>
+                    ) : (
+                      <>
+                        <span
+                          style={{
+                            padding: '3px 10px',
+                            borderRadius: 'var(--radius-pill)',
+                            background: urgency.bg,
+                            color: urgency.color,
+                            fontFamily: 'var(--font-inter)',
+                            fontSize: '11px',
+                            fontWeight: 600,
+                            whiteSpace: 'nowrap',
+                          }}
+                        >
+                          {actionInfo.label}
+                        </span>
+                        <span
+                          style={{
+                            fontFamily: 'var(--font-inter)',
+                            fontSize: '10px',
+                            color: urgency.color,
+                            fontWeight: 500,
+                          }}
+                        >
+                          {urgency.label}
+                        </span>
+                      </>
+                    )}
                   </div>
                 </div>
               </Link>

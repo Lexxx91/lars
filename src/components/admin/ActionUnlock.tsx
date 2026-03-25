@@ -29,7 +29,7 @@ export default function ActionUnlock({ lead, onSubmit, onCancel, submitting }: P
           color: 'var(--color-text-tertiary)',
           margin: 0,
         }}>
-          Día {lead.days_since} desde el diagnóstico
+          Día {lead.days_since} desde el análisis
         </p>
       </div>
 

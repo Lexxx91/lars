@@ -350,7 +350,7 @@ export async function GET(req: NextRequest) {
     activity.push({
       type: 'diagnostic',
       at: row.created_at,
-      description: `Nuevo diagnóstico (${shortLabel}, score ${score})`,
+      description: `Nuevo análisis (${shortLabel}, score ${score})`,
       icon: '📋',
     })
   }
@@ -422,11 +422,19 @@ export async function GET(req: NextRequest) {
     actionType: string
     actionReason: string
     urgency: string
+    hasRecentAction?: boolean
   }
 
   const pendingActions: PendingAction[] = []
+  let debugSkippedConverted = 0
+  let debugNoAction = 0
+  let debugRecentAction = 0
+
   for (const row of leadsWithEmail) {
-    if (row.funnel?.converted_week1 || row.funnel?.unsubscribed) continue
+    if (row.funnel?.converted_week1 || row.funnel?.unsubscribed) {
+      debugSkippedConverted++
+      continue
+    }
 
     const lead: LeadData = {
       created_at: row.created_at,
@@ -438,14 +446,20 @@ export async function GET(req: NextRequest) {
     }
 
     const action = getSuggestedAction(lead)
-    if (!action) continue
+    if (!action) {
+      debugNoAction++
+      continue
+    }
 
-    // Skip if recent personal action exists (within 3 days)
+    // Check if recent personal action exists (within 3 days)
     const actions = row.personal_actions ?? []
     const hasRecentAction = actions.some(
       (a: { created_at: string }) => a.created_at >= now3d
     )
-    if (hasRecentAction) continue
+
+    if (hasRecentAction) {
+      debugRecentAction++
+    }
 
     const heat = calculateHeatScore(lead)
     const profile = getProfileIntelligence(row.profile?.ego_primary)
@@ -459,12 +473,19 @@ export async function GET(req: NextRequest) {
       actionType: action.type,
       actionReason: action.reason,
       urgency: action.urgency,
+      hasRecentAction,
     })
   }
 
-  // Sort: high urgency first, then hot leads
+  console.log(`[hub] Pending actions debug: ${leadsWithEmail.length} leads with email, ${debugSkippedConverted} converted/unsub, ${debugNoAction} no action suggested, ${debugRecentAction} recent action, ${pendingActions.length} total pending`)
+
+  // Sort: without recent action first, then high urgency, then hot leads
   const urgencyOrder: Record<string, number> = { high: 0, medium: 1, low: 2 }
-  pendingActions.sort((a, b) => (urgencyOrder[a.urgency] ?? 2) - (urgencyOrder[b.urgency] ?? 2))
+  pendingActions.sort((a, b) => {
+    // Leads without recent action come first
+    if (a.hasRecentAction !== b.hasRecentAction) return a.hasRecentAction ? 1 : -1
+    return (urgencyOrder[a.urgency] ?? 2) - (urgencyOrder[b.urgency] ?? 2)
+  })
   const topPendingActions = pendingActions.slice(0, 8)
 
   // ── Response ──────────────────────────────────────────────────────────────

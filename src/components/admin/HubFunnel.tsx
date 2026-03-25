@@ -3,7 +3,7 @@
 /**
  * HubFunnel — Mini horizontal funnel for the last 30 days.
  *
- * 4 bars: Evaluaciones → Email capturado → Mapa visitado → Pagado
+ * 4 bars: Análisis → Email capturado → Mapa visitado → Pagado
  * Terracotta with decreasing opacity.
  */
 
@@ -20,7 +20,7 @@ interface HubFunnelProps {
 }
 
 const STAGES = [
-  { key: 'diagnostics' as const, label: 'Evaluaciones', opacity: 1 },
+  { key: 'diagnostics' as const, label: 'Análisis', opacity: 1 },
   { key: 'email_captured' as const, label: 'Email capturado', opacity: 0.75 },
   { key: 'map_visited' as const, label: 'Mapa visitado', opacity: 0.5 },
   { key: 'paid' as const, label: 'Pagado', opacity: 0.3 },

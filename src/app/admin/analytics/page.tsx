@@ -3,7 +3,7 @@
 /**
  * /admin/analytics — Panel de analytics L.A.R.S.
  *
- * Muestra el embudo completo, métricas clave y últimas evaluaciones.
+ * Muestra el embudo completo, métricas clave y últimos análisis.
  */
 
 import AnalyticsDashboard from './AnalyticsDashboard'

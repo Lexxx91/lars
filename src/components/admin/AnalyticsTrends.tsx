@@ -3,7 +3,7 @@
 /**
  * AnalyticsTrends — Gráfico SVG de tendencias diarias.
  *
- * Línea terracotta (diagnósticos) + línea verde fina (conversiones).
+ * Línea terracotta (análisis) + línea verde fina (conversiones).
  * Sin librerías externas — SVG puro.
  */
 
@@ -114,7 +114,7 @@ export default function AnalyticsTrends({ dailyCounts }: AnalyticsTrendsProps) {
       }}>
         <span style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
           <span style={{ display: 'inline-block', width: 12, height: 3, borderRadius: 2, background: '#B45A32' }} />
-          Diagnósticos
+          Análisis
         </span>
         <span style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
           <span style={{ display: 'inline-block', width: 12, height: 2, borderRadius: 2, background: 'var(--color-success)' }} />
@@ -203,7 +203,7 @@ export default function AnalyticsTrends({ dailyCounts }: AnalyticsTrendsProps) {
                 strokeWidth={2}
                 style={{ transition: 'r 150ms ease' }}
               >
-                <title>{`${formatShortDate(d.date)}: ${d.diagnostics} diagnósticos, ${d.conversions} conversiones`}</title>
+                <title>{`${formatShortDate(d.date)}: ${d.diagnostics} análisis, ${d.conversions} conversiones`}</title>
               </circle>
               {/* Conversion point */}
               {d.conversions > 0 && (
@@ -270,7 +270,7 @@ export default function AnalyticsTrends({ dailyCounts }: AnalyticsTrendsProps) {
             zIndex: 10,
           }}>
             <div style={{ fontWeight: 600 }}>{formatShortDate(data[hoverIndex].date)}</div>
-            <div style={{ color: '#D4895C' }}>{data[hoverIndex].diagnostics} diagnósticos</div>
+            <div style={{ color: '#D4895C' }}>{data[hoverIndex].diagnostics} análisis</div>
             <div style={{ color: 'var(--color-success)' }}>{data[hoverIndex].conversions} conversiones</div>
           </div>
         )}
