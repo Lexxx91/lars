@@ -23,6 +23,7 @@ import {
   sendDia21Email,
   sendDia30Email,
   sendDia90Email,
+  sendGoodbyeEmail,
 } from '@/lib/email'
 
 const DAY_MS = 86400000
@@ -64,6 +65,7 @@ export async function GET(req: NextRequest): Promise<NextResponse> {
   let skippedConverted = 0
   let skippedUnsubscribed = 0
   let skippedUnopened = 0
+  let sentGoodbye = 0
   const errors: string[] = []
 
   for (const diag of diagnosticos) {
@@ -91,10 +93,28 @@ export async function GET(req: NextRequest): Promise<NextResponse> {
       continue
     }
 
-    // ── Check 3: 3+ emails consecutivos sin abrir → stop ──
+    // ── Check 3: 3+ emails consecutivos sin abrir → goodbye o stop ──
     const consecutiveUnopened = mapEvolution.consecutive_unopened ?? 0
     if (consecutiveUnopened >= 3) {
-      skippedUnopened++
+      if (!mapEvolution.email_goodbye_sent) {
+        // Enviar email de despedida (una sola vez)
+        try {
+          await sendGoodbyeEmail(diag.email, diag.hash)
+          await supabase
+            .from('diagnosticos')
+            .update({
+              map_evolution: { ...mapEvolution, email_goodbye_sent: true },
+            })
+            .eq('hash', diag.hash)
+          sentGoodbye++
+        } catch (err) {
+          const msg = err instanceof Error ? err.message : String(err)
+          errors.push(`${diag.hash}: goodbye — ${msg}`)
+          console.error(`[cron/evoluciones] Error sending goodbye to ${diag.hash}:`, msg)
+        }
+      } else {
+        skippedUnopened++
+      }
       continue
     }
 
@@ -148,6 +168,7 @@ export async function GET(req: NextRequest): Promise<NextResponse> {
 
   return NextResponse.json({
     sent: totalSent,
+    goodbye: sentGoodbye,
     processed: diagnosticos.length,
     skipped: {
       converted: skippedConverted,

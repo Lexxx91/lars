@@ -557,3 +557,96 @@ export async function sendDia90Email(to: string, mapHash: string): Promise<void>
     html, headers: listUnsubscribeHeaders(mapHash),
   })
 }
+
+// ─── EMAIL DE DESPEDIDA (3 emails sin abrir) ─────────────────────────────────
+
+/** Goodbye: despedida empática cuando 3+ emails no se abren */
+export async function sendGoodbyeEmail(to: string, mapHash: string): Promise<void> {
+  const reactivateUrl = `${getBaseUrl()}/api/email/reactivate?h=${mapHash}`
+  const mapUrl = `${getBaseUrl()}/mapa/${mapHash}`
+
+  const html = `
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+</head>
+<body style="
+  margin: 0; padding: 0;
+  background-color: #FFFBEF;
+  font-family: Lora, Inter, system-ui, sans-serif;
+  color: #1E1310;
+">
+  <table width="100%" cellpadding="0" cellspacing="0" style="max-width: 560px; margin: 0 auto; padding: 48px 24px;">
+    <tr><td>
+
+      <img src="${getBaseUrl()}/img/logo-instituto-epigenetico.png" alt="Instituto Epigenético" width="220" style="display: block; width: 220px; height: auto; margin: 0 0 32px 0;" />
+
+      <p style="font-size: 14px; color: #1E1310; line-height: 1.8; margin: 0 0 16px 0;">
+        Tu mapa de regulación sigue evolucionando.
+      </p>
+
+      <p style="font-size: 14px; color: #4B413C; line-height: 1.8; margin: 0 0 16px 0;">
+        No necesitas abrir estos emails para que eso ocurra. Tu diagnóstico trabaja por ti en segundo plano — y lo que revele estará ahí cuando lo necesites.
+      </p>
+
+      <p style="font-size: 14px; color: #4B413C; line-height: 1.8; margin: 0 0 32px 0;">
+        Vamos a dejar de enviarte actualizaciones para no añadir ruido a tu bandeja. Pero hay algo que no cambia:
+      </p>
+
+      <p style="
+        font-size: 16px;
+        font-weight: 500;
+        color: #1E1310;
+        line-height: 1.6;
+        margin: 0 0 32px 0;
+        padding: 20px 24px;
+        background: #F9F1DE;
+        border-left: 3px solid #B45A32;
+        border-radius: 8px;
+      ">Tu mapa es tuyo. Sigue aquí. Sigue vivo.</p>
+
+      <p style="font-size: 14px; color: #1E1310; line-height: 1.8; margin: 0 0 24px 0;">
+        Si en algún momento quieres que volvamos a avisarte cuando haya algo nuevo:
+      </p>
+
+      <table cellpadding="0" cellspacing="0" style="margin: 0 0 16px 0;">
+        <tr><td style="background: #F5F564; border-radius: 100px; padding: 16px 32px;">
+          <a href="${reactivateUrl}" style="color: #1E1310; font-size: 15px; font-weight: 500; text-decoration: none; display: block; white-space: nowrap;">
+            Seguir recibiendo actualizaciones
+          </a>
+        </td></tr>
+      </table>
+
+      <p style="font-size: 13px; color: #8A7E75; line-height: 1.6; margin: 0 0 32px 0;">
+        Sin compromiso. Un clic.
+      </p>
+
+      <!-- Separador -->
+      <div style="height: 1px; background: #E8E2D0; margin-bottom: 32px;"></div>
+
+      <p style="font-size: 14px; color: #1E1310; line-height: 1.6; margin: 0 0 4px 0;">
+        Javier A. Martín Ramos
+      </p>
+      <p style="font-size: 13px; color: #8A7E75; margin: 0 0 24px 0;">
+        Director · Instituto Epigenético
+      </p>
+
+      <p style="font-size: 12px; color: #8A7E75; margin: 0;">
+        <a href="${mapUrl}" style="color: #8A7E75; text-decoration: underline;">Tu mapa siempre está aquí</a>
+      </p>
+
+      ${trackingPixelHtml(mapHash, 'goodbye')}
+
+    </td></tr>
+  </table>
+</body>
+</html>`
+
+  await getResend().emails.send({
+    from: getFromEmail(), to,
+    subject: 'Tu mapa sigue aquí',
+    html,
+  })
+}

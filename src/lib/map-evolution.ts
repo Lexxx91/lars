@@ -38,6 +38,7 @@ export interface MapEvolutionData {
   email_opens?: Record<string, string> // key = email key (d0, d3...), value = ISO date
   consecutive_unopened?: number // resets to 0 on any open
   email_unsubscribed?: boolean
+  email_goodbye_sent?: boolean
 }
 
 export interface ReevaluationScores {
