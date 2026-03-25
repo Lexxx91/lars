@@ -41,6 +41,21 @@ export const metadata: Metadata = {
       "Una evaluación de 3 minutos calibrada con más de 25.000 evaluaciones reales.",
     type: "website",
     locale: "es_ES",
+    images: [
+      {
+        url: "/Estado.png",
+        width: 1200,
+        height: 630,
+        alt: "Descubre el estado de tu sistema nervioso",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Descubre el estado de tu sistema nervioso",
+    description:
+      "Una evaluación de 3 minutos calibrada con más de 25.000 evaluaciones reales.",
+    images: ["/Estado.png"],
   },
 };
 
