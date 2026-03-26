@@ -776,41 +776,7 @@ export default function MapaClient({
                   if (action.type === 'personal_note')
                     return <PersonalNote key={`pa-${i}`} content={action.content} createdAt={action.created_at} />
                   if (action.type === 'video')
-                    return (
-                      <div key={`pa-${i}`}>
-                        <PersonalVideo
-                          id="personal-video"
-                          videoUrl={action.content}
-                          createdAt={action.created_at}
-                          autoPlay={isVideoMode}
-                        />
-                        {isVideoMode && (
-                          <button
-                            onClick={() => {
-                              const el = document.getElementById('zona-estado')
-                              if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' })
-                            }}
-                            style={{
-                              display: 'block',
-                              width: '100%',
-                              marginTop: 'var(--space-4)',
-                              padding: 'var(--space-4) var(--space-6)',
-                              fontFamily: 'var(--font-inter)',
-                              fontSize: 'var(--text-body)',
-                              fontWeight: 600,
-                              color: 'var(--color-text-primary)',
-                              background: 'var(--color-bg-secondary)',
-                              border: 'var(--border-subtle)',
-                              borderRadius: 'var(--radius-lg)',
-                              cursor: 'pointer',
-                              textAlign: 'center',
-                            }}
-                          >
-                            Ver mi análisis completo ↓
-                          </button>
-                        )}
-                      </div>
-                    )
+                    return <PersonalVideo key={`pa-${i}`} id="personal-video" videoUrl={action.content} createdAt={action.created_at} autoPlay={isVideoMode} />
                   if (action.type === 'express_session')
                     return <ExpressSessionOffer key={`pa-${i}`} content={action.content} createdAt={action.created_at} />
                   return null
