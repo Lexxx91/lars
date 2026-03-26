@@ -186,6 +186,7 @@ export default function LeadsTable({
   const [search, setSearch] = useState('')
   const [page, setPage] = useState(1)
   const [isMobile, setIsMobile] = useState(false)
+  const [showHeatLegend, setShowHeatLegend] = useState(false)
 
   useEffect(() => {
     const mq = window.matchMedia('(max-width: 767px)')
@@ -305,6 +306,125 @@ export default function LeadsTable({
             <option key={p.key} value={p.key}>{p.label}</option>
           ))}
         </select>
+
+        {/* Heat legend toggle */}
+        <div style={{ position: 'relative' }}>
+          <button
+            onClick={() => setShowHeatLegend(!showHeatLegend)}
+            title="¿Qué significa cada temperatura?"
+            style={{
+              width: 28,
+              height: 28,
+              borderRadius: '50%',
+              border: showHeatLegend ? '1px solid var(--color-accent)' : 'var(--border-medium)',
+              background: showHeatLegend ? 'rgba(180, 90, 50, 0.08)' : 'transparent',
+              color: showHeatLegend ? 'var(--color-accent)' : 'var(--color-text-tertiary)',
+              fontFamily: 'var(--font-inter)',
+              fontSize: '13px',
+              fontWeight: 600,
+              cursor: 'pointer',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              transition: 'all 150ms ease',
+              flexShrink: 0,
+            }}
+          >
+            ?
+          </button>
+
+          {/* Popover */}
+          {showHeatLegend && (
+            <>
+              {/* Backdrop */}
+              <div
+                onClick={() => setShowHeatLegend(false)}
+                style={{ position: 'fixed', inset: 0, zIndex: 90 }}
+              />
+              <div
+                style={{
+                  position: 'absolute',
+                  top: 'calc(100% + 8px)',
+                  right: 0,
+                  zIndex: 91,
+                  width: isMobile ? 'calc(100vw - 32px)' : 380,
+                  padding: '16px 20px',
+                  background: 'var(--color-bg-primary)',
+                  border: 'var(--border-subtle)',
+                  borderRadius: 'var(--radius-md)',
+                  boxShadow: '0 8px 32px rgba(0,0,0,0.18), 0 2px 8px rgba(0,0,0,0.08)',
+                  fontFamily: 'var(--font-inter)',
+                  fontSize: '12px',
+                  lineHeight: 1.65,
+                  color: 'var(--color-text-secondary)',
+                }}
+              >
+                {/* Niveles */}
+                <div style={{ display: 'flex', flexDirection: 'column', gap: 8, marginBottom: 14 }}>
+                  {[
+                    { color: 'var(--color-error)', label: 'Caliente', pts: '5+ pts', desc: 'Alta urgencia y engagement activo' },
+                    { color: '#D97706', label: 'Tibio', pts: '3-4 pts', desc: 'Muestra interés, necesita un empujón' },
+                    { color: 'var(--color-text-tertiary)', label: 'Frío', pts: '<3 pts', desc: 'Poca actividad o mucho tiempo sin interacción' },
+                    { color: 'var(--color-success)', label: 'Convertido', pts: null, desc: 'Ha pagado la Semana 1' },
+                    { color: '#8A7E75', label: 'Pausado', pts: null, desc: 'Email de despedida enviado (3+ sin abrir)' },
+                    { color: '#8A7E75', label: 'Perdido', pts: null, desc: 'Se dio de baja' },
+                  ].map((item) => (
+                    <div key={item.label} style={{ display: 'flex', alignItems: 'baseline', gap: 8 }}>
+                      <span
+                        style={{
+                          width: 8,
+                          height: 8,
+                          borderRadius: '50%',
+                          background: item.color,
+                          flexShrink: 0,
+                          position: 'relative',
+                          top: -1,
+                        }}
+                      />
+                      <span>
+                        <b style={{ color: item.color }}>{item.label}</b>
+                        {item.pts && <span style={{ color: 'var(--color-text-tertiary)', marginLeft: 4 }}>({item.pts})</span>}
+                        <span style={{ margin: '0 4px', color: 'var(--color-text-tertiary)' }}>—</span>
+                        {item.desc}
+                      </span>
+                    </div>
+                  ))}
+                </div>
+
+                {/* Separador */}
+                <div style={{ height: 1, background: 'var(--color-bg-secondary)', margin: '0 0 12px' }} />
+
+                {/* Cómo se calcula */}
+                <div style={{ color: 'var(--color-text-tertiary)', fontSize: '11px', fontWeight: 500, textTransform: 'uppercase' as const, letterSpacing: '0.05em', marginBottom: 8 }}>
+                  Cómo suma puntos
+                </div>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
+                  {[
+                    { signal: 'Score global ≤ 39', pts: '+2' },
+                    { signal: 'Score global 40-59', pts: '+1' },
+                    { signal: '3+ visitas al mapa', pts: '+2' },
+                    { signal: '1+ visita al mapa', pts: '+1' },
+                    { signal: 'Abrió último email', pts: '+1' },
+                    { signal: 'Menos de 7 días', pts: '+2' },
+                    { signal: 'Menos de 14 días', pts: '+1' },
+                    { signal: 'Ya agendó sesión', pts: '-1', negative: true },
+                  ].map((item) => (
+                    <div key={item.signal} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                      <span>{item.signal}</span>
+                      <span style={{
+                        fontWeight: 600,
+                        fontVariantNumeric: 'tabular-nums',
+                        color: 'negative' in item ? 'var(--color-text-tertiary)' : 'var(--color-accent)',
+                      }}>
+                        {item.pts}
+                      </span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </>
+          )}
+        </div>
       </div>
 
       {/* Search */}

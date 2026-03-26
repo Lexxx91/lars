@@ -20,13 +20,14 @@ export async function PATCH(
   try {
     const supabase = createAdminClient()
 
-    // Leer meta y map_evolution actual
+    // Leer meta, funnel y map_evolution actual
     const { data } = await supabase
       .from('diagnosticos')
-      .select('meta, map_evolution, created_at')
+      .select('meta, funnel, map_evolution, created_at')
       .eq('hash', hash)
       .single<{
         meta: Record<string, unknown>
+        funnel: Record<string, unknown> | null
         map_evolution: MapEvolutionData
         created_at: string
       }>()
@@ -56,10 +57,20 @@ export async function PATCH(
       changed = true
     }
 
+    // Incrementar map_visits en funnel
+    const currentFunnel = data.funnel ?? {}
+    const currentVisits = typeof currentFunnel.map_visits === 'number' ? currentFunnel.map_visits : 0
+    const now = new Date().toISOString()
+
     const updatePayload: Record<string, unknown> = {
       meta: {
         ...currentMeta,
-        last_visited_at: new Date().toISOString(),
+        last_visited_at: now,
+      },
+      funnel: {
+        ...currentFunnel,
+        map_visits: currentVisits + 1,
+        map_last_visit: now,
       },
     }
 
