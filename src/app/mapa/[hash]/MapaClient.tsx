@@ -17,6 +17,7 @@
  */
 
 import { useEffect, useState, useRef, useCallback } from 'react'
+import { useSearchParams } from 'next/navigation'
 import Button from '@/components/ui/Button'
 import Card from '@/components/ui/Card'
 import type { DimensionResult, DimensionKey } from '@/lib/insights'
@@ -134,6 +135,8 @@ export default function MapaClient({
   personalActions,
 }: Props) {
   const isFirstVisit = !lastVisitedAt
+  const searchParams = useSearchParams()
+  const isVideoMode = searchParams.get('video') === '1'
 
   // ── State ──────────────────────────────────────────────────────────────────
 
@@ -195,6 +198,17 @@ export default function MapaClient({
     fetch(`/api/mapa/${hash}/visita`, { method: 'PATCH' }).catch(() => {})
   }, [hash])
 
+  // ── Auto-scroll to video when coming from email (?video=1) ──────────────
+
+  useEffect(() => {
+    if (!isVideoMode) return
+    const timer = setTimeout(() => {
+      const el = document.getElementById('personal-video')
+      if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' })
+    }, 600)
+    return () => clearTimeout(timer)
+  }, [isVideoMode])
+
   // ── Stripe Checkout ───────────────────────────────────────────────────────
 
   const checkoutDebounceRef = useRef(false)
@@ -230,7 +244,7 @@ export default function MapaClient({
   const handleShare = useCallback(() => {
     const gatewayUrl = `${window.location.origin}/`
     navigator.clipboard.writeText(gatewayUrl).then(() => {
-      setShareToast('Link copiado — lleva al diagnóstico, no a tu mapa')
+      setShareToast('Link copiado — lleva al análisis, no a tu mapa')
       setTimeout(() => setShareToast(null), 3500)
     }).catch(() => {
       setShareToast(gatewayUrl)
@@ -620,7 +634,7 @@ export default function MapaClient({
         .mapa-timeline-phase:nth-child(3) { animation-delay: 300ms; }
       `}</style>
 
-      <main style={{ minHeight: '100vh', padding: 'var(--space-12) var(--space-6) var(--space-24)' }}>
+      <main style={{ minHeight: '100vh', padding: 'calc(var(--header-height, 56px) + var(--space-6)) var(--space-6) var(--space-24)' }}>
         <div style={{ maxWidth: '540px', margin: '0 auto' }}>
 
           {/* ══════════════════════════════════════════════════════════════════
@@ -638,7 +652,7 @@ export default function MapaClient({
                 color: 'var(--color-accent)',
                 marginBottom: 'var(--space-3)',
               }}>
-                Tu diagnóstico
+                Tu análisis
               </p>
               <h1 style={{
                 fontFamily: 'var(--font-plus-jakarta)',
@@ -744,7 +758,7 @@ export default function MapaClient({
                   color: 'var(--color-text-tertiary)',
                   marginTop: 'var(--space-3)',
                 }}>
-                  Diagnóstico realizado {relativeTime(createdAt)}
+                  Análisis realizado {relativeTime(createdAt)}
                 </p>
 
               </Card>
@@ -762,7 +776,41 @@ export default function MapaClient({
                   if (action.type === 'personal_note')
                     return <PersonalNote key={`pa-${i}`} content={action.content} createdAt={action.created_at} />
                   if (action.type === 'video')
-                    return <PersonalVideo key={`pa-${i}`} videoUrl={action.content} createdAt={action.created_at} />
+                    return (
+                      <div key={`pa-${i}`}>
+                        <PersonalVideo
+                          id="personal-video"
+                          videoUrl={action.content}
+                          createdAt={action.created_at}
+                          autoPlay={isVideoMode}
+                        />
+                        {isVideoMode && (
+                          <button
+                            onClick={() => {
+                              const el = document.getElementById('zona-estado')
+                              if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' })
+                            }}
+                            style={{
+                              display: 'block',
+                              width: '100%',
+                              marginTop: 'var(--space-4)',
+                              padding: 'var(--space-4) var(--space-6)',
+                              fontFamily: 'var(--font-inter)',
+                              fontSize: 'var(--text-body)',
+                              fontWeight: 600,
+                              color: 'var(--color-text-primary)',
+                              background: 'var(--color-bg-secondary)',
+                              border: 'var(--border-subtle)',
+                              borderRadius: 'var(--radius-lg)',
+                              cursor: 'pointer',
+                              textAlign: 'center',
+                            }}
+                          >
+                            Ver mi análisis completo ↓
+                          </button>
+                        )}
+                      </div>
+                    )
                   if (action.type === 'express_session')
                     return <ExpressSessionOffer key={`pa-${i}`} content={action.content} createdAt={action.created_at} />
                   return null
@@ -871,7 +919,7 @@ export default function MapaClient({
                 </p>
                 <div style={{ display: 'flex', gap: 'var(--space-3)', flexWrap: 'wrap' }}>
                   <Button variant="secondary" size="small" onClick={handleShare}>
-                    ↗ Enviar el diagnóstico
+                    ↗ Enviar el análisis
                   </Button>
                   <Button variant="secondary" size="small" onClick={handleDownloadPNG}>
                     ↓ Descargar mi mapa
@@ -907,7 +955,7 @@ export default function MapaClient({
               opacity: 0.7,
             }}>
               Este mapa es tuyo. Evoluciona con el tiempo.<br />
-              Confidencial — solo esta URL tiene acceso a tu diagnóstico.
+              Confidencial — solo esta URL tiene acceso a tu análisis.
             </p>
           </div>
 

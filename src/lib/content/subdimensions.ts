@@ -43,7 +43,7 @@ const SUBDIMENSION_CONFIGS: Record<DimensionKey, SubdimensionConfig> = {
   d1: {
     dimensionKey: 'd1',
     dimensionName: 'Regulación Nerviosa',
-    intro: 'Tu regulación nerviosa tiene 3 subdimensiones que no pudimos calcular con tu diagnóstico original:',
+    intro: 'Tu regulación nerviosa tiene 3 subdimensiones que no pudimos calcular con tu análisis original:',
     subdimensions: [
       { key: 'd1_activation', name: 'Activación diurna' },
       { key: 'd1_recovery', name: 'Recuperación nocturna' },

@@ -33,7 +33,7 @@ export const EMAIL_DEFAULTS: Record<string, EmailTemplateDefaults> = {
   d7: {
     subject: 'Tu mapa se ha actualizado',
     bodyContent:
-      'Nuevo insight sobre tu dimensión más comprometida. Un dato que no existía cuando hiciste tu diagnóstico.',
+      'Nuevo insight sobre tu dimensión más comprometida. Un dato que no existía cuando hiciste tu análisis.',
     ctaText: 'Ver mi mapa',
   },
   d10: {
@@ -43,7 +43,7 @@ export const EMAIL_DEFAULTS: Record<string, EmailTemplateDefaults> = {
   },
   d14: {
     subject: 'Hay 3 subdimensiones nuevas disponibles',
-    bodyContent: '2 preguntas más para aumentar la resolución de tu diagnóstico.',
+    bodyContent: '2 preguntas más para aumentar la resolución de tu análisis.',
     ctaText: 'Ver mi mapa',
   },
   d21: {
@@ -53,7 +53,7 @@ export const EMAIL_DEFAULTS: Record<string, EmailTemplateDefaults> = {
     ctaText: 'Ver mi mapa',
   },
   d30: {
-    subject: 'Un mes desde tu diagnóstico — ¿ha cambiado algo?',
+    subject: 'Un mes desde tu análisis — ¿ha cambiado algo?',
     bodyContent:
       'Actualiza tu mapa en 30 segundos. Tus scores anteriores se guardan para que veas la evolución.',
     ctaText: 'Actualizar mi mapa',
@@ -66,7 +66,7 @@ export const EMAIL_DEFAULTS: Record<string, EmailTemplateDefaults> = {
   goodbye: {
     subject: 'Tu mapa sigue aquí',
     bodyContent:
-      'Tu mapa de regulación sigue evolucionando.\n\nNo necesitas abrir estos emails para que eso ocurra. Tu diagnóstico trabaja por ti en segundo plano — y lo que revele estará ahí cuando lo necesites.\n\nVamos a dejar de enviarte actualizaciones para no añadir ruido a tu bandeja. Pero hay algo que no cambia:',
+      'Tu mapa de regulación sigue evolucionando.\n\nNo necesitas abrir estos emails para que eso ocurra. Tu análisis trabaja por ti en segundo plano — y lo que revele estará ahí cuando lo necesites.\n\nVamos a dejar de enviarte actualizaciones para no añadir ruido a tu bandeja. Pero hay algo que no cambia:',
     ctaText: 'Seguir recibiendo actualizaciones',
     isDynamic: true,
     dynamicNote:

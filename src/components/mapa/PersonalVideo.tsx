@@ -1,8 +1,12 @@
 'use client'
 
+import { useRef, useState, useEffect } from 'react'
+
 interface Props {
   videoUrl: string
   createdAt: string
+  autoPlay?: boolean
+  id?: string
 }
 
 function relativeTime(iso: string): string {
@@ -15,9 +19,30 @@ function relativeTime(iso: string): string {
   return months === 1 ? 'hace 1 mes' : `hace ${months} meses`
 }
 
-export default function PersonalVideo({ videoUrl, createdAt }: Props) {
+export default function PersonalVideo({ videoUrl, createdAt, autoPlay, id }: Props) {
+  const videoRef = useRef<HTMLVideoElement>(null)
+  const [isPlaying, setIsPlaying] = useState(false)
+  const [hasThumb, setHasThumb] = useState(false)
+
+  // On iOS, preload="metadata" often doesn't generate a poster frame.
+  // We use the #t=0.5 trick to force loading a frame as poster.
+  const posterSrc = `${videoUrl}#t=0.5`
+
+  useEffect(() => {
+    if (autoPlay && videoRef.current) {
+      videoRef.current.play().then(() => setIsPlaying(true)).catch(() => {})
+    }
+  }, [autoPlay])
+
+  function handlePlay() {
+    if (videoRef.current) {
+      videoRef.current.play().then(() => setIsPlaying(true)).catch(() => {})
+    }
+  }
+
   return (
     <div
+      id={id}
       className="mapa-fade-up"
       style={{
         background: 'var(--color-bg-secondary)',
@@ -47,17 +72,62 @@ export default function PersonalVideo({ videoUrl, createdAt }: Props) {
         Dr. Javier A. Martín Ramos
       </p>
 
-      <video
-        src={videoUrl}
-        controls
-        preload="metadata"
-        playsInline
-        style={{
-          width: '100%',
-          borderRadius: 'var(--radius-md)',
-          display: 'block',
-        }}
-      />
+      {/* Video with custom play overlay for reliable thumbnail on mobile */}
+      <div style={{ position: 'relative', borderRadius: 'var(--radius-md)', overflow: 'hidden' }}>
+        <video
+          ref={videoRef}
+          src={posterSrc}
+          controls={isPlaying}
+          preload="metadata"
+          playsInline
+          onPlay={() => setIsPlaying(true)}
+          onLoadedData={() => setHasThumb(true)}
+          style={{
+            width: '100%',
+            borderRadius: 'var(--radius-md)',
+            display: 'block',
+            aspectRatio: '16 / 9',
+            objectFit: 'cover',
+            background: '#1E1310',
+          }}
+        />
+
+        {/* Play button overlay — hidden once playing */}
+        {!isPlaying && (
+          <button
+            onClick={handlePlay}
+            aria-label="Reproducir video"
+            style={{
+              position: 'absolute',
+              inset: 0,
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              background: 'rgba(30, 19, 16, 0.35)',
+              border: 'none',
+              cursor: 'pointer',
+              borderRadius: 'var(--radius-md)',
+            }}
+          >
+            <div style={{
+              width: 64,
+              height: 64,
+              borderRadius: '50%',
+              background: 'rgba(255, 255, 255, 0.92)',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              boxShadow: '0 4px 20px rgba(0,0,0,0.2)',
+              transition: 'transform 200ms ease',
+            }}>
+              {/* Play triangle */}
+              <svg width="24" height="28" viewBox="0 0 24 28" fill="none">
+                <path d="M2 2L22 14L2 26V2Z" fill="#1E1310" stroke="#1E1310" strokeWidth="2" strokeLinejoin="round" />
+              </svg>
+            </div>
+          </button>
+        )}
+      </div>
 
       <p style={{
         fontFamily: 'var(--font-inter)',

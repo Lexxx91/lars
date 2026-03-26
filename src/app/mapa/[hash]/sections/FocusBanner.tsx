@@ -92,7 +92,7 @@ export function selectFocus(props: FocusBannerProps): FocusItem {
     return {
       tag: 'PROFUNDIZA TU EVALUACIÓN',
       title: `${worstDimensionName} tiene ${subdimensionConfig.subdimensions.length} capas más`,
-      description: `2 preguntas más para calcular las subdimensiones que no pudimos medir con tu diagnóstico original.`,
+      description: `2 preguntas más para calcular las subdimensiones que no pudimos medir con tu análisis original.`,
       ctaText: 'Responder ahora',
       scrollTo: 'section-subdimensions',
     }

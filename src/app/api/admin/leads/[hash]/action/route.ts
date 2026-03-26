@@ -132,7 +132,10 @@ export async function POST(
 
   if (body.notify_lead && row.email && body.content) {
     try {
-      const mapUrl = `${getBaseUrl()}/mapa/${hash}`
+      const isVideo = body.type === 'video'
+      const mapUrl = isVideo
+        ? `${getBaseUrl()}/mapa/${hash}?video=1`
+        : `${getBaseUrl()}/mapa/${hash}`
       const html = `
 <!DOCTYPE html>
 <html lang="es">
@@ -145,7 +148,7 @@ export async function POST(
       <table cellpadding="0" cellspacing="0" style="margin: 0 0 32px 0;">
         <tr><td style="background: #F5F564; border-radius: 100px; padding: 16px 32px;">
           <a href="${mapUrl}" style="color: #1E1310; font-size: 15px; font-weight: 500; text-decoration: none; display: block; white-space: nowrap;">
-            Ver mi mapa
+            ${isVideo ? 'Ver mensaje de Javier' : 'Ver mi mapa'}
           </a>
         </td></tr>
       </table>
@@ -157,7 +160,7 @@ export async function POST(
 </html>`
 
       const subjectByType: Record<string, string> = {
-        personal_note: 'Un mensaje de Javier sobre tu diagnóstico',
+        personal_note: 'Un mensaje de Javier sobre tu análisis',
         video: 'Javier ha grabado algo para ti',
         early_unlock: 'Contenido nuevo desbloqueado en tu mapa',
         express_session: 'Javier quiere hablar contigo — 10 minutos',

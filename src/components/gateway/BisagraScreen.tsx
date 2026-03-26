@@ -15,7 +15,7 @@
  *   T+3400ms Texto de brecha (accent)
  *   T+4000ms Separador + coste oculto
  *   T+5000ms Amplificador social
- *   T+5800ms Botón "Ver mi diagnóstico completo"
+ *   T+5800ms Botón "Ver mi análisis completo"
  */
 
 import { useState, useEffect } from 'react'
@@ -285,7 +285,7 @@ export default function BisagraScreen({ scores, onContinue }: BisagraScreenProps
           e.currentTarget.style.borderColor = 'rgba(198,200,238,0.25)'
         }}
       >
-        Ver mi diagnóstico completo →
+        Ver mi análisis completo →
       </button>
     </div>
   )
