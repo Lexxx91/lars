@@ -86,6 +86,9 @@ export default function AdminHub() {
   const [data, setData] = useState<HubData | null>(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
+  const [mounted, setMounted] = useState(false)
+
+  useEffect(() => { setMounted(true) }, [])
 
   const fetchHub = useCallback(async () => {
     const secret = sessionStorage.getItem('admin_secret')
@@ -130,14 +133,7 @@ export default function AdminHub() {
 
   return (
     <AdminLayout>
-      {/* Skeleton pulse animation */}
-      <style>{`
-        @keyframes hubPulse {
-          0%, 100% { opacity: 0.4; }
-          50% { opacity: 1; }
-        }
-      `}</style>
-
+      <div style={{ opacity: mounted ? 1 : 0, transition: 'opacity 200ms ease-out' }}>
       {/* Greeting + Date */}
       <div
         style={{
@@ -228,6 +224,7 @@ export default function AdminHub() {
 
         {/* Activity */}
         <HubActivity items={data?.activity ?? null} loading={loading} />
+      </div>
       </div>
     </AdminLayout>
   )

@@ -929,6 +929,17 @@ input[type="range"]::-moz-range-track {
   }
 }
 
+/* ─── Admin skeleton pulse ─── */
+@keyframes hubPulse {
+  0%, 100% { opacity: 0.4; }
+  50% { opacity: 1; }
+}
+
+/* ─── Admin action button click feedback ─── */
+.admin-action-btn:active {
+  transform: scale(0.98);
+}
+
 /* prefers-reduced-motion for below-fold */
 @media (prefers-reduced-motion: reduce) {
   .organic-blob {

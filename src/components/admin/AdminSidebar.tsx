@@ -99,10 +99,14 @@ export default function AdminSidebar({
         overflow: 'hidden',
       }}
     >
-      {/* Item hover style */}
+      {/* Item hover style + badge pulse */}
       <style>{`
         .admin-sidebar-item:hover {
           background-color: ${HOVER_BG};
+        }
+        @keyframes badgePulse {
+          0%, 100% { transform: scale(1); }
+          50% { transform: scale(1.1); }
         }
       `}</style>
 
@@ -280,6 +284,7 @@ function SidebarItem({ item, active, collapsed, badge }: SidebarItemProps) {
               backgroundColor: badge === 'red' ? BADGE_RED : BADGE_GREEN,
               border: `2px solid ${SIDEBAR_BG}`,
               boxSizing: 'content-box',
+              animation: 'badgePulse 2s ease-in-out infinite',
             }}
           />
         )}

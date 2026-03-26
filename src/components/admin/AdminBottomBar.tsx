@@ -48,22 +48,29 @@ export default function AdminBottomBar({ activePath, badges }: AdminBottomBarPro
   }
 
   return (
-    <nav
-      style={{
-        position: 'fixed',
-        bottom: 0,
-        left: 0,
-        right: 0,
-        height: 56,
-        paddingBottom: 'env(safe-area-inset-bottom, 0px)',
-        backgroundColor: BAR_BG,
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'space-around',
-        zIndex: 200,
-        borderTop: '1px solid rgba(249, 241, 222, 0.08)',
-      }}
-    >
+    <>
+      <style>{`
+        @keyframes badgePulse {
+          0%, 100% { transform: scale(1); }
+          50% { transform: scale(1.1); }
+        }
+      `}</style>
+      <nav
+        style={{
+          position: 'fixed',
+          bottom: 0,
+          left: 0,
+          right: 0,
+          height: 56,
+          paddingBottom: 'env(safe-area-inset-bottom, 0px)',
+          backgroundColor: BAR_BG,
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-around',
+          zIndex: 200,
+          borderTop: '1px solid rgba(249, 241, 222, 0.08)',
+        }}
+      >
       {ITEMS.map((item) => {
         const active = isActive(item.href)
         const Icon = item.icon
@@ -103,6 +110,7 @@ export default function AdminBottomBar({ activePath, badges }: AdminBottomBarPro
                     backgroundColor: badgeColor,
                     border: `2px solid ${BAR_BG}`,
                     boxSizing: 'content-box',
+                    animation: 'badgePulse 2s ease-in-out infinite',
                   }}
                 />
               )}
@@ -121,5 +129,6 @@ export default function AdminBottomBar({ activePath, badges }: AdminBottomBarPro
         )
       })}
     </nav>
+    </>
   )
 }

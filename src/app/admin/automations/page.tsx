@@ -54,6 +54,9 @@ export default function AutomationsPage() {
   const [error, setError] = useState<string | null>(null)
   const [templates, setTemplates] = useState<TemplateInfo[]>([])
   const [editingKey, setEditingKey] = useState<string | null>(null)
+  const [mounted, setMounted] = useState(false)
+
+  useEffect(() => { setMounted(true) }, [])
 
   const fetchAutomations = useCallback(async () => {
     const secret = sessionStorage.getItem('admin_secret')
@@ -93,12 +96,9 @@ export default function AutomationsPage() {
 
   return (
     <AdminLayout>
-      {/* Animations + responsive grid */}
+      <div style={{ opacity: mounted ? 1 : 0, transition: 'opacity 200ms ease-out' }}>
+      {/* Responsive grid */}
       <style>{`
-        @keyframes hubPulse {
-          0%, 100% { opacity: 0.4; }
-          50% { opacity: 1; }
-        }
         .automations-stats-grid {
           display: grid;
           grid-template-columns: repeat(3, 1fr);
@@ -185,18 +185,35 @@ export default function AutomationsPage() {
       )}
 
       {/* Content */}
-      <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-6)' }}>
-        {/* Stats */}
-        <AutomationsStats data={data?.global_stats ?? null} loading={loading} />
+      {!loading && data && data.global_stats.total_sent === 0 && data.emails.length === 0 ? (
+        <p
+          style={{
+            fontFamily: 'var(--font-inter)',
+            fontSize: 'var(--text-body-sm)',
+            color: 'var(--color-text-tertiary)',
+            padding: 'var(--space-8)',
+            background: 'rgba(30,19,16,0.02)',
+            borderRadius: 'var(--radius-md)',
+            textAlign: 'center',
+            lineHeight: 'var(--lh-body)',
+          }}
+        >
+          No hay datos de emails todavía. Cuando se envíe el primer email automático, las estadísticas aparecerán aquí.
+        </p>
+      ) : (
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-6)' }}>
+          {/* Stats */}
+          <AutomationsStats data={data?.global_stats ?? null} loading={loading} />
 
-        {/* Flow */}
-        <AutomationsFlow
-          emails={data?.emails ?? null}
-          loading={loading}
-          templates={templates}
-          onEditTemplate={(key) => setEditingKey(key)}
-        />
-      </div>
+          {/* Flow */}
+          <AutomationsFlow
+            emails={data?.emails ?? null}
+            loading={loading}
+            templates={templates}
+            onEditTemplate={(key) => setEditingKey(key)}
+          />
+        </div>
+      )}
 
       {/* Template editor modal */}
       {editingKey && (
@@ -207,6 +224,7 @@ export default function AutomationsPage() {
           onSave={fetchAutomations}
         />
       )}
+      </div>
     </AdminLayout>
   )
 }

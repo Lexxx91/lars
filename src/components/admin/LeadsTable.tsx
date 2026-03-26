@@ -396,44 +396,66 @@ export default function LeadsTable({
           >
             <IconUsers size={24} />
           </div>
-          <p
-            style={{
-              fontFamily: 'var(--font-inter)',
-              fontSize: 'var(--text-body)',
-              color: 'var(--color-text-secondary)',
-              margin: '0 0 var(--space-2)',
-            }}
-          >
-            No hay leads que coincidan
-          </p>
-          <p
-            style={{
-              fontFamily: 'var(--font-inter)',
-              fontSize: 'var(--text-body-sm)',
-              color: 'var(--color-text-tertiary)',
-              margin: 0,
-            }}
-          >
-            Prueba a cambiar los filtros o el periodo
-          </p>
-          {(activeFilter !== 'all' || search) && (
-            <button
-              onClick={() => { onFilterChange('all'); setSearch('') }}
+          {leads.length === 0 && activeFilter === 'all' && !search ? (
+            /* True empty — no leads at all in this period */
+            <p
               style={{
-                marginTop: 'var(--space-4)',
-                padding: '8px 20px',
-                borderRadius: 'var(--radius-pill)',
-                border: 'var(--border-medium)',
-                background: 'transparent',
-                color: 'var(--color-text-secondary)',
                 fontFamily: 'var(--font-inter)',
-                fontSize: '13px',
-                fontWeight: 500,
-                cursor: 'pointer',
+                fontSize: 'var(--text-body-sm)',
+                color: 'var(--color-text-tertiary)',
+                padding: 'var(--space-8)',
+                background: 'rgba(30,19,16,0.02)',
+                borderRadius: 'var(--radius-md)',
+                textAlign: 'center',
+                lineHeight: 'var(--lh-body)',
+                margin: 0,
               }}
             >
-              Limpiar filtros
-            </button>
+              No hay leads en este periodo. Cuando alguien complete el gateway, aparecerá aquí.
+            </p>
+          ) : (
+            /* Filtered empty — leads exist but none match */
+            <>
+              <p
+                style={{
+                  fontFamily: 'var(--font-inter)',
+                  fontSize: 'var(--text-body)',
+                  color: 'var(--color-text-secondary)',
+                  margin: '0 0 var(--space-2)',
+                }}
+              >
+                No hay leads que coincidan
+              </p>
+              <p
+                style={{
+                  fontFamily: 'var(--font-inter)',
+                  fontSize: 'var(--text-body-sm)',
+                  color: 'var(--color-text-tertiary)',
+                  margin: 0,
+                }}
+              >
+                Prueba a cambiar los filtros o el periodo
+              </p>
+              {(activeFilter !== 'all' || search) && (
+                <button
+                  onClick={() => { onFilterChange('all'); setSearch('') }}
+                  style={{
+                    marginTop: 'var(--space-4)',
+                    padding: '8px 20px',
+                    borderRadius: 'var(--radius-pill)',
+                    border: 'var(--border-medium)',
+                    background: 'transparent',
+                    color: 'var(--color-text-secondary)',
+                    fontFamily: 'var(--font-inter)',
+                    fontSize: '13px',
+                    fontWeight: 500,
+                    cursor: 'pointer',
+                  }}
+                >
+                  Limpiar filtros
+                </button>
+              )}
+            </>
           )}
         </div>
       ) : isMobile ? (
@@ -449,6 +471,8 @@ export default function LeadsTable({
               <button
                 key={lead.hash}
                 onClick={() => onSelectLead(lead.hash)}
+                onMouseEnter={(e) => { e.currentTarget.style.background = 'rgba(180,90,50,0.03)' }}
+                onMouseLeave={(e) => { e.currentTarget.style.background = 'var(--color-bg-tertiary)' }}
                 style={{
                   background: 'var(--color-bg-tertiary)',
                   border: isSelected ? `2px solid var(--color-accent)` : 'var(--border-subtle)',
@@ -457,7 +481,7 @@ export default function LeadsTable({
                   textAlign: 'left',
                   cursor: 'pointer',
                   width: '100%',
-                  transition: 'border-color 150ms ease',
+                  transition: 'border-color 150ms ease, background var(--transition-base)',
                 }}
               >
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8 }}>
@@ -588,11 +612,11 @@ export default function LeadsTable({
                     style={{
                       borderBottom: '1px solid rgba(30, 19, 16, 0.04)',
                       cursor: 'pointer',
-                      transition: 'background 100ms ease',
+                      transition: 'background var(--transition-base)',
                       background: isSelected ? 'rgba(180, 90, 50, 0.04)' : 'transparent',
                       borderLeft: isSelected ? '3px solid var(--color-accent)' : '3px solid transparent',
                     }}
-                    onMouseEnter={(e) => { if (!isSelected) e.currentTarget.style.background = 'rgba(30, 19, 16, 0.02)' }}
+                    onMouseEnter={(e) => { if (!isSelected) e.currentTarget.style.background = 'rgba(180,90,50,0.03)' }}
                     onMouseLeave={(e) => { if (!isSelected) e.currentTarget.style.background = 'transparent' }}
                   >
                     <td style={{ padding: '10px 8px' }}>

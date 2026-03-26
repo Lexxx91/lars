@@ -9,6 +9,7 @@
  * 4. Conversión 7d (% + delta)
  */
 
+import { useState } from 'react'
 import Link from 'next/link'
 
 interface Stats {
@@ -110,6 +111,8 @@ function CompBadge({ current, previous, suffix }: { current: number; previous: n
 // ── Component ───────────────────────────────────────────────────────────────
 
 export default function HubStatCards({ data, loading }: HubStatCardsProps) {
+  const [hoveredCard, setHoveredCard] = useState<number | null>(null)
+
   if (loading || !data) {
     return (
       <div
@@ -166,7 +169,16 @@ export default function HubStatCards({ data, loading }: HubStatCardsProps) {
       }}
     >
       {/* Card 1: Análisis hoy */}
-      <div style={cardBase}>
+      <div
+        style={{
+          ...cardBase,
+          transition: 'all var(--transition-base)',
+          boxShadow: hoveredCard === 0 ? '0 4px 12px rgba(0,0,0,0.06)' : 'none',
+          transform: hoveredCard === 0 ? 'translateY(-1px)' : 'none',
+        }}
+        onMouseEnter={() => setHoveredCard(0)}
+        onMouseLeave={() => setHoveredCard(null)}
+      >
         <div>
           <p style={overlineStyle}>Análisis hoy</p>
           <p style={numberStyle}>{data.diagnostics_today}</p>
@@ -175,7 +187,16 @@ export default function HubStatCards({ data, loading }: HubStatCardsProps) {
       </div>
 
       {/* Card 2: Próxima sesión */}
-      <div style={cardBase}>
+      <div
+        style={{
+          ...cardBase,
+          transition: 'all var(--transition-base)',
+          boxShadow: hoveredCard === 1 ? '0 4px 12px rgba(0,0,0,0.06)' : 'none',
+          transform: hoveredCard === 1 ? 'translateY(-1px)' : 'none',
+        }}
+        onMouseEnter={() => setHoveredCard(1)}
+        onMouseLeave={() => setHoveredCard(null)}
+      >
         <div>
           <p style={overlineStyle}>Próxima sesión</p>
           {data.next_session ? (
@@ -228,7 +249,16 @@ export default function HubStatCards({ data, loading }: HubStatCardsProps) {
       </div>
 
       {/* Card 3: Leads calientes */}
-      <div style={cardBase}>
+      <div
+        style={{
+          ...cardBase,
+          transition: 'all var(--transition-base)',
+          boxShadow: hoveredCard === 2 ? '0 4px 12px rgba(0,0,0,0.06)' : 'none',
+          transform: hoveredCard === 2 ? 'translateY(-1px)' : 'none',
+        }}
+        onMouseEnter={() => setHoveredCard(2)}
+        onMouseLeave={() => setHoveredCard(null)}
+      >
         <div>
           <p style={overlineStyle}>Leads calientes</p>
           <p style={numberStyle}>{data.hot_leads}</p>
@@ -260,7 +290,16 @@ export default function HubStatCards({ data, loading }: HubStatCardsProps) {
       </div>
 
       {/* Card 4: Conversión 7d */}
-      <div style={cardBase}>
+      <div
+        style={{
+          ...cardBase,
+          transition: 'all var(--transition-base)',
+          boxShadow: hoveredCard === 3 ? '0 4px 12px rgba(0,0,0,0.06)' : 'none',
+          transform: hoveredCard === 3 ? 'translateY(-1px)' : 'none',
+        }}
+        onMouseEnter={() => setHoveredCard(3)}
+        onMouseLeave={() => setHoveredCard(null)}
+      >
         <div>
           <p style={overlineStyle}>Conversión 7 días</p>
           <p style={numberStyle}>{data.conversion_7d}%</p>

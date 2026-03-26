@@ -43,7 +43,7 @@ export async function GET(req: NextRequest): Promise<NextResponse> {
       .limit(20),
     supabase
       .from('bookings')
-      .select('id, email, map_hash, slot_start, slot_end, status, completed_at, cancelled_at')
+      .select('id, email, map_hash, slot_start, slot_end, status, completed_at, cancelled_at, diagnostico_id')
       .in('status', ['completed', 'cancelled', 'no_show'])
       .order('slot_start', { ascending: false })
       .limit(30),
@@ -53,10 +53,61 @@ export async function GET(req: NextRequest): Promise<NextResponse> {
     return NextResponse.json({ error: configResult.error.message }, { status: 500 })
   }
 
+  // Enrich bookings with profile data from diagnosticos
+  const allBookings = [...(bookingsResult.data ?? []), ...(historyResult.data ?? [])]
+  const diagIds = allBookings
+    .map((b: { diagnostico_id?: string | null }) => b.diagnostico_id)
+    .filter((id): id is string => !!id)
+  const uniqueDiagIds = [...new Set(diagIds)]
+
+  let profileLookup: Record<string, { ego_primary: string | null; global_score: number | null; days_since_creation: number }> = {}
+
+  if (uniqueDiagIds.length > 0) {
+    const { data: diagnosticos } = await supabase
+      .from('diagnosticos')
+      .select('id, profile, scores, created_at')
+      .in('id', uniqueDiagIds)
+
+    if (diagnosticos) {
+      const now = Date.now()
+      for (const d of diagnosticos) {
+        const profile = d.profile as { ego_primary?: string } | null
+        const scores = d.scores as { global?: number } | null
+        const daysSince = Math.floor((now - new Date(d.created_at).getTime()) / (1000 * 60 * 60 * 24))
+        profileLookup[d.id] = {
+          ego_primary: profile?.ego_primary ?? null,
+          global_score: typeof scores?.global === 'number' ? scores.global : null,
+          days_since_creation: daysSince,
+        }
+      }
+    }
+  }
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  function enrichBooking(b: any) {
+    const diagId = b.diagnostico_id as string | null
+    return {
+      ...b,
+      profile_data: diagId && profileLookup[diagId] ? profileLookup[diagId] : null,
+    }
+  }
+
+  const enrichedUpcoming = (bookingsResult.data ?? []).map(enrichBooking)
+  const enrichedPast = (historyResult.data ?? []).map(enrichBooking)
+
+  // Today's sessions (Europe/Madrid timezone)
+  const todayMadrid = new Date().toLocaleDateString('en-CA', { timeZone: 'Europe/Madrid' }) // YYYY-MM-DD
+  const todaySessions = enrichedUpcoming.filter((b: { slot_start?: string }) => {
+    if (!b.slot_start) return false
+    const slotDate = new Date(b.slot_start).toLocaleDateString('en-CA', { timeZone: 'Europe/Madrid' })
+    return slotDate === todayMadrid
+  })
+
   return NextResponse.json({
     config: configResult.data ?? [],
-    upcomingBookings: bookingsResult.data ?? [],
-    pastBookings: historyResult.data ?? [],
+    upcomingBookings: enrichedUpcoming,
+    pastBookings: enrichedPast,
+    todaySessions,
   })
 }
 

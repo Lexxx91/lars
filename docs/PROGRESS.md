@@ -69,6 +69,19 @@ Evoluciones del mapa (día 3-90), emails automáticos, analytics custom en Supab
   - Period selector: 7d / 30d / 90d / Todo — reloads all components
   - Responsive: 2-col grid → 1-col on mobile
 
+- ✅ **Admin v2 — Sprint 7: Agenda + Polish Final** (26 Mar 2026):
+  - Agenda mejorada: sección "Hoy" prominente con profile badges, score, mini-insight de cómo abordar cada lead
+  - Mini-calendario semanal (7 días, sesiones confirmadas, días bloqueados)
+  - API enriquecida: bookings devuelven profile_data (ego_primary, global_score, days_since_creation) + todaySessions
+  - Cards de sesiones con contexto de perfil y botón "Ver lead"
+  - Skeleton loading en Analytics (reemplaza texto "Cargando...")
+  - hubPulse centralizado en globals.css (eliminado de inline en Hub, LAM, Automations)
+  - Fade-in 200ms en TODAS las páginas admin (Hub, LAM, Automations, Analytics, Agenda, Tools)
+  - Empty states diseñados en LAM, Automations, Analytics
+  - Microinteracciones: hover elevation en Hub cards, hover background en LAM rows, click feedback (.admin-action-btn:active), badge pulse en Sidebar y BottomBar
+  - npx tsc --noEmit sin errores
+  - **Admin v2 COMPLETADO** — 7 sprints, Centro de Comando Clínico funcional
+
 ### Pendiente (no bloquea lanzamiento)
 - Testimonios: siguen siendo placeholder — pendiente de testimonios reales de Javier
 - Stripe: en modo test — pasar a LIVE cuando esté listo

@@ -45,6 +45,9 @@ export default function ToolsPage() {
   const [error, setError] = useState<string | null>(null)
   const [log, setLog] = useState<string[]>([])
   const [secret, setSecret] = useState('')
+  const [mounted, setMounted] = useState(false)
+
+  useEffect(() => { setMounted(true) }, [])
 
   useEffect(() => {
     const saved = sessionStorage.getItem('admin_secret')
@@ -89,7 +92,7 @@ export default function ToolsPage() {
 
   return (
     <AdminLayout>
-      <div style={{ maxWidth: '600px' }}>
+      <div style={{ maxWidth: '600px', opacity: mounted ? 1 : 0, transition: 'opacity 200ms ease-out' }}>
         <h1
           style={{
             fontFamily: 'var(--font-lora)',

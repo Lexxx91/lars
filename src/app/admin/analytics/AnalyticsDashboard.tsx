@@ -83,6 +83,9 @@ export default function AnalyticsDashboard() {
   const [period, setPeriod] = useState<Period>('30d')
   const [loading, setLoading] = useState(true)
   const [counterKey, setCounterKey] = useState(0)
+  const [mounted, setMounted] = useState(false)
+
+  useEffect(() => { setMounted(true) }, [])
 
   const fetchData = useCallback(async (p: Period) => {
     setLoading(true)
@@ -109,19 +112,51 @@ export default function AnalyticsDashboard() {
   }, [])
 
   if (loading && !data) {
+    const skel = (w: string, h: string, delay = '0s') => ({
+      width: w,
+      height: h,
+      borderRadius: 'var(--radius-md)',
+      background: 'rgba(30,19,16,0.06)',
+      animation: 'hubPulse 1.5s ease-in-out infinite',
+      animationDelay: delay,
+    })
     return (
-      <div style={{ textAlign: 'center', padding: 'var(--space-12)', color: 'var(--color-text-tertiary)' }}>
-        Cargando datos...
+      <div>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 'var(--space-4)', marginBottom: 'var(--space-8)' }}>
+          {[0, 1, 2, 3].map(i => (
+            <div key={i} style={skel('100%', '88px', `${i * 0.1}s`)} />
+          ))}
+        </div>
+        <div style={skel('100%', '200px', '0.3s')} />
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 'var(--space-4)', marginTop: 'var(--space-8)' }}>
+          <div style={skel('100%', '180px', '0.4s')} />
+          <div style={skel('100%', '180px', '0.5s')} />
+        </div>
       </div>
     )
   }
 
-  if (!data) return null
+  if (!data) return (
+    <p
+      style={{
+        fontFamily: 'var(--font-inter)',
+        fontSize: 'var(--text-body-sm)',
+        color: 'var(--color-text-tertiary)',
+        padding: 'var(--space-8)',
+        background: 'rgba(30,19,16,0.02)',
+        borderRadius: 'var(--radius-md)',
+        textAlign: 'center',
+        lineHeight: 'var(--lh-body)',
+      }}
+    >
+      Aún no hay datos suficientes. Los gráficos aparecerán cuando haya al menos 5 análisis completados.
+    </p>
+  )
 
   const { funnel, metrics, recent } = data
 
   return (
-    <div>
+    <div style={{ opacity: mounted ? 1 : 0, transition: 'opacity 200ms ease-out' }}>
       {/* ── Header + Period Selector ── */}
       <div style={{
         display: 'flex',

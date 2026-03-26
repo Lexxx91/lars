@@ -23,6 +23,10 @@ function LeadsPageInner() {
   const initialDetail = searchParams.get('detail')
   const initialFilter = searchParams.get('filter') ?? 'all'
 
+  // ── Fade-in ──
+  const [mounted, setMounted] = useState(false)
+  useEffect(() => { setMounted(true) }, [])
+
   // ── State ──
   const [leads, setLeads] = useState<LeadRow[] | null>(null)
   const [totalFromApi, setTotalFromApi] = useState(0)
@@ -171,8 +175,7 @@ function LeadsPageInner() {
 
   return (
     <AdminLayout>
-      <style>{`@keyframes hubPulse { 0%, 100% { opacity: 0.4; } 50% { opacity: 1; } }`}</style>
-
+      <div style={{ opacity: mounted ? 1 : 0, transition: 'opacity 200ms ease-out' }}>
       {error && (
         <div
           style={{
@@ -236,6 +239,7 @@ function LeadsPageInner() {
         onClose={handleClosePanel}
         onRefresh={() => { if (selectedHash) fetchDetail(selectedHash) }}
       />
+      </div>
     </AdminLayout>
   )
 }
