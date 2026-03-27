@@ -152,7 +152,7 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
   const sidebarWidth = isMobile ? 0 : collapsed ? WIDTH_COLLAPSED : WIDTH_EXPANDED
 
   return (
-    <div style={{ minHeight: '100vh', backgroundColor: '#0B0F0E' }}>
+    <div style={{ minHeight: '100vh', backgroundColor: 'var(--color-bg-primary)' }}>
       {/* Desktop sidebar */}
       {!isMobile && (
         <AdminSidebar
