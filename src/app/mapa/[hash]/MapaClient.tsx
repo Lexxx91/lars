@@ -44,6 +44,10 @@ import PersonalNote from '@/components/mapa/PersonalNote'
 import PersonalVideo from '@/components/mapa/PersonalVideo'
 import ExpressSessionOffer from '@/components/mapa/ExpressSessionOffer'
 
+// AMPLIFY
+import AmplifyInviteModal from '@/components/amplify/AmplifyInviteModal'
+import AmplifyAcceptBanner from '@/components/amplify/AmplifyAcceptBanner'
+
 // ─── TIPOS ────────────────────────────────────────────────────────────────────
 
 interface PersonalActionData {
@@ -76,6 +80,10 @@ interface Props {
   worstScore: number
   hasPaid: boolean
   personalActions?: PersonalActionData[]
+  // AMPLIFY
+  amplifyInviteCount: number
+  profileCode: string | null
+  pendingAmplifyInvite: { invite_hash: string; inviter_initials: string } | null
 }
 
 // ─── HELPERS ──────────────────────────────────────────────────────────────────
@@ -133,6 +141,10 @@ export default function MapaClient({
   worstScore,
   hasPaid,
   personalActions,
+  // AMPLIFY
+  amplifyInviteCount,
+  profileCode,
+  pendingAmplifyInvite,
 }: Props) {
   const isFirstVisit = !lastVisitedAt
   const searchParams = useSearchParams()
@@ -145,6 +157,15 @@ export default function MapaClient({
   const [showPriority, setShowPriority] = useState(!isFirstVisit)
   const [showZona4, setShowZona4] = useState(!isFirstVisit)
   const [shareToast, setShareToast] = useState<string | null>(null)
+  const [amplifyBannerDismissed, setAmplifyBannerDismissed] = useState(false)
+  const [showAmplifyModal, setShowAmplifyModal] = useState(false)
+
+  // AMPLIFY visibility conditions
+  const daysSinceCreation = Math.floor(
+    (Date.now() - new Date(createdAt).getTime()) / 86400000
+  )
+  const meetsTimeRequirement = daysSinceCreation >= 7
+  const hasInviteCapacity = amplifyInviteCount < 5
   const [checkoutLoading, setCheckoutLoading] = useState(false)
   const [checkoutError, setCheckoutError] = useState<string | null>(null)
   const rafRef = useRef<number>(0)
@@ -510,6 +531,49 @@ export default function MapaClient({
       })
     }
 
+    // AMPLIFY — "Comparar tu mapa" (≥7 days, ≥1 return visit, <5 invites)
+    if (meetsTimeRequirement && hasInviteCapacity) {
+      accordionSections.push({
+        id: 'amplify',
+        title: 'Comparar tu mapa',
+        summary: amplifyInviteCount > 0
+          ? amplifyInviteCount === 1 ? '1 invitación' : `${amplifyInviteCount} invitaciones`
+          : 'Invita a alguien',
+        children: (
+          <div>
+            <p style={{
+              fontFamily: 'var(--font-inter, system-ui)',
+              fontSize: 'var(--text-body, 1rem)',
+              lineHeight: 'var(--lh-body, 1.6)',
+              color: 'var(--color-text-secondary)',
+              marginBottom: 'var(--space-6)',
+              maxWidth: '42rem',
+            }}>
+              ¿Conoces a alguien en tu misma situación — tu pareja, un socio, un amigo?
+              Si ambos hacéis el diagnóstico, vuestros mapas se pueden comparar.
+              Las brechas compartidas son las más reveladoras.
+            </p>
+            <Button
+              variant="ghost"
+              onClick={() => setShowAmplifyModal(true)}
+              style={{ marginBottom: 'var(--space-4)' }}
+            >
+              Invitar a comparar
+            </Button>
+            <p style={{
+              fontFamily: 'var(--font-inter, system-ui)',
+              fontSize: 'var(--text-caption, 0.75rem)',
+              lineHeight: 'var(--lh-body-sm, 1.5)',
+              color: 'var(--color-text-tertiary)',
+              fontStyle: 'italic',
+            }}>
+              &ldquo;Su diagnóstico es confidencial. Solo se compara si ambos aceptáis.&rdquo;
+            </p>
+          </div>
+        ),
+      })
+    }
+
     // Disabled teaser rows for upcoming unlocks
     const UNLOCK_SCHEDULE = [
       { key: 'archetype', id: 'identidad', title: 'Tu Identidad', day: 3 },
@@ -787,6 +851,19 @@ export default function MapaClient({
           </section>
 
           {/* ══════════════════════════════════════════════════════════════════
+               AMPLIFY — Banner de aceptación (invitados con ?ref=)
+             ══════════════════════════════════════════════════════════════════ */}
+          {pendingAmplifyInvite && !amplifyBannerDismissed && showZona4 && (
+            <AmplifyAcceptBanner
+              inviteHash={pendingAmplifyInvite.invite_hash}
+              inviterInitials={pendingAmplifyInvite.inviter_initials}
+              inviteeHash={hash}
+              onAccepted={() => {}}
+              onDeclined={() => setAmplifyBannerDismissed(true)}
+            />
+          )}
+
+          {/* ══════════════════════════════════════════════════════════════════
                ZONA 2 — TU FOCO (return visits only)
              ══════════════════════════════════════════════════════════════════ */}
           {!isFirstVisit && (
@@ -929,6 +1006,14 @@ export default function MapaClient({
       </main>
 
       {shareToast && <div className="mapa-toast">{shareToast}</div>}
+
+      {/* AMPLIFY Modal */}
+      <AmplifyInviteModal
+        isOpen={showAmplifyModal}
+        onClose={() => setShowAmplifyModal(false)}
+        hash={hash}
+        profileCode={profileCode}
+      />
     </>
   )
 }

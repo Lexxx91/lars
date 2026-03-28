@@ -185,6 +185,44 @@ export default async function MapaPage({
   // Worst dimension name for book excerpt
   const worstDimResult = dimensionResults.find((d) => d.key === mostCompromisedKey)
 
+  // ── AMPLIFY data ─────────────────────────────────────────────────────────
+
+  const amplifyInviteCount = (meta as Record<string, unknown>)?.amplify_invites_sent as number ?? 0
+  const profileCode = (profile as Record<string, unknown>)?.ego_primary as string ?? null
+
+  // Check for pending invite acceptance (invitee came via ?ref=)
+  let pendingAmplifyInvite: { invite_hash: string; inviter_initials: string } | null = null
+  const referredBy = (meta as Record<string, unknown>)?.referred_by as string | undefined
+  if (referredBy) {
+    try {
+      const amplifySb = createAdminClient()
+      const inviteResult = await amplifySb
+        .from('amplify_invites')
+        .select('invite_hash, inviter_id')
+        .eq('invite_hash', referredBy)
+        .eq('status', 'completed')
+        .single()
+      if (inviteResult.data) {
+        // Get inviter email for initials
+        const inviterResult = await amplifySb
+          .from('diagnosticos')
+          .select('email')
+          .eq('id', inviteResult.data.inviter_id)
+          .single()
+        const inviterEmail = (inviterResult.data as Record<string, unknown>)?.email as string ?? ''
+        const initials = inviterEmail
+          ? inviterEmail.split('@')[0].slice(0, 2).toUpperCase()
+          : '??'
+        pendingAmplifyInvite = {
+          invite_hash: inviteResult.data.invite_hash,
+          inviter_initials: initials,
+        }
+      }
+    } catch {
+      // Silent — AMPLIFY is non-critical
+    }
+  }
+
   return (
     <>
     <SiteHeader variant="default" />
@@ -211,6 +249,10 @@ export default async function MapaPage({
       worstScore={worstScore}
       hasPaid={funnel?.converted_week1 === true || funnel?.paid === true}
       personalActions={personal_actions ?? []}
+      // AMPLIFY
+      amplifyInviteCount={amplifyInviteCount}
+      profileCode={profileCode}
+      pendingAmplifyInvite={pendingAmplifyInvite}
     />
     </>
   )

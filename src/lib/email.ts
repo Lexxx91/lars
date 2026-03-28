@@ -341,11 +341,24 @@ export async function sendDia7Email(to: string, mapHash: string): Promise<void> 
   const defaults = EMAIL_DEFAULTS.d7
 
   const bodyText = override?.body_content ?? defaults.bodyContent
+  const amplifyBlock = `
+      <tr>
+        <td style="padding: 24px 0 0 0; border-top: 1px solid rgba(30,19,16,0.08);">
+          <p style="font-size: 13px; color: #8A7E75; line-height: 1.5; margin: 0 0 12px 0;">
+            ¿Conoces a alguien que podría necesitar ver su mapa?
+            Si ambos hacéis el diagnóstico, podréis comparar vuestras dimensiones.
+          </p>
+          <a href="${mapUrl}" style="font-size: 13px; color: #B45A32; text-decoration: underline;">
+            Invitar a alguien a comparar →
+          </a>
+        </td>
+      </tr>`
   const html = buildEvolutionEmail({
     content: `
       <p style="font-size: 14px; color: #1E1310; line-height: 1.6; margin: 0 0 16px 0;">
         ${escapeHtml(bodyText)}
-      </p>`,
+      </p>
+      ${amplifyBlock}`,
     buttonText: override?.cta_text ?? defaults.ctaText,
     mapUrl, mapHash, emailKey: 'd7',
   })
@@ -578,6 +591,97 @@ export async function sendPostPagoEmail(to: string, mapHash: string): Promise<vo
     subject: overridePP?.subject ?? defaultsPP.subject,
     html,
     headers: listUnsubscribeHeaders(mapHash),
+  })
+}
+
+// ─── EMAIL AMPLIFY: COMPARACIÓN LISTA ────────────────────────────────────────
+
+interface AmplifyComparisonReadyParams {
+  to: string
+  inviteeInitials: string
+  compareUrl: string
+  inviterMapHash: string
+}
+
+/** Email al invitador cuando el invitado acepta la comparación */
+export async function sendAmplifyComparisonReadyEmail({
+  to,
+  inviteeInitials,
+  compareUrl,
+  inviterMapHash,
+}: AmplifyComparisonReadyParams): Promise<void> {
+  const override = await getTemplateOverride('amplify_comparison_ready')
+  const defaults = EMAIL_DEFAULTS.amplify_comparison_ready
+
+  const html = `
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+</head>
+<body style="
+  margin: 0; padding: 0;
+  background-color: #FFFBEF;
+  font-family: Lora, Inter, system-ui, sans-serif;
+  color: #1E1310;
+">
+  <table width="100%" cellpadding="0" cellspacing="0" style="max-width: 560px; margin: 0 auto; padding: 48px 24px;">
+    <tr><td>
+
+      <img src="${getBaseUrl()}/img/logo-instituto-epigenetico.png" alt="Instituto Epigenético" width="220" style="display: block; width: 220px; height: auto; margin: 0 0 32px 0;" />
+
+      <p style="
+        font-size: 13px;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        color: #B45A32;
+        margin: 0 0 8px 0;
+      ">COMPARACIÓN DE MAPAS</p>
+
+      <p style="
+        font-size: 20px;
+        font-weight: 600;
+        color: #1E1310;
+        margin: 0 0 24px 0;
+        line-height: 1.3;
+      ">${escapeHtml(inviteeInitials)} ha completado su diagnóstico.</p>
+
+      <p style="
+        font-size: 14px;
+        color: #4B413C;
+        line-height: 1.6;
+        margin: 0 0 32px 0;
+      ">Ahora podéis ver cómo se comparan vuestras dimensiones. Las brechas compartidas revelan lo que ningún mapa individual puede mostrar.</p>
+
+      <table cellpadding="0" cellspacing="0" style="margin: 0 0 32px 0;">
+        <tr><td style="background: #F5F564; border-radius: 100px; padding: 16px 32px;">
+          <a href="${compareUrl}" style="color: #1E1310; font-size: 15px; font-weight: 500; text-decoration: none; display: block; white-space: nowrap;">
+            ${escapeHtml(override?.cta_text ?? defaults.ctaText)}
+          </a>
+        </td></tr>
+      </table>
+
+      <div style="height: 1px; background: #E8E2D0; margin-bottom: 24px;"></div>
+
+      <p style="font-size: 13px; color: #8A7E75; line-height: 1.6; margin: 0;">
+        Confidencial. Solo vosotros dos podéis ver esto.
+      </p>
+
+      ${unsubscribeFooterHtml(inviterMapHash)}
+      ${trackingPixelHtml(inviterMapHash, 'amplify_comparison_ready')}
+
+    </td></tr>
+  </table>
+</body>
+</html>`
+
+  await getResend().emails.send({
+    from: getFromEmail(),
+    to,
+    subject: override?.subject ?? defaults.subject,
+    html,
+    headers: listUnsubscribeHeaders(inviterMapHash),
   })
 }
 

@@ -89,6 +89,14 @@ Evoluciones del mapa (día 3-90), emails automáticos, analytics custom en Supab
   - Integración de useCopy() en 6 componentes de landing, 2 data files del gateway, y componentes del mapa
   - Los componentes públicos funcionan idénticos sin overrides (fallback transparente a defaults)
 
+- ✅ **AMPLIFY — Sesión 1: Backend + BD** (28 Mar 2026):
+  - Tabla `amplify_invites` con RLS, índices, outcome tracking, campos de inteligencia del sistema
+  - 5 API routes: invite, invite status, accept, decline, compare
+  - Lógica de insight comparativo con 6 reglas de prioridad + personalización por perfil (PC/FI/CE/CP)
+  - Detección de `?ref=` en el gateway + vinculación automática de invitación en `/api/diagnostico`
+  - Email "comparación lista" con template warm cream + tracking pixel
+  - Anti-spam (5/hora) + límite de invitaciones activas (5) + detección de patrón de rechazo (3+)
+
 ### Pendiente (no bloquea lanzamiento)
 - Testimonios: siguen siendo placeholder — pendiente de testimonios reales de Javier
 - Stripe: en modo test — pasar a LIVE cuando esté listo

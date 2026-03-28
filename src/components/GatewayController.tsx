@@ -14,6 +14,7 @@
  */
 
 import { useState, useCallback, useEffect } from 'react'
+import { useSearchParams } from 'next/navigation'
 import HeroSection from '@/components/landing/HeroSection'
 import BelowTheFold from '@/components/landing/BelowTheFold'
 import GatewayBloque1 from '@/components/gateway/GatewayBloque1'
@@ -33,6 +34,7 @@ interface SavedState {
   p1: string | null
   bloque1Answers: Bloque1Answers | null
   bloque2Answers: Bloque2Answers | null
+  inviteHash: string | null
   savedAt: number
 }
 
@@ -69,6 +71,7 @@ function clearSavedState() {
 export default function GatewayController() {
   /* Restaurar estado guardado (si existe y no expiró) */
   const [restored] = useState(() => loadSavedState())
+  const searchParams = useSearchParams()
 
   const [phase, setPhase] = useState<Phase>(restored?.phase ?? 'landing')
   const [p1, setP1] = useState<string | null>(restored?.p1 ?? null)
@@ -78,11 +81,19 @@ export default function GatewayController() {
   const [duplicateEmail, setDuplicateEmail] = useState<string | null>(null)
   const [landingExiting, setLandingExiting] = useState(false)
 
+  // ── AMPLIFY: detectar ?ref= en la URL ───────────────────────────────────
+  const [inviteHash] = useState<string | null>(() => {
+    // Prioridad: URL param > estado guardado
+    const refParam = searchParams.get('ref')
+    if (refParam && /^[a-z0-9]{12}$/.test(refParam)) return refParam
+    return restored?.inviteHash ?? null
+  })
+
   /* Persistir estado en localStorage cada vez que cambia */
   useEffect(() => {
     if (phase === 'landing') return // no guardar estado en landing
-    saveState({ phase, p1, bloque1Answers, bloque2Answers })
-  }, [phase, p1, bloque1Answers, bloque2Answers])
+    saveState({ phase, p1, bloque1Answers, bloque2Answers, inviteHash })
+  }, [phase, p1, bloque1Answers, bloque2Answers, inviteHash])
 
   /* P1 seleccionada en el hero → fade out landing, then mount gateway */
   const handleP1Select = useCallback((id: string) => {
@@ -121,6 +132,7 @@ export default function GatewayController() {
           p1,
           bloque1: bloque1Answers,
           bloque2: bloque2Answers,
+          ...(inviteHash ? { ref: inviteHash } : {}),
         }),
       })
 
@@ -141,7 +153,7 @@ export default function GatewayController() {
       clearSavedState()
       window.location.href = '/mapa/preview'
     }
-  }, [p1, bloque1Answers, bloque2Answers])
+  }, [p1, bloque1Answers, bloque2Answers, inviteHash])
 
   /* Duplicado: actualizar con nuevas respuestas */
   const handleDuplicateUpdate = useCallback(async () => {

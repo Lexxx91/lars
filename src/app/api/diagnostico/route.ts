@@ -27,6 +27,7 @@ interface DiagnosticoPayload {
   update?: boolean
   mode?: 'deepen' | 'convert'
   sliders?: Record<string, number>
+  ref?: string // AMPLIFY invite_hash si viene por referencia
 }
 
 function detectProfile(p6: string, p2: string, p4: string): Record<string, unknown> {
@@ -291,6 +292,7 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
       source: req.headers.get('referer') ?? 'direct',
       device: req.headers.get('user-agent') ?? 'unknown',
       ...(mode === 'convert' ? { mode: 'convert' } : {}),
+      ...(payload.ref ? { referred_by: payload.ref } : {}),
       ...geo,
     },
   })
@@ -298,6 +300,44 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
   if (insertError) {
     console.error('[diagnostico] Error insertando en Supabase:', insertError)
     return NextResponse.json({ error: 'Error guardando diagnóstico' }, { status: 500 })
+  }
+
+  // ── AMPLIFY: vincular invitación si viene por ?ref= ─────────────────────
+  if (payload.ref && typeof payload.ref === 'string') {
+    void (async () => {
+      try {
+        // Obtener el ID del diagnóstico recién creado
+        const { data: newDiag } = await supabase
+          .from('diagnosticos')
+          .select('id')
+          .eq('hash', hash)
+          .single()
+
+        if (!newDiag) return
+
+        // Buscar invitación pending con este invite_hash
+        const { data: invite } = await supabase
+          .from('amplify_invites')
+          .select('id, status')
+          .eq('invite_hash', payload.ref)
+          .eq('status', 'pending')
+          .single()
+
+        if (!invite) return
+
+        // Actualizar invitación: vincular invitee y marcar como completed
+        await supabase
+          .from('amplify_invites')
+          .update({
+            invitee_id: newDiag.id,
+            status: 'completed',
+            completed_at: new Date().toISOString(),
+          })
+          .eq('id', invite.id)
+      } catch (err) {
+        console.error('[diagnostico] Error linking AMPLIFY invite:', err)
+      }
+    })()
   }
 
   // ── Enviar email día 0 (fire-and-forget — no bloquea el redirect) ─────────

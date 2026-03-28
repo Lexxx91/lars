@@ -8,6 +8,7 @@
  * ClientShell wraps everything in NervousSystemProvider + Canvas background.
  */
 
+import { Suspense } from 'react'
 import ClientShell from '@/components/ClientShell'
 import GatewayController from '@/components/GatewayController'
 import SiteHeader from '@/components/SiteHeader'
@@ -23,7 +24,9 @@ export default function Home() {
       <SiteHeader variant="landing" />
 
       <main id="main-content">
-        <GatewayController />
+        <Suspense>
+          <GatewayController />
+        </Suspense>
       </main>
     </ClientShell>
   )

@@ -233,6 +233,92 @@ ALTER TABLE bookings DROP COLUMN IF EXISTS admin_notes;
 
 ---
 
+## Tabla `amplify_invites` (Sistema AMPLIFY — Comparación de mapas)
+
+Invitaciones para comparar mapas entre dos personas. Motor de crecimiento orgánico.
+
+| Columna | Tipo | Descripción |
+|---------|------|-------------|
+| `id` | uuid (PK) | Identificador interno |
+| `invite_hash` | text (NOT NULL, UNIQUE) | 12 chars para la URL de invitación |
+| `inviter_id` | uuid (FK → diagnosticos.id) | Quien invita |
+| `invitee_id` | uuid (FK → diagnosticos.id) | Quien es invitado (NULL hasta que complete) |
+| `status` | text NOT NULL DEFAULT 'pending' | pending / completed / accepted / declined / expired |
+| `compare_hash` | text (UNIQUE) | Se genera al aceptar (para URL de comparación) |
+| `created_at` | timestamptz DEFAULT NOW() | Cuándo se creó |
+| `completed_at` | timestamptz | Cuando el invitado completa el gateway |
+| `accepted_at` | timestamptz | Cuando el invitado acepta comparar |
+| `profile_inviter` | text | Perfil del invitador (PC/FI/CE/CP) |
+| `profile_invitee` | text | Perfil del invitado |
+| `notified_reengagement` | boolean DEFAULT false | Para el sistema de re-engagement |
+| `invitee_converted` | boolean DEFAULT false | ¿El invitado compró el programa? |
+| `inviter_retained` | boolean DEFAULT false | ¿El invitador sigue activo 30d después? |
+| `comparison_viewed_count` | integer DEFAULT 0 | Cuántas veces se ha visto la comparación |
+| `outcome_measured_at` | timestamptz | Cuándo se midió el resultado |
+| `meta` | jsonb DEFAULT '{}' | channel, relationship_hint |
+
+**Índices:** `inviter_id`, `invitee_id`, `invite_hash`, `compare_hash`, `status`.
+
+**RLS:** Activo. Solo service_role_key puede acceder.
+
+**JSONB `meta`:**
+```json
+{
+  "channel": "whatsapp",          // "whatsapp" | "email" | "link"
+  "relationship_hint": "pareja"   // "pareja" | "socio" | "amigo" | null
+}
+```
+
+**Campos AMPLIFY en `diagnosticos.meta`** (no requieren migración):
+```json
+{
+  "referred_by": "abc123xyz456",        // invite_hash si vino por AMPLIFY
+  "amplify_invites_sent": 2,            // Contador de invitaciones enviadas
+  "amplify_comparisons_active": 1,      // Comparaciones activas
+  "amplify_rejection_pattern": false,   // true si 3+ rechazos (co-learning)
+  "amplify_declined_count": 0           // Total rechazos acumulados
+}
+```
+
+### SQL de migración — amplify_invites
+
+```sql
+CREATE TABLE IF NOT EXISTS amplify_invites (
+  id                      UUID        PRIMARY KEY DEFAULT gen_random_uuid(),
+  invite_hash             TEXT        NOT NULL UNIQUE,
+  inviter_id              UUID        NOT NULL REFERENCES diagnosticos(id),
+  invitee_id              UUID        REFERENCES diagnosticos(id),
+  status                  TEXT        NOT NULL DEFAULT 'pending',
+  compare_hash            TEXT        UNIQUE,
+  created_at              TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+  completed_at            TIMESTAMPTZ,
+  accepted_at             TIMESTAMPTZ,
+  profile_inviter         TEXT,
+  profile_invitee         TEXT,
+  notified_reengagement   BOOLEAN     NOT NULL DEFAULT FALSE,
+  invitee_converted       BOOLEAN     NOT NULL DEFAULT FALSE,
+  inviter_retained        BOOLEAN     NOT NULL DEFAULT FALSE,
+  comparison_viewed_count INTEGER     NOT NULL DEFAULT 0,
+  outcome_measured_at     TIMESTAMPTZ,
+  meta                    JSONB       NOT NULL DEFAULT '{}'
+);
+
+CREATE INDEX IF NOT EXISTS idx_amplify_inviter ON amplify_invites (inviter_id);
+CREATE INDEX IF NOT EXISTS idx_amplify_invitee ON amplify_invites (invitee_id);
+CREATE INDEX IF NOT EXISTS idx_amplify_invite_hash ON amplify_invites (invite_hash);
+CREATE INDEX IF NOT EXISTS idx_amplify_compare_hash ON amplify_invites (compare_hash);
+CREATE INDEX IF NOT EXISTS idx_amplify_status ON amplify_invites (status);
+
+ALTER TABLE amplify_invites ENABLE ROW LEVEL SECURITY;
+```
+
+**Para revertir:**
+```sql
+DROP TABLE IF EXISTS amplify_invites;
+```
+
+---
+
 ## Seguridad
 
 - Los mapas vivos son privados por diseño.
