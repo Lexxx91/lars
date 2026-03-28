@@ -7,6 +7,8 @@
  * por generateComparisonInsight() y un CTA hacia el programa.
  */
 
+import { useCopy } from '@/lib/copy'
+
 interface Props {
   insight: string
   visible: boolean
@@ -20,6 +22,7 @@ export default function ComparisonInsightBlock({
   instant,
   stripeUrl = '#',
 }: Props) {
+  const { getCopy } = useCopy()
   if (!visible && !instant) return null
 
   return (
@@ -50,7 +53,7 @@ export default function ComparisonInsightBlock({
             marginBottom: 'var(--space-4)',
           }}
         >
-          Lo que revelan los dos mapas juntos
+          {getCopy('amplify.insight.heading')}
         </p>
         <p
           style={{
@@ -85,8 +88,7 @@ export default function ComparisonInsightBlock({
             marginRight: 'auto',
           }}
         >
-          Lo que ningún diagnóstico individual puede revelar,
-          dos mapas juntos sí.
+          {getCopy('amplify.insight.tagline')}
         </p>
         <p
           style={{
@@ -100,8 +102,7 @@ export default function ComparisonInsightBlock({
             marginRight: 'auto',
           }}
         >
-          Si uno de los dos se regula, el otro lo nota.
-          Si los dos os reguláis, todo cambia.
+          {getCopy('amplify.insight.body')}
         </p>
 
         <a
@@ -120,7 +121,7 @@ export default function ComparisonInsightBlock({
             boxShadow: '0 2px 8px rgba(245, 245, 100, 0.3)',
           }}
         >
-          Empezar la Semana 1 — 97€
+          {getCopy('amplify.insight.cta')}
         </a>
 
         <p
@@ -131,7 +132,7 @@ export default function ComparisonInsightBlock({
             color: 'var(--color-text-tertiary)',
           }}
         >
-          Cada programa es individual y personalizado.
+          {getCopy('amplify.insight.caption')}
         </p>
       </div>
     </div>

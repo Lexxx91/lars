@@ -4,7 +4,7 @@
  */
 
 export type CopyFieldType = 'short' | 'medium' | 'long'
-export type CopySectionName = 'landing' | 'gateway' | 'mapa'
+export type CopySectionName = 'landing' | 'gateway' | 'mapa' | 'amplify'
 
 export interface CopySection {
   id: string              // e.g. "hero.shock", "gateway.p2.optionA"

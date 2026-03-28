@@ -15,6 +15,7 @@ import { useEffect, useState } from 'react'
 import Link from 'next/link'
 import Counter from '@/components/ui/Counter'
 import { getScoreColor, getScoreLabel } from '@/lib/insights'
+import { useCopy } from '@/lib/copy'
 import type { DimensionScores, Brecha } from '@/lib/amplify-insights'
 import ComparisonDimensionBar from './ComparisonDimensionBar'
 import ComparisonInsightBlock from './ComparisonInsightBlock'
@@ -48,6 +49,7 @@ export default function CompararClient({
   mapaHash,
   stripeUrl,
 }: CompararProps) {
+  const { getCopy } = useCopy()
   // Animation phases: 0=mount, 1=header, 2=scores, 3=bars, 4=highlight, 5=insight
   const [phase, setPhase] = useState(0)
 
@@ -103,7 +105,7 @@ export default function CompararClient({
           transition: 'color var(--transition-base)',
         }}
       >
-        ← Volver a mi mapa
+        ← {getCopy('amplify.comparison.back')}
       </Link>
 
       {/* ── HEADER ── */}
@@ -125,7 +127,7 @@ export default function CompararClient({
             marginBottom: 'var(--space-6)',
           }}
         >
-          Tu comparación de regulación
+          {getCopy('amplify.comparison.header')}
         </p>
 
         {/* Two scores side by side */}
@@ -156,7 +158,7 @@ export default function CompararClient({
                 letterSpacing: '0.06em',
               }}
             >
-              Tú
+              {getCopy('amplify.comparison.you_label')}
             </p>
             <p
               style={{
@@ -295,7 +297,7 @@ export default function CompararClient({
             color: 'var(--color-text-tertiary)',
           }}
         >
-          Confidencial. Solo vosotros dos podéis ver esta comparación.
+          {getCopy('amplify.comparison.footer')}
         </p>
       </div>
     </div>

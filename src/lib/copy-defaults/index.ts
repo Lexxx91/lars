@@ -10,6 +10,7 @@ import type { CopySection, CopySectionName } from './types'
 import { getLandingDefaults } from './landing'
 import { getGatewayDefaults } from './gateway'
 import { getMapaDefaults } from './mapa'
+import { getAmplifyDefaults } from './amplify'
 
 export type { CopySection, CopySectionName, CopyFieldType } from './types'
 
@@ -18,6 +19,7 @@ export const COPY_DEFAULTS: CopySection[] = [
   ...getLandingDefaults(),
   ...getGatewayDefaults(),
   ...getMapaDefaults(),
+  ...getAmplifyDefaults(),
 ]
 
 /** O(1) lookup by copy key (e.g. "hero.shock"). */
@@ -29,4 +31,4 @@ export const COPY_DEFAULTS_MAP: Record<string, CopySection> = Object.fromEntries
 export const VALID_COPY_KEYS: string[] = COPY_DEFAULTS.map((d) => d.id)
 
 /** Section names for navigation tabs. */
-export const COPY_SECTIONS: CopySectionName[] = ['landing', 'gateway', 'mapa']
+export const COPY_SECTIONS: CopySectionName[] = ['landing', 'gateway', 'mapa', 'amplify']

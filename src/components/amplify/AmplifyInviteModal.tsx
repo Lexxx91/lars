@@ -12,6 +12,7 @@
 
 import { useState, useEffect, useRef, useCallback } from 'react'
 import Button from '@/components/ui/Button'
+import { useCopy } from '@/lib/copy'
 
 // ─── TIPOS ──────────────────────────────────────────────────────────────────
 
@@ -33,50 +34,68 @@ interface ShareCopy {
   emailBody: string
 }
 
-function getShareCopy(profileCode: string | null, inviteUrl: string): ShareCopy {
+function getShareCopy(profileCode: string | null, inviteUrl: string, getCopyFn?: (key: string) => string): ShareCopy {
   const link = inviteUrl
+  const gc = getCopyFn ?? ((k: string) => k) // fallback returns key = no override
+  const profiles: Record<string, string> = { PC: 'pc', FI: 'fi', CE: 'ce', CP: 'cp' }
+  const code = (profileCode && profiles[profileCode]) ? profiles[profileCode] : 'default'
 
-  switch (profileCode) {
-    case 'PC':
-      return {
-        whatsapp: `He hecho un análisis de regulación nerviosa. Son 3 minutos y te da datos reales sobre sueño, energía y productividad. ¿Lo hacemos los dos y comparamos? ${link}`,
-        emailSubject: 'Diagnóstico de productividad — ¿comparamos datos?',
-        emailBody: `He hecho un análisis de regulación nerviosa. Son 3 minutos y te da datos reales sobre sueño, energía y productividad.\n\n¿Lo hacemos los dos y comparamos?\n\n${link}`,
-      }
-    case 'FI':
-      return {
-        whatsapp: `He encontrado un análisis de regulación nerviosa basado en datos. Sin narrativa, solo números. Si lo haces tú también podemos comparar métricas. 3 minutos: ${link}`,
-        emailSubject: 'Análisis de regulación — datos comparativos',
-        emailBody: `He encontrado un análisis de regulación nerviosa basado en datos. Sin narrativa, solo números.\n\nSi lo haces tú también, podemos comparar métricas. Son 3 minutos:\n\n${link}`,
-      }
-    case 'CE':
-      return {
-        whatsapp: `He descubierto algo sobre regulación nerviosa que me ha ayudado. Si tú también lo haces, podemos ver cómo estamos los dos. Es confidencial y son 3 minutos: ${link}`,
-        emailSubject: 'Algo que nos puede ayudar a los dos',
-        emailBody: `He descubierto algo sobre regulación nerviosa que me ha ayudado a entender mejor cómo estoy.\n\nSi tú también lo haces, podemos ver cómo estamos los dos. Es confidencial y son 3 minutos:\n\n${link}`,
-      }
-    case 'CP':
-      return {
-        whatsapp: `He hecho un diagnóstico estructurado de 5 dimensiones de regulación nerviosa. Si lo haces tú, comparamos resultados con un plan de seguimiento. 3 minutos: ${link}`,
-        emailSubject: 'Plan de regulación comparativa — ¿te apuntas?',
-        emailBody: `He hecho un diagnóstico estructurado de 5 dimensiones de regulación nerviosa.\n\nSi lo haces tú, podemos comparar resultados con un plan de seguimiento. Son 3 minutos:\n\n${link}`,
-      }
-    default:
-      return {
-        whatsapp: `He hecho un diagnóstico de regulación nerviosa y me gustaría que lo hicieras tú también para poder comparar nuestros resultados. Son 3 minutos: ${link}`,
-        emailSubject: 'Diagnóstico de regulación — ¿comparamos?',
-        emailBody: `He hecho un diagnóstico de regulación nerviosa y me gustaría que lo hicieras tú también para poder comparar nuestros resultados.\n\nSon 3 minutos:\n\n${link}`,
-      }
+  const whatsappKey = `amplify.share.${code}.whatsapp`
+  const subjectKey = `amplify.share.${code}.email_subject`
+  const bodyKey = `amplify.share.${code}.email_body`
+
+  const whatsappTpl = getCopyFn ? gc(whatsappKey) : null
+  const subjectTpl = getCopyFn ? gc(subjectKey) : null
+  const bodyTpl = getCopyFn ? gc(bodyKey) : null
+
+  // If copy was found (not just returning the key), use the override
+  const hasOverride = (val: string | null, key: string) => val !== null && val !== key
+
+  // Defaults per profile
+  const defaults: Record<string, ShareCopy> = {
+    pc: {
+      whatsapp: `He hecho un análisis de regulación nerviosa. Son 3 minutos y te da datos reales sobre sueño, energía y productividad. ¿Lo hacemos los dos y comparamos? ${link}`,
+      emailSubject: 'Diagnóstico de productividad — ¿comparamos datos?',
+      emailBody: `He hecho un análisis de regulación nerviosa. Son 3 minutos y te da datos reales sobre sueño, energía y productividad.\n\n¿Lo hacemos los dos y comparamos?\n\n${link}`,
+    },
+    fi: {
+      whatsapp: `He encontrado un análisis de regulación nerviosa basado en datos. Sin narrativa, solo números. Si lo haces tú también podemos comparar métricas. 3 minutos: ${link}`,
+      emailSubject: 'Análisis de regulación — datos comparativos',
+      emailBody: `He encontrado un análisis de regulación nerviosa basado en datos. Sin narrativa, solo números.\n\nSi lo haces tú también, podemos comparar métricas. Son 3 minutos:\n\n${link}`,
+    },
+    ce: {
+      whatsapp: `He descubierto algo sobre regulación nerviosa que me ha ayudado. Si tú también lo haces, podemos ver cómo estamos los dos. Es confidencial y son 3 minutos: ${link}`,
+      emailSubject: 'Algo que nos puede ayudar a los dos',
+      emailBody: `He descubierto algo sobre regulación nerviosa que me ha ayudado a entender mejor cómo estoy.\n\nSi tú también lo haces, podemos ver cómo estamos los dos. Es confidencial y son 3 minutos:\n\n${link}`,
+    },
+    cp: {
+      whatsapp: `He hecho un diagnóstico estructurado de 5 dimensiones de regulación nerviosa. Si lo haces tú, comparamos resultados con un plan de seguimiento. 3 minutos: ${link}`,
+      emailSubject: 'Plan de regulación comparativa — ¿te apuntas?',
+      emailBody: `He hecho un diagnóstico estructurado de 5 dimensiones de regulación nerviosa.\n\nSi lo haces tú, podemos comparar resultados con un plan de seguimiento. Son 3 minutos:\n\n${link}`,
+    },
+    default: {
+      whatsapp: `He hecho un diagnóstico de regulación nerviosa y me gustaría que lo hicieras tú también para poder comparar nuestros resultados. Son 3 minutos: ${link}`,
+      emailSubject: 'Diagnóstico de regulación — ¿comparamos?',
+      emailBody: `He hecho un diagnóstico de regulación nerviosa y me gustaría que lo hicieras tú también para poder comparar nuestros resultados.\n\nSon 3 minutos:\n\n${link}`,
+    },
+  }
+
+  const d = defaults[code] ?? defaults.default
+
+  return {
+    whatsapp: hasOverride(whatsappTpl, whatsappKey) ? whatsappTpl!.replace('{link}', link) : d.whatsapp,
+    emailSubject: hasOverride(subjectTpl, subjectKey) ? subjectTpl! : d.emailSubject,
+    emailBody: hasOverride(bodyTpl, bodyKey) ? bodyTpl!.replace('{link}', link) : d.emailBody,
   }
 }
 
 // ─── RELATIONSHIPS ──────────────────────────────────────────────────────────
 
-const RELATIONSHIPS: { key: Relationship; label: string }[] = [
-  { key: 'pareja', label: 'Mi pareja' },
-  { key: 'socio', label: 'Mi socio/a' },
-  { key: 'amigo', label: 'Un amigo/a' },
-  { key: 'otro', label: 'Otro' },
+const RELATIONSHIPS: { key: Relationship; copyKey: string; fallback: string }[] = [
+  { key: 'pareja', copyKey: 'amplify.modal.step1.rel_partner', fallback: 'Mi pareja' },
+  { key: 'socio', copyKey: 'amplify.modal.step1.rel_business', fallback: 'Mi socio/a' },
+  { key: 'amigo', copyKey: 'amplify.modal.step1.rel_friend', fallback: 'Un amigo/a' },
+  { key: 'otro', copyKey: 'amplify.modal.step1.rel_other', fallback: 'Otro' },
 ]
 
 // ─── COMPONENTE ─────────────────────────────────────────────────────────────
@@ -94,6 +113,7 @@ export default function AmplifyInviteModal({
   const [error, setError] = useState<string | null>(null)
   const [copied, setCopied] = useState(false)
 
+  const { getCopy } = useCopy()
   const modalRef = useRef<HTMLDivElement>(null)
   const firstFocusRef = useRef<HTMLButtonElement>(null)
 
@@ -205,7 +225,7 @@ export default function AmplifyInviteModal({
 
   const handleWhatsApp = () => {
     if (!inviteUrl) return
-    const copy = getShareCopy(profileCode, inviteUrl)
+    const copy = getShareCopy(profileCode, inviteUrl, getCopy)
     window.open(
       `https://wa.me/?text=${encodeURIComponent(copy.whatsapp)}`,
       '_blank',
@@ -216,7 +236,7 @@ export default function AmplifyInviteModal({
 
   const handleEmail = () => {
     if (!inviteUrl) return
-    const copy = getShareCopy(profileCode, inviteUrl)
+    const copy = getShareCopy(profileCode, inviteUrl, getCopy)
     window.location.href = `mailto:?subject=${encodeURIComponent(copy.emailSubject)}&body=${encodeURIComponent(copy.emailBody)}`
     setStep('confirmation')
   }
@@ -225,7 +245,7 @@ export default function AmplifyInviteModal({
 
   if (!isOpen) return null
 
-  const shareCopy = inviteUrl ? getShareCopy(profileCode, inviteUrl) : null
+  const shareCopy = inviteUrl ? getShareCopy(profileCode, inviteUrl, getCopy) : null
 
   return (
     <div
@@ -302,7 +322,7 @@ export default function AmplifyInviteModal({
               color: 'var(--color-text-primary)',
               marginBottom: 'var(--space-3)',
             }}>
-              ¿Cuál es vuestra relación?
+              {getCopy('amplify.modal.step1.heading')}
             </h3>
             <p style={{
               fontFamily: 'var(--font-inter, system-ui)',
@@ -311,7 +331,7 @@ export default function AmplifyInviteModal({
               marginBottom: 'var(--space-6)',
               lineHeight: 'var(--lh-body-sm, 1.5)',
             }}>
-              Esto nos ayuda a personalizar la comparación
+              {getCopy('amplify.modal.step1.subtext')}
             </p>
 
             {/* Relationship chips */}
@@ -341,7 +361,7 @@ export default function AmplifyInviteModal({
                     opacity: loading ? 0.5 : 1,
                   }}
                 >
-                  {rel.label}
+                  {getCopy(rel.copyKey)}
                 </button>
               ))}
             </div>
@@ -361,7 +381,7 @@ export default function AmplifyInviteModal({
                 textDecoration: 'none',
               }}
             >
-              Saltar →
+              {getCopy('amplify.modal.step1.skip')}
             </button>
 
             {/* Error */}
@@ -403,7 +423,7 @@ export default function AmplifyInviteModal({
               color: 'var(--color-text-primary)',
               marginBottom: 'var(--space-3)',
             }}>
-              Comparte este link
+              {getCopy('amplify.modal.step2.heading')}
             </h3>
             <p style={{
               fontFamily: 'var(--font-inter, system-ui)',
@@ -412,7 +432,7 @@ export default function AmplifyInviteModal({
               marginBottom: 'var(--space-6)',
               lineHeight: 'var(--lh-body-sm, 1.5)',
             }}>
-              Cuando complete su diagnóstico, ambos podréis ver la comparación.
+              {getCopy('amplify.modal.step2.subtext')}
             </p>
 
             {/* Copiable link */}
@@ -453,7 +473,7 @@ export default function AmplifyInviteModal({
                   whiteSpace: 'nowrap',
                 }}
               >
-                {copied ? '¡Copiado!' : '📋 Copiar'}
+                {copied ? getCopy('amplify.modal.step2.copied') : getCopy('amplify.modal.step2.copy_button')}
               </button>
             </div>
 
@@ -469,14 +489,14 @@ export default function AmplifyInviteModal({
                 onClick={handleWhatsApp}
                 style={{ width: '100%', textAlign: 'center' }}
               >
-                📱 Enviar por WhatsApp
+                {getCopy('amplify.modal.step2.whatsapp')}
               </Button>
               <Button
                 variant="ghost"
                 onClick={handleEmail}
                 style={{ width: '100%', textAlign: 'center' }}
               >
-                ✉️ Enviar por email
+                {getCopy('amplify.modal.step2.email')}
               </Button>
             </div>
 
@@ -487,7 +507,7 @@ export default function AmplifyInviteModal({
               color: 'var(--color-text-tertiary)',
               fontStyle: 'italic',
             }}>
-              &ldquo;El link caduca en 30 días.&rdquo;
+              {getCopy('amplify.modal.step2.expiry')}
             </p>
           </div>
         )}
@@ -516,7 +536,7 @@ export default function AmplifyInviteModal({
               color: 'var(--color-text-primary)',
               marginBottom: 'var(--space-4)',
             }}>
-              Invitación lista
+              {getCopy('amplify.modal.step3.heading')}
             </h3>
 
             <p style={{
@@ -526,14 +546,14 @@ export default function AmplifyInviteModal({
               lineHeight: 'var(--lh-body, 1.6)',
               marginBottom: 'var(--space-8)',
             }}>
-              Cuando complete su diagnóstico, ambos recibiréis un email para ver la comparación.
+              {getCopy('amplify.modal.step3.confirmation')}
             </p>
 
             <Button
               variant="ghost"
               onClick={onClose}
             >
-              Volver a mi mapa
+              {getCopy('amplify.modal.step3.close')}
             </Button>
           </div>
         )}

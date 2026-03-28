@@ -19,6 +19,7 @@
 import { useEffect, useState, useRef, useCallback } from 'react'
 import { useSearchParams } from 'next/navigation'
 import Button from '@/components/ui/Button'
+import { useCopy } from '@/lib/copy'
 import Card from '@/components/ui/Card'
 import type { DimensionResult, DimensionKey } from '@/lib/insights'
 import { getScoreColor, getScoreLabel } from '@/lib/insights'
@@ -148,6 +149,7 @@ export default function MapaClient({
   pendingAmplifyInvite,
   activeComparisons = [],
 }: Props) {
+  const { getCopy } = useCopy()
   const isFirstVisit = !lastVisitedAt
   const searchParams = useSearchParams()
   const isVideoMode = searchParams.get('video') === '1'
@@ -587,7 +589,7 @@ export default function MapaClient({
     if (meetsTimeRequirement && hasInviteCapacity) {
       accordionSections.push({
         id: 'amplify',
-        title: 'Comparar tu mapa',
+        title: getCopy('amplify.accordion.title'),
         summary: amplifyInviteCount > 0
           ? amplifyInviteCount === 1 ? '1 invitación' : `${amplifyInviteCount} invitaciones`
           : 'Invita a alguien',
@@ -601,16 +603,14 @@ export default function MapaClient({
               marginBottom: 'var(--space-6)',
               maxWidth: '42rem',
             }}>
-              ¿Conoces a alguien en tu misma situación — tu pareja, un socio, un amigo?
-              Si ambos hacéis el diagnóstico, vuestros mapas se pueden comparar.
-              Las brechas compartidas son las más reveladoras.
+              {getCopy('amplify.accordion.description')}
             </p>
             <Button
               variant="ghost"
               onClick={() => setShowAmplifyModal(true)}
               style={{ marginBottom: 'var(--space-4)' }}
             >
-              Invitar a comparar
+              {getCopy('amplify.accordion.button')}
             </Button>
             <p style={{
               fontFamily: 'var(--font-inter, system-ui)',
@@ -619,7 +619,7 @@ export default function MapaClient({
               color: 'var(--color-text-tertiary)',
               fontStyle: 'italic',
             }}>
-              &ldquo;Su diagnóstico es confidencial. Solo se compara si ambos aceptáis.&rdquo;
+              {getCopy('amplify.accordion.caption')}
             </p>
           </div>
         ),
