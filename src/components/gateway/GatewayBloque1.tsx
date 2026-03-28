@@ -158,8 +158,8 @@ export default function GatewayBloque1({
   }, [onComplete, p2, p3Selections, p4])
 
   // ── Contenido calculado ──
-  const primeraVerdad = getPrimeraVerdad(p1 || 'A', p2 || 'B')
-  const microEspejo1Content = getMicroEspejo1(p3Selections, p4 || 'A')
+  const primeraVerdad = getPrimeraVerdad(p1 || 'A', p2 || 'B', getCopy)
+  const microEspejo1Content = getMicroEspejo1(p3Selections, p4 || 'A', getCopy)
 
   const progress = PROGRESS[step]
   const progressLabel = `Tu regulación: ${progress}% completo`

@@ -184,68 +184,103 @@ const PRIMERA_VERDAD_FALLBACK: Partial<Record<P1Option, ReflectionContent>> = {
   E: PRIMERA_VERDAD_MAP['E-D'],
 }
 
-export function getPrimeraVerdad(p1: string, p2: string): ReflectionContent {
-  if (p1 === 'D') return PRIMERA_VERDAD_MAP['D-*']
-  const key = `${p1}-${p2}`
-  return (
-    PRIMERA_VERDAD_MAP[key] ??
-    PRIMERA_VERDAD_FALLBACK[p1 as P1Option] ??
-    PRIMERA_VERDAD_DEFAULT
-  )
+type CopyGetter = (key: string) => string
+
+// Map from hardcoded key to copy-defaults key (no dash)
+const PV_FALLBACK_COPY_KEY: Record<string, string> = { A: 'AA', B: 'BA', C: 'CB', E: 'ED' }
+
+export function getPrimeraVerdad(p1: string, p2: string, getCopy?: CopyGetter): ReflectionContent {
+  // Determine base from hardcoded map
+  let base: ReflectionContent
+  let copyKey: string
+
+  if (p1 === 'D') {
+    base = PRIMERA_VERDAD_MAP['D-*']
+    copyKey = 'D'
+  } else {
+    const combo = `${p1}-${p2}`
+    if (PRIMERA_VERDAD_MAP[combo]) {
+      base = PRIMERA_VERDAD_MAP[combo]
+      copyKey = `${p1}${p2}`
+    } else if (PRIMERA_VERDAD_FALLBACK[p1 as P1Option]) {
+      base = PRIMERA_VERDAD_FALLBACK[p1 as P1Option]!
+      copyKey = PV_FALLBACK_COPY_KEY[p1] ?? 'default'
+    } else {
+      base = PRIMERA_VERDAD_DEFAULT
+      copyKey = 'default'
+    }
+  }
+
+  if (!getCopy) return base
+
+  const textKey = `gateway.primeraverdad.${copyKey}.text`
+  const collectiveKey = `gateway.primeraverdad.${copyKey}.collective`
+  const textVal = getCopy(textKey)
+  const collectiveVal = getCopy(collectiveKey)
+
+  return {
+    text: textVal !== textKey ? textVal : base.text,
+    collectiveData: collectiveVal !== collectiveKey ? collectiveVal : base.collectiveData,
+  }
 }
 
 // ─── MICRO-ESPEJO 1 — 5 variantes P3 × P4 ────────────────────────────────────
 
+// Hardcoded micro-espejo 1 variants
+const MICRO_ESPEJO_1: Record<string, ReflectionContent> = {
+  pocoB: {
+    text: 'Tu cerebro funciona pero por dentro hay un vacío. No es tristeza — es un sistema nervioso que se ha apagado para protegerte. Como un fusible que salta.',
+    collectiveData: 'El 68% de personas con tu combinación no identifican esto como agotamiento. Lo viven como ausencia sin causa. Tiene causa — y tiene solución.',
+  },
+  muchoC: {
+    text: 'Das todo lo que tienes a los demás y lo que queda para ti no alcanza. Tu cerebro no tiene recursos para regularse después de regularte a ti — y el resultado es que explotas justo con quien menos quieres.',
+    collectiveData: 'El 79% de personas con tu patrón sienten culpa después de las explosiones. Esa culpa también agota. Es un ciclo — no un defecto de carácter.',
+  },
+  muchoD: {
+    text: 'Tu cuerpo ha encontrado la forma más radical de protegerte: apagar los circuitos. No es que no te importe — es que sentir se volvió demasiado costoso para tu sistema.',
+    collectiveData: 'El 74% de personas con anestesia emocional tardan más de 2 años en identificar lo que les ocurre. Tú lo estás nombrando hoy.',
+  },
+  pocoE: {
+    text: 'Tu capacidad cognitiva está intacta pero tu mente la usa para anticipar en lugar de ejecutar. No estás pensando — estás sobreviviendo mentalmente.',
+    collectiveData: 'El 73% de personas con rumiación activa y pocas señales cognitivas tienen el sistema nervioso en hipervigilancia constante. La amenaza que monitoriza no existe — pero el sistema actúa como si sí.',
+  },
+  default: {
+    text: 'Tu cabeza va a mil pero tu capacidad de procesar se ha reducido. No es que seas menos capaz — es que tu cerebro está usando su energía para mantenerte en alerta en lugar de para pensar con claridad. Y eso tiene una consecuencia directa: te irritas más porque tu freno interno está agotado.',
+    collectiveData: 'El 65% de personas con tu combinación de respuestas no saben que la irritabilidad y la niebla mental tienen la misma causa. Cuando se regula una, la otra mejora.',
+  },
+}
+
 export function getMicroEspejo1(
   p3Selections: string[],
-  p4: string
+  p4: string,
+  getCopy?: CopyGetter,
 ): ReflectionContent {
   const realSymptoms = p3Selections.filter((s) => s !== 'ninguna')
   const many = realSymptoms.length >= 3
 
-  if (!many && p4 === 'B') {
-    return {
-      text: 'Tu cerebro funciona pero por dentro hay un vacío. No es tristeza — es un sistema nervioso que se ha apagado para protegerte. Como un fusible que salta.',
-      collectiveData:
-        'El 68% de personas con tu combinación no identifican esto como agotamiento. Lo viven como ausencia sin causa. Tiene causa — y tiene solución.',
-    }
-  }
+  let variantKey: string
+  if (!many && p4 === 'B') variantKey = 'pocoB'
+  else if (many && p4 === 'C') variantKey = 'muchoC'
+  else if (many && p4 === 'D') variantKey = 'muchoD'
+  else if (!many && p4 === 'E') variantKey = 'pocoE'
+  else variantKey = 'default'
 
-  if (many && p4 === 'C') {
-    return {
-      text: 'Das todo lo que tienes a los demás y lo que queda para ti no alcanza. Tu cerebro no tiene recursos para regularse después de regularte a ti — y el resultado es que explotas justo con quien menos quieres.',
-      collectiveData:
-        'El 79% de personas con tu patrón sienten culpa después de las explosiones. Esa culpa también agota. Es un ciclo — no un defecto de carácter.',
-    }
-  }
+  const base = MICRO_ESPEJO_1[variantKey]
 
-  if (many && p4 === 'D') {
-    return {
-      text: 'Tu cuerpo ha encontrado la forma más radical de protegerte: apagar los circuitos. No es que no te importe — es que sentir se volvió demasiado costoso para tu sistema.',
-      collectiveData:
-        'El 74% de personas con anestesia emocional tardan más de 2 años en identificar lo que les ocurre. Tú lo estás nombrando hoy.',
-    }
-  }
+  if (!getCopy) return base
 
-  if (!many && p4 === 'E') {
-    return {
-      text: 'Tu capacidad cognitiva está intacta pero tu mente la usa para anticipar en lugar de ejecutar. No estás pensando — estás sobreviviendo mentalmente.',
-      collectiveData:
-        'El 73% de personas con rumiación activa y pocas señales cognitivas tienen el sistema nervioso en hipervigilancia constante. La amenaza que monitoriza no existe — pero el sistema actúa como si sí.',
-    }
-  }
+  const textKey = `gateway.microespejo1.${variantKey}.text`
+  const collectiveKey = `gateway.microespejo1.${variantKey}.collective`
+  const textVal = getCopy(textKey)
+  const collectiveVal = getCopy(collectiveKey)
 
-  // Default — caso más frecuente (fallback 65%)
   return {
-    text: 'Tu cabeza va a mil pero tu capacidad de procesar se ha reducido. No es que seas menos capaz — es que tu cerebro está usando su energía para mantenerte en alerta en lugar de para pensar con claridad. Y eso tiene una consecuencia directa: te irritas más porque tu freno interno está agotado.',
-    collectiveData:
-      'El 65% de personas con tu combinación de respuestas no saben que la irritabilidad y la niebla mental tienen la misma causa. Cuando se regula una, la otra mejora.',
+    text: textVal !== textKey ? textVal : base.text,
+    collectiveData: collectiveVal !== collectiveKey ? collectiveVal : base.collectiveData,
   }
 }
 
 // ─── OVERRIDE HELPERS ────────────────────────────────────────────────────────
-
-type CopyGetter = (key: string) => string
 
 /** Returns P2 options with copy overrides applied. */
 export function getP2Options(getCopy: CopyGetter): SelectOption[] {

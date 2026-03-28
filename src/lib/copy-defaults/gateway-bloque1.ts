@@ -233,6 +233,14 @@ export function getGatewayBloque1Defaults(): CopySection[] {
       defaultValue: '\u201cNinguna de estas\u201d',
       fieldType: 'short',
     },
+    {
+      id: 'gateway.p3.ninguna.subtitle',
+      section: 'gateway',
+      subsection: 'p3',
+      label: 'P3 — Ninguna de estas (subtítulo)',
+      defaultValue: '',
+      fieldType: 'short',
+    },
 
     // ── P4 — Síntomas emocionales ────────────────────────────────────
     {

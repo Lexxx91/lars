@@ -68,7 +68,7 @@ function fetchOverrides(force = false): Promise<void> {
  */
 export function useCopy(): UseCopyReturn {
   const [loading, setLoading] = useState(cachedOverrides === null)
-  const [, setTick] = useState(0)
+  const [tick, setTick] = useState(0)
 
   useEffect(() => {
     const stale = !cachedOverrides || (Date.now() - lastFetchTime) >= CACHE_TTL
@@ -80,12 +80,15 @@ export function useCopy(): UseCopyReturn {
     }
   }, [])
 
+  // tick in deps ensures getCopy reference changes when overrides load,
+  // so any useMemo([getCopy]) downstream re-computes with fresh data.
   const getCopy = useCallback((key: string): string => {
     if (cachedOverrides && key in cachedOverrides) {
       return cachedOverrides[key]
     }
     return COPY_DEFAULTS_MAP[key]?.defaultValue ?? key
-  }, [])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [tick])
 
   return { getCopy, loading }
 }

@@ -8,7 +8,7 @@
  * Sprint 3: animateEntrance prop — question label + cards fade in with 150ms stagger.
  */
 
-import { useState, useEffect, useCallback, useMemo } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { useCopy } from '@/lib/copy'
 
 const OPTION_IDS = ['A', 'B', 'C', 'D', 'E'] as const
@@ -30,11 +30,11 @@ export default function P1Cards({ onSelect, animateEntrance = false }: P1CardsPr
   const [labelRevealed, setLabelRevealed] = useState(false)
 
   const questionText = getCopy('gateway.p1.question')
-  const options = useMemo(() => OPTION_IDS.map(id => ({
+  const options = OPTION_IDS.map(id => ({
     id,
     title: getCopy(`gateway.p1.option${id}.title`),
     subtitle: getCopy(`gateway.p1.option${id}.subtitle`),
-  })), [getCopy])
+  }))
 
   // Escucha el evento del CTA de below-the-fold para hacer pulse
   useEffect(() => {
