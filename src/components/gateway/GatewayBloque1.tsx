@@ -94,8 +94,9 @@ export default function GatewayBloque1({
   onClose,
 }: GatewayBloque1Props) {
   // ── Copy overrides (admin-editable copy) ──
-  const { getCopy } = useCopy()
+  const { getCopy, loading: copyLoading } = useCopy()
   const copyOverrides = useMemo(() => {
+    if (copyLoading) return undefined
     const keys = [
       'gateway.p2.optionA', 'gateway.p2.optionB',
       'gateway.p2.optionC', 'gateway.p2.optionD', 'gateway.p2.optionE',
@@ -113,7 +114,7 @@ export default function GatewayBloque1({
       if (val !== k) map[k] = val
     }
     return Object.keys(map).length > 0 ? map : undefined
-  }, [getCopy])
+  }, [getCopy, copyLoading])
 
   // ── Estado de pasos con cross-fade (A-04) ──
   const overlayRef = useRef<HTMLDivElement>(null)

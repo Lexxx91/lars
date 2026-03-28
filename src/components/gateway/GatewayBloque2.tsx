@@ -91,9 +91,11 @@ export default function GatewayBloque2({
   onClose,
 }: GatewayBloque2Props) {
   // ── Copy overrides (admin-editable copy) ──
-  const { getCopy } = useCopy()
+  const { getCopy, loading: copyLoading } = useCopy()
   // Build overrides map from fetched copy for data file getters
+  // Depends on copyLoading so it recomputes when overrides arrive from API
   const copyOverrides = useMemo(() => {
+    if (copyLoading) return undefined
     const keys = [
       'gateway.p5.optionA', 'gateway.p5.optionB',
       'gateway.p5.optionC', 'gateway.p5.optionD', 'gateway.p5.optionE',
@@ -114,10 +116,10 @@ export default function GatewayBloque2({
     const map: Record<string, string> = {}
     for (const k of keys) {
       const val = getCopy(k)
-      if (val !== k) map[k] = val // Only include actual overrides
+      if (val !== k) map[k] = val
     }
     return Object.keys(map).length > 0 ? map : undefined
-  }, [getCopy])
+  }, [getCopy, copyLoading])
 
   // ── Estado de pasos con cross-fade (A-04) ──
   const overlayRef = useRef<HTMLDivElement>(null)
