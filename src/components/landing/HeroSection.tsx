@@ -11,7 +11,7 @@
 
 import { useState, useEffect } from 'react'
 import { useCopy } from '@/lib/copy'
-import P1Cards from './P1Cards'
+import P1RoleCards from './P1RoleCards'
 
 interface HeroSectionProps {
   onP1Select?: (id: string) => void
@@ -118,7 +118,7 @@ export default function HeroSection({ onP1Select }: HeroSectionProps) {
 
         {/* P1 — visible sin botón previo */}
         <div style={{ width: '100%', marginBottom: 'var(--space-6)' }}>
-          <P1Cards onSelect={onP1Select} animateEntrance={revealStep >= 4} />
+          <P1RoleCards onSelect={onP1Select} animateEntrance={revealStep >= 4} />
         </div>
 
         {/* Micro-promesas */}

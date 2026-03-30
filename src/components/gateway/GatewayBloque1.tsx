@@ -19,6 +19,7 @@ import MicroEspejo from '@/components/ui/MicroEspejo'
 import ProgressBar from '@/components/ui/ProgressBar'
 import { useCopy } from '@/lib/copy'
 import {
+  getP1Options,
   getP2Options,
   getP3Options,
   getP4Options,
@@ -28,18 +29,19 @@ import {
 
 // ─── TIPOS ────────────────────────────────────────────────────────────────────
 
-type Step = 'p2' | 'analyzing' | 'primera-verdad' | 'p3' | 'p4' | 'micro-espejo-1'
+type Step = 'p1' | 'p2' | 'analyzing' | 'primera-verdad' | 'p3' | 'p4' | 'micro-espejo-1'
 type Zone = 'exploracion' | 'reflexion'
 
 export interface Bloque1Answers {
+  p1: string
   p2: string
   p3Selections: string[]
   p4: string
 }
 
 // Progreso no lineal — pausa en revelaciones (barra no avanza)
-// Sprint 3: new values — mirrors PAUSE at same % as preceding question
 const PROGRESS: Record<Step, number> = {
+  p1: 10,
   p2: 22,
   analyzing: 22,
   'primera-verdad': 22,    // PAUSE — bar stays at 22% during first truth
@@ -51,7 +53,6 @@ const PROGRESS: Record<Step, number> = {
 // ─── PROPS ────────────────────────────────────────────────────────────────────
 
 interface GatewayBloque1Props {
-  p1: string
   onComplete: (answers: Bloque1Answers) => void
   onClose?: () => void
 }
@@ -86,7 +87,6 @@ const overlineStyle: React.CSSProperties = {
 // ─── COMPONENTE ───────────────────────────────────────────────────────────────
 
 export default function GatewayBloque1({
-  p1,
   onComplete,
   onClose,
 }: GatewayBloque1Props) {
@@ -95,12 +95,13 @@ export default function GatewayBloque1({
 
   // ── Estado de pasos con cross-fade (A-04) ──
   const overlayRef = useRef<HTMLDivElement>(null)
-  const [step, setStep] = useState<Step>('p2')
+  const [step, setStep] = useState<Step>('p1')
   const [stepKey, setStepKey] = useState(0)
   const [isExiting, setIsExiting] = useState(false)
 
   // ── Zona y respuestas ──
   const [zone, setZone] = useState<Zone>('exploracion')
+  const [p1, setP1] = useState('')
   const [p2, setP2] = useState('')
   const [p3Selections, setP3Selections] = useState<string[]>([])
   const [p4, setP4] = useState('')
@@ -118,6 +119,14 @@ export default function GatewayBloque1({
   }, [])
 
   // ── Handlers ──
+  const handleP1Select = useCallback(
+    (id: string) => {
+      setP1(id)
+      changeStep('p2')
+    },
+    [changeStep]
+  )
+
   const handleP2Select = useCallback(
     (id: string) => {
       setP2(id)
@@ -154,8 +163,8 @@ export default function GatewayBloque1({
   )
 
   const handleMicroEspejo1Continue = useCallback(() => {
-    onComplete({ p2, p3Selections, p4 })
-  }, [onComplete, p2, p3Selections, p4])
+    onComplete({ p1, p2, p3Selections, p4 })
+  }, [onComplete, p1, p2, p3Selections, p4])
 
   // ── Contenido calculado ──
   const primeraVerdad = getPrimeraVerdad(p1 || 'A', p2 || 'B', getCopy)
@@ -242,6 +251,16 @@ export default function GatewayBloque1({
           key={stepKey}
           className={isExiting ? 'step-exit' : 'step-enter'}
         >
+          {/* P1 — ¿Qué te trajo hasta aquí? (antes era la pregunta del hero) */}
+          {step === 'p1' && (
+            <SingleSelectStep
+              question={getCopy('gateway.p1.question')}
+              context={getCopy('gateway.p1.context')}
+              options={getP1Options(getCopy)}
+              onSelect={handleP1Select}
+            />
+          )}
+
           {/* P2 */}
           {step === 'p2' && (
             <SingleSelectStep

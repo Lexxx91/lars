@@ -31,6 +31,7 @@ const EXPIRATION_MS = 24 * 60 * 60 * 1000 // 24 horas
 
 interface SavedState {
   phase: Phase
+  role: string | null
   p1: string | null
   bloque1Answers: Bloque1Answers | null
   bloque2Answers: Bloque2Answers | null
@@ -74,6 +75,7 @@ export default function GatewayController() {
   const searchParams = useSearchParams()
 
   const [phase, setPhase] = useState<Phase>(restored?.phase ?? 'landing')
+  const [role, setRole] = useState<string | null>(restored?.role ?? null)
   const [p1, setP1] = useState<string | null>(restored?.p1 ?? null)
   const [bloque1Answers, setBloque1Answers] = useState<Bloque1Answers | null>(restored?.bloque1Answers ?? null)
   const [bloque2Answers, setBloque2Answers] = useState<Bloque2Answers | null>(restored?.bloque2Answers ?? null)
@@ -92,13 +94,13 @@ export default function GatewayController() {
   /* Persistir estado en localStorage cada vez que cambia */
   useEffect(() => {
     if (phase === 'landing') return // no guardar estado en landing
-    saveState({ phase, p1, bloque1Answers, bloque2Answers, inviteHash })
-  }, [phase, p1, bloque1Answers, bloque2Answers, inviteHash])
+    saveState({ phase, role, p1, bloque1Answers, bloque2Answers, inviteHash })
+  }, [phase, role, p1, bloque1Answers, bloque2Answers, inviteHash])
 
-  /* P1 seleccionada en el hero → fade out landing, then mount gateway */
-  const handleP1Select = useCallback((id: string) => {
-    setP1(id)
-    // 600ms delay already happens in P1Cards (selection feedback).
+  /* Rol seleccionado en el hero → fade out landing, then mount gateway (que empieza con P1) */
+  const handleRoleSelect = useCallback((roleId: string) => {
+    setRole(roleId)
+    // 600ms delay already happens in P1RoleCards (selection feedback).
     // Now fade out landing content, then mount gateway.
     setLandingExiting(true)
     setTimeout(() => {
@@ -108,7 +110,9 @@ export default function GatewayController() {
   }, [])
 
   /* Bloque1 completo → pasa a bloque2 */
+  /* Bloque1 ahora incluye P1 (antigua primera pregunta) + P2-P4 */
   const handleBloque1Complete = useCallback((answers: Bloque1Answers) => {
+    setP1(answers.p1)
     setBloque1Answers(answers)
     setPhase('bloque2')
     setTimeout(() => window.scrollTo({ top: 0, behavior: 'smooth' }), 50)
@@ -129,6 +133,7 @@ export default function GatewayController() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           email,
+          role,
           p1,
           bloque1: bloque1Answers,
           bloque2: bloque2Answers,
@@ -159,7 +164,7 @@ export default function GatewayController() {
   const handleDuplicateUpdate = useCallback(async () => {
     if (!duplicateEmail) return
     try {
-      const body = { email: duplicateEmail, p1, bloque1: bloque1Answers, bloque2: bloque2Answers, update: true }
+      const body = { email: duplicateEmail, role, p1, bloque1: bloque1Answers, bloque2: bloque2Answers, update: true }
 
       const res = await fetch('/api/diagnostico', {
         method: 'POST',
@@ -174,7 +179,7 @@ export default function GatewayController() {
     } catch {
       window.location.href = '/mapa/preview'
     }
-  }, [duplicateEmail, p1, bloque1Answers, bloque2Answers])
+  }, [duplicateEmail, role, p1, bloque1Answers, bloque2Answers])
 
   /* Duplicado: ver mapa existente */
   const handleDuplicateViewExisting = useCallback(() => {
@@ -204,15 +209,14 @@ export default function GatewayController() {
           pointerEvents: landingExiting ? 'none' : 'auto',
         }}
       >
-        <HeroSection onP1Select={handleP1Select} />
+        <HeroSection onP1Select={handleRoleSelect} />
 
         <BelowTheFold />
       </div>
 
       {/* ── Flujo evaluación completa ── */}
-      {phase === 'bloque1' && p1 && (
+      {phase === 'bloque1' && role && (
         <GatewayBloque1
-          p1={p1}
           onComplete={handleBloque1Complete}
           onClose={handleClose}
         />

@@ -282,6 +282,16 @@ export function getMicroEspejo1(
 
 // ─── OVERRIDE HELPERS ────────────────────────────────────────────────────────
 
+/** Returns P1 options with copy overrides applied. */
+export function getP1Options(getCopy: CopyGetter): SelectOption[] {
+  const ids = ['A', 'B', 'C', 'D', 'E'] as const
+  return ids.map((id) => ({
+    id,
+    title: getCopy(`gateway.p1.option${id}.title`),
+    subtitle: getCopy(`gateway.p1.option${id}.subtitle`),
+  }))
+}
+
 /** Returns P2 options with copy overrides applied. */
 export function getP2Options(getCopy: CopyGetter): SelectOption[] {
   return P2_OPTIONS.map((opt) => ({

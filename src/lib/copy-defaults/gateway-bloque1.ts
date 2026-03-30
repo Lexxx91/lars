@@ -15,7 +15,16 @@ export function getGatewayBloque1Defaults(): CopySection[] {
       label: 'Pregunta P1',
       defaultValue: '¿Qué te trajo hasta aquí?',
       fieldType: 'short',
-      hint: 'Pregunta principal del hero. Es lo primero que ve la persona.',
+      hint: 'Primera pregunta del gateway (después de seleccionar rol). Antes estaba en el hero.',
+    },
+    {
+      id: 'gateway.p1.context',
+      section: 'gateway',
+      subsection: 'p1',
+      label: 'P1 contexto',
+      defaultValue: 'Esto no es una anzuelo. Lo que va a picar es la verdad.',
+      fieldType: 'medium',
+      hint: 'Texto de contexto bajo la pregunta P1.',
     },
     {
       id: 'gateway.p1.optionA.title',

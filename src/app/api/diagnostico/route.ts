@@ -20,6 +20,7 @@ import type { Bloque2Answers } from '@/lib/gateway-bloque2-data'
 
 interface DiagnosticoPayload {
   email: string
+  role?: string
   p1: string
   p2?: string
   bloque1: Bloque1Answers
@@ -55,7 +56,7 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
     return NextResponse.json({ error: 'Payload inválido' }, { status: 400 })
   }
 
-  const { email, p1, bloque1, bloque2, update, mode } = payload
+  const { email, role, p1, bloque1, bloque2, update, mode } = payload
 
   // ── Geo capture via IP (nice-to-have, no bloquea el flujo) ────────────────
   const forwarded = req.headers.get('x-forwarded-for')
@@ -192,6 +193,7 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
         mode: 'convert',
       }
     : {
+        role: role ?? null,
         p1,
         p2: bloque1.p2,
         p3: bloque1.p3Selections,
