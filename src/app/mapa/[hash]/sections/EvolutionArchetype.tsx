@@ -108,7 +108,7 @@ export default function EvolutionArchetype({ archetype, isNew, mode = 'full', on
               transition: 'opacity var(--transition-base)',
             }}
           >
-            Descubrir tu perfil completo →
+            Descubrir tu mecanismo de defensa completo →
           </button>
         )}
       </div>

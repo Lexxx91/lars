@@ -185,9 +185,29 @@ export default function FocusBanner(props: FocusBannerProps) {
   const { evolution, archetype } = props
   const focus = selectFocus(props)
 
+  const SCROLL_TO_ACCORDION: Record<string, string> = {
+    'section-archetype': 'identidad',
+    'section-session': 'sesion',
+    'section-subdimensions': 'profundidad',
+    'section-book': 'libro',
+    'section-reevaluation': 'evolucion',
+    'section-dimensions': 'evaluacion',
+    'mapa-completo': 'evaluacion',
+  }
+
   const handleCTA = () => {
-    const el = document.getElementById(focus.scrollTo)
-    if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' })
+    const accordionId = SCROLL_TO_ACCORDION[focus.scrollTo]
+    // Open the accordion section via custom event
+    if (accordionId) {
+      window.dispatchEvent(new CustomEvent('accordion:open', { detail: accordionId }))
+    }
+    const el = accordionId
+      ? document.getElementById(`section-accordion-${accordionId}`)
+      : document.getElementById(focus.scrollTo)
+    if (el) {
+      // Small delay to let accordion open before scrolling
+      setTimeout(() => el.scrollIntoView({ behavior: 'smooth', block: 'start' }), 100)
+    }
   }
 
   // Archetype focus: render EvolutionArchetype in summary mode

@@ -117,6 +117,12 @@ Evoluciones del mapa (día 3-90), emails automáticos, analytics custom en Supab
   - Gateway responses: labels y hints descriptivos en Primera Verdad (8 variantes P1×P2), Micro-espejo 1 (5 variantes P3×P4), Micro-espejo 2 (6 variantes P6). Cada label ahora dice qué combinación de respuestas produce ese texto. Hints con contexto del perfil. Textos duplicados C-B/C-C marcados como intencionales.
   - Mapa editable: 8 textos hardcodeados extraídos a copy-defaults (post-pago, checkout, acordeón semana 1, tags de dimensión). EvolutionTimeline, AspiracionalTimeline y DimensionCard ahora leen todos sus textos vía getCopy(). Tab "Mapa" del Copy Editor cubre el 100% de los textos del mapa público.
 
+- ✅ **Feedback-D: Resultados Gateway — Perfil + WOW** (30 Mar 2026):
+  - Nuevo paso "DefenseReveal" entre bisagra y email: muestra mecanismo de defensa adaptativo con revelación progresiva (nombre, teaser espejo, contexto neurocientífico wound→armor)
+  - Fix botón "Descubrir tu mecanismo de defensa completo" en mapa: scroll ahora encuentra el accordion correcto (section-accordion-identidad) y lo abre via custom event
+  - Texto de EvolutionArchetype summary actualizado: "Descubrir tu mecanismo de defensa completo"
+  - Sección "Tu nivel de regulación" reestructurada: Bloque 1 (score + severity en línea) separado visualmente de Bloque 2 (contexto comparativo con 69% bold)
+
 ### Pendiente (no bloquea lanzamiento)
 - Testimonios: siguen siendo placeholder — pendiente de testimonios reales de Javier
 - Stripe: en modo test — pasar a LIVE cuando esté listo

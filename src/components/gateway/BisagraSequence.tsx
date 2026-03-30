@@ -190,6 +190,8 @@ export default function BisagraSequence({ scores, onContinue }: BisagraSequenceP
 
             {/* ═══ REVEAL PHASE ═══ */}
 
+            {/* ── BLOQUE 1: Tu score ── */}
+
             {/* Overline */}
             <p
               style={{
@@ -200,19 +202,21 @@ export default function BisagraSequence({ scores, onContinue }: BisagraSequenceP
                 textTransform: 'uppercase',
                 color: 'var(--color-accent)',
                 marginBottom: 'var(--space-5)',
-                // Hide during calc phase
                 display: fadeTyping ? 'block' : 'none',
               }}
             >
               Tu nivel de regulación
             </p>
 
-            {/* Score principal */}
+            {/* Score + "de 100" + "— Moderado" en una línea */}
             <div
               style={{
                 ...fadeStyle(showScore),
-                marginBottom: 'var(--space-2)',
-                display: fadeTyping ? 'block' : 'none',
+                marginBottom: 'var(--space-6)',
+                display: fadeTyping ? 'flex' : 'none',
+                alignItems: 'baseline',
+                flexWrap: 'wrap',
+                gap: 'var(--space-2)',
               }}
             >
               <span
@@ -240,35 +244,31 @@ export default function BisagraSequence({ scores, onContinue }: BisagraSequenceP
                   fontSize: 'var(--text-h4)',
                   lineHeight: 'var(--lh-h4)',
                   color: 'var(--color-text-secondary)',
-                  marginLeft: 'var(--space-3)',
                 }}
               >
                 de 100
               </span>
+              <span
+                style={{
+                  ...fadeStyle(showSeverity),
+                  fontFamily: 'var(--font-host-grotesk)',
+                  fontSize: 'var(--text-h4)',
+                  fontWeight: 700,
+                  color: severity.color,
+                }}
+              >
+                — {severity.label}
+              </span>
             </div>
 
-            {/* Severity label */}
-            <p
-              style={{
-                ...fadeStyle(showSeverity),
-                fontFamily: 'var(--font-host-grotesk)',
-                fontSize: 'var(--text-h4)',
-                fontWeight: 700,
-                letterSpacing: 'var(--ls-overline)',
-                color: severity.color,
-                marginBottom: 'var(--space-6)',
-                display: fadeTyping ? 'block' : 'none',
-              }}
-            >
-              {severity.label}
-            </p>
+            {/* ── BLOQUE 2: Contexto comparativo ── */}
 
-            {/* Separador */}
+            {/* Separador claro entre bloques */}
             <div
               style={{
                 ...fadeStyle(showBenchmark),
                 height: '1px',
-                background: 'rgba(38,66,51,0.06)',
+                background: 'rgba(38,66,51,0.08)',
                 margin: '0 0 var(--space-5)',
                 display: fadeTyping ? 'block' : 'none',
               }}
@@ -303,9 +303,9 @@ export default function BisagraSequence({ scores, onContinue }: BisagraSequenceP
                 display: fadeTyping ? 'block' : 'none',
               }}
             >
-              El <strong style={{ color: 'var(--color-accent)', fontWeight: 700 }}>69%</strong> de
-              las personas mejoraron un 12-18% sus niveles en las primeras 72 h. del programa
-              e incrementaron {'>'} 35% sus resultados al completar el proceso de neuroregulación.
+              El <strong style={{ color: 'var(--color-text-primary)', fontWeight: 700 }}>69%</strong> de
+              las personas mejoraron un 12-18% sus niveles en las primeras 72&nbsp;h. del programa
+              e incrementaron {'>'}35% sus resultados al completar el proceso de neuroregulación.
             </p>
 
             {/* Dato de urgencia */}

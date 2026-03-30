@@ -17,18 +17,21 @@
 
 import { useState, useCallback, useRef } from 'react'
 import BisagraSequence from './BisagraSequence'
+import DefenseReveal from './DefenseReveal'
 import EmailCapture from './EmailCapture'
 import ProgressBar from '@/components/ui/ProgressBar'
 import { computeScores } from '@/lib/scoring'
+import { getArchetype } from '@/lib/content/archetypes'
 import type { Bloque1Answers } from './GatewayBloque1'
 import type { Bloque2Answers } from '@/lib/gateway-bloque2-data'
 
 // ─── TIPOS ────────────────────────────────────────────────────────────────────
 
-type Step = 'bisagra' | 'email'
+type Step = 'bisagra' | 'archetype' | 'email'
 
 const PROGRESS: Record<Step, number> = {
   bisagra: 90,
+  archetype: 93,
   email: 95,
 }
 
@@ -59,6 +62,9 @@ export default function GatewayBloque3({
   /* Score calculado una sola vez al montar — antes del typing */
   const [scores] = useState(() => computeScores(p1, bloque1, bloque2))
 
+  /* Archetype calculado una sola vez — p6 de bloque2, p4 y p2 de bloque1 */
+  const [archetype] = useState(() => getArchetype(bloque2.p6, bloque1.p4, bloque1.p2))
+
   /* cross-fade A-04 */
   const changeStep = useCallback((newStep: Step) => {
     setIsExiting(true)
@@ -71,6 +77,10 @@ export default function GatewayBloque3({
   }, [])
 
   const handleBisagraContinue = useCallback(() => {
+    changeStep('archetype')
+  }, [changeStep])
+
+  const handleArchetypeContinue = useCallback(() => {
     changeStep('email')
   }, [changeStep])
 
@@ -151,7 +161,7 @@ export default function GatewayBloque3({
           flex: 1,
           display: 'flex',
           flexDirection: 'column',
-          justifyContent: step === 'bisagra' ? 'center' : 'flex-start',
+          justifyContent: (step === 'bisagra' || step === 'archetype') ? 'center' : 'flex-start',
           padding: 'var(--space-8) var(--container-padding-mobile)',
         }}
       >
@@ -162,6 +172,9 @@ export default function GatewayBloque3({
           >
             {step === 'bisagra' && (
               <BisagraSequence scores={scores} onContinue={handleBisagraContinue} />
+            )}
+            {step === 'archetype' && (
+              <DefenseReveal archetype={archetype} onContinue={handleArchetypeContinue} />
             )}
             {step === 'email' && (
               <EmailCapture scores={scores} onComplete={handleEmailComplete} />

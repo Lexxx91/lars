@@ -235,6 +235,18 @@ export default function MapaAccordion({ sections, defaultOpenId }: MapaAccordion
     setOpenId((prev) => (prev === id ? null : id))
   }, [])
 
+  // Listen for external open requests (e.g. from FocusBanner)
+  useEffect(() => {
+    const handler = (e: Event) => {
+      const id = (e as CustomEvent<string>).detail
+      if (sections.some((s) => s.id === id)) {
+        setOpenId(id)
+      }
+    }
+    window.addEventListener('accordion:open', handler)
+    return () => window.removeEventListener('accordion:open', handler)
+  }, [sections])
+
   if (sections.length === 0) return null
 
   return (
