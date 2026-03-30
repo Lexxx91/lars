@@ -7,6 +7,53 @@ import type { CopySection } from './types'
 
 export function getGatewayBloque1Defaults(): CopySection[] {
   return [
+    // ── P1 Role — Rol profesional (Hero) ────────────────────────────
+    {
+      id: 'gateway.p1role.question',
+      section: 'gateway',
+      subsection: 'p1role',
+      label: 'Pregunta de rol',
+      defaultValue: '¿Cuál describe mejor tu día a día?',
+      fieldType: 'short',
+      hint: 'Primera pregunta visual en el hero. 4 cards con ilustraciones.',
+    },
+    {
+      id: 'gateway.p1role.leader',
+      section: 'gateway',
+      subsection: 'p1role',
+      label: 'Rol — Líder',
+      defaultValue: 'Lidero equipos',
+      fieldType: 'short',
+      hint: 'Card 1: directivos, managers, coordinadores.',
+    },
+    {
+      id: 'gateway.p1role.entrepreneur',
+      section: 'gateway',
+      subsection: 'p1role',
+      label: 'Rol — Emprendedor',
+      defaultValue: 'Mi propio negocio',
+      fieldType: 'short',
+      hint: 'Card 2: autónomos, fundadores, freelance.',
+    },
+    {
+      id: 'gateway.p1role.employee',
+      section: 'gateway',
+      subsection: 'p1role',
+      label: 'Rol — Empleado',
+      defaultValue: 'Trabajo para otros',
+      fieldType: 'short',
+      hint: 'Card 3: empleados, técnicos, consultores.',
+    },
+    {
+      id: 'gateway.p1role.caregiver',
+      section: 'gateway',
+      subsection: 'p1role',
+      label: 'Rol — Cuidador',
+      defaultValue: 'Cuido o enseño',
+      fieldType: 'short',
+      hint: 'Card 4: sanitarios, docentes, terapeutas, cuidadores.',
+    },
+
     // ── P1 — ¿Qué te trajo hasta aquí? ──────────────────────────────
     {
       id: 'gateway.p1.question',
