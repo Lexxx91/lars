@@ -7,14 +7,10 @@
  * Al seleccionar, activa el gateway (que ahora empieza con la antigua P1).
  */
 
-import React, { useState, useEffect, useCallback } from 'react'
+import React, { useState, useEffect, useCallback, useMemo } from 'react'
+import { useCopy } from '@/lib/copy'
 
-const ROLES = [
-  { id: 'leader', label: 'Lidero equipos' },
-  { id: 'entrepreneur', label: 'Mi propio negocio' },
-  { id: 'employee', label: 'Trabajo para otros' },
-  { id: 'caregiver', label: 'Cuido o enseño' },
-] as const
+const ROLE_IDS = ['leader', 'entrepreneur', 'employee', 'caregiver'] as const
 
 interface P1RoleCardsProps {
   onSelect?: (roleId: string) => void
@@ -127,10 +123,16 @@ const ILLUSTRATIONS: Record<string, () => React.ReactElement> = {
 /* ── Component ─────────────────────────────────────────────────────────────── */
 
 export default function P1RoleCards({ onSelect, animateEntrance = false }: P1RoleCardsProps) {
+  const { getCopy } = useCopy()
   const [selected, setSelected] = useState<string | null>(null)
   const [isPulsing, setIsPulsing] = useState(false)
   const [revealedCards, setRevealedCards] = useState<number>(-1)
   const [labelRevealed, setLabelRevealed] = useState(false)
+
+  const roles = useMemo(() => ROLE_IDS.map((id) => ({
+    id,
+    label: getCopy(`gateway.p1role.${id}`),
+  })), [getCopy])
 
   // Escucha el evento del CTA de below-the-fold para hacer pulse
   useEffect(() => {
@@ -148,7 +150,7 @@ export default function P1RoleCards({ onSelect, animateEntrance = false }: P1Rol
     if (!animateEntrance) return
     setLabelRevealed(true)
     const timers: ReturnType<typeof setTimeout>[] = []
-    ROLES.forEach((_, i) => {
+    ROLE_IDS.forEach((_, i) => {
       timers.push(setTimeout(() => setRevealedCards(i), 100 + i * 150))
     })
     return () => timers.forEach(clearTimeout)
@@ -180,22 +182,32 @@ export default function P1RoleCards({ onSelect, animateEntrance = false }: P1Rol
           textAlign: 'center',
         }}
       >
-        ¿Cuál describe mejor tu día a día?
+        {getCopy('gateway.p1role.question')}
       </p>
 
       {/* Grid de cards — 2×2 en móvil, 4 en desktop */}
+      {/* Responsive grid: 2 cols mobile, 4 cols desktop */}
+      <style>{`
+        .p1-role-grid {
+          display: grid;
+          grid-template-columns: repeat(2, 1fr);
+          gap: var(--space-4);
+          max-width: 560px;
+          margin: 0 auto;
+        }
+        @media (min-width: 768px) {
+          .p1-role-grid {
+            grid-template-columns: repeat(4, 1fr);
+            max-width: 820px;
+          }
+        }
+      `}</style>
       <div
         role="radiogroup"
-        aria-label="¿Cuál describe mejor tu día a día?"
-        style={{
-          display: 'grid',
-          gridTemplateColumns: 'repeat(2, 1fr)',
-          gap: 'var(--space-4)',
-          maxWidth: '560px',
-          margin: '0 auto',
-        }}
+        aria-label={getCopy('gateway.p1role.question')}
+        className="p1-role-grid"
       >
-        {ROLES.map((role, index) => {
+        {roles.map((role, index) => {
           const isSelected = selected === role.id
           const shouldAnimate = animateEntrance
           const isRevealed = !shouldAnimate || index <= revealedCards
