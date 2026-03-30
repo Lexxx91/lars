@@ -56,34 +56,34 @@ export const P2_OPTIONS: SelectOption[] = [
 export interface MultiOption {
   id: string
   title: string
-  subtitle: string
+  subtitle?: string
 }
 
 export const P3_OPTIONS: MultiOption[] = [
   {
     id: 'niebla',
-    title: '"Niebla mental"',
-    subtitle: 'Leo algo y al terminar no sé qué he leído',
+    title: 'Saturación mental',
+    subtitle: 'Leo algo y al terminar no sé ni qué he leído.',
   },
   {
     id: 'decisiones',
-    title: '"Peores decisiones"',
-    subtitle: 'Tomo peores decisiones que antes — y lo noto',
+    title: 'Me cuesta concentrarme y tomar buenas decisiones',
+    subtitle: 'He perdido capacidad y claridad mental. Decisiones simples se vuelven agotadoras.',
   },
   {
     id: 'dispersa',
-    title: '"Mente dispersa"',
-    subtitle: 'Mi cabeza salta de un tema a otro sin control',
+    title: 'Falta de foco',
+    subtitle: 'Mi cabeza salta de un tema a otro sin control.',
   },
   {
     id: 'palabras',
-    title: '"Palabras perdidas"',
-    subtitle: 'Me cuesta encontrar palabras que antes tenía',
+    title: 'No me viene la palabra',
+    subtitle: 'Últimamente me cuesta recordar la palabra que busco.',
   },
   {
     id: 'decisional',
     title: '"Agotamiento decisional"',
-    subtitle: 'Al final del día no puedo elegir ni qué cenar',
+    subtitle: 'Al final del día no puedo elegir ni qué cenar.',
   },
   {
     id: 'ninguna',
@@ -98,32 +98,32 @@ export const P4_OPTIONS: SelectOption[] = [
   {
     id: 'A',
     title: '"Irritabilidad"',
-    subtitle: 'Te encienden cosas que antes no te afectaban',
+    subtitle: 'Reaccionas a menudo con enfado con impaciencia.',
   },
   {
     id: 'B',
-    title: '"Vacío"',
-    subtitle: 'Sientes un hueco que no sabes describir aunque desde fuera todo va bien',
+    title: 'No logro disfrutar con nada.',
+    subtitle: 'Lo que te hacía feliz ya no te satisface.',
   },
   {
     id: 'C',
-    title: '"Explosiones de culpa"',
-    subtitle: 'Explotas con quien más quieres y después te sientes fatal',
+    title: 'Reaccionas por detalles insignificantes',
+    subtitle: 'Explotas con quien más quieres y después te sientes fatal.',
   },
   {
     id: 'D',
-    title: '"Anestesia emocional"',
-    subtitle: 'No sientes nada — ni alegría ni tristeza. Como si estuvieras apagado',
+    title: 'Vivo desconectado de mí y de los demás',
+    subtitle: 'Tiendes a aislarte y no te apetece relacionarte.',
   },
   {
     id: 'E',
-    title: '"Rumiación constante"',
-    subtitle: 'Tu mente no para: conversaciones, errores, escenarios futuros',
+    title: 'Obsesividad mental',
+    subtitle: 'Mi mente me pide estimulación constante y no puedo pararla.',
   },
   {
     id: 'F',
     title: '"Razonablemente bien"',
-    subtitle: 'Tu equilibrio emocional es aceptable',
+    subtitle: 'Tu equilibrio emocional es aceptable.',
   },
 ]
 
@@ -132,39 +132,39 @@ export const P4_OPTIONS: SelectOption[] = [
 // Clave: "P1-P2". Para P1=D se usa "D-*" (independiente de P2).
 const PRIMERA_VERDAD_MAP: Record<string, ReflectionContent> = {
   'A-A': {
-    text: 'Tu agotamiento no es cansancio normal. Tu mente no se apaga por la noche porque tu sistema nervioso no distingue descanso de amenaza.',
+    text: 'Tu mente no se apaga ya que el estrés crónico promociona hormonas como la adrenalina, la noradrenalina y el cortisol que promueven la activación de modo huída. Esta respuesta recluta recursos energéticos que no se gastan físicamente (ciclo del estrés incompleto). Tu cuerpo usa esa energía en procesos obsesivos compulsivos negativos que retroalimentan el modo simpático.',
     collectiveData:
-      'El 78% de los +25.000 sistemas nerviosos analizados con tu patrón de respuestas presentan niveles de la hormona del estrés crónicamente elevados. No es falta de voluntad — es bioquímica.',
+      'El 78% de los +25.000 sistemas nerviosos analizados no está ajustado ni a los ciclos ni a los biorritmos que tu cuerpo necesita para funcionar de forma equilibrada.',
   },
   'A-B': {
-    text: 'Tu agotamiento no es cansancio normal. Tu cortisol se dispara de noche porque tu sistema no distingue descanso de amenaza.',
+    text: 'A nivel bioquímico este patrón suele conectarse con la hipoglucemia nocturna. Tu cuerpo no tiene la energía suficiente para completar los ciclos de sueño y segrega hormonas que promocionan energía rápida pero activan tu sistema nervioso. Normalmente es un síntoma fácil y rápido de regular.',
     collectiveData:
-      'El 82% de los +25.000 sistemas nerviosos analizados con tu patrón de respuestas presentan niveles de la hormona del estrés crónicamente elevados. No es falta de voluntad — es bioquímica.',
+      'El 82% de las personas que hemos neuroregulado responden en menos de 72 h a protocolos de suplementación con aminoácidos que estabilizan el metabolismo energético incrementando drásticamente la calidad y cantidad de su descanso.',
   },
   'B-A': {
-    text: 'Tu rendimiento bajó porque tu cerebro no descansa. Sin sueño profundo, el prefrontal no puede tomar decisiones con la precisión que antes tenías.',
+    text: 'Tu rendimiento bajó porque has estado expuesto a niveles de estrés muy altos que han comprometido tu descanso. La falta de sueño te ha llevado a un estado de mayor irritabilidad, reactividad y negatividad.',
     collectiveData:
       'El 71% de ejecutivos con deterioro cognitivo progresivo reportan un patrón de sueño idéntico al tuyo como factor previo. La conexión es directa y reversible.',
   },
   'C-B': {
-    text: 'Tu cuerpo te está dando señales que tu mente ha intentado ignorar. El despertar nocturno es la más clara — y la que más información contiene.',
+    text: 'Este síntoma puede estar relacionado con una déficit metabólico o con deficiencias en los neurotransmisores y hormonas que regulan los ciclos de sueño y vigilia.',
     collectiveData:
-      'El 82% de personas con señales físicas persistentes y despertar nocturno muestran activación crónica del sistema de alerta. El cuerpo habló antes que la mente.',
+      'El 82% de las personas con señales físicas persistentes y sueño no reparador muestran activación crónica del sistema de alerta. Vivir en modo huida compromete seriamente tu salud física y emocional. Tus relaciones y tus logros se ponen en riesgo.',
   },
   'C-C': {
-    text: 'Tu cuerpo te está dando señales que tu mente ha intentado ignorar. El cansancio que no se va con sueño es la más clara — y la que más información contiene.',
+    text: 'Tu cuerpo te está dando señales que tu mente intenta ignorar. El cansancio que no se va con sueño es la más clara — y la que más información contiene.',
     collectiveData:
-      'El 85% de personas con señales físicas persistentes y sueño no reparador muestran activación crónica del sistema de alerta. El cuerpo habló antes que la mente.',
+      'El 82% de las personas con señales físicas persistentes y sueño no reparador muestran activación crónica del sistema de alerta. Vivir en modo huida compromete seriamente tu salud física y emocional. Tus relaciones y tus logros se ponen en riesgo.',
   },
   'D-*': {
-    text: 'Alguien que te conoce vio algo que tú llevas tiempo normalizando. Tu sistema nervioso confirma que tenía razón.',
+    text: 'La gente que tienes cerca puede ver claramente las consecuencias para ti y para los demás del comportamiento que tú llevas tiempo normalizando. Tu sistema nervioso te empieza a dar señales de alarma.',
     collectiveData:
-      'El 69% de personas derivadas por un profesional presentan un nivel de agotamiento que ya habían normalizado completamente. El entorno siempre lo detecta antes.',
+      'El 69% de personas derivadas por un profesional presentan un nivel de agotamiento que ya habían normalizado completamente.',
   },
   'E-D': {
-    text: 'Dices que funcionas con poco sueño. Tu sistema nervioso puede tener una versión diferente de esa historia.',
+    text: 'Dices que funcionas con poco sueño. Las ciencia es clara y contundente: este comportamiento implica grandes riesgos para la salud como la neurodegeneración y el riesgo cardiovascular.',
     collectiveData:
-      'El 74% de personas que declaran "funcionar con poco sueño" muestran marcadores de déficit cognitivo acumulado que no perciben subjetivamente. El umbral se mueve — lo que antes era cansancio ya no lo registras como tal.',
+      'El 74% de personas que declaran "funcionar con poco sueño" muestran marcadores de déficit cognitivo acumulado que no perciben. El umbral se mueve — lo que antes era cansancio ya no lo registras como tal.',
   },
 }
 
@@ -172,7 +172,7 @@ const PRIMERA_VERDAD_MAP: Record<string, ReflectionContent> = {
 const PRIMERA_VERDAD_DEFAULT: ReflectionContent = {
   text: 'Tu sistema nervioso lleva tiempo funcionando en modo de emergencia. Lo que sientes no es debilidad — es el resultado predecible de un sistema que no ha descansado de verdad.',
   collectiveData:
-    'El 73% de los +25.000 sistemas nerviosos analizados con un patrón similar al tuyo presentan marcadores de estrés crónico. No es falta de voluntad — es bioquímica.',
+    'El 78% de los +25.000 sistemas nerviosos que hemos analizados con tu patrón de respuestas presentan niveles elevados de cortisol y adrenalina, provocando estrés crónico e inflamación sistémica.',
 }
 
 // Fallbacks por P1 cuando no hay combinación exacta
@@ -233,7 +233,7 @@ const MICRO_ESPEJO_1: Record<string, ReflectionContent> = {
     collectiveData: 'El 68% de personas con tu combinación no identifican esto como agotamiento. Lo viven como ausencia sin causa. Tiene causa — y tiene solución.',
   },
   muchoC: {
-    text: 'Das todo lo que tienes a los demás y lo que queda para ti no alcanza. Tu cerebro no tiene recursos para regularse después de regularte a ti — y el resultado es que explotas justo con quien menos quieres.',
+    text: 'Das todo lo que tienes a los demás y lo que queda para ti no es suficiente. Tu cerebro no tiene recursos para regularse  y el resultado es que explotas con quien más aprecias.',
     collectiveData: 'El 79% de personas con tu patrón sienten culpa después de las explosiones. Esa culpa también agota. Es un ciclo — no un defecto de carácter.',
   },
   muchoD: {
@@ -242,11 +242,11 @@ const MICRO_ESPEJO_1: Record<string, ReflectionContent> = {
   },
   pocoE: {
     text: 'Tu capacidad cognitiva está intacta pero tu mente la usa para anticipar en lugar de ejecutar. No estás pensando — estás sobreviviendo mentalmente.',
-    collectiveData: 'El 73% de personas con rumiación activa y pocas señales cognitivas tienen el sistema nervioso en hipervigilancia constante. La amenaza que monitoriza no existe — pero el sistema actúa como si sí.',
+    collectiveData: 'El 73% de personas con obsesividad mental activa tienen el sistema nervioso en hipervigilancia constante. La amenaza que tratas de predecir agotan tus recursos energéticos y comprometen tu bienestar emocional, tu claridad mental, la creatividad y la agilidad para hacer frente tanto a los imprevistos .',
   },
   default: {
-    text: 'Tu cabeza va a mil pero tu capacidad de procesar se ha reducido. No es que seas menos capaz — es que tu cerebro está usando su energía para mantenerte en alerta en lugar de para pensar con claridad. Y eso tiene una consecuencia directa: te irritas más porque tu freno interno está agotado.',
-    collectiveData: 'El 65% de personas con tu combinación de respuestas no saben que la irritabilidad y la niebla mental tienen la misma causa. Cuando se regula una, la otra mejora.',
+    text: 'Tu cabeza va a mil pero tu capacidad de procesar la información se ha reducido de forma dramática. No logras ni desconectar ni descansar y te sientes frustrado, asustado y desorientado con esta situación.',
+    collectiveData: 'El 65% de personas con tu combinación de respuestas no saben que la irritabilidad y la saturación cognitiva tienen la misma causa. Cuando se regula una, la otra mejora.',
   },
 }
 

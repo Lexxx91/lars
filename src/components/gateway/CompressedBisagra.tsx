@@ -12,8 +12,6 @@ import { useState, useEffect } from 'react'
 import Counter from '@/components/ui/Counter'
 import type { DimensionScores } from '@/lib/scoring'
 
-const BENCHMARK = 72
-
 interface CompressedBisagraProps {
   scores: DimensionScores
   onContinue: () => void
@@ -34,13 +32,6 @@ export default function CompressedBisagra({ scores, onContinue }: CompressedBisa
     ]
     return () => timers.forEach(clearTimeout)
   }, [])
-
-  const gap = BENCHMARK - scores.global
-  const gapText = gap > 0
-    ? `${gap} puntos por debajo de la media`
-    : gap === 0
-    ? 'Justo en la media'
-    : `${Math.abs(gap)} puntos por encima de la media`
 
   return (
     <div style={{ textAlign: 'center' }}>
@@ -91,32 +82,25 @@ export default function CompressedBisagra({ scores, onContinue }: CompressedBisa
         </div>
       </div>
 
-      {/* Comparación con benchmark */}
+      {/* Contexto de personas en este rango */}
       <div
         style={{
           opacity: showComparison ? 1 : 0,
           transform: showComparison ? 'translateY(0)' : 'translateY(8px)',
           transition: 'all 400ms ease',
           marginBottom: 'var(--space-8)',
+          textAlign: 'left',
         }}
       >
         <p style={{
           fontFamily: 'var(--font-host-grotesk)',
           fontSize: 'var(--text-body-sm)',
+          lineHeight: 'var(--lh-body-sm)',
           color: 'var(--color-text-secondary)',
-          marginBottom: 'var(--space-2)',
         }}>
-          Media colectiva: <strong style={{ color: 'var(--color-text-primary)' }}>{BENCHMARK}</strong>
+          El <strong style={{ color: 'var(--color-accent)', fontWeight: 700 }}>69%</strong> de
+          las personas mejoraron un 12-18% sus niveles en las primeras 72 h. del programa.
         </p>
-        {gap > 0 && (
-          <p style={{
-            fontFamily: 'var(--font-host-grotesk)',
-            fontSize: 'var(--text-body-sm)',
-            color: 'var(--color-accent)',
-          }}>
-            {gapText}
-          </p>
-        )}
       </div>
 
       {/* Botón */}

@@ -74,14 +74,14 @@ export function getGatewayBloque2Defaults(): CopySection[] {
       label: 'P6 — No puedo parar (título)',
       defaultValue: '\u201cNo puedo parar\u201d',
       fieldType: 'short',
-      hint: 'La pregunta más importante del gateway. Define el arquetipo.',
+      hint: 'La pregunta más importante del gateway. Define el mecanismo de defensa.',
     },
     {
       id: 'gateway.p6.optionA.subtitle',
       section: 'gateway',
       subsection: 'p6',
       label: 'P6 — No puedo parar (subtítulo)',
-      defaultValue: 'Sientes que si aflojas, todo lo que has construido se cae',
+      defaultValue: 'Sientes que si aflojas, todo lo que has construido se vendrá abajo.',
       fieldType: 'medium',
     },
     {
@@ -97,7 +97,7 @@ export function getGatewayBloque2Defaults(): CopySection[] {
       section: 'gateway',
       subsection: 'p6',
       label: 'P6 — Puedo con todo (subtítulo)',
-      defaultValue: 'No necesitas ayuda — o eso es lo que repites',
+      defaultValue: 'No necesitas ayuda — o eso es lo que repites.',
       fieldType: 'medium',
     },
     {
@@ -105,7 +105,7 @@ export function getGatewayBloque2Defaults(): CopySection[] {
       section: 'gateway',
       subsection: 'p6',
       label: 'P6 — Si yo caigo, todos caen (título)',
-      defaultValue: '\u201cSi yo caigo, todos caen\u201d',
+      defaultValue: '\u201cNo puedo fallar, muchas personas dependen de mi\u201d',
       fieldType: 'short',
     },
     {
@@ -113,7 +113,7 @@ export function getGatewayBloque2Defaults(): CopySection[] {
       section: 'gateway',
       subsection: 'p6',
       label: 'P6 — Si yo caigo, todos caen (subtítulo)',
-      defaultValue: 'Las personas que dependen de ti te mantienen en pie — y agotado',
+      defaultValue: 'No aceptas ni reconoces que el verdadero peligro es no responder a tus necesidades físicas y emocionales a tiempo.',
       fieldType: 'medium',
     },
     {
@@ -121,7 +121,7 @@ export function getGatewayBloque2Defaults(): CopySection[] {
       section: 'gateway',
       subsection: 'p6',
       label: 'P6 — Necesito entender primero (título)',
-      defaultValue: '\u201cNecesito entender primero\u201d',
+      defaultValue: '\u201cNecesito entender primero qué es lo que me pasa\u201d',
       fieldType: 'short',
     },
     {
@@ -129,7 +129,7 @@ export function getGatewayBloque2Defaults(): CopySection[] {
       section: 'gateway',
       subsection: 'p6',
       label: 'P6 — Necesito entender primero (subtítulo)',
-      defaultValue: 'No actúas hasta que lo tienes todo claro — y nunca está del todo claro',
+      defaultValue: 'No actúas hasta que lo tienes todo claro — y nunca está del todo claro.',
       fieldType: 'medium',
     },
     {
@@ -145,7 +145,7 @@ export function getGatewayBloque2Defaults(): CopySection[] {
       section: 'gateway',
       subsection: 'p6',
       label: 'P6 — He probado de todo (subtítulo)',
-      defaultValue: 'Nada ha funcionado de verdad y empiezas a dudar de que algo pueda',
+      defaultValue: 'Nada ha funcionado de verdad y empiezas a dudar de que algo pueda ayudarte.',
       fieldType: 'medium',
     },
 
@@ -204,7 +204,7 @@ export function getGatewayBloque2Defaults(): CopySection[] {
       section: 'gateway',
       subsection: 'microespejo2',
       label: 'Micro-espejo 2 — Necesito entender',
-      defaultValue: 'Entender es tu forma de sentirte seguro. Pero hay un punto donde entender más se convierte en la excusa perfecta para no actuar — porque actuar implica soltar el control. Lo que tu sistema nervioso necesita no es más análisis. Es una intervención concreta, medible y reversible.',
+      defaultValue: 'Entender es tu forma de sentirte seguro. Pero hay un punto donde entender más se convierte en la excusa perfecta para no actuar — porque actuar implica soltar el control, ser vulnerable y confiar en otros. Lo que tu sistema nervioso necesita no es más análisis. Es una intervención concreta, medible y reversible.',
       fieldType: 'long',
     },
     {

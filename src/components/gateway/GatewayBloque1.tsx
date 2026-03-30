@@ -25,6 +25,7 @@ import {
   getP4Options,
   getPrimeraVerdad,
   getMicroEspejo1,
+  type MultiOption,
 } from '@/lib/gateway-bloque1-data'
 
 // ─── TIPOS ────────────────────────────────────────────────────────────────────
@@ -153,9 +154,14 @@ export default function GatewayBloque1({
     [changeStep]
   )
 
-  const handleP4Select = useCallback(
-    (id: string) => {
-      setP4(id)
+  const handleP4Continue = useCallback(
+    (selections: string[]) => {
+      // Pick the most severe symptom (lowest P4 score) as primary for scoring/archetype
+      const P4_SEVERITY: Record<string, number> = { A: 30, B: 20, C: 25, D: 15, E: 25, F: 75 }
+      const primary = selections.reduce((worst, id) =>
+        (P4_SEVERITY[id] ?? 99) < (P4_SEVERITY[worst] ?? 99) ? id : worst
+      , selections[0])
+      setP4(primary)
       setZone('reflexion')
       changeStep('micro-espejo-1')
     },
@@ -305,14 +311,14 @@ export default function GatewayBloque1({
             />
           )}
 
-          {/* P4 — Equilibrio emocional */}
+          {/* P4 — Equilibrio emocional (multi-select) */}
           {step === 'p4' && (
-            <SingleSelectStep
-              question="¿Cuál de estas frases podrías haber dicho tú esta semana?"
-              context="La reactividad emocional no es un defecto de carácter. Es la respuesta de un cerebro que ha agotado los recursos para regular."
-              collectiveData="Esta es la pregunta que más tarda en responderse. Tómate tu tiempo."
-              options={getP4Options(getCopy)}
-              onSelect={handleP4Select}
+            <MultiSelectStep
+              question="¿Qué síntomas estás expresando de forma cotidiana?"
+              context="Estos son los síntomas más comunes de las personas que han agotado sus recursos bioquímicos y emocionales para lidiar con la altísima demanda que requiere la vida actual."
+              collectiveData="Responde con sinceridad y sin culpa. Estás aquí porque eres consciente y buscas mejorar que es más de lo que la inmensa mayoría hace."
+              options={getP4Options(getCopy) as MultiOption[]}
+              onContinue={handleP4Continue}
             />
           )}
 

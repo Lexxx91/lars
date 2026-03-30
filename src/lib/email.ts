@@ -133,7 +133,7 @@ export async function sendDia0Email({
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Tu Mapa de Regulación</title>
+  <title>Tu mapa de neuroregulación</title>
 </head>
 <body style="
   margin: 0;
@@ -156,7 +156,7 @@ export async function sendDia0Email({
           text-transform: uppercase;
           color: #CD796C;
           margin: 0 0 8px 0;
-        ">TU MAPA DE REGULACIÓN</p>
+        ">TU MAPA DE NEUROREGULACIÓN</p>
 
         <p style="
           font-size: 48px;
@@ -311,7 +311,7 @@ function buildEvolutionEmail(params: {
 </html>`
 }
 
-/** Día 3: Arquetipo del Sistema Nervioso */
+/** Día 3: Mecanismo de defensa adaptativo */
 export async function sendDia3Email(to: string, mapHash: string): Promise<void> {
   const mapUrl = `${getBaseUrl()}/mapa/${mapHash}`
   const override = await getTemplateOverride('d3')
@@ -540,7 +540,7 @@ export async function sendPostPagoEmail(to: string, mapHash: string): Promise<vo
       </table>
 
       <p style="font-size: 13px; color: #878E92; line-height: 1.6; margin: 0 0 40px 0;">
-        Ya tiene tu Mapa de Regulación. No empezáis de cero.<br>
+        Ya tiene tu mapa de neuroregulación. No empezáis de cero.<br>
         20-30 minutos. Esta semana.
       </p>
 

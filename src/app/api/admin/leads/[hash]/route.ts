@@ -25,8 +25,8 @@ interface TimelineEvent {
 
 // Emails conocidos con metadata
 const EMAIL_KEYS = [
-  { key: 'd0', name: 'Tu Mapa de Regulación', subject: 'Tu Mapa de Regulación', day: 0 },
-  { key: 'd3', name: 'Arquetipo SN', subject: 'Hay algo nuevo en tu mapa de regulación', day: 3 },
+  { key: 'd0', name: 'Tu mapa de neuroregulación', subject: 'Tu mapa de neuroregulación', day: 0 },
+  { key: 'd3', name: 'Mecanismo de defensa', subject: 'Hay algo nuevo en tu mapa de neuroregulación', day: 3 },
   { key: 'd7', name: 'Insight colectivo', subject: 'Tu mapa se ha actualizado', day: 7 },
   { key: 'd10', name: 'Sesión con Javier', subject: 'Javier puede revisar tu mapa contigo', day: 10 },
   { key: 'd14', name: 'Subdimensiones', subject: 'Hay 3 subdimensiones nuevas disponibles', day: 14 },
@@ -93,12 +93,12 @@ export async function GET(
   timeline.push({
     type: 'email_sent',
     at: row.created_at,
-    details: { key: 'd0', subject: 'Tu Mapa de Regulación' },
+    details: { key: 'd0', subject: 'Tu mapa de neuroregulación' },
   })
 
   // Otros emails enviados (por flags)
   const sentFlags: [string, string, string][] = [
-    ['email_d3_sent', 'd3', 'Hay algo nuevo en tu mapa de regulación'],
+    ['email_d3_sent', 'd3', 'Hay algo nuevo en tu mapa de neuroregulación'],
     ['email_d7_sent', 'd7', 'Tu mapa se ha actualizado'],
     ['email_d10_sent', 'd10', 'Javier puede revisar tu mapa contigo'],
     ['email_d14_sent', 'd14', 'Hay 3 subdimensiones nuevas disponibles'],

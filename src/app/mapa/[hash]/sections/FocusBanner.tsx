@@ -61,9 +61,9 @@ export function selectFocus(props: FocusBannerProps): FocusItem {
   if (evolution.archetype.isNew && archetype) {
     return {
       tag: 'NUEVO DESDE TU ÚLTIMA VISITA',
-      title: `Tu Arquetipo: ${archetype.name}`,
+      title: `Tu mecanismo de defensa: ${archetype.name}`,
       description: archetype.teaser,
-      ctaText: 'Descubrir tu perfil completo',
+      ctaText: 'Descubrir tu mecanismo de defensa completo',
       scrollTo: 'section-archetype',
     }
   }

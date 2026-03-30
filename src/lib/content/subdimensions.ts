@@ -135,7 +135,7 @@ const SUBDIMENSION_CONFIGS: Record<DimensionKey, SubdimensionConfig> = {
         affectsSubdimension: 'd3_decisions',
         options: [
           { key: 'A', label: 'Parálisis total — no puedo decidir y pospongo todo', value: 15 },
-          { key: 'B', label: 'Decido pero luego rumiación sobre si fue correcto', value: 35 },
+          { key: 'B', label: 'Decido pero luego obsesividad mental sobre si fue correcto', value: 35 },
           { key: 'C', label: 'Me cuesta más que antes pero consigo decidir', value: 60 },
           { key: 'D', label: 'Decido con claridad razonable', value: 80 },
         ],
@@ -157,7 +157,7 @@ const SUBDIMENSION_CONFIGS: Record<DimensionKey, SubdimensionConfig> = {
         text: 'Cuando algo te frustra en el trabajo, ¿cómo sueles reaccionar?',
         affectsSubdimension: 'd4_reactivity',
         options: [
-          { key: 'A', label: 'Explosión inmediata o implosión con rumiación intensa', value: 15 },
+          { key: 'A', label: 'Explosión inmediata o implosión con obsesividad mental intensa', value: 15 },
           { key: 'B', label: 'Irritabilidad contenida que dura horas', value: 35 },
           { key: 'C', label: 'Molestia moderada que proceso en poco tiempo', value: 65 },
           { key: 'D', label: 'Lo gestiono sin que me desestabilice significativamente', value: 85 },

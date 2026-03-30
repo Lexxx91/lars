@@ -158,7 +158,7 @@ export async function sendBookingConfirmationEmail({
       ${meetBlock}
 
       <p style="font-family: 'Host Grotesk', system-ui, sans-serif; font-size: 14px; color: #878E92; line-height: 1.6; margin: 28px 0 0 0;">
-        Javier ya tiene tu Mapa de Regulación. No empezáis de cero.
+        Javier ya tiene tu mapa de neuroregulación. No empezáis de cero.
       </p>
 
       <p style="font-family: 'Host Grotesk', system-ui, sans-serif; font-size: 12px; color: #878E92; margin: 32px 0 0 0;">

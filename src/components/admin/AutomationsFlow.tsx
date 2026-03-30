@@ -44,7 +44,7 @@ const EMAIL_META: Record<string, { description: string; cta: string; conditions?
   },
   d3: {
     description:
-      'Revela el arquetipo del sistema nervioso. Genera curiosidad sobre una pieza que "faltaba" en el diagnóstico inicial.',
+      'Revela el mecanismo de defensa adaptativo. Genera curiosidad sobre una pieza que "faltaba" en el diagnóstico inicial.',
     cta: 'Ver mi mapa',
   },
   d7: {

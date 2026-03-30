@@ -34,7 +34,7 @@ export default function EvolutionTimeline({ evolution }: Props) {
     },
     {
       day: 3,
-      label: 'Arquetipo del SN',
+      label: 'Mecanismo de defensa',
       sublabel: '7 tipos · Tu patrón profundo',
       sectionId: 'section-archetype',
       status: evolution.archetype.unlocked

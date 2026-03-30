@@ -23,7 +23,7 @@ interface EvolutionResult {
 }
 
 const PRESETS = [
-  { label: 'Día 4 → Arquetipo', days: 4, color: 'var(--color-accent)' },
+  { label: 'Día 4 → Mecanismo de defensa', days: 4, color: 'var(--color-accent)' },
   { label: 'Día 8 → Insight D7', days: 4, color: 'var(--color-accent)' },
   { label: 'Día 11 → Sesión', days: 3, color: 'var(--color-success)' },
   { label: 'Día 15 → Subdimensiones', days: 4, color: 'var(--color-accent)' },

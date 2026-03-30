@@ -97,6 +97,15 @@ Evoluciones del mapa (día 3-90), emails automáticos, analytics custom en Supab
   - Email "comparación lista" con template warm cream + tracking pixel
   - Anti-spam (5/hora) + límite de invitaciones activas (5) + detección de patrón de rechazo (3+)
 
+- ✅ **Copy & Terminología — Sprint 1: 7 cambios de producto** (30 Mar 2026):
+  - "Arquetipo del sistema nervioso" → "Mecanismo de defensa adaptativo" en todo el sistema (mapa, admin, emails, archetypes)
+  - "Rumiación/rumiar" → "Obsesividad mental" en copy y datos
+  - "Mapa de Regulación" → "Mapa de neuroregulación" en emails, mapa vivo, admin
+  - Sync copy-defaults con Supabase copy_overrides (landing, bloque1, bloque2, datos hardcoded) — elimina flash en reload
+  - Fix P5 optionC/D mostrando claves de traducción en lugar de texto
+  - P4 convertida a multi-select con nuevo copy de síntomas
+  - Sección "Tu nivel de regulación" reestructurada con dato del 69% y urgencia
+
 ### Pendiente (no bloquea lanzamiento)
 - Testimonios: siguen siendo placeholder — pendiente de testimonios reales de Javier
 - Stripe: en modo test — pasar a LIVE cuando esté listo

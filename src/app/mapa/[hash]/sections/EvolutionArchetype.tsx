@@ -1,9 +1,9 @@
 'use client'
 
 /**
- * EvolutionArchetype.tsx — Sección Día 3: Arquetipo del Sistema Nervioso
+ * EvolutionArchetype.tsx — Sección Día 3: Mecanismo de defensa adaptativo
  *
- * Muestra el arquetipo con narrativa espejo + creencias + expandibles con patrones y 3 capas de necesidad.
+ * Muestra el mecanismo de defensa con narrativa espejo + creencias + expandibles con patrones y 3 capas de necesidad.
  */
 
 import { useState } from 'react'
@@ -60,7 +60,7 @@ export default function EvolutionArchetype({ archetype, isNew, mode = 'full', on
             marginBottom: 'var(--space-4)',
           }}
         >
-          Tu Arquetipo del Sistema Nervioso
+          Mecanismo de defensa adaptativo
         </p>
 
         {/* Archetype name */}
@@ -147,7 +147,7 @@ export default function EvolutionArchetype({ archetype, isNew, mode = 'full', on
           marginBottom: 'var(--space-2)',
         }}
       >
-        Tu arquetipo
+        Tu mecanismo de defensa
       </p>
 
       {/* Nombre */}

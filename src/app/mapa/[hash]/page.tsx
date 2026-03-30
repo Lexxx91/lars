@@ -28,7 +28,7 @@ import SiteHeader from '@/components/SiteHeader'
 // ─── METADATA ─────────────────────────────────────────────────────────────────
 
 export const metadata: Metadata = {
-  title: 'Tu Mapa de Regulación · L.A.R.S.',
+  title: 'Tu mapa de neuroregulación · L.A.R.S.',
   description: 'Tu evaluación personal de regulación nerviosa.',
   robots: { index: false, follow: false },
 }
@@ -134,7 +134,7 @@ export default async function MapaPage({
 
   const evolution = computeEvolutionState(created_at, map_evolution)
 
-  // Arquetipo (Día 3)
+  // Mecanismo de defensa (Día 3)
   const archetype = evolution.archetype.unlocked
     ? getArchetype(responses.p6, responses.p4, responses.p2)
     : null

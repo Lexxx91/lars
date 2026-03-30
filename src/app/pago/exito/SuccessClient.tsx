@@ -208,7 +208,7 @@ export default function SuccessClient({ hash, email, sessionId }: Props) {
                   lineHeight: 'var(--lh-body)',
                   color: 'var(--color-text-primary)',
                 }}>
-                  Ya tengo tu Mapa de Regulación. Sé cuál es tu dimensión más comprometida, tu arquetipo y tu patrón.
+                  Ya tengo tu mapa de neuroregulación. Sé cuál es tu dimensión más comprometida, tu mecanismo de defensa y tu patrón.
                   En nuestra sesión 1:1 no empezamos de cero — empezamos desde lo que tu cuerpo ya me ha contado.
                   Mi trabajo esta semana es que duermas mejor. Así de simple.
                 </p>
@@ -424,7 +424,7 @@ export default function SuccessClient({ hash, email, sessionId }: Props) {
               color: 'var(--color-text-tertiary)',
               marginBottom: 'var(--space-3)',
             }}>
-              Tu Mapa de Regulación sigue vivo en tu página personal. Vuelve cuando quieras.
+              Tu mapa de neuroregulación sigue vivo en tu página personal. Vuelve cuando quieras.
             </p>
 
             {hash && (

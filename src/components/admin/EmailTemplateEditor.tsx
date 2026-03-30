@@ -31,8 +31,8 @@ interface Props {
 // ── Email display names ───────────────────────────────────────────────────────
 
 const EMAIL_NAMES: Record<string, string> = {
-  d0: 'Día 0 — Tu Mapa de Regulación',
-  d3: 'Día 3 — Arquetipo SN',
+  d0: 'Día 0 — Tu mapa de neuroregulación',
+  d3: 'Día 3 — Mecanismo de defensa',
   d7: 'Día 7 — Insight colectivo',
   d10: 'Día 10 — Sesión con Javier',
   d14: 'Día 14 — Subdimensiones',

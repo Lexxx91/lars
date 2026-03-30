@@ -1,5 +1,5 @@
 /**
- * archetypes.ts — Los 7 arquetipos del Sistema Nervioso
+ * archetypes.ts — Los 7 mecanismos de defensa adaptativos
  *
  * Contenido real de:
  * - /arquetipos/cards.pdf (6 patrones de burnout por arquetipo)
@@ -32,13 +32,13 @@ export interface ArchetypeData {
   wound: string
   armor: string
   snState: string
-  /** Narrativa completa del arquetipo — texto espejo en 2ª persona */
+  /** Narrativa completa del mecanismo de defensa — texto espejo en 2ª persona */
   narrative: string
   /** Creencia central que gobierna el patrón (ej: "No puedo confiar en nadie") */
   centralBelief: string
   /** Creencia de sanación — la dirección de integración */
   healingBelief: string
-  /** Miedos principales del arquetipo */
+  /** Miedos principales del mecanismo de defensa */
   fears: string[]
   /** Frase corta para el teaser en el mapa */
   teaser: string
@@ -52,7 +52,7 @@ export interface ArchetypeData {
   }
 }
 
-// ─── LOS 7 ARQUETIPOS ────────────────────────────────────────────────────────
+// ─── LOS 7 MECANISMOS DE DEFENSA ────────────────────────────────────────────
 
 const ARCHETYPES: ArchetypeData[] = [
   {
@@ -141,18 +141,18 @@ const ARCHETYPES: ArchetypeData[] = [
     wound: 'Humillación',
     armor: 'Control absoluto',
     snState: 'Hiperactivación prefrontal — déficit de serotonina y GABA',
-    narrative: 'En algún momento de tu historia ocurrió algo que no pudiste prever — y ese algo te destrozó. Quizá fue un padre impredecible cuyo humor cambiaba sin aviso, un entorno donde las reglas se movían sin explicación, una pérdida que cayó del cielo sin darle tiempo a tu cuerpo de prepararse. Tu sistema nervioso extrajo una conclusión brutal de esa experiencia: si no lo vi venir, no pude protegerme.\n\nY a partir de ahí tomó una decisión que ya no te consultó — nunca más serás sorprendido. Convirtió tu mente en su herramienta de supervivencia más sofisticada y más agotadora.\n\nNo piensas por placer ni por curiosidad, piensas porque dejar de pensar significa perder el control, y perder el control significa quedar expuesto a ese caos original que tu cuerpo nunca olvidó. La rumiación es el intento desesperado de tu biología por predecir lo que viene y controlar el resultado final.\n\nPero el precio es brutal: vives encerrado en una cárcel de escenarios que nunca suceden mientras la vida real pasa al otro lado de los barrotes que tú mismo construiste.',
+    narrative: 'En algún momento de tu historia ocurrió algo que no pudiste prever — y ese algo te destrozó. Quizá fue un padre impredecible cuyo humor cambiaba sin aviso, un entorno donde las reglas se movían sin explicación, una pérdida que cayó del cielo sin darle tiempo a tu cuerpo de prepararse. Tu sistema nervioso extrajo una conclusión brutal de esa experiencia: si no lo vi venir, no pude protegerme.\n\nY a partir de ahí tomó una decisión que ya no te consultó — nunca más serás sorprendido. Convirtió tu mente en su herramienta de supervivencia más sofisticada y más agotadora.\n\nNo piensas por placer ni por curiosidad, piensas porque dejar de pensar significa perder el control, y perder el control significa quedar expuesto a ese caos original que tu cuerpo nunca olvidó. La obsesividad mental es el intento desesperado de tu biología por predecir lo que viene y controlar el resultado final.\n\nPero el precio es brutal: vives encerrado en una cárcel de escenarios que nunca suceden mientras la vida real pasa al otro lado de los barrotes que tú mismo construiste.',
     centralBelief: 'Debo mantener el control a toda costa para evitar el castigo.',
     healingBelief: 'Puedo soltar el control y expresar mis emociones sin temor.',
     fears: [
       'Perder el autocontrol y enfrentarse a impulsos reprimidos',
       'Angustia ante cambios, lo inesperado y la incertidumbre',
     ],
-    teaser: 'La rumiación ES hiperactivación cognitiva. Tu mente no para de ejecutar algoritmos de seguridad: anticipar todos los escenarios posibles.',
+    teaser: 'La obsesividad mental ES hiperactivación cognitiva. Tu mente no para de ejecutar algoritmos de seguridad: anticipar todos los escenarios posibles.',
     patterns: [
       {
         name: 'Hiperactivación',
-        description: 'La rumiación ES hiperactivación cognitiva. Su mente no para de ejecutar «algoritmos de seguridad»: anticipar todos los escenarios posibles.',
+        description: 'La obsesividad mental ES hiperactivación cognitiva. Su mente no para de ejecutar «algoritmos de seguridad»: anticipar todos los escenarios posibles.',
       },
       {
         name: 'Perfeccionismo',
@@ -180,11 +180,11 @@ const ARCHETYPES: ArchetypeData[] = [
         title: 'Necesidad bioquímica',
         items: [
           'Movimiento que libere hipertonía',
-          'Sueño reparador sin rumiación',
+          'Sueño reparador sin obsesividad mental',
           'Contacto que desbloquee rigidez',
           'Expresión sexual liberadora',
         ],
-        explanation: 'Mantiene un tono simpático permanente con hiperactividad prefrontal. Necesita movimiento físico que libere la hipertonía muscular crónica, sueño que permita consolidación sin rumiación, y contacto que desbloquee la rigidez somática del control.',
+        explanation: 'Mantiene un tono simpático permanente con hiperactividad prefrontal. Necesita movimiento físico que libere la hipertonía muscular crónica, sueño que permita consolidación sin obsesividad mental, y contacto que desbloquee la rigidez somática del control.',
       },
       nervousSystem: {
         title: 'Necesidad del sistema nervioso',
@@ -233,7 +233,7 @@ const ARCHETYPES: ArchetypeData[] = [
       },
       {
         name: 'Identidad = producción',
-        description: 'Fusión total: soy lo que logro. Sin función profesional, vacío existencial. Es el arquetipo donde este patrón es más puro.',
+        description: 'Fusión total: soy lo que logro. Sin función profesional, vacío existencial. Es el mecanismo de defensa donde este patrón es más puro.',
       },
       {
         name: 'Hiperactivación',
@@ -525,7 +525,7 @@ const ARCHETYPES: ArchetypeData[] = [
     wound: 'Impotencia',
     armor: 'Superioridad',
     snState: 'Simpático de dominancia — testosterona y dopamina competitiva',
-    narrative: 'En algún momento de tu historia alguien te hizo sentir pequeño — tan pequeño que tu sistema nervioso juró que nunca más nadie tendría el poder de hacerte sentir así. Quizá fue un padre que te humillaba delante de otros, un entorno escolar donde fuiste el débil, una familia donde tu sensibilidad se ridiculizaba como defecto.\n\nTu sistema nervioso extrajo una conclusión que reconfiguró tu personalidad entera: si estoy arriba nadie me alcanza, y si nadie me alcanza nadie me hiere. Y a partir de ahí construyó una torre de superioridad que hoy el mundo confunde con tu carácter.\n\nEres soberbio — pero esa soberbia no es ego sino escudo. Eres crítico — juzgas a todos porque mientras juzgas nadie te juzga a ti. Eres intelectual — usas la mente como trinchera, racionalizas todo para no sentir nada. Y eres infranqueable — la superioridad funciona como foso y muralla contra la intimidad.\n\nY lo más devastador de este arquetipo es que funciona — la gente te respeta, te teme, te admira desde lejos, y esa distancia que interpretas como victoria es exactamente la condena que tu sistema nervioso diseñó sin consultarte.',
+    narrative: 'En algún momento de tu historia alguien te hizo sentir pequeño — tan pequeño que tu sistema nervioso juró que nunca más nadie tendría el poder de hacerte sentir así. Quizá fue un padre que te humillaba delante de otros, un entorno escolar donde fuiste el débil, una familia donde tu sensibilidad se ridiculizaba como defecto.\n\nTu sistema nervioso extrajo una conclusión que reconfiguró tu personalidad entera: si estoy arriba nadie me alcanza, y si nadie me alcanza nadie me hiere. Y a partir de ahí construyó una torre de superioridad que hoy el mundo confunde con tu carácter.\n\nEres soberbio — pero esa soberbia no es ego sino escudo. Eres crítico — juzgas a todos porque mientras juzgas nadie te juzga a ti. Eres intelectual — usas la mente como trinchera, racionalizas todo para no sentir nada. Y eres infranqueable — la superioridad funciona como foso y muralla contra la intimidad.\n\nY lo más devastador de este mecanismo de defensa es que funciona — la gente te respeta, te teme, te admira desde lejos, y esa distancia que interpretas como victoria es exactamente la condena que tu sistema nervioso diseñó sin consultarte.',
     centralBelief: 'Debo demostrar superioridad para ser digno y no quedar expuesto como impostor.',
     healingBelief: 'Soy valioso por quien soy; puedo conectar con mi vulnerabilidad y seguir siendo digno.',
     fears: [
@@ -594,11 +594,11 @@ const ARCHETYPES: ArchetypeData[] = [
   },
 ]
 
-// ─── MAPEO P6+P4+P2 → ARQUETIPO ─────────────────────────────────────────────
+// ─── MAPEO P6+P4+P2 → MECANISMO DE DEFENSA ─────────────────────────────────
 
 /**
  * Mapea las respuestas P6 (frase identitaria), P4 (patrón emocional)
- * y P2 (sueño) a uno de los 7 arquetipos del sistema nervioso.
+ * y P2 (sueño) a uno de los 7 mecanismos de defensa adaptativos.
  *
  * Lógica basada en la matriz de conexiones (arquetipos-conexiones.jpeg):
  * - P6 selecciona el grupo primario (4 perfiles ego → subset de arquetipos)
@@ -663,12 +663,12 @@ export function getArchetype(p6: string, p4: string, p2: string): ArchetypeData 
   }
 }
 
-/** Obtiene un arquetipo por su key */
+/** Obtiene un mecanismo de defensa por su key */
 export function getArchetypeByKey(key: string): ArchetypeData | undefined {
   return ARCHETYPES.find((a) => a.key === key)
 }
 
-/** Todos los arquetipos (para admin/debug) */
+/** Todos los mecanismos de defensa (para admin/debug) */
 export function getAllArchetypes(): ArchetypeData[] {
   return ARCHETYPES
 }

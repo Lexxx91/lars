@@ -59,7 +59,7 @@ export default function BookingConfirmed({ slotStart, meetUrl, mapHash, onCancel
       `DTSTART:${fmt(date)}`,
       `DTEND:${fmt(new Date(date.getTime() + 20 * 60 * 1000))}`,
       'SUMMARY:Sesión con Javier — Instituto Epigenético',
-      `DESCRIPTION:Revisión de tu Mapa de Regulación.${meetUrl ? `\\nEnlace: ${meetUrl}` : ''}`,
+      `DESCRIPTION:Revisión de tu mapa de neuroregulación.${meetUrl ? `\\nEnlace: ${meetUrl}` : ''}`,
       meetUrl ? `URL:${meetUrl}` : '',
       'END:VEVENT',
       'END:VCALENDAR',

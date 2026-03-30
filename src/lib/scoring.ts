@@ -73,7 +73,7 @@ const P4_D4: Record<string, number> = {
   B: 20, // vacío
   C: 25, // explosiones de culpa
   D: 15, // anestesia emocional (forzado < 25 después)
-  E: 25, // rumiación constante
+  E: 25, // obsesividad mental
   F: 75, // razonablemente bien
 }
 

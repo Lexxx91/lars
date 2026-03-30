@@ -56,7 +56,7 @@ const EVENT_CONFIG: Record<string, { icon: string; color: string; label: (d?: Re
     color: '#D97706',
     label: (d) => {
       const map: Record<string, string> = {
-        archetype: 'Arquetipo desbloqueado',
+        archetype: 'Mecanismo de defensa desbloqueado',
         insight_d7: 'Insight colectivo desbloqueado',
         subdimensions: 'Subdimensiones desbloqueadas',
         book_excerpt: 'Extracto del libro desbloqueado',

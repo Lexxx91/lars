@@ -302,7 +302,7 @@ export default function MapaClient({
 
     ctx.fillStyle = '#F5F5F0'
     ctx.font = '600 26px system-ui, sans-serif'
-    ctx.fillText('Tu Mapa de Regulación', 40, 88)
+    ctx.fillText('Tu mapa de neuroregulación', 40, 88)
 
     ctx.fillStyle = '#6B7572'
     ctx.font = '400 12px system-ui, sans-serif'
@@ -378,7 +378,7 @@ export default function MapaClient({
     ctx.fillStyle = '#6B7572'
     ctx.font = '400 11px system-ui, sans-serif'
     const date = new Date().toLocaleDateString('es-ES', { day: '2-digit', month: 'long', year: 'numeric' })
-    ctx.fillText(`Mapa de Regulación · ${date}`, 40, H - 24)
+    ctx.fillText(`Mapa de neuroregulación · ${date}`, 40, H - 24)
 
     const link = document.createElement('a')
     link.download = `mapa-lars-${hash}.png`
@@ -779,7 +779,7 @@ export default function MapaClient({
                 color: 'var(--color-text-primary)',
                 marginBottom: 'var(--space-2)',
               }}>
-                Tu Mapa de Regulación
+                Tu mapa de neuroregulación
               </h1>
               <p style={{
                 fontFamily: 'var(--font-host-grotesk)',

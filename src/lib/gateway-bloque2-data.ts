@@ -42,27 +42,27 @@ export const P6_OPTIONS: SelectOption[] = [
   {
     id: 'A',
     title: '"No puedo parar"',
-    subtitle: 'Sientes que si aflojas, todo lo que has construido se cae',
+    subtitle: 'Sientes que si aflojas, todo lo que has construido se vendrá abajo.',
   },
   {
     id: 'B',
     title: '"Puedo con todo"',
-    subtitle: 'No necesitas ayuda — o eso es lo que repites',
+    subtitle: 'No necesitas ayuda — o eso es lo que repites.',
   },
   {
     id: 'C',
-    title: '"Si yo caigo, todos caen"',
-    subtitle: 'Las personas que dependen de ti te mantienen en pie — y agotado',
+    title: '"No puedo fallar, muchas personas dependen de mi"',
+    subtitle: 'No aceptas ni reconoces que el verdadero peligro es no responder a tus necesidades físicas y emocionales a tiempo.',
   },
   {
     id: 'D',
-    title: '"Necesito entender primero"',
-    subtitle: 'No actúas hasta que lo tienes todo claro — y nunca está del todo claro',
+    title: '"Necesito entender primero qué es lo que me pasa"',
+    subtitle: 'No actúas hasta que lo tienes todo claro — y nunca está del todo claro.',
   },
   {
     id: 'E',
     title: '"He probado de todo"',
-    subtitle: 'Nada ha funcionado de verdad y empiezas a dudar de que algo pueda',
+    subtitle: 'Nada ha funcionado de verdad y empiezas a dudar de que algo pueda ayudarte.',
   },
 ]
 
@@ -85,7 +85,7 @@ const MICRO_ESPEJO_2_MAP: Record<string, ReflectionContent> = {
       'El 84% de personas con tu patrón reportan que la culpa de cuidarse es mayor que el malestar de no hacerlo. Es la trampa más silenciosa del agotamiento.',
   },
   D: {
-    text: 'Entender es tu forma de sentirte seguro. Pero hay un punto donde entender más se convierte en la excusa perfecta para no actuar — porque actuar implica soltar el control. Lo que tu sistema nervioso necesita no es más análisis. Es una intervención concreta, medible y reversible.',
+    text: 'Entender es tu forma de sentirte seguro. Pero hay un punto donde entender más se convierte en la excusa perfecta para no actuar — porque actuar implica soltar el control, ser vulnerable y confiar en otros. Lo que tu sistema nervioso necesita no es más análisis. Es una intervención concreta, medible y reversible.',
     collectiveData:
       'El 79% de personas que priorizan entender antes de actuar tardan una media de 14 meses más en resolver su situación. No por falta de información — por exceso de análisis.',
   },
@@ -157,7 +157,12 @@ export interface Bloque2Answers {
 export function getP5Options(getCopy: CopyGetter): SelectOption[] {
   return P5_OPTIONS.map((opt) => ({
     ...opt,
-    title: getCopy(`gateway.p5.option${opt.id}`),
+    title: opt.subtitle
+      ? getCopy(`gateway.p5.option${opt.id}.title`)
+      : getCopy(`gateway.p5.option${opt.id}`),
+    subtitle: opt.subtitle
+      ? getCopy(`gateway.p5.option${opt.id}.subtitle`)
+      : opt.subtitle,
   }))
 }
 

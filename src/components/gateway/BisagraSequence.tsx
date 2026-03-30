@@ -26,7 +26,6 @@ import Counter from '@/components/ui/Counter'
 import TypeWriter from '@/components/ui/TypeWriter'
 import type { DimensionScores } from '@/lib/scoring'
 
-const BENCHMARK = 72
 const CALCULANDO_TEXT = 'Calculando tu perfil de regulación\u2026'
 
 interface BisagraSequenceProps {
@@ -274,67 +273,41 @@ export default function BisagraSequence({ scores, onContinue }: BisagraSequenceP
               }}
             />
 
-            {/* Texto de comparación */}
+            {/* Título de contexto */}
             <p
               style={{
                 ...fadeStyle(showBenchmark),
                 fontFamily: 'var(--font-host-grotesk)',
                 fontSize: 'var(--text-body-sm)',
                 lineHeight: 'var(--lh-body-sm)',
-                color: 'var(--color-text-secondary)',
-                marginBottom: 'var(--space-3)',
+                letterSpacing: 'var(--ls-overline)',
+                textTransform: 'uppercase',
+                color: 'var(--color-text-tertiary)',
+                marginBottom: 'var(--space-4)',
                 display: fadeTyping ? 'block' : 'none',
               }}
             >
-              El promedio de personas en tu situación que empezaron a regularse:
+              Personas que empezaron en este rango:
             </p>
 
-            {/* Benchmark counter */}
-            <div
-              style={{
-                ...fadeStyle(showBenchmark),
-                marginBottom: 'var(--space-5)',
-                display: fadeTyping ? 'block' : 'none',
-              }}
-            >
-              <span
-                style={{
-                  fontFamily: 'var(--font-host-grotesk)',
-                  fontSize: 'var(--text-display)',
-                  lineHeight: 1,
-                  letterSpacing: 'var(--ls-display)',
-                  fontWeight: 700,
-                  color: 'var(--color-accent)',
-                }}
-              >
-                {showBenchmark ? (
-                  <Counter
-                    from={0}
-                    to={BENCHMARK}
-                    duration={800}
-                    autoStart
-                  />
-                ) : '0'}
-              </span>
-            </div>
-
-            {/* Gap text */}
+            {/* Dato principal con 69% destacado */}
             <p
               style={{
                 ...fadeStyle(showGap),
                 fontFamily: 'var(--font-host-grotesk)',
                 fontSize: 'var(--text-body)',
                 lineHeight: 'var(--lh-body)',
-                color: 'var(--color-accent)',
-                fontWeight: 500,
-                marginBottom: 'var(--space-6)',
+                color: 'var(--color-text-secondary)',
+                marginBottom: 'var(--space-4)',
                 display: fadeTyping ? 'block' : 'none',
               }}
             >
-              La distancia entre ambos números es donde está tu oportunidad.
+              El <strong style={{ color: 'var(--color-accent)', fontWeight: 700 }}>69%</strong> de
+              las personas mejoraron un 12-18% sus niveles en las primeras 72 h. del programa
+              e incrementaron {'>'} 35% sus resultados al completar el proceso de neuroregulación.
             </p>
 
-            {/* Social data */}
+            {/* Dato de urgencia */}
             <p
               style={{
                 ...fadeStyle(showSocial),
@@ -345,9 +318,7 @@ export default function BisagraSequence({ scores, onContinue }: BisagraSequenceP
                 display: fadeTyping ? 'block' : 'none',
               }}
             >
-              De las 5.247 personas con un score similar al tuyo, las que actuaron
-              en la primera semana mejoraron un 34% más rápido que las que esperaron
-              un mes.
+              Las que actuaron en la primera semana avanzaron un 34% más rápido que las que esperaron un mes.
             </p>
           </>
         )}

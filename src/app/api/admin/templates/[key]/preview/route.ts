@@ -54,7 +54,7 @@ function buildD0Preview(subject: string, ctaText: string): string {
   <table width="100%" cellpadding="0" cellspacing="0" style="max-width:560px;margin:0 auto;padding:48px 24px;">
     <tr><td>
       <img src="${LOGO_URL}" alt="Instituto Epigenético" width="220" style="display:block;width:220px;height:auto;margin:0 0 32px 0;" />
-      <p style="font-size:13px;letter-spacing:0.12em;text-transform:uppercase;color:#CD796C;margin:0 0 8px 0;">TU MAPA DE REGULACIÓN</p>
+      <p style="font-size:13px;letter-spacing:0.12em;text-transform:uppercase;color:#CD796C;margin:0 0 8px 0;">TU MAPA DE NEUROREGULACIÓN</p>
       <p style="font-size:48px;font-weight:600;color:#212426;margin:0 0 4px 0;line-height:1;">42<span style="font-size:24px;font-weight:400;color:#2D2D2D;">/100</span></p>
       <p style="font-size:14px;color:#878E92;margin:0 0 40px 0;">Score global de regulación</p>
       <div style="height:1px;background:rgba(38, 66, 51, 0.10);margin-bottom:32px;"></div>
@@ -139,7 +139,7 @@ function buildPostPagoPreview(bodyText: string, subject: string, ctaText: string
           <a href="#" style="color:#FFFFFF;font-size:14px;font-weight:500;text-decoration:none;display:block;white-space:nowrap;">${escapeHtml(ctaText)}</a>
         </td></tr>
       </table>
-      <p style="font-size:13px;color:#878E92;line-height:1.6;margin:0 0 40px 0;">Ya tiene tu Mapa de Regulación. No empezáis de cero.<br>20-30 minutos. Esta semana.</p>
+      <p style="font-size:13px;color:#878E92;line-height:1.6;margin:0 0 40px 0;">Ya tiene tu mapa de neuroregulación. No empezáis de cero.<br>20-30 minutos. Esta semana.</p>
       <div style="height:1px;background:rgba(38, 66, 51, 0.10);margin-bottom:32px;"></div>
       <p style="font-size:14px;color:#2D2D2D;line-height:1.6;margin:0 0 8px 0;">Recuerda: si tu sueño no mejora en 7 días, te devolvemos los 97€. Sin preguntas.</p>
       <p style="font-size:14px;color:#212426;font-weight:500;margin:0 0 40px 0;">Pero no los vas a necesitar.</p>

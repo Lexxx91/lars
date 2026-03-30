@@ -17,7 +17,7 @@ export interface EmailTemplateDefaults {
 
 export const EMAIL_DEFAULTS: Record<string, EmailTemplateDefaults> = {
   d0: {
-    subject: 'Tu Mapa de Regulación',
+    subject: 'Tu mapa de neuroregulación',
     bodyContent: '',
     ctaText: 'Ver mi mapa completo',
     isDynamic: true,
@@ -25,9 +25,9 @@ export const EMAIL_DEFAULTS: Record<string, EmailTemplateDefaults> = {
       'El cuerpo de este email incluye scores y dimensiones calculados automáticamente. Solo el asunto y el texto del botón son editables.',
   },
   d3: {
-    subject: 'Hay algo nuevo en tu mapa de regulación',
+    subject: 'Hay algo nuevo en tu mapa de neuroregulación',
     bodyContent:
-      'Tu arquetipo del sistema nervioso está disponible. Es la pieza que faltaba para entender por qué tu cuerpo responde como responde.',
+      'Tu mecanismo de defensa adaptativo está disponible. Es la pieza que faltaba para entender por qué tu cuerpo responde como responde.',
     ctaText: 'Ver mi mapa',
   },
   d7: {
@@ -66,7 +66,7 @@ export const EMAIL_DEFAULTS: Record<string, EmailTemplateDefaults> = {
   goodbye: {
     subject: 'Tu mapa sigue aquí',
     bodyContent:
-      'Tu mapa de regulación sigue evolucionando.\n\nNo necesitas abrir estos emails para que eso ocurra. Tu análisis trabaja por ti en segundo plano — y lo que revele estará ahí cuando lo necesites.\n\nVamos a dejar de enviarte actualizaciones para no añadir ruido a tu bandeja. Pero hay algo que no cambia:',
+      'Tu mapa de neuroregulación sigue evolucionando.\n\nNo necesitas abrir estos emails para que eso ocurra. Tu análisis trabaja por ti en segundo plano — y lo que revele estará ahí cuando lo necesites.\n\nVamos a dejar de enviarte actualizaciones para no añadir ruido a tu bandeja. Pero hay algo que no cambia:',
     ctaText: 'Seguir recibiendo actualizaciones',
     isDynamic: true,
     dynamicNote:

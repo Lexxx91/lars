@@ -50,7 +50,7 @@ export default function ActionUnlock({ lead, onSubmit, onCancel, submitting }: P
         </p>
         <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
           {[
-            { icon: '🧬', label: 'Arquetipo del Sistema Nervioso', day: 3 },
+            { icon: '🧬', label: 'Mecanismo de defensa adaptativo', day: 3 },
             { icon: '📊', label: 'Insight de Inteligencia Colectiva (D7)', day: 7 },
             { icon: '🔬', label: 'Subdimensiones detalladas', day: 14 },
           ].map((item) => (
