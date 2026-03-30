@@ -176,15 +176,11 @@ export default function P1RoleCards({ onSelect, animateEntrance = false }: P1Rol
               <div
                 style={{
                   width: '100%',
-                  aspectRatio: '1.1',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  background: isSelected ? 'var(--color-bg-secondary)' : '#F7FAF8',
-                  transition: 'background 300ms ease',
-                  padding: '12px',
+                  aspectRatio: '1',
                   position: 'relative',
                   overflow: 'hidden',
+                  background: isSelected ? 'var(--color-bg-secondary)' : '#F7FAF8',
+                  transition: 'background 300ms ease',
                 }}
               >
                 <Image
@@ -192,7 +188,7 @@ export default function P1RoleCards({ onSelect, animateEntrance = false }: P1Rol
                   alt={role.label}
                   fill
                   sizes="(max-width: 768px) 45vw, 200px"
-                  style={{ objectFit: 'contain', padding: '8px' }}
+                  style={{ objectFit: 'cover' }}
                   priority
                 />
               </div>

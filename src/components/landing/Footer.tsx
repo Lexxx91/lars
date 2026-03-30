@@ -6,7 +6,6 @@
  * Mobile: stack vertical centrado. Copyright arriba, links debajo.
  */
 
-import { useCopy } from '@/lib/copy'
 
 const legalLinks = [
   { label: 'Aviso legal', href: 'https://institutoepigenetico.com/aviso-legal' },
@@ -16,8 +15,6 @@ const legalLinks = [
 ]
 
 export default function Footer() {
-  const { getCopy } = useCopy()
-
   return (
     <footer
       style={{
