@@ -21,6 +21,8 @@ interface SingleSelectStepProps {
   onSelect: (id: string) => void
   /** Diseño reforzado para P6 — fuente mayor, padding mayor en cards */
   reinforced?: boolean
+  /** Respuesta previa (se muestra al volver atrás) */
+  defaultSelected?: string
 }
 
 export default function SingleSelectStep({
@@ -30,8 +32,9 @@ export default function SingleSelectStep({
   options,
   onSelect,
   reinforced = false,
+  defaultSelected,
 }: SingleSelectStepProps) {
-  const [selected, setSelected] = useState<string | null>(null)
+  const [selected, setSelected] = useState<string | null>(defaultSelected ?? null)
   const [isAdvancing, setIsAdvancing] = useState(false)
 
   function handleSelect(id: string) {

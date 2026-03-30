@@ -1,92 +1,51 @@
 /**
- * useCopyAutoSave — Auto-saves copy changes with 1.5s debounce.
+ * useCopySave — Manual save hook for copy fields.
  *
- * Calls POST /api/admin/copy on change. If value equals defaultValue,
- * the backend auto-deletes the override (keeps DB clean).
- * Cancels in-flight requests when a new save starts.
+ * Replaces the old auto-save with debounce. Now the user controls
+ * when to save via an explicit "Guardar" button.
+ * Cancels in-flight requests if a new save starts.
  */
 
-import { useEffect, useRef, useState } from 'react'
+import { useRef, useState, useCallback } from 'react'
 import type { SaveStatus } from './types'
 
-const DEBOUNCE_MS = 1500
-
-interface UseCopyAutoSaveOptions {
-  key: string
-  value: string
-  defaultValue: string
-  enabled?: boolean
+interface UseCopySaveReturn {
+  status: SaveStatus
+  save: (key: string, value: string) => Promise<boolean>
 }
 
-export function useCopyAutoSave({
-  key,
-  value,
-  defaultValue,
-  enabled = true,
-}: UseCopyAutoSaveOptions): SaveStatus {
+export function useCopySave(): UseCopySaveReturn {
   const [status, setStatus] = useState<SaveStatus>('idle')
-  const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
   const abortRef = useRef<AbortController | null>(null)
-  const lastSavedRef = useRef(value)
-  const isFirstRender = useRef(true)
 
-  useEffect(() => {
-    // Skip the initial render — don't save on mount
-    if (isFirstRender.current) {
-      isFirstRender.current = false
-      lastSavedRef.current = value
-      return
-    }
+  const save = useCallback(async (key: string, value: string): Promise<boolean> => {
+    // Abort any in-flight request
+    if (abortRef.current) abortRef.current.abort()
+    const controller = new AbortController()
+    abortRef.current = controller
 
-    if (!enabled) return
+    setStatus('saving')
 
-    // Value hasn't changed from last saved state
-    if (value === lastSavedRef.current) return
+    try {
+      const res = await fetch('/api/admin/copy', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ key, value }),
+        signal: controller.signal,
+      })
 
-    // Clear pending timer
-    if (timerRef.current) clearTimeout(timerRef.current)
+      if (!res.ok) throw new Error(`HTTP ${res.status}`)
 
-    timerRef.current = setTimeout(async () => {
-      // Abort any in-flight request
-      if (abortRef.current) abortRef.current.abort()
-      const controller = new AbortController()
-      abortRef.current = controller
-
-      setStatus('saving')
-
-      try {
-        const res = await fetch('/api/admin/copy', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ key, value }),
-          signal: controller.signal,
-        })
-
-        if (!res.ok) throw new Error(`HTTP ${res.status}`)
-
-        lastSavedRef.current = value
-        setStatus('saved')
-
-        // Reset to idle after 2s
-        setTimeout(() => setStatus('idle'), 2000)
-      } catch (err) {
-        if ((err as Error).name === 'AbortError') return
-        setStatus('error')
-      }
-    }, DEBOUNCE_MS)
-
-    return () => {
-      if (timerRef.current) clearTimeout(timerRef.current)
-    }
-  }, [key, value, defaultValue, enabled])
-
-  // Cleanup on unmount
-  useEffect(() => {
-    return () => {
-      if (timerRef.current) clearTimeout(timerRef.current)
-      if (abortRef.current) abortRef.current.abort()
+      setStatus('saved')
+      // Reset to idle after 2s
+      setTimeout(() => setStatus('idle'), 2000)
+      return true
+    } catch (err) {
+      if ((err as Error).name === 'AbortError') return false
+      setStatus('error')
+      return false
     }
   }, [])
 
-  return status
+  return { status, save }
 }

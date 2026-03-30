@@ -8,6 +8,7 @@
  * Los puntos activos son clicables y hacen scroll a su sección.
  */
 
+import { useCopy } from '@/lib/copy'
 import Badge from '@/components/ui/Badge'
 import type { EvolutionState } from '@/lib/map-evolution'
 
@@ -24,18 +25,20 @@ interface Props {
 }
 
 export default function EvolutionTimeline({ evolution }: Props) {
+  const { getCopy } = useCopy()
+
   const milestones: TimelineMilestone[] = [
     {
       day: 0,
-      label: 'Tu análisis',
-      sublabel: '5 dimensiones · Score global',
+      label: getCopy('mapa.evolution.d0.label'),
+      sublabel: getCopy('mapa.evolution.d0.sublabel'),
       sectionId: 'section-dimensions',
       status: 'active',
     },
     {
       day: 3,
-      label: 'Mecanismo de defensa',
-      sublabel: '7 tipos · Tu patrón profundo',
+      label: getCopy('mapa.evolution.d3.label'),
+      sublabel: getCopy('mapa.evolution.d3.sublabel'),
       sectionId: 'section-archetype',
       status: evolution.archetype.unlocked
         ? evolution.archetype.isNew ? 'new' : 'active'
@@ -43,8 +46,8 @@ export default function EvolutionTimeline({ evolution }: Props) {
     },
     {
       day: 7,
-      label: 'Insight colectivo',
-      sublabel: 'Dato nuevo en tu peor dimensión',
+      label: getCopy('mapa.evolution.d7.label'),
+      sublabel: getCopy('mapa.evolution.d7.sublabel'),
       sectionId: 'section-dimensions',
       status: evolution.insightD7.unlocked
         ? evolution.insightD7.isNew ? 'new' : 'active'
@@ -52,8 +55,8 @@ export default function EvolutionTimeline({ evolution }: Props) {
     },
     {
       day: 10,
-      label: 'Sesión con Javier',
-      sublabel: '20 min gratuitos · Sin compromiso',
+      label: getCopy('mapa.evolution.d10.label'),
+      sublabel: getCopy('mapa.evolution.d10.sublabel'),
       sectionId: 'section-session',
       status: evolution.session.unlocked
         ? evolution.session.isNew ? 'new' : 'active'
@@ -61,8 +64,8 @@ export default function EvolutionTimeline({ evolution }: Props) {
     },
     {
       day: 14,
-      label: 'Subdimensiones',
-      sublabel: '2 preguntas · Mayor resolución',
+      label: getCopy('mapa.evolution.d14.label'),
+      sublabel: getCopy('mapa.evolution.d14.sublabel'),
       sectionId: 'section-subdimensions',
       status: evolution.subdimensions.unlocked
         ? evolution.subdimensions.isNew ? 'new' : 'active'
@@ -70,8 +73,8 @@ export default function EvolutionTimeline({ evolution }: Props) {
     },
     {
       day: 21,
-      label: 'Extracto del libro',
-      sublabel: 'Capítulo personalizado',
+      label: getCopy('mapa.evolution.d21.label'),
+      sublabel: getCopy('mapa.evolution.d21.sublabel'),
       sectionId: 'section-book',
       status: evolution.bookExcerpt.unlocked
         ? evolution.bookExcerpt.isNew ? 'new' : 'active'
@@ -79,8 +82,8 @@ export default function EvolutionTimeline({ evolution }: Props) {
     },
     {
       day: 30,
-      label: 'Reevaluación',
-      sublabel: 'Compara con tu día 0',
+      label: getCopy('mapa.evolution.d30.label'),
+      sublabel: getCopy('mapa.evolution.d30.sublabel'),
       sectionId: 'section-reevaluation',
       status: evolution.reevaluation.unlocked
         ? evolution.reevaluation.isNew ? 'new' : 'active'
@@ -92,8 +95,8 @@ export default function EvolutionTimeline({ evolution }: Props) {
   if (evolution.daysSinceCreation >= 90) {
     milestones.push({
       day: 90,
-      label: 'Trimestral',
-      sublabel: 'Evolución a largo plazo',
+      label: getCopy('mapa.evolution.d90.label'),
+      sublabel: getCopy('mapa.evolution.d90.sublabel'),
       sectionId: 'section-reevaluation',
       status: evolution.nextQuarterlyUnlocked ? 'new' : 'active',
     })
@@ -136,7 +139,7 @@ export default function EvolutionTimeline({ evolution }: Props) {
             margin: 0,
           }}
         >
-          Tu mapa evoluciona
+          {getCopy('mapa.evolution.header')}
         </p>
         {newCount > 0 && (
           <Badge status="nuevo">

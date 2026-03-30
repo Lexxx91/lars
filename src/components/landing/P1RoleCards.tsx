@@ -8,6 +8,7 @@
  */
 
 import React, { useState, useEffect, useCallback, useMemo } from 'react'
+import Image from 'next/image'
 import { useCopy } from '@/lib/copy'
 
 const ROLE_IDS = ['leader', 'entrepreneur', 'employee', 'caregiver'] as const
@@ -17,107 +18,13 @@ interface P1RoleCardsProps {
   animateEntrance?: boolean
 }
 
-/* ── SVG Illustrations ─────────────────────────────────────────────────────── */
+/* ── Illustration images ──────────────────────────────────────────────────── */
 
-function LeaderIllustration() {
-  return (
-    <svg viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <circle cx="60" cy="28" r="10" stroke="var(--color-primary)" strokeWidth="2.5" />
-      <path d="M60 38 L60 68" stroke="var(--color-primary)" strokeWidth="2.5" strokeLinecap="round" />
-      <path d="M60 48 L44 58" stroke="var(--color-primary)" strokeWidth="2.5" strokeLinecap="round" />
-      <path d="M60 48 L76 58" stroke="var(--color-primary)" strokeWidth="2.5" strokeLinecap="round" />
-      <path d="M50 68 L60 68 L70 68" stroke="var(--color-primary)" strokeWidth="2.5" strokeLinecap="round" />
-      <circle cx="30" cy="52" r="7" stroke="var(--color-accent)" strokeWidth="1.8" opacity="0.7" />
-      <path d="M30 59 L30 80" stroke="var(--color-accent)" strokeWidth="1.8" strokeLinecap="round" opacity="0.7" />
-      <circle cx="90" cy="52" r="7" stroke="var(--color-accent)" strokeWidth="1.8" opacity="0.7" />
-      <path d="M90 59 L90 80" stroke="var(--color-accent)" strokeWidth="1.8" strokeLinecap="round" opacity="0.7" />
-      <path d="M48 35 L37 48" stroke="rgba(38,66,51,0.2)" strokeWidth="1.5" strokeDasharray="3 3" />
-      <path d="M72 35 L83 48" stroke="rgba(38,66,51,0.2)" strokeWidth="1.5" strokeDasharray="3 3" />
-      <path d="M52 42 L68 42" stroke="var(--color-accent)" strokeWidth="2" strokeLinecap="round" opacity="0.5" />
-      <circle cx="18" cy="74" r="5" stroke="var(--color-primary)" strokeWidth="1.2" opacity="0.35" />
-      <circle cx="42" cy="86" r="5" stroke="var(--color-primary)" strokeWidth="1.2" opacity="0.35" />
-      <circle cx="78" cy="86" r="5" stroke="var(--color-primary)" strokeWidth="1.2" opacity="0.35" />
-      <circle cx="102" cy="74" r="5" stroke="var(--color-primary)" strokeWidth="1.2" opacity="0.35" />
-    </svg>
-  )
-}
-
-function EntrepreneurIllustration() {
-  return (
-    <svg viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <circle cx="60" cy="30" r="10" stroke="var(--color-primary)" strokeWidth="2.5" />
-      <path d="M60 40 L60 72" stroke="var(--color-primary)" strokeWidth="2.5" strokeLinecap="round" />
-      <path d="M50 72 L60 72 L70 72" stroke="var(--color-primary)" strokeWidth="2.5" strokeLinecap="round" />
-      <path d="M60 50 L30 44" stroke="var(--color-primary)" strokeWidth="2.5" strokeLinecap="round" />
-      <path d="M60 50 L90 44" stroke="var(--color-primary)" strokeWidth="2.5" strokeLinecap="round" />
-      <rect x="18" y="32" width="16" height="12" rx="3" stroke="var(--color-accent)" strokeWidth="1.8" opacity="0.6" />
-      <path d="M24 36 L30 36" stroke="var(--color-accent)" strokeWidth="1.2" strokeLinecap="round" opacity="0.6" />
-      <path d="M24 40 L28 40" stroke="var(--color-accent)" strokeWidth="1.2" strokeLinecap="round" opacity="0.6" />
-      <circle cx="92" cy="32" r="8" stroke="var(--color-accent)" strokeWidth="1.8" opacity="0.6" />
-      <path d="M92 28 L92 32 L96 34" stroke="var(--color-accent)" strokeWidth="1.5" strokeLinecap="round" opacity="0.6" />
-      <path d="M50 22 L70 22" stroke="rgba(38,66,51,0.2)" strokeWidth="1.2" strokeLinecap="round" />
-      <path d="M46 18 L74 18" stroke="rgba(38,66,51,0.15)" strokeWidth="1.2" strokeLinecap="round" />
-      <path d="M36 48 L36 56" stroke="rgba(205,121,108,0.4)" strokeWidth="1.5" strokeLinecap="round" />
-      <path d="M33 53 L36 56 L39 53" stroke="rgba(205,121,108,0.4)" strokeWidth="1.5" strokeLinecap="round" fill="none" />
-      <path d="M84 48 L84 56" stroke="rgba(205,121,108,0.4)" strokeWidth="1.5" strokeLinecap="round" />
-      <path d="M81 53 L84 56 L87 53" stroke="rgba(205,121,108,0.4)" strokeWidth="1.5" strokeLinecap="round" fill="none" />
-      <path d="M40 88 L80 88" stroke="rgba(38,66,51,0.12)" strokeWidth="1.5" strokeLinecap="round" />
-    </svg>
-  )
-}
-
-function EmployeeIllustration() {
-  return (
-    <svg viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <rect x="22" y="18" width="76" height="72" rx="6" stroke="rgba(38,66,51,0.2)" strokeWidth="1.8" />
-      <path d="M22 36 L98 36" stroke="rgba(38,66,51,0.12)" strokeWidth="1.2" />
-      <path d="M22 54 L98 54" stroke="rgba(38,66,51,0.12)" strokeWidth="1.2" />
-      <circle cx="44" cy="27" r="4" stroke="var(--color-primary)" strokeWidth="1.2" opacity="0.3" />
-      <circle cx="60" cy="27" r="4" stroke="var(--color-primary)" strokeWidth="1.2" opacity="0.3" />
-      <circle cx="76" cy="27" r="4" stroke="var(--color-primary)" strokeWidth="1.2" opacity="0.3" />
-      <circle cx="38" cy="45" r="4" stroke="var(--color-primary)" strokeWidth="1.2" opacity="0.25" />
-      <circle cx="82" cy="45" r="4" stroke="var(--color-primary)" strokeWidth="1.2" opacity="0.25" />
-      <circle cx="60" cy="65" r="8" stroke="var(--color-primary)" strokeWidth="2.5" />
-      <path d="M60 73 L60 88" stroke="var(--color-primary)" strokeWidth="2.5" strokeLinecap="round" />
-      <path d="M60 54 L60 57" stroke="var(--color-accent)" strokeWidth="2" strokeLinecap="round" opacity="0.5" />
-      <path d="M57 55.5 L60 58.5 L63 55.5" stroke="var(--color-accent)" strokeWidth="1.5" strokeLinecap="round" fill="none" opacity="0.5" />
-      <path d="M38 65 L50 65" stroke="rgba(205,121,108,0.3)" strokeWidth="1.5" strokeLinecap="round" />
-      <path d="M70 65 L82 65" stroke="rgba(205,121,108,0.3)" strokeWidth="1.5" strokeLinecap="round" />
-      <rect x="72" y="72" width="10" height="8" rx="1.5" stroke="rgba(38,66,51,0.25)" strokeWidth="1.2" />
-      <rect x="74" y="62" width="10" height="8" rx="1.5" stroke="rgba(38,66,51,0.2)" strokeWidth="1.2" />
-    </svg>
-  )
-}
-
-function CaregiverIllustration() {
-  return (
-    <svg viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <circle cx="60" cy="32" r="10" stroke="var(--color-primary)" strokeWidth="2.5" />
-      <path d="M60 42 L60 70" stroke="var(--color-primary)" strokeWidth="2.5" strokeLinecap="round" />
-      <path d="M50 70 L60 70 L70 70" stroke="var(--color-primary)" strokeWidth="2.5" strokeLinecap="round" />
-      <path d="M60 52 L36 46" stroke="var(--color-primary)" strokeWidth="2.5" strokeLinecap="round" />
-      <path d="M60 52 L84 46" stroke="var(--color-primary)" strokeWidth="2.5" strokeLinecap="round" />
-      <circle cx="22" cy="50" r="6" stroke="var(--color-accent)" strokeWidth="1.5" opacity="0.6" />
-      <path d="M28 50 L34 48" stroke="var(--color-accent)" strokeWidth="1.5" strokeLinecap="round" opacity="0.5" />
-      <circle cx="98" cy="50" r="6" stroke="var(--color-accent)" strokeWidth="1.5" opacity="0.6" />
-      <path d="M92 50 L86 48" stroke="var(--color-accent)" strokeWidth="1.5" strokeLinecap="round" opacity="0.5" />
-      <circle cx="40" cy="86" r="6" stroke="var(--color-accent)" strokeWidth="1.5" opacity="0.6" />
-      <path d="M44 82 L52 74" stroke="var(--color-accent)" strokeWidth="1.5" strokeLinecap="round" opacity="0.5" />
-      <circle cx="80" cy="86" r="6" stroke="var(--color-accent)" strokeWidth="1.5" opacity="0.6" />
-      <path d="M76 82 L68 74" stroke="var(--color-accent)" strokeWidth="1.5" strokeLinecap="round" opacity="0.5" />
-      <path d="M34 44 L30 42" stroke="rgba(205,121,108,0.35)" strokeWidth="1.2" strokeLinecap="round" />
-      <path d="M32 48 L26 48" stroke="rgba(205,121,108,0.35)" strokeWidth="1.2" strokeLinecap="round" />
-      <path d="M86 44 L90 42" stroke="rgba(205,121,108,0.35)" strokeWidth="1.2" strokeLinecap="round" />
-      <path d="M88 48 L94 48" stroke="rgba(205,121,108,0.35)" strokeWidth="1.2" strokeLinecap="round" />
-    </svg>
-  )
-}
-
-const ILLUSTRATIONS: Record<string, () => React.ReactElement> = {
-  leader: LeaderIllustration,
-  entrepreneur: EntrepreneurIllustration,
-  employee: EmployeeIllustration,
-  caregiver: CaregiverIllustration,
+const ILLUSTRATION_IMAGES: Record<string, string> = {
+  leader: '/Lidero-equipos.png',
+  entrepreneur: '/mi-propio-negocio.png',
+  employee: '/trabajo-para-otros.png',
+  caregiver: '/cuido-o-enseño.png',
 }
 
 /* ── Component ─────────────────────────────────────────────────────────────── */
@@ -211,7 +118,7 @@ export default function P1RoleCards({ onSelect, animateEntrance = false }: P1Rol
           const isSelected = selected === role.id
           const shouldAnimate = animateEntrance
           const isRevealed = !shouldAnimate || index <= revealedCards
-          const Illustration = ILLUSTRATIONS[role.id]
+          const illustrationSrc = ILLUSTRATION_IMAGES[role.id]
 
           return (
             <button
@@ -275,12 +182,19 @@ export default function P1RoleCards({ onSelect, animateEntrance = false }: P1Rol
                   justifyContent: 'center',
                   background: isSelected ? 'var(--color-bg-secondary)' : '#F7FAF8',
                   transition: 'background 300ms ease',
-                  padding: '20px',
+                  padding: '12px',
+                  position: 'relative',
+                  overflow: 'hidden',
                 }}
               >
-                <div style={{ width: '80%', maxWidth: '120px' }}>
-                  <Illustration />
-                </div>
+                <Image
+                  src={illustrationSrc}
+                  alt={role.label}
+                  fill
+                  sizes="(max-width: 768px) 45vw, 200px"
+                  style={{ objectFit: 'contain', padding: '8px' }}
+                  priority
+                />
               </div>
 
               {/* Label */}

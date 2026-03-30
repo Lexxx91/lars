@@ -76,7 +76,7 @@ export default function DimensionCard({
               textTransform: 'uppercase',
             }}
           >
-            Tu prioridad nº1
+            {getCopy('mapa.dimension.priority')}
           </span>
         )}
         {isD2 && (
@@ -94,7 +94,7 @@ export default function DimensionCard({
               textTransform: 'uppercase',
             }}
           >
-            Mejorable en 72 horas
+            {getCopy('mapa.dimension.improvable72h')}
           </span>
         )}
         {d7IsNew && <Badge status="actualizado">ACTUALIZADO</Badge>}

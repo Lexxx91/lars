@@ -49,22 +49,21 @@ export default function CalculandoScreen({ onComplete }: CalculandoScreenProps) 
         justifyContent: 'center',
         minHeight: '60vh',
         gap: 'var(--space-5)',
-        /* ZONA 3 — máxima oscuridad envolvente */
-        background: 'radial-gradient(ellipse at center, #070f12 0%, #030a0c 100%)',
-        borderRadius: 'var(--radius-xl)',
+        background: 'var(--color-bg-primary)',
         padding: 'var(--space-16) var(--space-8)',
       }}
     >
-      {/* Punto de luz central — sutil, orgánico */}
+      {/* Indicador de carga — pulso sutil */}
       <div
         aria-hidden="true"
         style={{
-          width: '64px',
-          height: '64px',
+          width: '48px',
+          height: '48px',
           borderRadius: '50%',
-          background: 'radial-gradient(circle, rgba(198,200,238,0.18) 0%, transparent 70%)',
+          border: '2px solid rgba(38,66,51,0.08)',
+          borderTopColor: 'var(--color-accent)',
           marginBottom: 'var(--space-4)',
-          animation: 'pulse-glow 2.5s ease-in-out infinite',
+          animation: 'spin 1s linear infinite',
         }}
       />
 

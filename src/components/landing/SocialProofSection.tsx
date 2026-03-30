@@ -10,10 +10,12 @@
 import { useRef, useEffect, useState, useMemo } from 'react'
 import { useCopy } from '@/lib/copy'
 
+const TESTIMONIAL_NAMES = ['Javier M.', 'Elena R.', 'Carlos G.']
+
 const TESTIMONIAL_STYLES: { bg: string; border?: string }[] = [
-  { bg: 'var(--color-surface-lavender)' },
-  { bg: 'var(--color-surface-cream)', border: '1px solid rgba(30, 19, 16, 0.08)' },
-  { bg: 'var(--color-surface-lime)' },
+  { bg: '#fbf8f4', border: '1px solid rgba(30, 19, 16, 0.08)' },
+  { bg: '#fbf8f4', border: '1px solid rgba(30, 19, 16, 0.08)' },
+  { bg: '#fbf8f4', border: '1px solid rgba(30, 19, 16, 0.08)' },
 ]
 
 export default function SocialProofSection() {
@@ -22,6 +24,7 @@ export default function SocialProofSection() {
   const testimonials = useMemo(() => TESTIMONIAL_STYLES.map((style, i) => ({
     quote: getCopy(`socialproof.t${i + 1}.quote`),
     author: getCopy(`socialproof.t${i + 1}.author`),
+    name: TESTIMONIAL_NAMES[i],
     ...style,
   })), [getCopy])
   const sectionRef = useRef<HTMLElement>(null)
@@ -106,28 +109,7 @@ export default function SocialProofSection() {
                              transform 500ms var(--ease-out-expo) ${200 + index * 200}ms`,
               }}
             >
-              {/* Icono comillas — círculo 40px */}
-              <div
-                aria-hidden="true"
-                style={{
-                  width: '40px',
-                  height: '40px',
-                  borderRadius: '50%',
-                  border: '1px solid rgba(30, 19, 16, 0.12)',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  fontFamily: 'var(--font-host-grotesk)',
-                  fontSize: '1.25rem',
-                  fontWeight: 500,
-                  color: 'var(--color-text-primary)',
-                  flexShrink: 0,
-                }}
-              >
-                &ldquo;&rdquo;
-              </div>
-
-              {/* Cita */}
+              {/* Cita + nombre */}
               <p
                 style={{
                   fontFamily: 'var(--font-host-grotesk)',
@@ -137,7 +119,8 @@ export default function SocialProofSection() {
                   flex: 1,
                 }}
               >
-                &ldquo;{t.quote}&rdquo;
+                &ldquo;{t.quote}&rdquo;{' '}
+                <strong style={{ fontWeight: 600 }}>{t.name}</strong>
               </p>
 
               {/* Badge pill oscuro */}

@@ -80,6 +80,13 @@ const overlineStyle: React.CSSProperties = {
   marginBottom: 'var(--space-4)',
 }
 
+// Mapa de paso anterior para navegación "Volver" dentro del bloque
+const PREV_STEP: Partial<Record<Step, { step: Step }>> = {
+  p6: { step: 'p5' },
+  p7: { step: 'p6' },              // saltar micro-espejo-2 (es revelación)
+  p8: { step: 'p7' },
+}
+
 // ─── COMPONENTE ───────────────────────────────────────────────────────────────
 
 export default function GatewayBloque2({
@@ -113,6 +120,19 @@ export default function GatewayBloque2({
       setTimeout(() => overlayRef.current?.scrollTo({ top: 0, behavior: 'smooth' }), 50)
     }, 400)
   }, [])
+
+  // ── Volver: navega a la pregunta anterior o sale al hero ──
+  const handleBack = useCallback(() => {
+    const prev = PREV_STEP[step]
+    if (!prev) {
+      // P5 (primera pregunta del bloque) → volver al hero
+      onClose?.()
+      return
+    }
+    // Restaurar zona exploración al volver a preguntas normales
+    if (['p5', 'p6', 'p7', 'p8'].includes(prev.step)) setZone('exploracion')
+    changeStep(prev.step)
+  }, [step, onClose, changeStep])
 
   // ── Handlers ──
   const handleP5Select = useCallback(
@@ -206,7 +226,8 @@ export default function GatewayBloque2({
         }}
       >
         <div style={{ maxWidth: '540px', margin: '0 auto' }}>
-          {onClose && (
+          {/* Volver: visible en preguntas (p5-p8), oculto en revelaciones */}
+          {(['p5', 'p6', 'p7', 'p8'] as Step[]).includes(step) && (
             <div
               style={{
                 display: 'flex',
@@ -215,8 +236,8 @@ export default function GatewayBloque2({
               }}
             >
               <button
-                onClick={onClose}
-                aria-label="Volver a la landing"
+                onClick={handleBack}
+                aria-label={step === 'p5' ? 'Volver a la landing' : 'Volver a la pregunta anterior'}
                 style={{
                   background: 'none',
                   border: 'none',
@@ -250,6 +271,7 @@ export default function GatewayBloque2({
               collectiveData={p5Context}
               options={getP5Options(getCopy)}
               onSelect={handleP5Select}
+              defaultSelected={p5 || undefined}
             />
           )}
 
@@ -275,6 +297,7 @@ export default function GatewayBloque2({
                 options={getP6Options(getCopy)}
                 reinforced
                 onSelect={handleP6Select}
+                defaultSelected={p6 || undefined}
               />
             </div>
           )}
@@ -305,6 +328,7 @@ export default function GatewayBloque2({
               question="En una escala del 1 al 10, ¿cómo calificarías cada una de estas áreas?"
               sliders={P7_SLIDERS}
               onContinue={handleP7Continue}
+              defaultValues={Object.keys(sliders).length > 0 ? sliders : undefined}
             />
           )}
 
@@ -315,6 +339,7 @@ export default function GatewayBloque2({
               context="La duración importa: determina cómo responde tu cuerpo a la intervención."
               options={getP8Options(getCopy)}
               onSelect={handleP8Select}
+              defaultSelected={p8 || undefined}
             />
           )}
         </div>

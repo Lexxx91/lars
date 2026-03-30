@@ -4,7 +4,7 @@
   "description": "Sistema de adquisición del Programa LARS para ejecutivos con burnout",
   "status": "active",
   "created_at": "2026-03-21T00:00:00Z",
-  "updated_at": "2026-03-27T22:00:00Z",
+  "updated_at": "2026-03-30T12:00:00Z",
   "repo_path": "/sessions/intelligent-stoic-hypatia/mnt/lars-project",
   "deploy_url": "https://lars.institutoepigenetico.com",
   "tech_stack": "Next.js 15 + Supabase + TypeScript + Vercel",
@@ -161,6 +161,144 @@
     },
     {
       "index": 6,
+      "name": "Feedback-A: Terminología Global + Textos por Defecto",
+      "description": "Renombrar Arquetipo→Mecanismo de defensa adaptativo, rumiación→Obsesividad mental, Mapa de Regulación→neuroregulación, actualizar defaults de copy, fix gateway.p5.optionC, cambios de copy en preguntas, reestructurar sección nivel de regulación",
+      "status": "pending",
+      "started_at": null,
+      "completed_at": null,
+      "estimated_sessions": 1,
+      "tasks": [
+        {
+          "id": "feedback-a-terminologia",
+          "title": "Cambios de terminología global y textos por defecto",
+          "description": "7 cambios de texto/terminología en toda la app: renombrar Arquetipo, rumiación, Mapa de Regulación, actualizar defaults, fix p5 options, cambios de copy en preguntas, reestructurar nivel de regulación",
+          "status": "pending",
+          "dependencies": [],
+          "prompt_file": "prompts/session-feedback-A-terminologia.md",
+          "started_at": null,
+          "completed_at": null,
+          "blocked_reason": null,
+          "notes": "Feedback Javier 30 Mar 2026 — puntos 1, 12, 13, 17, 20, 23-25"
+        }
+      ]
+    },
+    {
+      "index": 7,
+      "name": "Feedback-B: Landing Visual Fixes",
+      "description": "Logo sin transparencia, footer con links legales, eliminar ornamentos decorativos, testimonios rediseñados, colores corregidos de stats y botones",
+      "status": "pending",
+      "started_at": null,
+      "completed_at": null,
+      "estimated_sessions": 1,
+      "tasks": [
+        {
+          "id": "feedback-b-landing-visual",
+          "title": "Correcciones visuales en la landing page",
+          "description": "8 fixes visuales: logo #cd796c sin transparencia, footer legal, eliminar ornamentos, testimonios fondo #fbf8f4 sin esfera sin números con nombre, stats fondo #2d4134, botón evaluación #2d4134",
+          "status": "pending",
+          "dependencies": [],
+          "prompt_file": "prompts/session-feedback-B-landing-visual.md",
+          "started_at": null,
+          "completed_at": null,
+          "blocked_reason": null,
+          "notes": "Feedback Javier 30 Mar 2026 — puntos 2, 5, 6, 7, 8, 9, 10, 11"
+        }
+      ]
+    },
+    {
+      "index": 8,
+      "name": "Feedback-C: Gateway UX Fixes",
+      "description": "Fix botón Volver, tick marks en sliders, rediseño pantalla preload, eliminar todos los degradados",
+      "status": "pending",
+      "started_at": null,
+      "completed_at": null,
+      "estimated_sessions": 1,
+      "tasks": [
+        {
+          "id": "feedback-c-gateway-ux",
+          "title": "Correcciones de UX en el gateway",
+          "description": "3 fixes: botón Volver que funcione correctamente, tick marks de regla en sliders, preload limpio sin blur/gradients + eliminar todos los degradados del diseño",
+          "status": "pending",
+          "dependencies": [],
+          "prompt_file": "prompts/session-feedback-C-gateway-ux.md",
+          "started_at": null,
+          "completed_at": null,
+          "blocked_reason": null,
+          "notes": "Feedback Javier 30 Mar 2026 — puntos 3, 15, 16"
+        }
+      ]
+    },
+    {
+      "index": 9,
+      "name": "Feedback-D: Resultados Gateway — Perfil + WOW",
+      "description": "Mostrar Mecanismo de defensa adaptativo en resultados con efecto WOW, fix botón Descubrir perfil, reestructurar sección nivel de regulación",
+      "status": "pending",
+      "started_at": null,
+      "completed_at": null,
+      "estimated_sessions": 1,
+      "tasks": [
+        {
+          "id": "feedback-d-resultados-perfil",
+          "title": "Perfil en resultados del gateway con efecto WOW + fixes",
+          "description": "3 cambios: añadir sección Mecanismo de defensa adaptativo en resultados para enganchar al cliente, fix botón Descubrir perfil que no funciona, reestructurar bloque nivel de regulación con contexto comparativo",
+          "status": "pending",
+          "dependencies": ["feedback-a-terminologia"],
+          "prompt_file": "prompts/session-feedback-D-resultados-perfil.md",
+          "started_at": null,
+          "completed_at": null,
+          "blocked_reason": null,
+          "notes": "Feedback Javier 30 Mar 2026 — puntos 16, 18, 24. Depende de sesión A para la terminología correcta."
+        }
+      ]
+    },
+    {
+      "index": 10,
+      "name": "Feedback-E: Admin Fixes",
+      "description": "Copy editor sin auto-refresh con botón Guardar, editor de respuestas gateway consistente, textos del mapa editables desde admin",
+      "status": "pending",
+      "started_at": null,
+      "completed_at": null,
+      "estimated_sessions": 1,
+      "tasks": [
+        {
+          "id": "feedback-e-admin-fixes",
+          "title": "Correcciones del panel de administración",
+          "description": "3 fixes: copy editor con botón Guardar explícito que mantiene posición, editor de respuestas gateway con estructura consistente sin duplicados, textos del mapa de neuroregulación editables desde admin",
+          "status": "pending",
+          "dependencies": [],
+          "prompt_file": "prompts/session-feedback-E-admin-fixes.md",
+          "started_at": null,
+          "completed_at": null,
+          "blocked_reason": null,
+          "notes": "Feedback Javier 30 Mar 2026 — puntos 4, 14, 19"
+        }
+      ]
+    },
+    {
+      "index": 11,
+      "name": "Feedback-F: Mapa Vivo — Programa + Contenido",
+      "description": "Programa completo 12 semanas en el mapa, contenido Semana 1, sesión Javier inmediata, extracto libro descargable",
+      "status": "pending",
+      "started_at": null,
+      "completed_at": null,
+      "estimated_sessions": 1,
+      "tasks": [
+        {
+          "id": "feedback-f-mapa-programa",
+          "title": "Programa completo y contenido en el mapa vivo",
+          "description": "4 cambios: acordeón con programa completo 12 semanas (3 fases), contenido detallado Semana 1 (Dr. Alvear + MNN + Protocolo Sueño), CTA sesión Javier disponible inmediatamente tras test, extracto libro PDF descargable administrable desde admin",
+          "status": "pending",
+          "dependencies": ["feedback-a-terminologia"],
+          "prompt_file": "prompts/session-feedback-F-mapa-programa.md",
+          "started_at": null,
+          "completed_at": null,
+          "blocked_reason": null,
+          "notes": "Feedback Javier 30 Mar 2026 — puntos 21, 22, 26, 27. Depende de sesión A para terminología."
+        }
+      ]
+    },
+    {
+      "index": 12,
       "name": "Emails por Perfil",
       "description": "Personalizar toda la secuencia de nurturing (8 emails + evoluciones del mapa) según el perfil detectado en el gateway",
       "status": "pending",
@@ -183,7 +321,7 @@
       ]
     },
     {
-      "index": 7,
+      "index": 13,
       "name": "Inteligencia Colectiva Dinámica",
       "description": "Los datos colectivos del gateway y mapa dejan de ser estáticos y se calculan en tiempo real desde Supabase",
       "status": "pending",
@@ -206,7 +344,7 @@
       ]
     },
     {
-      "index": 8,
+      "index": 14,
       "name": "CONVERT Path (90 segundos)",
       "description": "Camino rápido del gateway para personas en Confidence/Readiness: P1 + P2 + P7 → bisagra → email → resultado",
       "status": "pending",
@@ -229,7 +367,7 @@
       ]
     },
     {
-      "index": 9,
+      "index": 15,
       "name": "Experiencia Post-Pago Semana 1",
       "description": "Onboarding inmediato tras pagar: protocolo de sueño, agendar sesión, vídeo de bienvenida. El quick win de 72h empieza en el segundo posterior al pago.",
       "status": "pending",
@@ -252,7 +390,7 @@
       ]
     },
     {
-      "index": 10,
+      "index": 16,
       "name": "Re-engagement Inteligente",
       "description": "Automatizaciones que actúan sobre patrones de comportamiento: visitas sin pago, emails sin abrir, mapas abandonados",
       "status": "pending",
@@ -275,7 +413,7 @@
       ]
     },
     {
-      "index": 11,
+      "index": 17,
       "name": "Co-Learning System — Backend",
       "description": "Cola de aprobación de acciones, registro de decisiones de Javier, cálculo de confianza progresiva",
       "status": "pending",
@@ -300,7 +438,7 @@
       ]
     },
     {
-      "index": 12,
+      "index": 18,
       "name": "Co-Learning System — Frontend + Educación",
       "description": "Panel de acciones pendientes en admin, educación bidireccional, % de confianza visible",
       "status": "pending",
@@ -325,7 +463,7 @@
       ]
     },
     {
-      "index": 13,
+      "index": 19,
       "name": "WhatsApp — Meta Cloud API",
       "description": "Integrar Meta Cloud API para notificaciones de evolución del mapa vía WhatsApp",
       "status": "pending",
@@ -348,7 +486,7 @@
       ]
     },
     {
-      "index": 14,
+      "index": 20,
       "name": "Comunidad Latente en Mapa",
       "description": "Datos agregados anónimos de evolución colectiva visibles en el mapa individual",
       "status": "pending",
@@ -373,7 +511,7 @@
       ]
     },
     {
-      "index": 15,
+      "index": 21,
       "name": "Gateway Aprende — A/B Testing",
       "description": "Variantes de micro-espejos y medición de qué textos producen mayor completion rate y conversión",
       "status": "pending",
@@ -396,7 +534,7 @@
       ]
     },
     {
-      "index": 16,
+      "index": 22,
       "name": "Ignición — Arquitectura de Distribución",
       "description": "Diseño del sistema de distribución de tráfico: contenido de Javier, SEO, redes, el gateway como pieza central",
       "status": "pending",
@@ -422,6 +560,6 @@
     }
   ],
   "metadata": {
-    "notes": "17 sesiones. S0: Google Auth. S1-2: Editor de Copy. S3-16: fase de inteligencia. El gateway, mapa vivo, admin v2, emails, booking ya están en producción."
+    "notes": "23 sesiones. S0-5: completados. S6-11: Feedback Javier 30 Mar. S12-22: fase de inteligencia. El gateway, mapa vivo, admin v2, emails, booking ya están en producción."
   }
 }

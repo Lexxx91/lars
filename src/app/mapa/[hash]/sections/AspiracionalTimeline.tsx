@@ -12,6 +12,7 @@
  */
 
 import { useEffect, useRef, useState } from 'react'
+import { useCopy } from '@/lib/copy'
 
 // ─── TIPOS ────────────────────────────────────────────────────────────────────
 
@@ -25,71 +26,6 @@ interface Props {
   checkoutError: string | null
   onRetryCheckout: () => void
 }
-
-interface Phase {
-  id: number
-  name: string
-  title: string
-  subtitle: string
-  description: string
-}
-
-interface WeekItem {
-  title: string
-  description: string
-}
-
-// ─── DATOS ────────────────────────────────────────────────────────────────────
-
-const PHASES: Phase[] = [
-  {
-    id: 1,
-    name: 'FASE 1',
-    title: 'El Despertar',
-    subtitle: 'Semanas 1–4 · Reconocer y estabilizar',
-    description:
-      'Entenderás qué le pasa a tu biología: neurotransmisores, función hormonal, inflamación. Restaurarás tu sueño con un protocolo diseñado por un médico. En la semana 4, tu primer balance formal confirmará lo que tu cuerpo ya empieza a notar.',
-  },
-  {
-    id: 2,
-    name: 'FASE 2',
-    title: 'La Metamorfosis',
-    subtitle: 'Semanas 5–8 · Activar y procesar',
-    description:
-      'Desmontarás las creencias y patrones que sostienen el ciclo. Conocerás las partes internas que dirigen tus decisiones sin que lo sepas — el perfeccionista, el controlador, el crítico — y aprenderás a liderarlas. Lo que el burnout congeló empieza a procesarse.',
-  },
-  {
-    id: 3,
-    name: 'FASE 3',
-    title: 'Volar Alto',
-    subtitle: 'Semanas 9–12 · Conectar y reconstruir',
-    description:
-      'Repararás los vínculos que el burnout dañó, pondrás límites desde tus valores y diseñarás tu nueva arquitectura vital. Un sistema de alertas tempranas para que el burnout no vuelva.',
-  },
-]
-
-const WEEK1_ITEMS: WeekItem[] = [
-  {
-    title: 'Protocolo de Sueño de Emergencia',
-    description:
-      'Diseñado por el Dr. Carlos Alvear. Un plan concreto para ganar hasta una hora más de sueño al día. Resultados en 72 horas.',
-  },
-  {
-    title: 'Sesión 1:1 con Javier A. Martín Ramos',
-    description:
-      'Director del Instituto Epigenético. Ya tiene tu mapa — la sesión arranca desde tus datos, no desde cero.',
-  },
-  {
-    title: 'Mapa de Niveles de Neurotransmisores (MNN©)',
-    description:
-      'Tu primer análisis bioquímico real: qué sustancias produce tu cerebro, cuáles le faltan y qué significa eso para tu sueño, tu energía y tu claridad mental.',
-  },
-  {
-    title: 'Garantía total',
-    description:
-      '7 días. Si no notas mejora en tu sueño, devolución íntegra. Sin preguntas. Sin formularios.',
-  },
-]
 
 // ─── HELPERS ──────────────────────────────────────────────────────────────────
 
@@ -126,6 +62,7 @@ export default function AspiracionalTimeline({
   const containerRef = useRef<HTMLDivElement>(null)
   const [isVisible, setIsVisible] = useState(false)
   const [accordionOpen, setAccordionOpen] = useState(false)
+  const { getCopy } = useCopy()
 
   // IntersectionObserver para fade-up al entrar en viewport (A-15)
   useEffect(() => {
@@ -142,6 +79,49 @@ export default function AspiracionalTimeline({
   }, [])
 
   const personalNote = getPersonalNote(daysSinceCreation, score, reevaluationScore)
+
+  const phases = [
+    {
+      id: 1,
+      name: 'FASE 1',
+      title: getCopy('mapa.aspiracional.fase1.title'),
+      subtitle: getCopy('mapa.aspiracional.fase1.subtitle'),
+      description: getCopy('mapa.aspiracional.fase1.description'),
+    },
+    {
+      id: 2,
+      name: 'FASE 2',
+      title: getCopy('mapa.aspiracional.fase2.title'),
+      subtitle: getCopy('mapa.aspiracional.fase2.subtitle'),
+      description: getCopy('mapa.aspiracional.fase2.description'),
+    },
+    {
+      id: 3,
+      name: 'FASE 3',
+      title: getCopy('mapa.aspiracional.fase3.title'),
+      subtitle: getCopy('mapa.aspiracional.fase3.subtitle'),
+      description: getCopy('mapa.aspiracional.fase3.description'),
+    },
+  ]
+
+  const week1Items = [
+    {
+      title: getCopy('mapa.aspiracional.week1.item1.title'),
+      description: getCopy('mapa.aspiracional.week1.item1.description'),
+    },
+    {
+      title: getCopy('mapa.aspiracional.week1.item2.title'),
+      description: getCopy('mapa.aspiracional.week1.item2.description'),
+    },
+    {
+      title: getCopy('mapa.aspiracional.week1.item3.title'),
+      description: getCopy('mapa.aspiracional.week1.item3.description'),
+    },
+    {
+      title: getCopy('mapa.aspiracional.week1.item4.title'),
+      description: getCopy('mapa.aspiracional.week1.item4.description'),
+    },
+  ]
 
   return (
     <div
@@ -174,7 +154,7 @@ export default function AspiracionalTimeline({
           lineHeight: 1.3,
         }}
       >
-        Tu regulación es un proceso de 12 semanas.
+        {getCopy('mapa.aspiracional.headline1')}
       </h3>
       <p
         style={{
@@ -188,7 +168,7 @@ export default function AspiracionalTimeline({
           lineHeight: 1.3,
         }}
       >
-        Tu primer paso son los próximos 7 días.
+        {getCopy('mapa.aspiracional.headline2')}
       </p>
 
       {/* Timeline vertical con línea de progreso */}
@@ -205,7 +185,7 @@ export default function AspiracionalTimeline({
           }}
         />
 
-        {PHASES.map((phase, i) => {
+        {phases.map((phase, i) => {
           const isActive = phase.id === 1
           const isFaded = !isActive && !hasPaid
 
@@ -214,7 +194,7 @@ export default function AspiracionalTimeline({
               key={phase.id}
               style={{
                 position: 'relative',
-                marginBottom: i < PHASES.length - 1 ? 'var(--space-6)' : 0,
+                marginBottom: i < phases.length - 1 ? 'var(--space-6)' : 0,
                 opacity: isVisible ? (isFaded ? 0.5 : 1) : 0,
                 transform: isVisible ? 'translateY(0)' : 'translateY(12px)',
                 transition:
@@ -351,8 +331,7 @@ export default function AspiracionalTimeline({
           lineHeight: 'var(--lh-body-sm)',
         }}
       >
-        Tu mapa también evoluciona: cada semana aparece algo nuevo — tu perfil
-        profundo, insights colectivos, reevaluaciones. Vuelve cuando quieras.
+        {getCopy('mapa.aspiracional.mapNote')}
       </p>
 
       {/* ── Separador sutil ── */}
@@ -380,7 +359,7 @@ export default function AspiracionalTimeline({
               margin: 0,
             }}
           >
-            Tu Semana 1 está en marcha.
+            {getCopy('mapa.aspiracional.hasPaid.title')}
           </p>
           <p
             style={{
@@ -392,7 +371,7 @@ export default function AspiracionalTimeline({
               marginTop: 'var(--space-1)',
             }}
           >
-            Revisa tu email para el Protocolo de Sueño de Emergencia.
+            {getCopy('mapa.aspiracional.hasPaid.description')}
           </p>
         </div>
       ) : (
@@ -416,10 +395,7 @@ export default function AspiracionalTimeline({
                 marginBottom: 'var(--space-3)',
               }}
             >
-              El programa completo tiene tres niveles de acompañamiento desde
-              2.500€, según la profundidad que necesites. La elección del plan
-              viene después — cuando hayas comprobado con tu propio cuerpo que
-              esto funciona.
+              {getCopy('mapa.aspiracional.reencuadre')}
             </p>
             <p
               style={{
@@ -430,7 +406,7 @@ export default function AspiracionalTimeline({
                 margin: 0,
               }}
             >
-              Por eso existe la Semana 1.
+              {getCopy('mapa.aspiracional.reencuadre2')}
             </p>
           </div>
 
@@ -452,8 +428,7 @@ export default function AspiracionalTimeline({
                 textAlign: 'left',
               }}
             >
-              Tu sistema nervioso lleva años sosteniendo lo que tú no podías
-              soltar. Ahora tienes el mapa.
+              {getCopy('mapa.aspiracional.preCta')}
             </p>
 
             {/* Texto delta de alivio — 72 horas */}
@@ -468,9 +443,7 @@ export default function AspiracionalTimeline({
                 textAlign: 'left',
               }}
             >
-              Los primeros cambios llegan en 72 horas. No en meses — en 3 días.
-              El Protocolo de Sueño de Emergencia está diseñado para que tu
-              cuerpo note la diferencia antes de que tu mente decida si confía.
+              {getCopy('mapa.aspiracional.delta')}
             </p>
 
             {/* Botón CTA */}
@@ -503,7 +476,9 @@ export default function AspiracionalTimeline({
                 e.currentTarget.style.transform = 'translateY(0)'
               }}
             >
-              {checkoutLoading ? 'Redirigiendo…' : 'Empieza la Semana 1'}
+              {checkoutLoading
+                ? getCopy('mapa.aspiracional.checkout.loading')
+                : getCopy('mapa.aspiracional.ctaButton')}
             </button>
 
             {/* Error de checkout */}
@@ -526,8 +501,7 @@ export default function AspiracionalTimeline({
                     marginBottom: 'var(--space-2)',
                   }}
                 >
-                  No se pudo conectar con el sistema de pago. Tus datos están a
-                  salvo.
+                  {getCopy('mapa.aspiracional.checkout.error')}
                 </p>
                 <button
                   onClick={onRetryCheckout}
@@ -542,7 +516,7 @@ export default function AspiracionalTimeline({
                     cursor: 'pointer',
                   }}
                 >
-                  Intentar de nuevo
+                  {getCopy('mapa.aspiracional.checkout.retry')}
                 </button>
               </div>
             )}
@@ -559,8 +533,7 @@ export default function AspiracionalTimeline({
                 marginBottom: 'var(--space-1)',
               }}
             >
-              97€ · Protocolo de Sueño de Emergencia + Sesión 1:1 con Javier +
-              Mapa de Niveles de Neurotransmisores (MNN©)
+              {getCopy('mapa.aspiracional.priceCopy')}
             </p>
             <p
               style={{
@@ -572,8 +545,7 @@ export default function AspiracionalTimeline({
                 opacity: 0.8,
               }}
             >
-              Si tu sueño no mejora en 7 días, te devolvemos los 97€. Sin
-              preguntas.
+              {getCopy('mapa.aspiracional.guarantee')}
             </p>
 
             {/* ── Acordeón colapsable: Qué incluye la Semana 1 ── */}
@@ -600,7 +572,7 @@ export default function AspiracionalTimeline({
                   color: 'var(--color-text-secondary)',
                 }}
               >
-                <span>Qué incluye la Semana 1</span>
+                <span>{getCopy('mapa.aspiracional.week1.accordion.title')}</span>
                 <svg
                   width="12"
                   height="12"
@@ -639,12 +611,12 @@ export default function AspiracionalTimeline({
                     border: 'var(--border-subtle)',
                   }}
                 >
-                  {WEEK1_ITEMS.map((item, idx) => (
+                  {week1Items.map((item, idx) => (
                     <div
                       key={idx}
                       style={{
                         marginBottom:
-                          idx < WEEK1_ITEMS.length - 1
+                          idx < week1Items.length - 1
                             ? 'var(--space-5)'
                             : '0',
                       }}

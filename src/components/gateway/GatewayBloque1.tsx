@@ -64,13 +64,14 @@ const continueButtonStyle: React.CSSProperties = {
   width: '100%',
   padding: 'var(--space-4) var(--space-6)',
   borderRadius: 'var(--radius-lg)',
-  border: 'var(--border-subtle)',
-  background: 'transparent',
-  color: 'var(--color-text-secondary)',
+  border: 'none',
+  background: '#2d4134',
+  color: '#ffffff',
   fontFamily: 'var(--font-host-grotesk)',
   fontSize: 'var(--text-body-sm)',
+  fontWeight: 500,
   cursor: 'pointer',
-  transition: 'color var(--transition-fast), border-color var(--transition-fast)',
+  transition: 'opacity var(--transition-fast), transform var(--transition-fast)',
   minHeight: '44px',
   marginTop: 'var(--space-2)',
 }
@@ -83,6 +84,13 @@ const overlineStyle: React.CSSProperties = {
   letterSpacing: 'var(--ls-overline)',
   textTransform: 'uppercase',
   marginBottom: 'var(--space-4)',
+}
+
+// Mapa de paso anterior para navegación "Volver" dentro del bloque
+const PREV_STEP: Partial<Record<Step, { step: Step; zone?: Zone }>> = {
+  p2: { step: 'p1' },
+  p3: { step: 'p2' },              // saltar analyzing/primera-verdad (son revelaciones)
+  p4: { step: 'p3' },
 }
 
 // ─── COMPONENTE ───────────────────────────────────────────────────────────────
@@ -118,6 +126,20 @@ export default function GatewayBloque1({
       setTimeout(() => overlayRef.current?.scrollTo({ top: 0, behavior: 'smooth' }), 50)
     }, 400)
   }, [])
+
+  // ── Volver: navega a la pregunta anterior o sale al hero ──
+  const handleBack = useCallback(() => {
+    const prev = PREV_STEP[step]
+    if (!prev) {
+      // P1 o paso sin anterior → volver al hero
+      onClose?.()
+      return
+    }
+    if (prev.zone) setZone(prev.zone)
+    // Restaurar zona de exploración al volver a preguntas normales
+    if (['p1', 'p2', 'p3', 'p4'].includes(prev.step)) setZone('exploracion')
+    changeStep(prev.step)
+  }, [step, onClose, changeStep])
 
   // ── Handlers ──
   const handleP1Select = useCallback(
@@ -213,7 +235,8 @@ export default function GatewayBloque1({
         }}
       >
         <div style={{ maxWidth: '540px', margin: '0 auto' }}>
-          {onClose && (
+          {/* Volver: visible en preguntas (p1-p4), oculto en revelaciones */}
+          {(['p1', 'p2', 'p3', 'p4'] as Step[]).includes(step) && (
             <div
               style={{
                 display: 'flex',
@@ -222,8 +245,8 @@ export default function GatewayBloque1({
               }}
             >
               <button
-                onClick={onClose}
-                aria-label="Volver a la landing"
+                onClick={handleBack}
+                aria-label={step === 'p1' ? 'Volver a la landing' : 'Volver a la pregunta anterior'}
                 style={{
                   background: 'none',
                   border: 'none',
@@ -264,6 +287,7 @@ export default function GatewayBloque1({
               context={getCopy('gateway.p1.context')}
               options={getP1Options(getCopy)}
               onSelect={handleP1Select}
+              defaultSelected={p1 || undefined}
             />
           )}
 
@@ -274,6 +298,7 @@ export default function GatewayBloque1({
               context="Tu sueño es el indicador más fiable de cómo está tu sistema nervioso."
               options={getP2Options(getCopy)}
               onSelect={handleP2Select}
+              defaultSelected={p2 || undefined}
             />
           )}
 
@@ -308,6 +333,7 @@ export default function GatewayBloque1({
               collectiveData="El 68% de ejecutivos con tu perfil reportan 3 o más de estos síntomas."
               options={getP3Options(getCopy)}
               onContinue={handleP3Continue}
+              defaultSelections={p3Selections.length > 0 ? p3Selections : undefined}
             />
           )}
 

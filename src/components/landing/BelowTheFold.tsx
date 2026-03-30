@@ -18,37 +18,8 @@ export default function BelowTheFold() {
         <MirrorSection />
         <TensionSection />
 
-        {/* Social Proof with organic blob */}
-        <div style={{ position: 'relative' }}>
-          {/* Blob decorativo — detrás de testimonios, overflow right */}
-          <div
-            className="organic-blob"
-            style={{
-              width: '400px',
-              height: '400px',
-              right: '-120px',
-              top: '20%',
-            }}
-          />
-          <SocialProofSection />
-        </div>
-
-        {/* Relief with organic blob */}
-        <div style={{ position: 'relative' }}>
-          {/* Blob decorativo — detrás de alivio, overflow left */}
-          <div
-            className="organic-blob"
-            style={{
-              width: '300px',
-              height: '300px',
-              left: '-100px',
-              top: '30%',
-              borderRadius: '70% 30% 30% 70% / 70% 70% 30% 30%',
-              opacity: 0.35,
-            }}
-          />
-          <ReliefSection />
-        </div>
+        <SocialProofSection />
+        <ReliefSection />
       </div>
 
       <Footer />

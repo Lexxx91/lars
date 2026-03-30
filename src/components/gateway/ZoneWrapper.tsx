@@ -57,17 +57,12 @@ export default function ZoneWrapper({ zone, children }: ZoneWrapperProps) {
     }
   }, [zone])
 
-  const isReveal = zone === 'revelacion'
-
   return (
     <div
       className={isBreathing ? 'zone-breathe' : ''}
       style={{
         flex: 1,
-        // REVEAL uses gradient, others use solid color
-        ...(isReveal
-          ? { background: 'var(--bg-reveal-gradient)' }
-          : { backgroundColor: getZoneBackground(zone) }),
+        backgroundColor: getZoneBackground(zone),
         transition: `background-color ${transitionDuration}ms var(--ease-zone), background ${transitionDuration}ms var(--ease-zone)`,
         minHeight: '100%',
         // Padding interno — el contenido respira dentro del wrapper

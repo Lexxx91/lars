@@ -9,9 +9,10 @@
 import { useCopy } from '@/lib/copy'
 
 const legalLinks = [
-  { label: 'Política de privacidad', href: '/privacidad' },
-  { label: 'Aviso legal', href: '/legal' },
-  { label: 'Condiciones de uso', href: '#' },
+  { label: 'Aviso legal', href: 'https://institutoepigenetico.com/aviso-legal' },
+  { label: 'Términos y condiciones', href: 'https://institutoepigenetico.com/terminos-y-condiciones' },
+  { label: 'Política de privacidad y cookies', href: 'https://institutoepigenetico.com/politica-de-privacidad' },
+  { label: 'Contacto', href: 'https://institutoepigenetico.com/contacto' },
 ]
 
 export default function Footer() {
@@ -32,57 +33,73 @@ export default function Footer() {
           maxWidth: '960px',
           margin: '0 auto',
           display: 'flex',
-          flexWrap: 'wrap',
+          flexDirection: 'column',
           alignItems: 'center',
-          justifyContent: 'space-between',
           gap: 'var(--space-3)',
+          textAlign: 'center',
         }}
       >
-        {/* Copyright — izquierda */}
+        {/* Links legales — una línea separados por | */}
+        <nav
+          style={{
+            display: 'flex',
+            flexWrap: 'wrap',
+            alignItems: 'center',
+            justifyContent: 'center',
+            gap: '0',
+          }}
+        >
+          {legalLinks.map((link, i) => (
+            <span key={link.label} style={{ display: 'inline-flex', alignItems: 'center' }}>
+              <a
+                href={link.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{
+                  fontFamily: 'var(--font-host-grotesk)',
+                  fontSize: 'var(--text-caption)',
+                  lineHeight: 'var(--lh-caption)',
+                  color: 'rgba(255, 255, 255, 0.5)',
+                  textDecoration: 'none',
+                  transition: 'opacity var(--transition-fast)',
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.opacity = '0.8'
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.opacity = '1'
+                }}
+              >
+                {link.label}
+              </a>
+              {i < legalLinks.length - 1 && (
+                <span
+                  style={{
+                    color: 'rgba(255, 255, 255, 0.3)',
+                    margin: '0 var(--space-2)',
+                    fontFamily: 'var(--font-host-grotesk)',
+                    fontSize: 'var(--text-caption)',
+                  }}
+                >
+                  |
+                </span>
+              )}
+            </span>
+          ))}
+        </nav>
+
+        {/* Copyright — debajo */}
         <p
           style={{
             fontFamily: 'var(--font-host-grotesk)',
             fontSize: 'var(--text-caption)',
             lineHeight: 'var(--lh-caption)',
-            color: 'rgba(255, 255, 255, 0.5)',
+            color: 'rgba(255, 255, 255, 0.4)',
             margin: 0,
           }}
         >
-          {getCopy('footer.copyright')}
+          2026 © Instituto Epigenético™
         </p>
-
-        {/* Links legales — derecha, horizontal */}
-        <nav
-          style={{
-            display: 'flex',
-            flexWrap: 'wrap',
-            gap: 'var(--space-4)',
-            alignItems: 'center',
-          }}
-        >
-          {legalLinks.map((link) => (
-            <a
-              key={link.label}
-              href={link.href}
-              style={{
-                fontFamily: 'var(--font-host-grotesk)',
-                fontSize: 'var(--text-caption)',
-                lineHeight: 'var(--lh-caption)',
-                color: 'rgba(255, 255, 255, 0.5)',
-                textDecoration: 'none',
-                transition: 'opacity var(--transition-fast)',
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.opacity = '0.8'
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.opacity = '1'
-              }}
-            >
-              {link.label}
-            </a>
-          ))}
-        </nav>
       </div>
     </footer>
   )

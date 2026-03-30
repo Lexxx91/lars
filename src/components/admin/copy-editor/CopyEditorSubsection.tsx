@@ -18,7 +18,7 @@ interface CopyEditorSubsectionProps {
   defaultOpen: boolean
   searchQuery: string
   onValueChange: (key: string, value: string) => void
-  onSaved: () => void
+  onSaved: (key: string, isCustomized: boolean) => void
 }
 
 function CopyEditorSubsectionInner({

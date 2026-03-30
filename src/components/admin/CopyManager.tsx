@@ -89,10 +89,31 @@ export default function CopyManager() {
     setLocalValues((prev) => ({ ...prev, [key]: value }))
   }, [])
 
-  const handleSaved = useCallback(() => {
-    // Refetch to sync stats and isCustomized flags
-    fetchData()
-  }, [fetchData])
+  const handleSaved = useCallback((key: string, isCustomized: boolean) => {
+    // Update isCustomized flag in-place without refetching (preserves scroll & accordion state)
+    setData((prev) => {
+      if (!prev) return prev
+      const updated = { ...prev, sections: { ...prev.sections }, stats: { ...prev.stats } }
+      for (const section of Object.keys(updated.sections)) {
+        const entries = updated.sections[section]
+        const idx = entries.findIndex((e) => e.id === key)
+        if (idx !== -1) {
+          const entry = entries[idx]
+          const wasCustomized = entry.isCustomized
+          updated.sections[section] = [...entries]
+          updated.sections[section][idx] = { ...entry, isCustomized, currentValue: localValues[key] ?? entry.currentValue }
+          // Update stats
+          if (wasCustomized && !isCustomized) {
+            updated.stats[section] = Math.max(0, (updated.stats[section] ?? 0) - 1)
+          } else if (!wasCustomized && isCustomized) {
+            updated.stats[section] = (updated.stats[section] ?? 0) + 1
+          }
+          break
+        }
+      }
+      return updated
+    })
+  }, [localValues])
 
   const handleSearch = useCallback((q: string) => {
     setSearchQuery(q)

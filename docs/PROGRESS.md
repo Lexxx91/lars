@@ -106,6 +106,17 @@ Evoluciones del mapa (día 3-90), emails automáticos, analytics custom en Supab
   - P4 convertida a multi-select con nuevo copy de síntomas
   - Sección "Tu nivel de regulación" reestructurada con dato del 69% y urgencia
 
+- ✅ **Gateway UX Fixes — Sesión Feedback-C** (30 Mar 2026):
+  - Botón "Volver" navega a la pregunta anterior (antes salía del gateway y borraba progreso). Preserva respuestas previas. Oculto en pantallas de revelación.
+  - Tick marks en sliders P7: 10 rayas de escala, la central (5) más larga. Sutil, no compite con el slider activo.
+  - Preload "Calculando..." rediseñado: eliminado rectángulo borroso con gradiente, reemplazado por spinner limpio sobre fondo sólido.
+  - Eliminados TODOS los degradados decorativos del gateway y resultados (BisagraSequence, BisagraScreen, Bisagra, ZoneWrapper, GatewayBloque3, EmailCapture, globals.css). Colores sólidos del sistema de diseño.
+
+- ✅ **Admin Fixes — Sesión Feedback-E** (30 Mar 2026):
+  - Copy Editor: eliminado auto-save con debounce 1.5s, reemplazado por botón "Guardar" manual. Sección y scroll no se mueven tras guardar. Indicador "Sin guardar" / "Guardado ✓" por campo. Estado dirty local sin re-fetch del servidor.
+  - Gateway responses: labels y hints descriptivos en Primera Verdad (8 variantes P1×P2), Micro-espejo 1 (5 variantes P3×P4), Micro-espejo 2 (6 variantes P6). Cada label ahora dice qué combinación de respuestas produce ese texto. Hints con contexto del perfil. Textos duplicados C-B/C-C marcados como intencionales.
+  - Mapa editable: 8 textos hardcodeados extraídos a copy-defaults (post-pago, checkout, acordeón semana 1, tags de dimensión). EvolutionTimeline, AspiracionalTimeline y DimensionCard ahora leen todos sus textos vía getCopy(). Tab "Mapa" del Copy Editor cubre el 100% de los textos del mapa público.
+
 ### Pendiente (no bloquea lanzamiento)
 - Testimonios: siguen siendo placeholder — pendiente de testimonios reales de Javier
 - Stripe: en modo test — pasar a LIVE cuando esté listo

@@ -71,7 +71,7 @@ export default function TensionSection() {
             onMouseEnter={() => setHoveredCard(0)}
             onMouseLeave={() => setHoveredCard(null)}
             style={{
-              background: 'var(--color-accent)',
+              background: '#2d4134',
               borderRadius: '20px',
               padding: 'var(--space-8)',
               boxShadow: hoveredCard === 0 ? '0 8px 32px rgba(30, 19, 16, 0.12)' : 'none',

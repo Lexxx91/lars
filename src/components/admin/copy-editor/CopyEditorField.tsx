@@ -1,21 +1,22 @@
 'use client'
 
 /**
- * CopyEditorField — Individual editable copy field with auto-save.
+ * CopyEditorField — Individual editable copy field with manual save.
  *
  * Shows label, hint tooltip, input (sized by fieldType), "Editado" badge,
- * restore button, original text, and save status indicator.
+ * restore button, original text, dirty indicator, and save button.
+ * No auto-save — user clicks "Guardar" when ready.
  */
 
 import { useState, useCallback, useRef, memo } from 'react'
 import type { CopyEntry, SaveStatus } from './types'
-import { useCopyAutoSave } from './useCopyAutoSave'
+import { useCopySave } from './useCopyAutoSave'
 
 interface CopyEditorFieldProps {
   entry: CopyEntry
   searchQuery: string
   onValueChange: (key: string, value: string) => void
-  onSaved: () => void
+  onSaved: (key: string, isCustomized: boolean) => void
 }
 
 function CopyEditorFieldInner({
@@ -27,21 +28,13 @@ function CopyEditorFieldInner({
   const [value, setValue] = useState(entry.currentValue)
   const [showOriginal, setShowOriginal] = useState(false)
   const [confirmRestore, setConfirmRestore] = useState(false)
+  const [savedValue, setSavedValue] = useState(entry.currentValue)
   const textareaRef = useRef<HTMLTextAreaElement>(null)
 
-  const isCustomized = value !== entry.defaultValue
-  const status = useCopyAutoSave({
-    key: entry.id,
-    value,
-    defaultValue: entry.defaultValue,
-  })
+  const { status, save } = useCopySave()
 
-  // Notify parent when save completes
-  const prevStatusRef = useRef<SaveStatus>('idle')
-  if (prevStatusRef.current === 'saving' && status === 'saved') {
-    onSaved()
-  }
-  prevStatusRef.current = status
+  const isCustomized = value !== entry.defaultValue
+  const isDirty = value !== savedValue
 
   const handleChange = useCallback(
     (newValue: string) => {
@@ -51,15 +44,28 @@ function CopyEditorFieldInner({
     [entry.id, onValueChange],
   )
 
-  const handleRestore = useCallback(() => {
+  const handleSave = useCallback(async () => {
+    const ok = await save(entry.id, value)
+    if (ok) {
+      setSavedValue(value)
+      onSaved(entry.id, value !== entry.defaultValue)
+    }
+  }, [save, entry.id, entry.defaultValue, value, onSaved])
+
+  const handleRestore = useCallback(async () => {
     if (!confirmRestore) {
       setConfirmRestore(true)
       return
     }
     setValue(entry.defaultValue)
     onValueChange(entry.id, entry.defaultValue)
+    const ok = await save(entry.id, entry.defaultValue)
+    if (ok) {
+      setSavedValue(entry.defaultValue)
+      onSaved(entry.id, false)
+    }
     setConfirmRestore(false)
-  }, [confirmRestore, entry.defaultValue, entry.id, onValueChange])
+  }, [confirmRestore, entry.defaultValue, entry.id, onValueChange, save, onSaved])
 
   const renderHighlighted = (text: string) => {
     if (!searchQuery) return text
@@ -131,8 +137,26 @@ function CopyEditorFieldInner({
           </span>
         )}
 
+        {/* Dirty indicator */}
+        {isDirty && (
+          <span style={{
+            fontFamily: 'var(--font-host-grotesk)',
+            fontSize: '10px',
+            fontWeight: 600,
+            color: '#B45A32',
+            background: 'rgba(180, 90, 50, 0.10)',
+            borderRadius: '9999px',
+            padding: '2px 8px',
+            textTransform: 'uppercase',
+            letterSpacing: '0.04em',
+            flexShrink: 0,
+          }}>
+            Sin guardar
+          </span>
+        )}
+
         {/* Editado badge */}
-        {isCustomized && (
+        {isCustomized && !isDirty && (
           <span style={{
             fontFamily: 'var(--font-host-grotesk)',
             fontSize: '10px',
@@ -168,15 +192,40 @@ function CopyEditorFieldInner({
         />
       )}
 
-      {/* Status + Restore row */}
+      {/* Status + Save + Restore row */}
       <div style={{
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'space-between',
-        marginTop: 'var(--space-1)',
-        minHeight: 20,
+        marginTop: 'var(--space-2)',
+        minHeight: 28,
+        gap: 'var(--space-2)',
       }}>
-        <SaveIndicator status={status} />
+        <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-3)' }}>
+          {/* Save button — only when dirty */}
+          {isDirty && (
+            <button
+              onClick={handleSave}
+              disabled={status === 'saving'}
+              style={{
+                fontFamily: 'var(--font-host-grotesk)',
+                fontSize: 'var(--text-caption)',
+                fontWeight: 600,
+                color: '#FFFFFF',
+                background: status === 'saving' ? 'rgba(38, 66, 51, 0.5)' : '#264233',
+                border: 'none',
+                borderRadius: 'var(--radius-pill)',
+                padding: '4px 14px',
+                cursor: status === 'saving' ? 'wait' : 'pointer',
+                transition: 'background 150ms ease',
+              }}
+            >
+              {status === 'saving' ? 'Guardando...' : 'Guardar'}
+            </button>
+          )}
+
+          <SaveIndicator status={status} />
+        </div>
 
         {isCustomized && (
           <button

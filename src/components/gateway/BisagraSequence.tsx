@@ -120,7 +120,7 @@ export default function BisagraSequence({ scores, onContinue }: BisagraSequenceP
       <div
         className={`bisagra-box${calcPhase ? ' bisagra-glow-active' : ''}`}
         style={{
-          background: 'linear-gradient(135deg, #D6E8DD 0%, #FFFFFF 100%)',
+          background: 'var(--color-bg-secondary)',
           border: '1px solid rgba(205,121,108,0.1)',
           borderRadius: '16px',
           padding: '48px 32px',
@@ -155,15 +155,16 @@ export default function BisagraSequence({ scores, onContinue }: BisagraSequenceP
                 gap: 'var(--space-4)',
               }}
             >
-              {/* Punto de luz central */}
+              {/* Indicador de carga — spinner sutil */}
               <div
                 aria-hidden="true"
                 style={{
-                  width: '64px',
-                  height: '64px',
+                  width: '48px',
+                  height: '48px',
                   borderRadius: '50%',
-                  background: 'radial-gradient(circle, rgba(205,121,108,0.18) 0%, transparent 70%)',
-                  animation: 'pulse-glow 2.5s ease-in-out infinite',
+                  border: '2px solid rgba(38,66,51,0.08)',
+                  borderTopColor: 'var(--color-accent)',
+                  animation: 'spin 1s linear infinite',
                 }}
               />
 

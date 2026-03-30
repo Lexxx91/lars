@@ -98,7 +98,7 @@ export default function GatewayBloque3({
         flexDirection: 'column',
         overflowY: 'auto',
         overflowX: 'hidden',
-        background: 'var(--bg-reveal-gradient)', /* ZONA 3 — REVEAL gradient */
+        backgroundColor: 'var(--bg-reveal-solid)', /* ZONA 3 — color sólido */
       }}
     >
       {/* ── Barra de progreso sticky ── */}

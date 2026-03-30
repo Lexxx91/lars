@@ -19,6 +19,8 @@ interface MultiSelectStepProps {
   collectiveData?: string
   options: MultiOption[]
   onContinue: (selections: string[]) => void
+  /** Selecciones previas (se muestran al volver atrás) */
+  defaultSelections?: string[]
 }
 
 export default function MultiSelectStep({
@@ -27,8 +29,9 @@ export default function MultiSelectStep({
   collectiveData,
   options,
   onContinue,
+  defaultSelections,
 }: MultiSelectStepProps) {
-  const [selections, setSelections] = useState<string[]>([])
+  const [selections, setSelections] = useState<string[]>(defaultSelections ?? [])
 
   function toggle(id: string) {
     if (id === 'ninguna') {

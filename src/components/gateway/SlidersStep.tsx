@@ -19,6 +19,8 @@ interface SlidersStepProps {
   question: string
   sliders: SliderDimension[]
   onContinue: (values: Record<string, number>) => void
+  /** Valores previos (se muestran al volver atrás) */
+  defaultValues?: Record<string, number | undefined>
 }
 
 /** Color del fill según valor 1-10 */
@@ -48,11 +50,17 @@ function positionToValue(clientX: number, trackEl: HTMLElement): number {
   return Math.round(ratio * 9) + 1 // 1-10
 }
 
-export default function SlidersStep({ question, sliders, onContinue }: SlidersStepProps) {
+export default function SlidersStep({ question, sliders, onContinue, defaultValues }: SlidersStepProps) {
   const [values, setValues] = useState<Record<string, number | undefined>>(
-    () => Object.fromEntries(sliders.map((s) => [s.id, undefined]))
+    () => defaultValues
+      ? { ...Object.fromEntries(sliders.map((s) => [s.id, undefined])), ...defaultValues }
+      : Object.fromEntries(sliders.map((s) => [s.id, undefined]))
   )
-  const [touched, setTouched] = useState<Set<string>>(() => new Set())
+  const [touched, setTouched] = useState<Set<string>>(
+    () => defaultValues
+      ? new Set(Object.entries(defaultValues).filter(([, v]) => v !== undefined).map(([k]) => k))
+      : new Set()
+  )
   const [pulsingSlider, setPulsingSlider] = useState<string | null>(null)
   const pulseTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
   const trackRefs = useRef<Record<string, HTMLDivElement | null>>({})
@@ -272,32 +280,55 @@ export default function SlidersStep({ question, sliders, onContinue }: SlidersSt
                 />
               </div>
 
-              {/* Escala 1–10 */}
+              {/* Escala 1–10: tick marks + labels */}
               <div
                 style={{
                   display: 'flex',
                   justifyContent: 'space-between',
+                  alignItems: 'flex-start',
                   marginTop: 'var(--space-1)',
+                  paddingLeft: 0,
+                  paddingRight: 0,
                 }}
               >
-                <span
-                  style={{
-                    fontFamily: 'var(--font-host-grotesk)',
-                    fontSize: 'var(--text-caption)',
-                    color: 'var(--color-text-tertiary)',
-                  }}
-                >
-                  1
-                </span>
-                <span
-                  style={{
-                    fontFamily: 'var(--font-host-grotesk)',
-                    fontSize: 'var(--text-caption)',
-                    color: 'var(--color-text-tertiary)',
-                  }}
-                >
-                  10
-                </span>
+                {Array.from({ length: 10 }, (_, i) => {
+                  const isCenter = i === 4 // posición 5 (índice 4)
+                  const isEnd = i === 0 || i === 9
+                  return (
+                    <div
+                      key={i}
+                      style={{
+                        display: 'flex',
+                        flexDirection: 'column',
+                        alignItems: 'center',
+                        flex: 1,
+                      }}
+                    >
+                      {/* Tick mark */}
+                      <div
+                        style={{
+                          width: '1px',
+                          height: isCenter ? '10px' : '6px',
+                          background: 'rgba(38,66,51,0.18)',
+                          borderRadius: '0.5px',
+                        }}
+                      />
+                      {/* Label solo en extremos */}
+                      {isEnd && (
+                        <span
+                          style={{
+                            fontFamily: 'var(--font-host-grotesk)',
+                            fontSize: 'var(--text-caption)',
+                            color: 'var(--color-text-tertiary)',
+                            marginTop: '2px',
+                          }}
+                        >
+                          {i + 1}
+                        </span>
+                      )}
+                    </div>
+                  )
+                })}
               </div>
             </div>
           )

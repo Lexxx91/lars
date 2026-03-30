@@ -466,6 +466,26 @@ export function getMapaDefaults(): CopySection[] {
       fieldType: 'short',
     },
 
+    // ── DIMENSIONS — Tags ─────────────────────────────────────────────
+    {
+      id: 'mapa.dimension.priority',
+      section: 'mapa',
+      subsection: 'dimensions',
+      label: 'Dimensión — etiqueta de prioridad',
+      defaultValue: 'Tu prioridad nº1',
+      fieldType: 'short',
+      hint: 'Tag que aparece en la dimensión más comprometida.',
+    },
+    {
+      id: 'mapa.dimension.improvable72h',
+      section: 'mapa',
+      subsection: 'dimensions',
+      label: 'Dimensión Sueño — etiqueta de mejora',
+      defaultValue: 'Mejorable en 72 horas',
+      fieldType: 'short',
+      hint: 'Tag específico para la dimensión de Sueño.',
+    },
+
     // ── ASPIRACIONAL — 3 fases ───────────────────────────────────────
     {
       id: 'mapa.aspiracional.headline1',
@@ -629,6 +649,59 @@ export function getMapaDefaults(): CopySection[] {
       label: 'Semana 1 — Garantía (descripción)',
       defaultValue: '7 días. Si no notas mejora en tu sueño, devolución íntegra. Sin preguntas. Sin formularios.',
       fieldType: 'medium',
+    },
+
+    // ── ASPIRACIONAL — Post-pago & Checkout ────────────────────────────
+    {
+      id: 'mapa.aspiracional.hasPaid.title',
+      section: 'mapa',
+      subsection: 'aspiracional',
+      label: 'Post-pago — título',
+      defaultValue: 'Tu Semana 1 está en marcha.',
+      fieldType: 'short',
+      hint: 'Texto que aparece después de completar el pago.',
+    },
+    {
+      id: 'mapa.aspiracional.hasPaid.description',
+      section: 'mapa',
+      subsection: 'aspiracional',
+      label: 'Post-pago — descripción',
+      defaultValue: 'Revisa tu email para el Protocolo de Sueño de Emergencia.',
+      fieldType: 'medium',
+    },
+    {
+      id: 'mapa.aspiracional.week1.accordion.title',
+      section: 'mapa',
+      subsection: 'aspiracional',
+      label: 'Semana 1 — título del acordeón',
+      defaultValue: 'Qué incluye la Semana 1',
+      fieldType: 'short',
+      hint: 'Título del desplegable que muestra el contenido de la Semana 1.',
+    },
+    {
+      id: 'mapa.aspiracional.checkout.loading',
+      section: 'mapa',
+      subsection: 'aspiracional',
+      label: 'Checkout — botón cargando',
+      defaultValue: 'Redirigiendo…',
+      fieldType: 'short',
+      hint: 'Texto del botón mientras se procesa el pago.',
+    },
+    {
+      id: 'mapa.aspiracional.checkout.error',
+      section: 'mapa',
+      subsection: 'aspiracional',
+      label: 'Checkout — mensaje de error',
+      defaultValue: 'No se pudo conectar con el sistema de pago. Tus datos están a salvo.',
+      fieldType: 'medium',
+    },
+    {
+      id: 'mapa.aspiracional.checkout.retry',
+      section: 'mapa',
+      subsection: 'aspiracional',
+      label: 'Checkout — botón reintentar',
+      defaultValue: 'Intentar de nuevo',
+      fieldType: 'short',
     },
 
     // ── ASPIRACIONAL — CTA ───────────────────────────────────────────

@@ -314,8 +314,7 @@ svg {
   /* Zone transition easings — EXPERIENCE_STANDARDS.md §1 */
   --ease-zone: cubic-bezier(0.65, 0, 0.35, 1);
 
-  /* REVEAL zone gradient */
-  --bg-reveal-gradient: linear-gradient(180deg, #EAF2EE 0%, #FFFFFF 100%);
+  /* REVEAL zone — solid color (no gradients) */
   --bg-reveal-solid: #EAF2EE;
 }
 
@@ -533,6 +532,11 @@ svg {
 /* ============================================================
    PULSE GLOW — CalculandoScreen A-09
    ============================================================ */
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
 @keyframes pulse-glow {
   0%, 100% {
     opacity: 0.6;
@@ -556,7 +560,7 @@ svg {
   position: absolute;
   inset: -40px;
   border-radius: 24px;
-  background: radial-gradient(ellipse at center, rgba(205,121,108,0.08) 0%, transparent 70%);
+  background: rgba(205,121,108,0.06);
   opacity: 0;
   z-index: -1;
   transition: opacity 600ms var(--ease-out-expo);
@@ -799,18 +803,13 @@ input[type="range"]::-moz-range-track {
 }
 
 .site-header[data-variant="landing"] .site-header__logo {
-  opacity: 0.5;
-  transition: opacity 300ms ease;
+  opacity: 1;
 }
 
 /* Landing opaque state (scroll or gateway active) */
 .site-header[data-variant="landing"].site-header--opaque {
   background: var(--color-bg-primary);
   border-bottom-color: rgba(38, 66, 51, 0.08);
-}
-
-.site-header[data-variant="landing"].site-header--opaque .site-header__logo {
-  opacity: 1;
 }
 
 .site-header__container {
@@ -923,22 +922,6 @@ input[type="range"]::-moz-range-track {
   }
 }
 
-/* Organic blobs — hidden on mobile */
-.organic-blob {
-  position: absolute;
-  background: var(--color-surface-peach);
-  opacity: 0.5;
-  border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%;
-  z-index: 0;
-  pointer-events: none;
-  display: none;
-}
-
-@media (min-width: 768px) {
-  .organic-blob {
-    display: block;
-  }
-}
 
 /* Credentials card grid */
 .credentials-grid {
@@ -968,9 +951,3 @@ input[type="range"]::-moz-range-track {
   transform: scale(0.98);
 }
 
-/* prefers-reduced-motion for below-fold */
-@media (prefers-reduced-motion: reduce) {
-  .organic-blob {
-    display: none !important;
-  }
-}

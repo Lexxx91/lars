@@ -18,8 +18,7 @@ export default function Bisagra({
   return (
     <div
       style={{
-        background:
-          "linear-gradient(135deg, var(--color-bg-secondary), var(--color-bg-tertiary))",
+        background: "var(--color-bg-secondary)",
         border: "var(--border-accent)",
         borderRadius: "var(--radius-lg)",
         padding: "var(--space-8)",

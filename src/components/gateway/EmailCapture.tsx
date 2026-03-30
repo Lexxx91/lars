@@ -128,8 +128,7 @@ export default function EmailCapture({ scores, onComplete }: EmailCaptureProps) 
             display: 'flex',
             flexDirection: 'column',
             gap: 'var(--space-4)',
-            filter: 'blur(6px)',
-            opacity: 0.35,
+            opacity: 0.25,
             userSelect: 'none',
             pointerEvents: 'none',
           }}
@@ -197,8 +196,7 @@ export default function EmailCapture({ scores, onComplete }: EmailCaptureProps) 
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            backdropFilter: 'blur(2px)',
-            WebkitBackdropFilter: 'blur(2px)',
+            background: 'rgba(234,242,238,0.6)',
           }}
         >
           <p

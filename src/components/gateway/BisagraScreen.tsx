@@ -81,7 +81,7 @@ export default function BisagraScreen({ scores, onContinue }: BisagraScreenProps
       {/* ── Card bisagra ── */}
       <div
         style={{
-          background: 'linear-gradient(160deg, #07181d 0%, #0a1e24 100%)',
+          background: 'var(--color-bg-secondary)',
           border: '1px solid rgba(198,200,238,0.15)',
           borderRadius: 'var(--radius-xl)',
           padding: 'var(--space-8) var(--space-6)',
