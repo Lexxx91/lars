@@ -277,77 +277,73 @@ export default function CopyManager() {
       {!loading && !error && entries.length === 0 && !searchQuery && <CopyEditorEmpty />}
 
       {!loading && !error && filteredEntries.length > 0 && (
-        <div style={{
-          display: 'grid',
-          gridTemplateColumns: isMobile ? '1fr' : '1fr 380px',
-          gap: 'var(--space-6)',
-          alignItems: 'start',
-        }}>
-          {/* Left: editor */}
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-3)' }}>
-            {/* Gateway visual navigator */}
-            {activeTab === 'gateway' && (
-              <div>
-                {/* Toggle */}
-                <div style={{
-                  display: 'flex',
-                  justifyContent: 'flex-end',
-                  marginBottom: 8,
-                  gap: 4,
-                }}>
-                  <ViewToggle
-                    label="Lista"
-                    active={gatewayView === 'list'}
-                    onClick={() => setGatewayView('list')}
-                  />
-                  <ViewToggle
-                    label="Mapa mental"
-                    active={gatewayView === 'mindmap'}
-                    onClick={() => setGatewayView('mindmap')}
-                  />
-                </div>
-                {gatewayView === 'list'
-                  ? <GatewayFlowMap entries={entries} onNavigate={handleFlowNavigate} />
-                  : <GatewayMindMap entries={entries} onNavigate={handleFlowNavigate} />
-                }
-              </div>
-            )}
-
-            {Object.entries(grouped).map(([subsection, items], idx) => (
-              <div key={subsection} data-subsection={subsection} onFocus={() => handleSubsectionFocus(subsection)}>
-                <CopyEditorSubsection
-                  subsection={subsection}
-                  entries={items}
-                  defaultOpen={idx === 0}
-                  searchQuery={searchQuery}
-                  onValueChange={handleValueChange}
-                  onSaved={handleSaved}
-                />
-              </div>
-            ))}
-          </div>
-
-          {/* Right: preview (desktop) */}
-          {!isMobile && (
-            <div style={{ position: 'sticky', top: 24 }}>
-              <p style={{
-                fontFamily: 'var(--font-host-grotesk)',
-                fontSize: 'var(--text-caption)',
-                fontWeight: 600,
-                color: 'var(--color-text-tertiary)',
-                textTransform: 'uppercase',
-                letterSpacing: '0.08em',
-                marginBottom: 'var(--space-3)',
+        <>
+          {/* Gateway visual navigator — FULL WIDTH above grid */}
+          {activeTab === 'gateway' && (
+            <div style={{ marginBottom: 'var(--space-4)' }}>
+              {/* View toggle */}
+              <div style={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'flex-end',
+                marginBottom: 8,
+                gap: 4,
               }}>
-                Vista previa
-              </p>
-              <PreviewComponent
-                localValues={localValues}
-                activeSubsection={activeSubsection}
-              />
+                <ViewToggle label="Navegador" active={gatewayView === 'list'} onClick={() => setGatewayView('list')} />
+                <ViewToggle label="Mapa mental" active={gatewayView === 'mindmap'} onClick={() => setGatewayView('mindmap')} />
+              </div>
+              {gatewayView === 'list'
+                ? <GatewayFlowMap entries={entries} onNavigate={handleFlowNavigate} />
+                : <GatewayMindMap entries={entries} onNavigate={handleFlowNavigate} />
+              }
             </div>
           )}
-        </div>
+
+          {/* Two-column grid: editor + preview */}
+          <div style={{
+            display: 'grid',
+            gridTemplateColumns: isMobile ? '1fr' : '1fr 380px',
+            gap: 'var(--space-6)',
+            alignItems: 'start',
+          }}>
+            {/* Left: editor */}
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-3)' }}>
+              {Object.entries(grouped).map(([subsection, items], idx) => (
+                <div key={subsection} data-subsection={subsection} onFocus={() => handleSubsectionFocus(subsection)}>
+                  <CopyEditorSubsection
+                    subsection={subsection}
+                    entries={items}
+                    defaultOpen={idx === 0}
+                    searchQuery={searchQuery}
+                    onValueChange={handleValueChange}
+                    onSaved={handleSaved}
+                  />
+                </div>
+              ))}
+            </div>
+
+            {/* Right: preview (desktop) */}
+            {!isMobile && (
+              <div style={{ position: 'sticky', top: 24 }}>
+                <p style={{
+                  fontFamily: 'var(--font-host-grotesk)',
+                  fontSize: 'var(--text-caption)',
+                  fontWeight: 600,
+                  color: 'var(--color-text-tertiary)',
+                  textTransform: 'uppercase',
+                  letterSpacing: '0.08em',
+                  marginBottom: 'var(--space-3)',
+                }}>
+                  Vista previa
+                </p>
+                <PreviewComponent
+                  localValues={localValues}
+                  activeSubsection={activeSubsection}
+                />
+              </div>
+            )}
+          </div>
+        </>
       )}
 
       {/* Mobile preview button */}
