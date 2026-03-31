@@ -286,7 +286,7 @@ export default function SlidersStep({ question, sliders, onContinue, defaultValu
                   display: 'flex',
                   justifyContent: 'space-between',
                   alignItems: 'flex-start',
-                  marginTop: 'var(--space-1)',
+                  marginTop: 0,
                   paddingLeft: 0,
                   paddingRight: 0,
                 }}
@@ -300,7 +300,9 @@ export default function SlidersStep({ question, sliders, onContinue, defaultValu
                       style={{
                         display: 'flex',
                         flexDirection: 'column',
-                        alignItems: 'center',
+                        alignItems: isEnd
+                          ? i === 0 ? 'flex-start' : 'flex-end'
+                          : 'center',
                         flex: 1,
                       }}
                     >
@@ -362,9 +364,9 @@ export default function SlidersStep({ question, sliders, onContinue, defaultValu
           width: '100%',
           padding: 'var(--space-4) var(--space-6)',
           borderRadius: 'var(--radius-lg)',
-          border: 'var(--border-accent-strong)',
-          background: allTouched ? 'var(--color-accent-subtle)' : 'transparent',
-          color: allTouched ? 'var(--color-accent)' : 'var(--color-text-secondary)',
+          border: 'none',
+          background: allTouched ? '#314135' : 'rgba(49,65,53,0.3)',
+          color: '#ffffff',
           fontFamily: 'var(--font-host-grotesk)',
           fontSize: 'var(--text-body-sm)',
           fontWeight: allTouched ? 500 : 400,
@@ -373,6 +375,7 @@ export default function SlidersStep({ question, sliders, onContinue, defaultValu
           minHeight: '44px',
           opacity: allTouched ? 1 : 0.4,
           pointerEvents: allTouched ? 'auto' : 'none',
+          marginBottom: '30px',
         }}
       >
         Ver mi evaluación completa →

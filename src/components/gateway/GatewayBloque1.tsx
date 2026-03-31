@@ -65,7 +65,7 @@ const continueButtonStyle: React.CSSProperties = {
   padding: 'var(--space-4) var(--space-6)',
   borderRadius: 'var(--radius-lg)',
   border: 'none',
-  background: '#2d4134',
+  background: '#314135',
   color: '#ffffff',
   fontFamily: 'var(--font-host-grotesk)',
   fontSize: 'var(--text-body-sm)',
@@ -295,7 +295,7 @@ export default function GatewayBloque1({
           {step === 'p2' && (
             <SingleSelectStep
               question="¿Cómo son tus noches últimamente?"
-              context="Tu sueño es el indicador más fiable de cómo está tu sistema nervioso."
+              context="Tu sueño es el indicador más fiable del estado de tu sistema nervioso."
               options={getP2Options(getCopy)}
               onSelect={handleP2Select}
               defaultSelected={p2 || undefined}
@@ -329,8 +329,7 @@ export default function GatewayBloque1({
           {step === 'p3' && (
             <MultiSelectStep
               question="¿Reconoces alguna de estas señales en tu día a día?"
-              context="Tu cerebro consume el 20% de tu energía total. Cuando el sistema nervioso está en alerta, desvía esos recursos a la supervivencia."
-              collectiveData="El 68% de ejecutivos con tu perfil reportan 3 o más de estos síntomas."
+              context="La gente que más necesita terminar este test es la que menos tiempo cree tener para hacerlo. Irónico, ¿verdad? Esa misma urgencia es el síntoma número uno."
               options={getP3Options(getCopy)}
               onContinue={handleP3Continue}
               defaultSelections={p3Selections.length > 0 ? p3Selections : undefined}

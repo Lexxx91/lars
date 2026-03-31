@@ -201,11 +201,11 @@ export default function BisagraSequence({ scores, onContinue }: BisagraSequenceP
                 letterSpacing: 'var(--ls-overline)',
                 textTransform: 'uppercase',
                 color: 'var(--color-accent)',
-                marginBottom: 'var(--space-5)',
+                marginBottom: 'var(--space-3)',
                 display: fadeTyping ? 'block' : 'none',
               }}
             >
-              Tu nivel de regulación
+              TU NIVEL DE NEUROREGULACIÓN
             </p>
 
             {/* Score + "de 100" + "— Moderado" en una línea */}
@@ -334,23 +334,17 @@ export default function BisagraSequence({ scores, onContinue }: BisagraSequenceP
           maxWidth: '520px',
           padding: 'var(--space-4) var(--space-6)',
           borderRadius: 'var(--radius-lg)',
-          border: '1px solid rgba(205,121,108,0.25)',
-          background: 'transparent',
-          color: 'var(--color-text-secondary)',
+          border: 'none',
+          background: '#c27d70',
+          color: '#ffffff',
           fontFamily: 'var(--font-host-grotesk)',
           fontSize: 'var(--text-body-sm)',
+          fontWeight: 500,
           cursor: 'pointer',
-          transition: 'color var(--transition-fast), border-color var(--transition-fast)',
+          transition: 'opacity var(--transition-fast)',
           minHeight: '44px',
           pointerEvents: showButton ? 'auto' : 'none',
-        }}
-        onMouseEnter={(e) => {
-          e.currentTarget.style.color = 'var(--color-text-primary)'
-          e.currentTarget.style.borderColor = 'rgba(205,121,108,0.5)'
-        }}
-        onMouseLeave={(e) => {
-          e.currentTarget.style.color = 'var(--color-text-secondary)'
-          e.currentTarget.style.borderColor = 'rgba(205,121,108,0.25)'
+          marginBottom: '30px',
         }}
       >
         Ver mi evaluación completa →

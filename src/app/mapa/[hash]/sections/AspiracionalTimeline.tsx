@@ -18,6 +18,7 @@ import { useCopy } from '@/lib/copy'
 import ProgramaCompleto from './ProgramaCompleto'
 import SessionCTA from './SessionCTA'
 import BookExcerptDownload from './BookExcerptDownload'
+import ProgressiveUnlockModule from './ProgressiveUnlockModule'
 
 // ─── TIPOS ────────────────────────────────────────────────────────────────────
 
@@ -157,11 +158,13 @@ export default function AspiracionalTimeline({
       {/* ══════════════════════════════════════════════════════════════════════
           BLOQUE B — Sesión con Javier (disponible desde día 0)
           ══════════════════════════════════════════════════════════════════════ */}
-      <SessionCTA
-        mapHash={mapHash}
-        booked={sessionBooked}
-        bookingDetails={sessionBookingDetails}
-      />
+      <div id="session-cta">
+        <SessionCTA
+          mapHash={mapHash}
+          booked={sessionBooked}
+          bookingDetails={sessionBookingDetails}
+        />
+      </div>
 
       {/* ══════════════════════════════════════════════════════════════════════
           BLOQUE C — Extracto del libro (PDF, si existe)
@@ -217,7 +220,8 @@ export default function AspiracionalTimeline({
                 style={{
                   fontFamily: 'var(--font-host-grotesk)',
                   fontSize: 'var(--text-body)',
-                  color: 'var(--color-text-primary)',
+                  color: '#c27d70',
+                  fontWeight: 700,
                   lineHeight: 'var(--lh-body)',
                   margin: 0,
                   marginBottom: 'var(--space-3)',
@@ -229,7 +233,8 @@ export default function AspiracionalTimeline({
                 style={{
                   fontFamily: 'var(--font-host-grotesk)',
                   fontSize: 'var(--text-body-sm)',
-                  color: 'var(--color-text-secondary)',
+                  color: '#c27d70',
+                  fontWeight: 700,
                   lineHeight: 'var(--lh-body)',
                   margin: 0,
                 }}
@@ -347,28 +352,16 @@ export default function AspiracionalTimeline({
                 </div>
               )}
 
-              {/* Sub-copy: precio + garantía */}
+              {/* Garantía — mismo tamaño y color que delta */}
               <p
                 style={{
                   fontFamily: 'var(--font-host-grotesk)',
-                  fontSize: 'var(--text-caption)',
-                  color: 'var(--color-text-tertiary)',
+                  fontSize: 'var(--text-body)',
+                  color: 'var(--color-text-primary)',
                   textAlign: 'center',
-                  lineHeight: 'var(--lh-body-sm)',
+                  lineHeight: 'var(--lh-body)',
                   marginTop: 'var(--space-3)',
-                  marginBottom: 'var(--space-1)',
-                }}
-              >
-                {getCopy('mapa.aspiracional.priceCopy')}
-              </p>
-              <p
-                style={{
-                  fontFamily: 'var(--font-host-grotesk)',
-                  fontSize: 'var(--text-caption)',
-                  color: 'var(--color-text-tertiary)',
-                  textAlign: 'center',
-                  margin: 0,
-                  opacity: 0.8,
+                  marginBottom: 0,
                 }}
               >
                 {getCopy('mapa.aspiracional.guarantee')}
@@ -437,13 +430,94 @@ export default function AspiracionalTimeline({
                       border: 'var(--border-subtle)',
                     }}
                   >
-                    {week1Items.map((item, idx) => (
+                    {/* Presentaciones del Dr. Carlos Alvear */}
+                    <p
+                      style={{
+                        fontFamily: 'var(--font-host-grotesk)',
+                        fontSize: 'var(--text-caption)',
+                        fontWeight: 600,
+                        color: 'var(--color-text-primary)',
+                        margin: 0,
+                        marginBottom: 'var(--space-3)',
+                        textTransform: 'uppercase',
+                        letterSpacing: '0.04em',
+                      }}
+                    >
+                      {getCopy('mapa.programa.week1.presentations.title')}
+                    </p>
+                    {[
+                      getCopy('mapa.programa.week1.pres1'),
+                      getCopy('mapa.programa.week1.pres2'),
+                      getCopy('mapa.programa.week1.pres3'),
+                    ].map((pres, i) => (
+                      <div
+                        key={i}
+                        style={{
+                          display: 'flex',
+                          alignItems: 'baseline',
+                          gap: 'var(--space-2)',
+                          marginBottom: 'var(--space-2)',
+                        }}
+                      >
+                        <span
+                          style={{
+                            fontFamily: 'var(--font-host-grotesk)',
+                            fontSize: 'var(--text-caption)',
+                            fontWeight: 600,
+                            color: 'var(--color-accent)',
+                            flexShrink: 0,
+                          }}
+                        >
+                          {i + 1}.
+                        </span>
+                        <span
+                          style={{
+                            fontFamily: 'var(--font-host-grotesk)',
+                            fontSize: 'var(--text-caption)',
+                            color: 'var(--color-text-secondary)',
+                            lineHeight: 'var(--lh-body-sm)',
+                          }}
+                        >
+                          {pres}
+                        </span>
+                      </div>
+                    ))}
+
+                    {/* Qué vas a aprender */}
+                    <div style={{ height: '1px', background: 'rgba(180, 90, 50, 0.1)', margin: 'var(--space-4) 0' }} />
+                    <p
+                      style={{
+                        fontFamily: 'var(--font-host-grotesk)',
+                        fontSize: 'var(--text-caption)',
+                        fontWeight: 600,
+                        color: 'var(--color-text-primary)',
+                        margin: 0,
+                        marginBottom: 'var(--space-2)',
+                      }}
+                    >
+                      {getCopy('mapa.programa.week1.learning.title')}
+                    </p>
+                    <p
+                      style={{
+                        fontFamily: 'var(--font-host-grotesk)',
+                        fontSize: 'var(--text-caption)',
+                        color: 'var(--color-text-tertiary)',
+                        lineHeight: 'var(--lh-body-sm)',
+                        margin: 0,
+                        marginBottom: 'var(--space-4)',
+                      }}
+                    >
+                      {getCopy('mapa.programa.week1.learning.items')}
+                    </p>
+
+                    {/* Protocolo + MNN + Sesión */}
+                    {week1Items.slice(0, 3).map((item, idx) => (
                       <div
                         key={idx}
                         style={{
                           marginBottom:
-                            idx < week1Items.length - 1
-                              ? 'var(--space-5)'
+                            idx < 2
+                              ? 'var(--space-3)'
                               : '0',
                         }}
                       >
@@ -477,6 +551,9 @@ export default function AspiracionalTimeline({
                   </div>
                 </div>
               </div>
+
+              {/* ── Módulo de desbloqueos progresivos ── */}
+              <ProgressiveUnlockModule daysSinceCreation={daysSinceCreation} />
             </div>
           </>
         )}

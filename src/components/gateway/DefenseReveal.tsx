@@ -153,7 +153,7 @@ export default function DefenseReveal({ archetype, onContinue }: DefenseRevealPr
               textAlign: 'center',
             }}
           >
-            Por qu\u00e9 tu sistema nervioso hace esto
+            Por qué tu sistema nervioso hace esto
           </p>
           <p
             style={{
@@ -168,7 +168,7 @@ export default function DefenseReveal({ archetype, onContinue }: DefenseRevealPr
             <strong style={{ color: 'var(--color-text-primary)', fontWeight: 600 }}>
               {archetype.wound.toLowerCase()}
             </strong>{' '}
-            activ\u00f3 una armadura de{' '}
+            activó una armadura de{' '}
             <strong style={{ color: 'var(--color-text-primary)', fontWeight: 600 }}>
               {archetype.armor.toLowerCase()}
             </strong>
@@ -177,7 +177,7 @@ export default function DefenseReveal({ archetype, onContinue }: DefenseRevealPr
         </div>
       </div>
 
-      {/* Bot\u00f3n continuar */}
+      {/* Botón continuar */}
       <button
         onClick={onContinue}
         style={{
@@ -186,26 +186,19 @@ export default function DefenseReveal({ archetype, onContinue }: DefenseRevealPr
           maxWidth: '520px',
           padding: 'var(--space-4) var(--space-6)',
           borderRadius: 'var(--radius-lg)',
-          border: '1px solid rgba(205,121,108,0.25)',
-          background: 'transparent',
-          color: 'var(--color-text-secondary)',
+          border: 'none',
+          background: '#c27d70',
+          color: '#ffffff',
           fontFamily: 'var(--font-host-grotesk)',
           fontSize: 'var(--text-body-sm)',
+          fontWeight: 500,
           cursor: 'pointer',
-          transition: 'color var(--transition-fast), border-color var(--transition-fast)',
+          transition: 'opacity var(--transition-fast)',
           minHeight: '44px',
           pointerEvents: showButton ? 'auto' : 'none',
         }}
-        onMouseEnter={(e) => {
-          e.currentTarget.style.color = 'var(--color-text-primary)'
-          e.currentTarget.style.borderColor = 'rgba(205,121,108,0.5)'
-        }}
-        onMouseLeave={(e) => {
-          e.currentTarget.style.color = 'var(--color-text-secondary)'
-          e.currentTarget.style.borderColor = 'rgba(205,121,108,0.25)'
-        }}
       >
-        Ver mi evaluaci\u00f3n completa \u2192
+        Ver mi evaluación completa →
       </button>
     </div>
   )

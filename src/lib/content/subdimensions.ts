@@ -86,13 +86,13 @@ const SUBDIMENSION_CONFIGS: Record<DimensionKey, SubdimensionConfig> = {
     questions: [
       {
         id: 'd2_q1',
-        text: '¿Qué describe mejor tu patrón al irte a dormir?',
+        text: '¿Qué haces habitualmente en la última hora antes de dormir?',
         affectsSubdimension: 'd2_onset',
         options: [
-          { key: 'A', label: 'Tardo más de 45 minutos con la mente acelerada', value: 15 },
-          { key: 'B', label: 'Tardo 20-45 minutos, a veces con pensamientos intrusivos', value: 40 },
-          { key: 'C', label: 'Me duermo en 10-20 minutos la mayoría de noches', value: 70 },
-          { key: 'D', label: 'Me duermo casi al acostarme', value: 90 },
+          { key: 'A', label: 'Trabajo, emails o pantallas hasta el último minuto', value: 15 },
+          { key: 'B', label: 'Intento desconectar pero acabo mirando el móvil', value: 35 },
+          { key: 'C', label: 'Tengo una rutina de desconexión pero no siempre la cumplo', value: 60 },
+          { key: 'D', label: 'Tengo una rutina de desconexión que respeto consistentemente', value: 85 },
         ],
       },
       {
@@ -120,24 +120,24 @@ const SUBDIMENSION_CONFIGS: Record<DimensionKey, SubdimensionConfig> = {
     questions: [
       {
         id: 'd3_q1',
-        text: '¿Cuánto tiempo puedes mantener el foco en una tarea compleja sin distraerte?',
+        text: 'Después de una reunión intensa o una tarea que requiere mucha concentración, ¿cómo responde tu mente?',
         affectsSubdimension: 'd3_focus',
         options: [
-          { key: 'A', label: 'Menos de 10 minutos — la mente salta constantemente', value: 15 },
-          { key: 'B', label: '15-25 minutos con esfuerzo', value: 40 },
-          { key: 'C', label: '30-45 minutos la mayoría de veces', value: 65 },
-          { key: 'D', label: 'Puedo mantener foco profundo cuando lo necesito', value: 85 },
+          { key: 'A', label: 'Quedo completamente agotado — no puedo hacer nada más exigente ese día', value: 15 },
+          { key: 'B', label: 'Necesito al menos 1-2 horas para volver a pensar con claridad', value: 35 },
+          { key: 'C', label: 'Unos 20-30 minutos de pausa y puedo retomar', value: 65 },
+          { key: 'D', label: 'Me recupero rápido y puedo encadenar tareas exigentes', value: 85 },
         ],
       },
       {
         id: 'd3_q2',
-        text: 'Ante una decisión importante, ¿qué patrón reconoces?',
+        text: '¿Cuándo fue la última vez que tuviste una idea creativa o una solución inesperada a un problema?',
         affectsSubdimension: 'd3_decisions',
         options: [
-          { key: 'A', label: 'Parálisis total — no puedo decidir y pospongo todo', value: 15 },
-          { key: 'B', label: 'Decido pero luego obsesividad mental sobre si fue correcto', value: 35 },
-          { key: 'C', label: 'Me cuesta más que antes pero consigo decidir', value: 60 },
-          { key: 'D', label: 'Decido con claridad razonable', value: 80 },
+          { key: 'A', label: 'No lo recuerdo — mi mente solo ejecuta, no crea', value: 15 },
+          { key: 'B', label: 'Hace semanas o meses — antes me pasaba más', value: 35 },
+          { key: 'C', label: 'De vez en cuando, normalmente cuando estoy relajado', value: 60 },
+          { key: 'D', label: 'Con frecuencia — mi mente conecta ideas con facilidad', value: 85 },
         ],
       },
     ],
@@ -154,24 +154,24 @@ const SUBDIMENSION_CONFIGS: Record<DimensionKey, SubdimensionConfig> = {
     questions: [
       {
         id: 'd4_q1',
-        text: 'Cuando algo te frustra en el trabajo, ¿cómo sueles reaccionar?',
+        text: '¿Puedes identificar qué emoción concreta estás sintiendo mientras la sientes?',
         affectsSubdimension: 'd4_reactivity',
         options: [
-          { key: 'A', label: 'Explosión inmediata o implosión con obsesividad mental intensa', value: 15 },
-          { key: 'B', label: 'Irritabilidad contenida que dura horas', value: 35 },
-          { key: 'C', label: 'Molestia moderada que proceso en poco tiempo', value: 65 },
-          { key: 'D', label: 'Lo gestiono sin que me desestabilice significativamente', value: 85 },
+          { key: 'A', label: 'Normalmente solo noto "malestar general" sin poder especificar', value: 15 },
+          { key: 'B', label: 'A veces, pero suelo darme cuenta después — no en tiempo real', value: 35 },
+          { key: 'C', label: 'Casi siempre puedo nombrar lo que siento en el momento', value: 65 },
+          { key: 'D', label: 'Sí, y eso me ayuda a gestionarla antes de que escale', value: 85 },
         ],
       },
       {
         id: 'd4_q2',
-        text: '¿Cuántas emociones distintas recuerdas haber sentido en la última semana?',
+        text: 'Después de un conflicto o una situación emocionalmente intensa, ¿cuánto tardas en volver a tu estado normal?',
         affectsSubdimension: 'd4_range',
         options: [
-          { key: 'A', label: 'Básicamente una: agotamiento/nada', value: 10 },
-          { key: 'B', label: 'Dos o tres: cansancio, irritabilidad, algo de ansiedad', value: 35 },
-          { key: 'C', label: 'Cuatro o cinco: incluidas algunas positivas', value: 65 },
-          { key: 'D', label: 'Un rango amplio incluyendo momentos de alegría genuina', value: 85 },
+          { key: 'A', label: 'Horas o incluso días — la emoción me secuestra', value: 10 },
+          { key: 'B', label: 'Varias horas, con pensamientos repetitivos sobre lo ocurrido', value: 35 },
+          { key: 'C', label: 'Una hora aproximadamente, aunque me queda algo de tensión residual', value: 60 },
+          { key: 'D', label: 'Relativamente rápido — proceso y sigo adelante', value: 85 },
         ],
       },
     ],
@@ -188,13 +188,13 @@ const SUBDIMENSION_CONFIGS: Record<DimensionKey, SubdimensionConfig> = {
     questions: [
       {
         id: 'd5_q1',
-        text: '¿Cuándo fue la última vez que disfrutaste algo sin culpa, sin pensar en lo que "deberías" estar haciendo?',
+        text: 'Cuando piensas en los próximos 6 meses de tu vida, ¿qué sientes?',
         affectsSubdimension: 'd5_pleasure',
         options: [
-          { key: 'A', label: 'No lo recuerdo — hace meses', value: 10 },
-          { key: 'B', label: 'Hace semanas, y fue breve', value: 35 },
-          { key: 'C', label: 'La semana pasada, algún momento', value: 60 },
-          { key: 'D', label: 'Varias veces esta semana', value: 85 },
+          { key: 'A', label: 'Agotamiento anticipado — más de lo mismo o peor', value: 10 },
+          { key: 'B', label: 'Incertidumbre y algo de temor', value: 35 },
+          { key: 'C', label: 'Neutro — ni ilusión ni temor particular', value: 55 },
+          { key: 'D', label: 'Curiosidad o ilusión por algo concreto', value: 85 },
         ],
       },
       {

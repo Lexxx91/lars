@@ -75,7 +75,6 @@ export default function MultiSelectStep({
             fontFamily: 'var(--font-host-grotesk)',
             fontSize: 'var(--text-body-sm)',
             lineHeight: 'var(--lh-body-sm)',
-            fontStyle: 'italic',
             color: 'var(--color-text-secondary)',
             marginBottom: collectiveData ? 'var(--space-2)' : 'var(--space-5)',
           }}
@@ -233,15 +232,16 @@ export default function MultiSelectStep({
             width: '100%',
             padding: 'var(--space-4) var(--space-6)',
             borderRadius: 'var(--radius-lg)',
-            border: '1px solid var(--color-accent)',
-            background: 'var(--color-accent-subtle)',
-            color: 'var(--color-accent)',
+            border: 'none',
+            background: '#314135',
+            color: '#ffffff',
             fontFamily: 'var(--font-host-grotesk)',
             fontSize: 'var(--text-body)',
             fontWeight: 600,
             cursor: 'pointer',
             transition: 'background var(--transition-fast)',
             minHeight: '44px',
+            marginBottom: '30px',
           }}
         >
           Continuar

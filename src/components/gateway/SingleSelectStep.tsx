@@ -68,7 +68,6 @@ export default function SingleSelectStep({
             fontFamily: 'var(--font-host-grotesk)',
             fontSize: 'var(--text-body-sm)',
             lineHeight: 'var(--lh-body-sm)',
-            fontStyle: 'italic',
             color: 'var(--color-text-secondary)',
             marginBottom: collectiveData ? 'var(--space-2)' : 'var(--space-5)',
           }}

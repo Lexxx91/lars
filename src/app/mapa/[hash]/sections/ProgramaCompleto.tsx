@@ -473,7 +473,7 @@ function PhaseAccordion({
                     color: 'var(--color-text-tertiary)',
                     margin: 0,
                     marginTop: '2px',
-                    marginLeft: '72px',
+                    marginLeft: 'calc(72px + var(--space-2))',
                     lineHeight: 'var(--lh-body-sm)',
                   }}
                 >
@@ -482,7 +482,7 @@ function PhaseAccordion({
 
                 {/* Week 1 expandable detail */}
                 {isWeek1 && week1Open && (
-                  <div style={{ marginLeft: '72px' }}>
+                  <div style={{ marginLeft: 'calc(72px + var(--space-2))' }}>
                     <Week1Detail getCopy={getCopy} />
                   </div>
                 )}
