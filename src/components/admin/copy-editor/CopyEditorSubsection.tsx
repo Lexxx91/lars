@@ -7,7 +7,7 @@
  * Expands to show CopyEditorField for each entry.
  */
 
-import { useState, useEffect, useCallback, memo } from 'react'
+import { useState, useEffect, useCallback, useRef, memo } from 'react'
 import type { CopyEntry } from './types'
 import { SUBSECTION_LABELS } from './types'
 import { CopyEditorField } from './CopyEditorField'
@@ -30,8 +30,21 @@ function CopyEditorSubsectionInner({
   onSaved,
 }: CopyEditorSubsectionProps) {
   const [open, setOpen] = useState(defaultOpen)
+  const contentRef = useRef<HTMLDivElement>(null)
+  const [contentHeight, setContentHeight] = useState(0)
   const customizedCount = entries.filter((e) => e.isCustomized).length
   const label = SUBSECTION_LABELS[subsection] ?? subsection
+
+  // Measure real content height for smooth animation
+  useEffect(() => {
+    if (contentRef.current && open) {
+      const measure = () => setContentHeight(contentRef.current?.scrollHeight ?? 0)
+      measure()
+      // Re-measure after a tick (textareas may resize)
+      const timer = setTimeout(measure, 50)
+      return () => clearTimeout(timer)
+    }
+  }, [open, entries.length])
 
   // Auto-open when search query matches entries in this subsection
   useEffect(() => {
@@ -45,9 +58,11 @@ function CopyEditorSubsectionInner({
   return (
     <div style={{
       border: '1px solid rgba(30, 19, 16, 0.06)',
-      borderRadius: 'var(--radius-lg)',
+      borderRadius: 12,
       overflow: 'hidden',
       background: 'var(--color-bg-primary)',
+      transition: 'border-color 200ms ease, box-shadow 200ms ease',
+      boxShadow: open ? '0 1px 4px rgba(0,0,0,0.04)' : 'none',
     }}>
       {/* Header */}
       <button
@@ -57,63 +72,76 @@ function CopyEditorSubsectionInner({
           width: '100%',
           display: 'flex',
           alignItems: 'center',
-          gap: 'var(--space-3)',
-          padding: 'var(--space-4) var(--space-5)',
-          background: 'none',
+          gap: 12,
+          padding: '16px 24px',
+          background: open ? 'rgba(30, 19, 16, 0.015)' : 'none',
           border: 'none',
           cursor: 'pointer',
           textAlign: 'left',
+          transition: 'background 200ms ease',
         }}
       >
-        {/* Chevron */}
-        <span style={{
-          fontFamily: 'var(--font-host-grotesk)',
-          fontSize: 'var(--text-body-sm)',
-          color: 'var(--color-text-tertiary)',
-          transition: 'transform 200ms ease',
-          transform: open ? 'rotate(90deg)' : 'rotate(0deg)',
-          flexShrink: 0,
-        }}>
-          ▸
-        </span>
+        {/* Chevron — smooth SVG */}
+        <svg
+          width="12"
+          height="12"
+          viewBox="0 0 12 12"
+          fill="none"
+          style={{
+            transition: 'transform 250ms cubic-bezier(0.16, 1, 0.3, 1)',
+            transform: open ? 'rotate(90deg)' : 'rotate(0deg)',
+            flexShrink: 0,
+            opacity: 0.4,
+          }}
+        >
+          <path d="M4.5 2.5L8 6L4.5 9.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+        </svg>
 
         {/* Subsection name */}
         <span style={{
           fontFamily: 'var(--font-host-grotesk)',
-          fontSize: 'var(--text-body)',
+          fontSize: 15,
           fontWeight: 600,
           color: 'var(--color-text-primary)',
           flex: 1,
+          letterSpacing: '-0.01em',
         }}>
           {label}
         </span>
 
-        {/* Stats */}
+        {/* Entry count pill */}
         <span style={{
           fontFamily: 'var(--font-host-grotesk)',
-          fontSize: 'var(--text-caption)',
+          fontSize: 12,
+          fontWeight: 500,
           color: customizedCount > 0 ? '#CD796C' : 'var(--color-text-tertiary)',
-          fontWeight: customizedCount > 0 ? 500 : 400,
+          background: customizedCount > 0 ? 'rgba(205,121,108,0.08)' : 'rgba(30, 19, 16, 0.04)',
+          borderRadius: 9999,
+          padding: '3px 12px',
           flexShrink: 0,
+          transition: 'all 200ms ease',
         }}>
           {customizedCount > 0
-            ? `${customizedCount} de ${entries.length} editado${entries.length !== 1 ? 's' : ''}`
+            ? `${customizedCount}/${entries.length} editados`
             : `${entries.length} campo${entries.length !== 1 ? 's' : ''}`}
         </span>
       </button>
 
-      {/* Content */}
+      {/* Content — real measured height for smooth animation */}
       <div style={{
-        maxHeight: open ? `${entries.length * 300}px` : '0',
+        maxHeight: open ? contentHeight || 9999 : 0,
         overflow: 'hidden',
-        transition: 'max-height 300ms cubic-bezier(0.16, 1, 0.3, 1)',
+        transition: 'max-height 350ms cubic-bezier(0.16, 1, 0.3, 1)',
       }}>
-        <div style={{
-          display: 'flex',
-          flexDirection: 'column',
-          gap: 'var(--space-3)',
-          padding: open ? '0 var(--space-5) var(--space-5)' : '0 var(--space-5)',
-        }}>
+        <div
+          ref={contentRef}
+          style={{
+            display: 'flex',
+            flexDirection: 'column',
+            gap: 8,
+            padding: '4px 24px 24px',
+          }}
+        >
           {entries.map((entry) => (
             <CopyEditorField
               key={entry.id}

@@ -3,8 +3,8 @@
 /**
  * CopyManager — Admin page for editing all copy.
  *
- * Layout: tabs (Landing|Gateway|Mapa) + search + accordion editor + live preview.
- * Auto-save with debounce. Preview updates in real-time.
+ * Full-width editor with preview as a slide-out drawer.
+ * Tabs (Landing|Gateway|Mapa) + search + accordion editor.
  */
 
 import { useState, useEffect, useCallback, useMemo } from 'react'
@@ -30,10 +30,9 @@ export default function CopyManager() {
   const [searchQuery, setSearchQuery] = useState('')
   const [localValues, setLocalValues] = useState<Record<string, string>>({})
   const [activeSubsection, setActiveSubsection] = useState<string | undefined>()
-  const [isMobile, setIsMobile] = useState(false)
-  const [showMobilePreview, setShowMobilePreview] = useState(false)
   const [showHistory, setShowHistory] = useState(false)
   const [gatewayView, setGatewayView] = useState<'list' | 'mindmap'>('list')
+  const [showPreview, setShowPreview] = useState(false)
 
   // ── Fetch data ──
   const fetchData = useCallback(async () => {
@@ -44,8 +43,6 @@ export default function CopyManager() {
       if (!res.ok) throw new Error(`Error ${res.status}`)
       const json: CopyData = await res.json()
       setData(json)
-
-      // Initialize local values from current values
       const vals: Record<string, string> = {}
       for (const section of Object.values(json.sections)) {
         for (const entry of section) {
@@ -62,14 +59,13 @@ export default function CopyManager() {
 
   useEffect(() => { fetchData() }, [fetchData])
 
-  // ── Mobile detection ──
+  // ── Close drawer with Escape ──
   useEffect(() => {
-    const mq = window.matchMedia('(max-width: 1024px)')
-    setIsMobile(mq.matches)
-    const handler = (e: MediaQueryListEvent) => setIsMobile(e.matches)
-    mq.addEventListener('change', handler)
-    return () => mq.removeEventListener('change', handler)
-  }, [])
+    if (!showPreview) return
+    const handler = (e: KeyboardEvent) => { if (e.key === 'Escape') setShowPreview(false) }
+    window.addEventListener('keydown', handler)
+    return () => window.removeEventListener('keydown', handler)
+  }, [showPreview])
 
   // ── Filter entries by search ──
   const entries = data?.sections[activeTab] ?? []
@@ -93,7 +89,6 @@ export default function CopyManager() {
   }, [])
 
   const handleSaved = useCallback((key: string, isCustomized: boolean) => {
-    // Update isCustomized flag in-place without refetching (preserves scroll & accordion state)
     setData((prev) => {
       if (!prev) return prev
       const updated = { ...prev, sections: { ...prev.sections }, stats: { ...prev.stats } }
@@ -105,7 +100,6 @@ export default function CopyManager() {
           const wasCustomized = entry.isCustomized
           updated.sections[section] = [...entries]
           updated.sections[section][idx] = { ...entry, isCustomized, currentValue: localValues[key] ?? entry.currentValue }
-          // Update stats
           if (wasCustomized && !isCustomized) {
             updated.stats[section] = Math.max(0, (updated.stats[section] ?? 0) - 1)
           } else if (!wasCustomized && isCustomized) {
@@ -118,33 +112,19 @@ export default function CopyManager() {
     })
   }, [localValues])
 
-  const handleSearch = useCallback((q: string) => {
-    setSearchQuery(q)
-  }, [])
+  const handleSearch = useCallback((q: string) => { setSearchQuery(q) }, [])
+  const handleSectionRestore = useCallback(() => { fetchData() }, [fetchData])
+  const handleSubsectionFocus = useCallback((sub: string) => { setActiveSubsection(sub) }, [])
 
-  const handleSectionRestore = useCallback(() => {
-    fetchData()
-  }, [fetchData])
-
-  // Track which subsection the user is working in (for preview)
-  const handleSubsectionFocus = useCallback((sub: string) => {
-    setActiveSubsection(sub)
-  }, [])
-
-  // Navigate from flow map → scroll to accordion + open it
   const handleFlowNavigate = useCallback((subsection: string) => {
     const el = document.querySelector(`[data-subsection="${subsection}"]`)
     if (!el) return
     el.scrollIntoView({ behavior: 'smooth', block: 'start' })
-    // If accordion is closed, click the header to open it
     const btn = el.querySelector('button[aria-expanded="false"]')
-    if (btn instanceof HTMLElement) {
-      setTimeout(() => btn.click(), 350) // wait for scroll
-    }
+    if (btn instanceof HTMLElement) setTimeout(() => btn.click(), 350)
     setActiveSubsection(subsection)
   }, [])
 
-  // ── Preview component ──
   const PreviewComponent = activeTab === 'landing'
     ? CopyPreviewLanding
     : activeTab === 'gateway'
@@ -152,13 +132,13 @@ export default function CopyManager() {
       : CopyPreviewMapa
 
   return (
-    <div>
-      {/* Title + History toggle */}
+    <div style={{ maxWidth: 960, margin: '0 auto' }}>
+      {/* ── HEADER ── */}
       <div style={{
         display: 'flex',
         justifyContent: 'space-between',
         alignItems: 'center',
-        marginBottom: 'var(--space-6)',
+        marginBottom: 28,
       }}>
         <h1 style={{
           fontFamily: 'var(--font-host-grotesk)',
@@ -168,146 +148,118 @@ export default function CopyManager() {
         }}>
           Copy
         </h1>
-        <button
-          onClick={() => setShowHistory(!showHistory)}
-          style={{
-            fontFamily: 'var(--font-host-grotesk)',
-            fontSize: 'var(--text-body-sm)',
-            fontWeight: 500,
-            color: showHistory ? 'var(--color-accent)' : 'var(--color-text-tertiary)',
-            background: showHistory ? 'rgba(205,121,108,0.08)' : 'none',
-            border: showHistory ? '1px solid rgba(205,121,108,0.2)' : '1px solid rgba(38,66,51,0.10)',
-            borderRadius: 'var(--radius-pill)',
-            padding: 'var(--space-2) var(--space-4)',
-            cursor: 'pointer',
-            display: 'flex',
-            alignItems: 'center',
-            gap: 'var(--space-2)',
-            transition: 'all 150ms ease',
-          }}
-        >
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-            <path d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-          </svg>
-          Historial
-        </button>
-      </div>
-
-      {/* History view */}
-      {showHistory && <CopyEditorHistory />}
-
-      {/* Editor view */}
-      {!showHistory && <>
-      {/* Tabs */}
-      <div style={{
-        display: 'flex',
-        gap: 'var(--space-1)',
-        borderBottom: '1px solid rgba(30, 19, 16, 0.08)',
-        marginBottom: 'var(--space-4)',
-      }}>
-        {TABS.map((tab) => {
-          const isActive = activeTab === tab.key
-          const count = data?.stats[tab.key] ?? 0
-          return (
-            <button
-              key={tab.key}
-              onClick={() => { setActiveTab(tab.key); setSearchQuery(''); setActiveSubsection(undefined) }}
-              style={{
-                fontFamily: 'var(--font-host-grotesk)',
-                fontSize: 'var(--text-body-sm)',
-                fontWeight: isActive ? 600 : 400,
-                color: isActive ? '#CD796C' : 'var(--color-text-secondary)',
-                background: 'none',
-                border: 'none',
-                borderBottom: isActive ? '2px solid #CD796C' : '2px solid transparent',
-                padding: 'var(--space-3) var(--space-4)',
-                cursor: 'pointer',
-                display: 'flex',
-                alignItems: 'center',
-                gap: 'var(--space-2)',
-                transition: 'color 150ms ease, border-color 150ms ease',
-              }}
-            >
-              {tab.label}
-              {count > 0 && <TabBadge count={count} />}
-            </button>
-          )
-        })}
-      </div>
-
-      {/* Search + Stats row */}
-      <div style={{
-        display: 'flex',
-        alignItems: 'center',
-        gap: 'var(--space-4)',
-        marginBottom: 'var(--space-4)',
-        flexWrap: 'wrap',
-      }}>
-        <div style={{ flex: 1, minWidth: 200 }}>
-          <CopyEditorSearch onSearch={handleSearch} />
-        </div>
-        <div style={{
-          display: 'flex',
-          alignItems: 'center',
-          gap: 'var(--space-4)',
-          flexShrink: 0,
-        }}>
-          <span style={{
-            fontFamily: 'var(--font-host-grotesk)',
-            fontSize: 'var(--text-caption)',
-            color: 'var(--color-text-tertiary)',
-          }}>
-            {totalCustomized} de {totalFields} personalizado{totalFields !== 1 ? 's' : ''}
-          </span>
-          <CopyEditorSectionRestore
-            section={activeTab}
-            sectionLabel={TABS.find((t) => t.key === activeTab)?.label ?? activeTab}
-            customizedCount={totalCustomized}
-            onRestore={handleSectionRestore}
+        <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+          {/* Preview drawer toggle */}
+          <HeaderBtn
+            icon={<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="2" y="3" width="20" height="14" rx="2" /><path d="M8 21h8m-4-4v4" /></svg>}
+            label="Vista previa"
+            active={showPreview}
+            onClick={() => setShowPreview(!showPreview)}
+          />
+          <HeaderBtn
+            icon={<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>}
+            label="Historial"
+            active={showHistory}
+            onClick={() => setShowHistory(!showHistory)}
           />
         </div>
       </div>
 
-      {/* Content */}
-      {loading && <CopyEditorSkeleton />}
-      {error && <CopyEditorError message={error} onRetry={fetchData} />}
-      {!loading && !error && filteredEntries.length === 0 && searchQuery && (
-        <NoResults query={searchQuery} />
-      )}
-      {!loading && !error && entries.length === 0 && !searchQuery && <CopyEditorEmpty />}
+      {/* ── HISTORY VIEW ── */}
+      {showHistory && <CopyEditorHistory />}
 
-      {!loading && !error && filteredEntries.length > 0 && (
-        <>
-          {/* Gateway visual navigator — FULL WIDTH above grid */}
-          {activeTab === 'gateway' && (
-            <div style={{ marginBottom: 'var(--space-4)' }}>
-              {/* View toggle */}
-              <div style={{
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'flex-end',
-                marginBottom: 8,
-                gap: 4,
-              }}>
-                <ViewToggle label="Navegador" active={gatewayView === 'list'} onClick={() => setGatewayView('list')} />
-                <ViewToggle label="Mapa mental" active={gatewayView === 'mindmap'} onClick={() => setGatewayView('mindmap')} />
+      {/* ── EDITOR VIEW ── */}
+      {!showHistory && <>
+        {/* Tabs */}
+        <div style={{
+          display: 'flex',
+          gap: 0,
+          borderBottom: '1px solid rgba(30, 19, 16, 0.08)',
+          marginBottom: 20,
+        }}>
+          {TABS.map((tab) => {
+            const isActive = activeTab === tab.key
+            const count = data?.stats[tab.key] ?? 0
+            return (
+              <button
+                key={tab.key}
+                onClick={() => { setActiveTab(tab.key); setSearchQuery(''); setActiveSubsection(undefined) }}
+                style={{
+                  fontFamily: 'var(--font-host-grotesk)',
+                  fontSize: 14,
+                  fontWeight: isActive ? 600 : 400,
+                  color: isActive ? '#CD796C' : 'var(--color-text-secondary)',
+                  background: 'none',
+                  border: 'none',
+                  borderBottom: isActive ? '2px solid #CD796C' : '2px solid transparent',
+                  padding: '12px 20px',
+                  cursor: 'pointer',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: 8,
+                  transition: 'color 150ms ease, border-color 150ms ease',
+                }}
+              >
+                {tab.label}
+                {count > 0 && <TabBadge count={count} />}
+              </button>
+            )
+          })}
+        </div>
+
+        {/* Search + Stats */}
+        <div style={{
+          display: 'flex',
+          alignItems: 'center',
+          gap: 16,
+          marginBottom: 20,
+          flexWrap: 'wrap',
+        }}>
+          <div style={{ flex: 1, minWidth: 240 }}>
+            <CopyEditorSearch onSearch={handleSearch} />
+          </div>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 16, flexShrink: 0 }}>
+            <span style={{
+              fontFamily: 'var(--font-host-grotesk)',
+              fontSize: 13,
+              color: 'var(--color-text-tertiary)',
+            }}>
+              {totalCustomized} de {totalFields} personalizado{totalFields !== 1 ? 's' : ''}
+            </span>
+            <CopyEditorSectionRestore
+              section={activeTab}
+              sectionLabel={TABS.find((t) => t.key === activeTab)?.label ?? activeTab}
+              customizedCount={totalCustomized}
+              onRestore={handleSectionRestore}
+            />
+          </div>
+        </div>
+
+        {/* Loading / Error / Empty */}
+        {loading && <CopyEditorSkeleton />}
+        {error && <CopyEditorError message={error} onRetry={fetchData} />}
+        {!loading && !error && filteredEntries.length === 0 && searchQuery && <NoResults query={searchQuery} />}
+        {!loading && !error && entries.length === 0 && !searchQuery && <CopyEditorEmpty />}
+
+        {/* ── CONTENT ── */}
+        {!loading && !error && filteredEntries.length > 0 && (
+          <>
+            {/* Gateway visual navigator — full width */}
+            {activeTab === 'gateway' && (
+              <div style={{ marginBottom: 20 }}>
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end', marginBottom: 8, gap: 4 }}>
+                  <ViewToggle label="Navegador" active={gatewayView === 'list'} onClick={() => setGatewayView('list')} />
+                  <ViewToggle label="Mapa mental" active={gatewayView === 'mindmap'} onClick={() => setGatewayView('mindmap')} />
+                </div>
+                {gatewayView === 'list'
+                  ? <GatewayFlowMap entries={entries} onNavigate={handleFlowNavigate} />
+                  : <GatewayMindMap entries={entries} onNavigate={handleFlowNavigate} />
+                }
               </div>
-              {gatewayView === 'list'
-                ? <GatewayFlowMap entries={entries} onNavigate={handleFlowNavigate} />
-                : <GatewayMindMap entries={entries} onNavigate={handleFlowNavigate} />
-              }
-            </div>
-          )}
+            )}
 
-          {/* Two-column grid: editor + preview */}
-          <div style={{
-            display: 'grid',
-            gridTemplateColumns: isMobile ? '1fr' : '1fr 380px',
-            gap: 'var(--space-6)',
-            alignItems: 'start',
-          }}>
-            {/* Left: editor */}
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-3)' }}>
+            {/* Accordions — FULL WIDTH */}
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
               {Object.entries(grouped).map(([subsection, items], idx) => (
                 <div key={subsection} data-subsection={subsection} onFocus={() => handleSubsectionFocus(subsection)}>
                   <CopyEditorSubsection
@@ -321,115 +273,160 @@ export default function CopyManager() {
                 </div>
               ))}
             </div>
+          </>
+        )}
+      </>}
 
-            {/* Right: preview (desktop) */}
-            {!isMobile && (
-              <div style={{ position: 'sticky', top: 24 }}>
-                <p style={{
-                  fontFamily: 'var(--font-host-grotesk)',
-                  fontSize: 'var(--text-caption)',
-                  fontWeight: 600,
-                  color: 'var(--color-text-tertiary)',
-                  textTransform: 'uppercase',
-                  letterSpacing: '0.08em',
-                  marginBottom: 'var(--space-3)',
-                }}>
-                  Vista previa
-                </p>
-                <PreviewComponent
-                  localValues={localValues}
-                  activeSubsection={activeSubsection}
-                />
-              </div>
-            )}
-          </div>
-        </>
-      )}
+      {/* ── PREVIEW DRAWER ── */}
+      {/* Backdrop */}
+      <div
+        onClick={() => setShowPreview(false)}
+        style={{
+          position: 'fixed',
+          inset: 0,
+          background: 'rgba(0,0,0,0.3)',
+          zIndex: 400,
+          opacity: showPreview ? 1 : 0,
+          pointerEvents: showPreview ? 'auto' : 'none',
+          transition: 'opacity 250ms ease',
+        }}
+      />
 
-      {/* Mobile preview button */}
-      {isMobile && !loading && !error && filteredEntries.length > 0 && (
+      {/* Drawer panel */}
+      <div style={{
+        position: 'fixed',
+        top: 0,
+        right: 0,
+        bottom: 0,
+        width: 420,
+        maxWidth: '90vw',
+        background: '#0B0F0E',
+        zIndex: 401,
+        transform: showPreview ? 'translateX(0)' : 'translateX(100%)',
+        transition: 'transform 300ms cubic-bezier(0.16, 1, 0.3, 1)',
+        display: 'flex',
+        flexDirection: 'column',
+        boxShadow: showPreview ? '-8px 0 40px rgba(0,0,0,0.2)' : 'none',
+      }}>
+        {/* Drawer header */}
+        <div style={{
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          padding: '16px 20px',
+          borderBottom: '1px solid rgba(255,255,255,0.08)',
+          flexShrink: 0,
+        }}>
+          <span style={{
+            fontFamily: 'var(--font-host-grotesk)',
+            fontSize: 13,
+            fontWeight: 600,
+            color: 'rgba(255,255,255,0.7)',
+            textTransform: 'uppercase',
+            letterSpacing: '0.08em',
+          }}>
+            Vista previa
+          </span>
+          <button
+            onClick={() => setShowPreview(false)}
+            style={{
+              color: 'rgba(255,255,255,0.5)',
+              background: 'rgba(255,255,255,0.06)',
+              border: '1px solid rgba(255,255,255,0.08)',
+              borderRadius: 6,
+              fontSize: 12,
+              cursor: 'pointer',
+              padding: '4px 10px',
+              fontFamily: 'var(--font-host-grotesk)',
+              fontWeight: 500,
+              display: 'flex',
+              alignItems: 'center',
+              gap: 6,
+              transition: 'all 150ms ease',
+            }}
+          >
+            Cerrar
+            <span style={{ fontSize: 10, opacity: 0.5 }}>Esc</span>
+          </button>
+        </div>
+
+        {/* Drawer body */}
+        <div style={{ flex: 1, overflow: 'auto', padding: '20px' }}>
+          <PreviewComponent
+            localValues={localValues}
+            activeSubsection={activeSubsection}
+          />
+        </div>
+      </div>
+
+      {/* ── FLOATING PREVIEW BUTTON (when drawer is closed) ── */}
+      {!showPreview && !loading && !error && filteredEntries.length > 0 && !showHistory && (
         <button
-          onClick={() => setShowMobilePreview(true)}
+          onClick={() => setShowPreview(true)}
           style={{
             position: 'fixed',
-            bottom: 80,
-            right: 16,
+            bottom: 24,
+            right: 24,
             fontFamily: 'var(--font-host-grotesk)',
-            fontSize: 'var(--text-body-sm)',
+            fontSize: 13,
             fontWeight: 600,
             color: '#FFFFFF',
             background: '#264233',
             border: 'none',
             borderRadius: 'var(--radius-pill)',
-            padding: 'var(--space-3) var(--space-5)',
+            padding: '10px 20px',
             cursor: 'pointer',
-            boxShadow: '0 4px 16px rgba(0,0,0,0.15)',
+            boxShadow: '0 4px 20px rgba(0,0,0,0.15)',
             zIndex: 100,
+            display: 'flex',
+            alignItems: 'center',
+            gap: 8,
+            transition: 'all 150ms ease',
           }}
         >
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
+            <circle cx="12" cy="12" r="3" />
+          </svg>
           Vista previa
         </button>
       )}
-
-      {/* Mobile preview modal */}
-      {showMobilePreview && (
-        <div style={{
-          position: 'fixed',
-          inset: 0,
-          background: 'rgba(0,0,0,0.6)',
-          zIndex: 300,
-          display: 'flex',
-          flexDirection: 'column',
-        }}>
-          <div style={{
-            display: 'flex',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-            padding: 'var(--space-4)',
-            background: '#0B0F0E',
-          }}>
-            <span style={{
-              fontFamily: 'var(--font-host-grotesk)',
-              fontSize: 'var(--text-body-sm)',
-              fontWeight: 600,
-              color: '#FFFFFF',
-            }}>
-              Vista previa
-            </span>
-            <button
-              onClick={() => setShowMobilePreview(false)}
-              style={{
-                color: '#FFFFFF',
-                background: 'none',
-                border: 'none',
-                fontSize: 20,
-                cursor: 'pointer',
-                padding: 4,
-              }}
-            >
-              ✕
-            </button>
-          </div>
-          <div style={{ flex: 1, overflow: 'auto', background: '#0B0F0E' }}>
-            <PreviewComponent
-              localValues={localValues}
-              activeSubsection={activeSubsection}
-            />
-          </div>
-        </div>
-      )}
-      </>}
     </div>
   )
 }
 
-// ─── Small sub-components ────────────────────────────────────────────────────
+// ─── Sub-components ─────────────────────────────────────────────────────────
+
+function HeaderBtn({ icon, label, active, onClick }: {
+  icon: React.ReactNode; label: string; active: boolean; onClick: () => void
+}) {
+  return (
+    <button onClick={onClick} style={{
+      fontFamily: 'var(--font-host-grotesk)',
+      fontSize: 13,
+      fontWeight: 500,
+      color: active ? 'var(--color-accent)' : 'var(--color-text-tertiary)',
+      background: active ? 'rgba(205,121,108,0.08)' : 'none',
+      border: active ? '1px solid rgba(205,121,108,0.2)' : '1px solid rgba(38,66,51,0.10)',
+      borderRadius: 'var(--radius-pill)',
+      padding: '6px 14px',
+      cursor: 'pointer',
+      display: 'flex',
+      alignItems: 'center',
+      gap: 8,
+      transition: 'all 150ms ease',
+    }}>
+      {icon}
+      {label}
+    </button>
+  )
+}
 
 function TabBadge({ count }: { count: number }) {
   return (
     <span style={{
       fontFamily: 'var(--font-host-grotesk)',
-      fontSize: 'var(--text-caption)',
+      fontSize: 11,
       fontWeight: 600,
       color: 'var(--color-text-inverse)',
       background: '#CD796C',
@@ -444,21 +441,18 @@ function TabBadge({ count }: { count: number }) {
 
 function ViewToggle({ label, active, onClick }: { label: string; active: boolean; onClick: () => void }) {
   return (
-    <button
-      onClick={onClick}
-      style={{
-        fontFamily: 'var(--font-host-grotesk)',
-        fontSize: 'var(--text-caption)',
-        fontWeight: active ? 600 : 400,
-        color: active ? '#264233' : 'var(--color-text-tertiary)',
-        background: active ? 'rgba(38,66,51,0.08)' : 'none',
-        border: active ? '1px solid rgba(38,66,51,0.15)' : '1px solid transparent',
-        borderRadius: 'var(--radius-pill)',
-        padding: '4px 12px',
-        cursor: 'pointer',
-        transition: 'all 120ms ease',
-      }}
-    >
+    <button onClick={onClick} style={{
+      fontFamily: 'var(--font-host-grotesk)',
+      fontSize: 12,
+      fontWeight: active ? 600 : 400,
+      color: active ? '#264233' : 'var(--color-text-tertiary)',
+      background: active ? 'rgba(38,66,51,0.08)' : 'none',
+      border: active ? '1px solid rgba(38,66,51,0.15)' : '1px solid transparent',
+      borderRadius: 'var(--radius-pill)',
+      padding: '5px 14px',
+      cursor: 'pointer',
+      transition: 'all 120ms ease',
+    }}>
       {label}
     </button>
   )
@@ -466,13 +460,10 @@ function ViewToggle({ label, active, onClick }: { label: string; active: boolean
 
 function NoResults({ query }: { query: string }) {
   return (
-    <div style={{
-      textAlign: 'center',
-      padding: 'var(--space-10)',
-    }}>
+    <div style={{ textAlign: 'center', padding: 60 }}>
       <p style={{
         fontFamily: 'var(--font-host-grotesk)',
-        fontSize: 'var(--text-body)',
+        fontSize: 15,
         color: 'var(--color-text-tertiary)',
       }}>
         No se encontraron resultados para &ldquo;{query}&rdquo;
