@@ -15,6 +15,7 @@ import { CopyEditorSearch } from './copy-editor/CopyEditorSearch'
 import { CopyEditorSubsection } from './copy-editor/CopyEditorSubsection'
 import { CopyEditorSectionRestore } from './copy-editor/CopyEditorSectionRestore'
 import { CopyEditorSkeleton, CopyEditorError, CopyEditorEmpty } from './copy-editor/CopyEditorStates'
+import { GatewayFlowMap } from './copy-editor/GatewayFlowMap'
 import { CopyPreviewLanding } from './copy-editor/CopyPreviewLanding'
 import { CopyPreviewGateway } from './copy-editor/CopyPreviewGateway'
 import { CopyPreviewMapa } from './copy-editor/CopyPreviewMapa'
@@ -126,6 +127,19 @@ export default function CopyManager() {
   // Track which subsection the user is working in (for preview)
   const handleSubsectionFocus = useCallback((sub: string) => {
     setActiveSubsection(sub)
+  }, [])
+
+  // Navigate from flow map → scroll to accordion + open it
+  const handleFlowNavigate = useCallback((subsection: string) => {
+    const el = document.querySelector(`[data-subsection="${subsection}"]`)
+    if (!el) return
+    el.scrollIntoView({ behavior: 'smooth', block: 'start' })
+    // If accordion is closed, click the header to open it
+    const btn = el.querySelector('button[aria-expanded="false"]')
+    if (btn instanceof HTMLElement) {
+      setTimeout(() => btn.click(), 350) // wait for scroll
+    }
+    setActiveSubsection(subsection)
   }, [])
 
   // ── Preview component ──
@@ -269,8 +283,13 @@ export default function CopyManager() {
         }}>
           {/* Left: editor */}
           <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-3)' }}>
+            {/* Gateway flow map */}
+            {activeTab === 'gateway' && (
+              <GatewayFlowMap entries={entries} onNavigate={handleFlowNavigate} />
+            )}
+
             {Object.entries(grouped).map(([subsection, items], idx) => (
-              <div key={subsection} onFocus={() => handleSubsectionFocus(subsection)}>
+              <div key={subsection} data-subsection={subsection} onFocus={() => handleSubsectionFocus(subsection)}>
                 <CopyEditorSubsection
                   subsection={subsection}
                   entries={items}
