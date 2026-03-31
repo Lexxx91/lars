@@ -16,6 +16,7 @@ import { CopyEditorSubsection } from './copy-editor/CopyEditorSubsection'
 import { CopyEditorSectionRestore } from './copy-editor/CopyEditorSectionRestore'
 import { CopyEditorSkeleton, CopyEditorError, CopyEditorEmpty } from './copy-editor/CopyEditorStates'
 import { GatewayFlowMap } from './copy-editor/GatewayFlowMap'
+import { GatewayMindMap } from './copy-editor/GatewayMindMap'
 import { CopyPreviewLanding } from './copy-editor/CopyPreviewLanding'
 import { CopyPreviewGateway } from './copy-editor/CopyPreviewGateway'
 import { CopyPreviewMapa } from './copy-editor/CopyPreviewMapa'
@@ -32,6 +33,7 @@ export default function CopyManager() {
   const [isMobile, setIsMobile] = useState(false)
   const [showMobilePreview, setShowMobilePreview] = useState(false)
   const [showHistory, setShowHistory] = useState(false)
+  const [gatewayView, setGatewayView] = useState<'list' | 'mindmap'>('list')
 
   // ── Fetch data ──
   const fetchData = useCallback(async () => {
@@ -283,9 +285,32 @@ export default function CopyManager() {
         }}>
           {/* Left: editor */}
           <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-3)' }}>
-            {/* Gateway flow map */}
+            {/* Gateway visual navigator */}
             {activeTab === 'gateway' && (
-              <GatewayFlowMap entries={entries} onNavigate={handleFlowNavigate} />
+              <div>
+                {/* Toggle */}
+                <div style={{
+                  display: 'flex',
+                  justifyContent: 'flex-end',
+                  marginBottom: 8,
+                  gap: 4,
+                }}>
+                  <ViewToggle
+                    label="Lista"
+                    active={gatewayView === 'list'}
+                    onClick={() => setGatewayView('list')}
+                  />
+                  <ViewToggle
+                    label="Mapa mental"
+                    active={gatewayView === 'mindmap'}
+                    onClick={() => setGatewayView('mindmap')}
+                  />
+                </div>
+                {gatewayView === 'list'
+                  ? <GatewayFlowMap entries={entries} onNavigate={handleFlowNavigate} />
+                  : <GatewayMindMap entries={entries} onNavigate={handleFlowNavigate} />
+                }
+              </div>
             )}
 
             {Object.entries(grouped).map(([subsection, items], idx) => (
@@ -418,6 +443,28 @@ function TabBadge({ count }: { count: number }) {
     }}>
       {count}
     </span>
+  )
+}
+
+function ViewToggle({ label, active, onClick }: { label: string; active: boolean; onClick: () => void }) {
+  return (
+    <button
+      onClick={onClick}
+      style={{
+        fontFamily: 'var(--font-host-grotesk)',
+        fontSize: 'var(--text-caption)',
+        fontWeight: active ? 600 : 400,
+        color: active ? '#264233' : 'var(--color-text-tertiary)',
+        background: active ? 'rgba(38,66,51,0.08)' : 'none',
+        border: active ? '1px solid rgba(38,66,51,0.15)' : '1px solid transparent',
+        borderRadius: 'var(--radius-pill)',
+        padding: '4px 12px',
+        cursor: 'pointer',
+        transition: 'all 120ms ease',
+      }}
+    >
+      {label}
+    </button>
   )
 }
 
