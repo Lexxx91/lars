@@ -238,6 +238,25 @@ export default async function MapaPage({
   // en activeComparisons (acordeón del mapa).
   const pendingAmplifyInvite = null
 
+  // ── Book excerpt PDF URL ──────────────────────────────────────────────────
+  let bookExcerptPdfUrl: string | null = null
+  try {
+    const pdfSb = createAdminClient()
+    const { data: pdfConfig } = await pdfSb
+      .from('copy_overrides')
+      .select('value')
+      .eq('copy_key', '_config.book_excerpt_pdf_path')
+      .single()
+    if (pdfConfig?.value) {
+      const { data: signedData } = await pdfSb.storage
+        .from('book-excerpts')
+        .createSignedUrl(pdfConfig.value, 3600) // 1 hour
+      bookExcerptPdfUrl = signedData?.signedUrl ?? null
+    }
+  } catch {
+    // Silent — PDF is optional
+  }
+
   return (
     <>
     <SiteHeader variant="default" />
@@ -264,6 +283,8 @@ export default async function MapaPage({
       worstScore={worstScore}
       hasPaid={funnel?.converted_week1 === true || funnel?.paid === true}
       personalActions={personal_actions ?? []}
+      // Book excerpt PDF
+      bookExcerptPdfUrl={bookExcerptPdfUrl}
       // AMPLIFY
       amplifyInviteCount={amplifyInviteCount}
       profileCode={profileCode}

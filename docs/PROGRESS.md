@@ -123,6 +123,15 @@ Evoluciones del mapa (día 3-90), emails automáticos, analytics custom en Supab
   - Texto de EvolutionArchetype summary actualizado: "Descubrir tu mecanismo de defensa completo"
   - Sección "Tu nivel de regulación" reestructurada: Bloque 1 (score + severity en línea) separado visualmente de Bloque 2 (contexto comparativo con 69% bold)
 
+- ✅ **Feedback-F: Mapa Vivo — Programa Completo + Conversión Inmediata** (30 Mar 2026):
+  - Programa de 12 semanas completo en el mapa: 3 fases expandibles (El Despertar, La Metamorfosis, El Líder Fénix) con sus 4 semanas cada una, resultados y métricas por fase
+  - Semana 1 detallada: 3 presentaciones del Dr. Carlos Alvear, sección "Qué vas a aprender", Protocolo de Sueño, MNN©, Sesión 1:1
+  - Sesión con Javier disponible desde día 0 (antes requería día 10): CTA de booking en Zona 4 del mapa, visible inmediatamente tras los resultados del gateway
+  - Descarga de extracto del libro (PDF): sección en el mapa, admin para subir/reemplazar/eliminar PDF, Supabase Storage (bucket privado), URLs firmadas temporales
+  - ~60 nuevas claves de copy editables desde admin (programa, sesión CTA, extracto PDF)
+  - Fase 3 renombrada: "Volar Alto" → "El Líder Fénix"
+  - 0 errores TypeScript
+
 ### Pendiente (no bloquea lanzamiento)
 - Testimonios: siguen siendo placeholder — pendiente de testimonios reales de Javier
 - Stripe: en modo test — pasar a LIVE cuando esté listo

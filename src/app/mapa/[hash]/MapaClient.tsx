@@ -81,6 +81,8 @@ interface Props {
   worstScore: number
   hasPaid: boolean
   personalActions?: PersonalActionData[]
+  // Book excerpt PDF
+  bookExcerptPdfUrl?: string | null
   // AMPLIFY
   amplifyInviteCount: number
   profileCode: string | null
@@ -143,6 +145,8 @@ export default function MapaClient({
   worstScore,
   hasPaid,
   personalActions,
+  // Book excerpt PDF
+  bookExcerptPdfUrl,
   // AMPLIFY
   amplifyInviteCount,
   profileCode,
@@ -988,6 +992,9 @@ export default function MapaClient({
                 checkoutLoading={checkoutLoading}
                 checkoutError={checkoutError}
                 onRetryCheckout={() => { setCheckoutError(null); handleStripeCheckout() }}
+                mapHash={hash}
+                sessionBooked={evolution.session.booked}
+                bookExcerptPdfUrl={bookExcerptPdfUrl ?? null}
               />
             )}
 
