@@ -32,6 +32,7 @@ import type { BookExcerptData } from '@/lib/content/book-excerpts'
 import DimensionCard from './sections/DimensionCard'
 import EvolutionChart from './sections/EvolutionChart'
 import EvolutionArchetype from './sections/EvolutionArchetype'
+import FearsNeedsModule from './sections/FearsNeedsModule'
 import EvolutionSession from './sections/EvolutionSession'
 import EvolutionSubdimensions from './sections/EvolutionSubdimensions'
 import EvolutionBookExcerpt from './sections/EvolutionBookExcerpt'
@@ -450,6 +451,22 @@ export default function MapaClient({
       })
     }
 
+    // Day 1+ — "Miedos + Necesidades nucleares" (D2: módulo separado)
+    if (evolution.fearsNeeds.unlocked && archetype) {
+      accordionSections.push({
+        id: 'miedos-necesidades',
+        title: 'Tus miedos + necesidades',
+        summary: 'Desbloqueado',
+        badge: evolution.fearsNeeds.isNew ? 'nuevo' : null,
+        children: (
+          <FearsNeedsModule
+            archetype={archetype}
+            isNew={evolution.fearsNeeds.isNew}
+          />
+        ),
+      })
+    }
+
     // Day 10+ — "Sesión con Javier"
     if (evolution.session.unlocked) {
       accordionSections.push({
@@ -663,6 +680,7 @@ export default function MapaClient({
 
   const SCROLL_TO_ACCORDION: Record<string, string> = {
     'section-archetype': 'identidad',
+    'section-fears-needs': 'miedos-necesidades',
     'section-session': 'sesion',
     'section-subdimensions': 'profundidad',
     'section-book': 'libro',
@@ -671,7 +689,12 @@ export default function MapaClient({
     'mapa-completo': 'evaluacion',
   }
 
-  let accordionDefaultOpenId = 'evaluacion'
+  // D4: Día 2+ → dimensiones colapsadas por defecto. Si hay miedos+necesidades nuevo, abre eso.
+  let accordionDefaultOpenId = evolution.fearsNeeds.isNew
+    ? 'miedos-necesidades'
+    : evolution.daysSinceCreation >= 1
+      ? 'identidad'
+      : 'evaluacion'
   if (!isFirstVisit && lastVisitedAt) {
     const focus = selectFocus({
       evolution,

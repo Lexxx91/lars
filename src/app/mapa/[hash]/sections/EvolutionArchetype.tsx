@@ -1,12 +1,13 @@
 'use client'
 
 /**
- * EvolutionArchetype.tsx — Sección Día 3: Mecanismo de defensa adaptativo
+ * EvolutionArchetype.tsx — Sección Día 0: Mecanismo de defensa adaptativo
  *
- * Muestra el mecanismo de defensa con narrativa espejo + creencias + expandibles con patrones y 3 capas de necesidad.
+ * D3 (feedback Javi): Solo muestra narrativa + creencias + herida/armadura.
+ * Los miedos, 3 capas de necesidad y patrones de burnout se muestran
+ * en FearsNeedsModule.tsx (desbloqueado en Día 1).
  */
 
-import { useState } from 'react'
 import Badge from '@/components/ui/Badge'
 import type { ArchetypeData } from '@/lib/content/archetypes'
 
@@ -18,10 +19,6 @@ interface Props {
 }
 
 export default function EvolutionArchetype({ archetype, isNew, mode = 'full', onExpandRequest }: Props) {
-  const [patternsOpen, setPatternsOpen] = useState(false)
-  const [needsOpen, setNeedsOpen] = useState(false)
-  const [fearsOpen, setFearsOpen] = useState(false)
-
   // ── SUMMARY MODE ──
   if (mode === 'summary') {
     return (
@@ -270,14 +267,13 @@ export default function EvolutionArchetype({ archetype, isNew, mode = 'full', on
           backgroundColor: 'rgba(38,66,51,0.03)',
           borderRadius: 'var(--radius-md)',
           padding: 'var(--space-4)',
-          marginBottom: 'var(--space-4)',
         }}
       >
         <p
           style={{
             fontFamily: 'var(--font-host-grotesk)',
             fontSize: 'var(--text-body-sm)',
-            color: 'var(--color-text-secondary)',
+            color: 'var(--color-text-primary)',
             marginBottom: 'var(--space-2)',
           }}
         >
@@ -287,268 +283,17 @@ export default function EvolutionArchetype({ archetype, isNew, mode = 'full', on
         <p
           style={{
             fontFamily: 'var(--font-host-grotesk)',
-            fontSize: 'var(--text-caption)',
-            color: 'var(--color-accent)',
-            opacity: 0.8,
+            fontSize: 'var(--text-body-sm)',
+            color: '#E8735A',
+            borderTop: '1px solid rgba(232, 115, 90, 0.2)',
+            paddingTop: 'var(--space-2)',
           }}
         >
-          {archetype.snState}
+          {archetype.snState.charAt(0).toUpperCase() + archetype.snState.slice(1)}
         </p>
       </div>
 
-      {/* ── Expandible: Miedos principales ── */}
-      <button
-        onClick={() => setFearsOpen((o) => !o)}
-        style={{
-          width: '100%',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'space-between',
-          background: 'transparent',
-          border: 'none',
-          borderTop: 'var(--border-subtle)',
-          fontFamily: 'var(--font-host-grotesk)',
-          fontSize: 'var(--text-body-sm)',
-          color: 'var(--color-text-secondary)',
-          cursor: 'pointer',
-          padding: 'var(--space-4) 0',
-          transition: 'color var(--transition-base)',
-        }}
-      >
-        <span>Tus miedos principales</span>
-        <span
-          style={{
-            display: 'inline-block',
-            transform: fearsOpen ? 'rotate(180deg)' : 'none',
-            transition: 'transform var(--transition-base)',
-            fontSize: '16px',
-          }}
-        >
-          ↓
-        </span>
-      </button>
-
-      {fearsOpen && (
-        <div style={{ paddingBottom: 'var(--space-4)' }}>
-          {archetype.fears.map((fear) => (
-            <p
-              key={fear}
-              style={{
-                fontFamily: 'var(--font-host-grotesk)',
-                fontSize: 'var(--text-body-sm)',
-                lineHeight: 'var(--lh-body)',
-                color: 'var(--color-text-secondary)',
-                marginBottom: 'var(--space-2)',
-                paddingLeft: 'var(--space-3)',
-              }}
-            >
-              · {fear}{/[.!?]$/.test(fear.trim()) ? '' : '.'}
-            </p>
-          ))}
-        </div>
-      )}
-
-      {/* ── Expandible: Patrones de Burnout ── */}
-      <button
-        onClick={() => setPatternsOpen((o) => !o)}
-        style={{
-          width: '100%',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'space-between',
-          background: 'transparent',
-          border: 'none',
-          borderTop: 'var(--border-subtle)',
-          fontFamily: 'var(--font-host-grotesk)',
-          fontSize: 'var(--text-body-sm)',
-          color: 'var(--color-text-secondary)',
-          cursor: 'pointer',
-          padding: 'var(--space-4) 0',
-          transition: 'color var(--transition-base)',
-        }}
-      >
-        <span>Tus patrones de burnout</span>
-        <span
-          style={{
-            display: 'inline-block',
-            transform: patternsOpen ? 'rotate(180deg)' : 'none',
-            transition: 'transform var(--transition-base)',
-            fontSize: '16px',
-          }}
-        >
-          ↓
-        </span>
-      </button>
-
-      {patternsOpen && (
-        <div style={{ paddingBottom: 'var(--space-4)' }}>
-          {archetype.patterns.map((p) => (
-            <div key={p.name} style={{ marginBottom: 'var(--space-4)' }}>
-              <p
-                style={{
-                  fontFamily: 'var(--font-host-grotesk)',
-                  fontSize: 'var(--text-body-sm)',
-                  fontWeight: 600,
-                  color: 'var(--color-text-primary)',
-                  marginBottom: 'var(--space-1)',
-                }}
-              >
-                {p.name}
-              </p>
-              <p
-                style={{
-                  fontFamily: 'var(--font-host-grotesk)',
-                  fontSize: 'var(--text-body-sm)',
-                  lineHeight: 'var(--lh-body)',
-                  color: 'var(--color-text-secondary)',
-                }}
-              >
-                {p.description}
-              </p>
-            </div>
-          ))}
-        </div>
-      )}
-
-      {/* ── Expandible: Tres Capas de Necesidad ── */}
-      <button
-        onClick={() => setNeedsOpen((o) => !o)}
-        style={{
-          width: '100%',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'space-between',
-          background: 'transparent',
-          border: 'none',
-          borderTop: 'var(--border-subtle)',
-          fontFamily: 'var(--font-host-grotesk)',
-          fontSize: 'var(--text-body-sm)',
-          color: 'var(--color-text-secondary)',
-          cursor: 'pointer',
-          padding: 'var(--space-4) 0 0',
-          transition: 'color var(--transition-base)',
-        }}
-      >
-        <span>Tus tres capas de necesidad</span>
-        <span
-          style={{
-            display: 'inline-block',
-            transform: needsOpen ? 'rotate(180deg)' : 'none',
-            transition: 'transform var(--transition-base)',
-            fontSize: '16px',
-          }}
-        >
-          ↓
-        </span>
-      </button>
-
-      {needsOpen && (
-        <div style={{ paddingTop: 'var(--space-4)' }}>
-          {/* Bioquímica (más urgente) */}
-          <NeedLayerSection
-            layer={archetype.needs.biochemical}
-            urgencyLabel="Más urgente"
-            accentColor="var(--color-error)"
-          />
-          {/* Sistema Nervioso */}
-          <NeedLayerSection
-            layer={archetype.needs.nervousSystem}
-            urgencyLabel="Plataforma"
-            accentColor="var(--color-accent)"
-          />
-          {/* Emocional (más profunda) */}
-          <NeedLayerSection
-            layer={archetype.needs.emotional}
-            urgencyLabel="Más profunda"
-            accentColor="var(--color-success)"
-          />
-        </div>
-      )}
-    </div>
-  )
-}
-
-// ─── Subcomponente: capa de necesidad ─────────────────────────────────────────
-
-function NeedLayerSection({
-  layer,
-  urgencyLabel,
-  accentColor,
-}: {
-  layer: { title: string; items: string[]; explanation: string }
-  urgencyLabel: string
-  accentColor: string
-}) {
-  return (
-    <div
-      style={{
-        marginBottom: 'var(--space-5)',
-        paddingLeft: 'var(--space-4)',
-        borderLeft: `2px solid ${accentColor}`,
-      }}
-    >
-      <div
-        style={{
-          display: 'flex',
-          alignItems: 'center',
-          gap: 'var(--space-2)',
-          marginBottom: 'var(--space-2)',
-        }}
-      >
-        <span
-          style={{
-            fontFamily: 'var(--font-host-grotesk)',
-            fontSize: 'var(--text-body-sm)',
-            fontWeight: 600,
-            color: 'var(--color-text-primary)',
-          }}
-        >
-          {layer.title}
-        </span>
-        <span
-          style={{
-            fontFamily: 'var(--font-host-grotesk)',
-            fontSize: 'var(--text-caption)',
-            color: accentColor,
-            opacity: 0.8,
-          }}
-        >
-          {urgencyLabel}
-        </span>
-      </div>
-      <ul
-        style={{
-          listStyle: 'none',
-          padding: 0,
-          margin: '0 0 var(--space-2) 0',
-        }}
-      >
-        {layer.items.map((item) => (
-          <li
-            key={item}
-            style={{
-              fontFamily: 'var(--font-host-grotesk)',
-              fontSize: 'var(--text-body-sm)',
-              lineHeight: 'var(--lh-body)',
-              color: 'var(--color-text-secondary)',
-              marginBottom: 'var(--space-1)',
-            }}
-          >
-            · {item}{/[.!?]$/.test(item.trim()) ? '' : '.'}
-          </li>
-        ))}
-      </ul>
-      <p
-        style={{
-          fontFamily: 'var(--font-host-grotesk)',
-          fontSize: 'var(--text-caption)',
-          lineHeight: 'var(--lh-body)',
-          color: 'var(--color-text-tertiary)',
-          fontStyle: 'italic',
-        }}
-      >
-        {layer.explanation}
-      </p>
+      {/* D3: Miedos, necesidades y patrones ahora se muestran en FearsNeedsModule (Día 1+) */}
     </div>
   )
 }
