@@ -163,13 +163,13 @@ export default function ProgressiveUnlockModule({ daysSinceCreation = 0 }: Progr
                   {item.title}
                 </p>
 
-                {/* Subtitle (si existe) */}
+                {/* Subtitle (si existe) — F2: negro para activos, gris solo para bloqueados */}
                 {item.subtitle && (
                   <p
                     style={{
                       fontFamily: 'var(--font-host-grotesk)',
-                      fontSize: 'var(--text-caption)',
-                      color: 'var(--color-text-tertiary)',
+                      fontSize: 'var(--text-body-sm)',
+                      color: isActive ? 'var(--color-text-primary)' : 'var(--color-text-tertiary)',
                       margin: 0,
                       lineHeight: 'var(--lh-body-sm)',
                     }}

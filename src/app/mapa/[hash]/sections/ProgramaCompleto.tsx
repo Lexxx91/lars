@@ -94,7 +94,7 @@ function Week1Detail({ getCopy }: { getCopy: (key: string) => string }) {
       <p
         style={{
           fontFamily: 'var(--font-host-grotesk)',
-          fontSize: 'var(--text-caption)',
+          fontSize: 'var(--text-body-sm)',
           fontWeight: 600,
           color: 'var(--color-text-primary)',
           margin: 0,
@@ -123,7 +123,7 @@ function Week1Detail({ getCopy }: { getCopy: (key: string) => string }) {
           <span
             style={{
               fontFamily: 'var(--font-host-grotesk)',
-              fontSize: 'var(--text-caption)',
+              fontSize: 'var(--text-body-sm)',
               fontWeight: 600,
               color: 'var(--color-accent)',
               flexShrink: 0,
@@ -134,8 +134,8 @@ function Week1Detail({ getCopy }: { getCopy: (key: string) => string }) {
           <span
             style={{
               fontFamily: 'var(--font-host-grotesk)',
-              fontSize: 'var(--text-caption)',
-              color: 'var(--color-text-secondary)',
+              fontSize: 'var(--text-body-sm)',
+              color: 'var(--color-text-primary)',
               lineHeight: 'var(--lh-body-sm)',
             }}
           >
@@ -157,7 +157,7 @@ function Week1Detail({ getCopy }: { getCopy: (key: string) => string }) {
       <p
         style={{
           fontFamily: 'var(--font-host-grotesk)',
-          fontSize: 'var(--text-caption)',
+          fontSize: 'var(--text-body-sm)',
           fontWeight: 600,
           color: 'var(--color-text-primary)',
           margin: 0,
@@ -169,8 +169,8 @@ function Week1Detail({ getCopy }: { getCopy: (key: string) => string }) {
       <p
         style={{
           fontFamily: 'var(--font-host-grotesk)',
-          fontSize: 'var(--text-caption)',
-          color: 'var(--color-text-tertiary)',
+          fontSize: 'var(--text-body-sm)',
+          color: 'var(--color-text-primary)',
           lineHeight: 'var(--lh-body-sm)',
           margin: 0,
           marginBottom: 'var(--space-4)',
@@ -194,7 +194,7 @@ function Week1Detail({ getCopy }: { getCopy: (key: string) => string }) {
           <p
             style={{
               fontFamily: 'var(--font-host-grotesk)',
-              fontSize: 'var(--text-caption)',
+              fontSize: 'var(--text-body-sm)',
               fontWeight: 600,
               color: 'var(--color-text-primary)',
               margin: 0,
@@ -206,8 +206,8 @@ function Week1Detail({ getCopy }: { getCopy: (key: string) => string }) {
           <p
             style={{
               fontFamily: 'var(--font-host-grotesk)',
-              fontSize: 'var(--text-caption)',
-              color: 'var(--color-text-tertiary)',
+              fontSize: 'var(--text-body-sm)',
+              color: 'var(--color-text-primary)',
               margin: 0,
               marginTop: '2px',
               lineHeight: 'var(--lh-body-sm)',
@@ -395,9 +395,9 @@ function PhaseAccordion({
           <p
             style={{
               fontFamily: 'var(--font-host-grotesk)',
-              fontSize: 'var(--text-caption)',
+              fontSize: 'var(--text-body-sm)',
               fontStyle: 'italic',
-              color: 'var(--color-text-secondary)',
+              color: isActive ? 'var(--color-text-primary)' : 'var(--color-text-tertiary)',
               margin: 0,
               marginBottom: 'var(--space-4)',
               lineHeight: 'var(--lh-body-sm)',
@@ -429,9 +429,9 @@ function PhaseAccordion({
                   <span
                     style={{
                       fontFamily: 'var(--font-host-grotesk)',
-                      fontSize: 'var(--text-caption)',
+                      fontSize: 'var(--text-body-sm)',
                       fontWeight: 600,
-                      color: 'var(--color-accent)',
+                      color: isActive ? 'var(--color-accent)' : 'var(--color-text-tertiary)',
                       flexShrink: 0,
                       minWidth: '72px',
                     }}
@@ -441,9 +441,9 @@ function PhaseAccordion({
                   <span
                     style={{
                       fontFamily: 'var(--font-host-grotesk)',
-                      fontSize: 'var(--text-caption)',
+                      fontSize: 'var(--text-body-sm)',
                       fontWeight: 600,
-                      color: 'var(--color-text-primary)',
+                      color: isActive ? 'var(--color-text-primary)' : 'var(--color-text-tertiary)',
                       flexShrink: 0,
                     }}
                   >
@@ -469,8 +469,8 @@ function PhaseAccordion({
                 <p
                   style={{
                     fontFamily: 'var(--font-host-grotesk)',
-                    fontSize: 'var(--text-caption)',
-                    color: 'var(--color-text-tertiary)',
+                    fontSize: 'var(--text-body-sm)',
+                    color: isActive ? 'var(--color-text-primary)' : 'var(--color-text-tertiary)',
                     margin: 0,
                     marginTop: '2px',
                     marginLeft: 'calc(72px + var(--space-2))',
@@ -503,9 +503,9 @@ function PhaseAccordion({
             <p
               style={{
                 fontFamily: 'var(--font-host-grotesk)',
-                fontSize: 'var(--text-caption)',
+                fontSize: 'var(--text-body-sm)',
                 fontStyle: 'italic',
-                color: 'var(--color-text-secondary)',
+                color: isActive ? 'var(--color-text-primary)' : 'var(--color-text-tertiary)',
                 margin: 0,
                 lineHeight: 'var(--lh-body-sm)',
               }}
@@ -515,7 +515,7 @@ function PhaseAccordion({
             <p
               style={{
                 fontFamily: 'var(--font-host-grotesk)',
-                fontSize: 'var(--text-caption)',
+                fontSize: 'var(--text-body-sm)',
                 fontWeight: 600,
                 color: 'var(--color-accent)',
                 margin: 0,

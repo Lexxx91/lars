@@ -182,12 +182,12 @@ export default function AspiracionalTimeline({
         <ProgramaCompleto hasPaid={hasPaid} />
       </div>
 
-      {/* Nota de evolución del mapa */}
+      {/* Nota de evolución del mapa — F1: min 15px, F2: negro */}
       <p
         style={{
           fontFamily: 'var(--font-host-grotesk)',
-          fontSize: 'var(--text-caption)',
-          color: 'var(--color-text-tertiary)',
+          fontSize: 'var(--text-body-sm)',
+          color: 'var(--color-text-primary)',
           marginTop: 0,
           marginBottom: 'var(--space-6)',
           lineHeight: 'var(--lh-body-sm)',
@@ -475,7 +475,7 @@ export default function AspiracionalTimeline({
                     <p
                       style={{
                         fontFamily: 'var(--font-host-grotesk)',
-                        fontSize: 'var(--text-caption)',
+                        fontSize: 'var(--text-body-sm)',
                         fontWeight: 600,
                         color: 'var(--color-text-primary)',
                         margin: 0,
@@ -503,7 +503,7 @@ export default function AspiracionalTimeline({
                         <span
                           style={{
                             fontFamily: 'var(--font-host-grotesk)',
-                            fontSize: 'var(--text-caption)',
+                            fontSize: 'var(--text-body-sm)',
                             fontWeight: 600,
                             color: 'var(--color-accent)',
                             flexShrink: 0,
@@ -514,8 +514,8 @@ export default function AspiracionalTimeline({
                         <span
                           style={{
                             fontFamily: 'var(--font-host-grotesk)',
-                            fontSize: 'var(--text-caption)',
-                            color: 'var(--color-text-secondary)',
+                            fontSize: 'var(--text-body-sm)',
+                            color: 'var(--color-text-primary)',
                             lineHeight: 'var(--lh-body-sm)',
                           }}
                         >
@@ -529,7 +529,7 @@ export default function AspiracionalTimeline({
                     <p
                       style={{
                         fontFamily: 'var(--font-host-grotesk)',
-                        fontSize: 'var(--text-caption)',
+                        fontSize: 'var(--text-body-sm)',
                         fontWeight: 600,
                         color: 'var(--color-text-primary)',
                         margin: 0,
@@ -541,8 +541,8 @@ export default function AspiracionalTimeline({
                     <p
                       style={{
                         fontFamily: 'var(--font-host-grotesk)',
-                        fontSize: 'var(--text-caption)',
-                        color: 'var(--color-text-tertiary)',
+                        fontSize: 'var(--text-body-sm)',
+                        color: 'var(--color-text-primary)',
                         lineHeight: 'var(--lh-body-sm)',
                         margin: 0,
                         marginBottom: 'var(--space-4)',

@@ -111,8 +111,8 @@ export default function SessionCTA({ mapHash, booked: initialBooked, bookingDeta
           <p
             style={{
               fontFamily: 'var(--font-host-grotesk)',
-              fontSize: 'var(--text-caption)',
-              color: 'var(--color-text-secondary)',
+              fontSize: 'var(--text-body-sm)',
+              color: 'var(--color-text-primary)',
               margin: 0,
               marginBottom: 'var(--space-4)',
               lineHeight: 'var(--lh-body-sm)',
@@ -161,8 +161,8 @@ export default function SessionCTA({ mapHash, booked: initialBooked, bookingDeta
           <p
             style={{
               fontFamily: 'var(--font-host-grotesk)',
-              fontSize: 'var(--text-caption)',
-              color: 'var(--color-text-secondary)',
+              fontSize: 'var(--text-body-sm)',
+              color: 'var(--color-text-primary)',
               margin: 0,
               marginBottom: 'var(--space-4)',
               lineHeight: 'var(--lh-body-sm)',
