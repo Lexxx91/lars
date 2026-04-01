@@ -584,20 +584,8 @@ export default function ProgramaCompleto({ hasPaid }: ProgramaCompletoProps) {
             lineHeight: 1.3,
           }}
         >
-          Tu programa de 12 semanas
+          Programa L.A.R.S.© Liderazgo de alto rendimiento sostenible
         </h3>
-        <p
-          style={{
-            fontFamily: 'var(--font-host-grotesk)',
-            fontSize: 'var(--text-caption)',
-            color: 'var(--color-text-tertiary)',
-            margin: 0,
-            marginTop: '4px',
-            lineHeight: 'var(--lh-body-sm)',
-          }}
-        >
-          3 fases · Protocolo L.A.R.S.©
-        </p>
       </div>
 
       {/* Phase accordions */}

@@ -39,6 +39,7 @@ import EvolutionReevaluation from './sections/EvolutionReevaluation'
 import FocusBanner, { selectFocus } from './sections/FocusBanner'
 import MapaAccordion, { type AccordionSection } from './sections/MapaAccordion'
 import AspiracionalTimeline from './sections/AspiracionalTimeline'
+import ProgressiveUnlockModule from './sections/ProgressiveUnlockModule'
 
 // Personal action components
 import PersonalNote from '@/components/mapa/PersonalNote'
@@ -774,8 +775,9 @@ export default function MapaClient({
                 color: 'var(--color-accent)',
                 marginBottom: 'var(--space-3)',
               }}>
-                Tu análisis
+                Resultados de tu análisis
               </p>
+              {/* C1 — MENSAJES link a la derecha */}
               <h1 style={{
                 fontFamily: 'var(--font-plus-jakarta)',
                 fontSize: 'var(--text-h1)',
@@ -785,7 +787,7 @@ export default function MapaClient({
                 color: 'var(--color-text-primary)',
                 marginBottom: 'var(--space-2)',
               }}>
-                Tu mapa de neuroregulación
+                El mapa actual de tu sistema nervioso
               </h1>
               <p style={{
                 fontFamily: 'var(--font-host-grotesk)',
@@ -793,13 +795,13 @@ export default function MapaClient({
                 color: 'var(--color-text-tertiary)',
                 lineHeight: 'var(--lh-body-sm)',
               }}>
-                Calibrado con +25.000 evaluaciones reales · Basado en tus 10 respuestas
+                Este mapa evoluciona contigo: cada día aparece información nueva de valor. Puedes ver los hitos un poco más abajo. Vuelve cuando quieras.
               </p>
             </div>
 
             {/* Score global */}
             <div className="mapa-fade-up" style={{ animationDelay: '100ms' }}>
-              <Card style={{ border: `1px solid ${globalColor}33` }}>
+              <Card style={{ border: `1px solid ${globalColor}33`, boxShadow: '0 2px 12px rgba(0,0,0,0.08)' }}>
                 <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: 'var(--space-5)' }}>
                   <div>
                     <div style={{ display: 'flex', alignItems: 'baseline', gap: 'var(--space-1)', marginBottom: 'var(--space-2)' }}>
@@ -976,6 +978,13 @@ export default function MapaClient({
               />
             )}
 
+          </section>
+
+          {/* ══════════════════════════════════════════════════════════════════
+               HITOS — C5: Menú de desbloqueos (entre dimensiones y programa)
+             ══════════════════════════════════════════════════════════════════ */}
+          <section id="zona-hitos" style={{ marginBottom: 'var(--space-8)' }}>
+            <ProgressiveUnlockModule daysSinceCreation={evolution.daysSinceCreation} />
           </section>
 
           {/* ══════════════════════════════════════════════════════════════════

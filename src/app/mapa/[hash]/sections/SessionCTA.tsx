@@ -174,11 +174,11 @@ export default function SessionCTA({ mapHash, booked: initialBooked, bookingDeta
           <button
             onClick={() => setExpanded(true)}
             style={{
-              background: 'transparent',
-              color: 'var(--color-accent)',
-              border: '1px solid var(--color-accent)',
+              background: '#E8735A',
+              color: 'white',
+              border: 'none',
               padding: 'var(--space-2) var(--space-4)',
-              borderRadius: '9999px',
+              borderRadius: 'var(--radius-pill)',
               fontFamily: 'var(--font-host-grotesk)',
               fontSize: 'var(--text-body-sm)',
               fontWeight: 600,
@@ -187,12 +187,12 @@ export default function SessionCTA({ mapHash, booked: initialBooked, bookingDeta
               width: '100%',
             }}
             onMouseEnter={(e) => {
-              e.currentTarget.style.background = 'var(--color-accent)'
-              e.currentTarget.style.color = 'var(--color-text-inverse)'
+              e.currentTarget.style.background = '#d65a45'
+              e.currentTarget.style.transform = 'translateY(-1px)'
             }}
             onMouseLeave={(e) => {
-              e.currentTarget.style.background = 'transparent'
-              e.currentTarget.style.color = 'var(--color-accent)'
+              e.currentTarget.style.background = '#E8735A'
+              e.currentTarget.style.transform = 'translateY(0)'
             }}
           >
             {getCopy('mapa.sessionCta.button')}

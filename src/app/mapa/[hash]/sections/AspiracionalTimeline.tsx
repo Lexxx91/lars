@@ -109,6 +109,22 @@ export default function AspiracionalTimeline({
           BLOQUE A — Headline + Programa Completo (12 semanas)
           ══════════════════════════════════════════════════════════════════════ */}
 
+      {/* Label "TU SIGUIENTE PASO" */}
+      <span
+        style={{
+          display: 'inline-block',
+          fontFamily: 'var(--font-host-grotesk)',
+          fontSize: '10px',
+          fontWeight: 600,
+          color: '#E8735A',
+          letterSpacing: '0.08em',
+          textTransform: 'uppercase',
+          marginBottom: 'var(--space-2)',
+        }}
+      >
+        Tu siguiente paso
+      </span>
+
       {/* Headline */}
       <h3
         style={{
@@ -117,6 +133,7 @@ export default function AspiracionalTimeline({
           fontWeight: 700,
           color: 'var(--color-text-primary)',
           marginBottom: 'var(--space-2)',
+          marginTop: 0,
           textAlign: 'left',
           lineHeight: 1.3,
         }}
@@ -138,8 +155,32 @@ export default function AspiracionalTimeline({
         {getCopy('mapa.aspiracional.headline2')}
       </p>
 
+      {/* C3 — Botón "Los detalles" outline en bloque CTA verde */}
+      <button
+        onClick={() => {
+          const el = document.getElementById('programa-detalle')
+          if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' })
+        }}
+        style={{
+          background: 'transparent',
+          color: 'var(--color-text-primary)',
+          border: '1px solid var(--color-border)',
+          padding: 'var(--space-2) var(--space-5)',
+          borderRadius: 'var(--radius-pill)',
+          fontFamily: 'var(--font-host-grotesk)',
+          fontSize: 'var(--text-body-sm)',
+          fontWeight: 500,
+          cursor: 'pointer',
+          marginBottom: 'var(--space-6)',
+        }}
+      >
+        Los detalles →
+      </button>
+
       {/* Programa de 12 semanas expandible */}
-      <ProgramaCompleto hasPaid={hasPaid} />
+      <div id="programa-detalle">
+        <ProgramaCompleto hasPaid={hasPaid} />
+      </div>
 
       {/* Nota de evolución del mapa */}
       <p
@@ -152,7 +193,7 @@ export default function AspiracionalTimeline({
           lineHeight: 'var(--lh-body-sm)',
         }}
       >
-        {getCopy('mapa.aspiracional.mapNote')}
+        ¿Quieres saber si el programa puede encajar en tu agenda? ¿Tienes dudas que necesites que te aclaremos? Reserva una cita de 20'' sin compromiso.
       </p>
 
       {/* ══════════════════════════════════════════════════════════════════════
@@ -552,8 +593,7 @@ export default function AspiracionalTimeline({
                 </div>
               </div>
 
-              {/* ── Módulo de desbloqueos progresivos ── */}
-              <ProgressiveUnlockModule daysSinceCreation={daysSinceCreation} />
+              {/* ProgressiveUnlockModule moved to MapaClient — C5: entre dimensiones y programa */}
             </div>
           </>
         )}
