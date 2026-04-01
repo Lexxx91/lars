@@ -46,74 +46,7 @@ export function CopyEditorSectionRestore({
     }
   }, [confirming, section, onRestore])
 
-  if (customizedCount === 0) return null
-
-  return (
-    <div style={{
-      display: 'flex',
-      alignItems: 'center',
-      gap: 'var(--space-3)',
-    }}>
-      {confirming ? (
-        <>
-          <span style={{
-            fontFamily: 'var(--font-host-grotesk)',
-            fontSize: 'var(--text-caption)',
-            color: 'var(--color-text-secondary)',
-          }}>
-            ¿Restaurar {customizedCount} texto{customizedCount !== 1 ? 's' : ''} de {sectionLabel}?
-          </span>
-          <button
-            onClick={handleRestore}
-            disabled={restoring}
-            style={{
-              fontFamily: 'var(--font-host-grotesk)',
-              fontSize: 'var(--text-caption)',
-              fontWeight: 600,
-              color: 'var(--color-error)',
-              background: 'none',
-              border: '1px solid rgba(196, 64, 64, 0.3)',
-              borderRadius: 'var(--radius-pill)',
-              padding: '2px 12px',
-              cursor: restoring ? 'not-allowed' : 'pointer',
-              opacity: restoring ? 0.5 : 1,
-            }}
-          >
-            {restoring ? 'Restaurando...' : 'Sí, restaurar'}
-          </button>
-          <button
-            onClick={() => setConfirming(false)}
-            style={{
-              fontFamily: 'var(--font-host-grotesk)',
-              fontSize: 'var(--text-caption)',
-              color: 'var(--color-text-tertiary)',
-              background: 'none',
-              border: 'none',
-              cursor: 'pointer',
-              textDecoration: 'underline',
-              padding: 0,
-            }}
-          >
-            Cancelar
-          </button>
-        </>
-      ) : (
-        <button
-          onClick={handleRestore}
-          style={{
-            fontFamily: 'var(--font-host-grotesk)',
-            fontSize: 'var(--text-caption)',
-            color: '#CD796C',
-            background: 'none',
-            border: 'none',
-            cursor: 'pointer',
-            textDecoration: 'underline',
-            padding: 0,
-          }}
-        >
-          Restaurar toda la sección
-        </button>
-      )}
-    </div>
-  )
+  /* Botón "Restaurar toda la sección" desactivado por petición de Alex —
+     las restauraciones se harán manualmente a través de Claude. */
+  return null
 }

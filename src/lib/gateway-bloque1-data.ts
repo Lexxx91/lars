@@ -172,7 +172,7 @@ const PRIMERA_VERDAD_MAP: Record<string, ReflectionContent> = {
   'BC': {
     text: 'Tu cuerpo intenta dormir pero no logra recuperarse. Las consecuencias que ves — el deterioro cognitivo, los conflictos personales, la caída de rendimiento — son síntomas de un sistema que no se está regenerando de verdad.',
     collectiveData:
-      'El 82% de las personas con consecuencias serias y sueño no reparador tienen una deficiencia metabólica o nutricional que bloquea la recuperación profunda. Es identificable y corregible.',
+      'El 82% de las personas con consecuencias serias y sueño no reparador tienen una posible deficiencia metabólica o nutricional que bloquea la recuperación profunda. Es identificable y corregible.',
   },
   'BD': {
     text: 'Crees que funcionas porque el estrés crónico ha entumecido tu percepción de cansancio. Pero tu sistema está enviando mensajes a través de las consecuencias que ves: conflictos, errores, desconexión.',
@@ -192,7 +192,7 @@ const PRIMERA_VERDAD_MAP: Record<string, ReflectionContent> = {
       'El 68% de personas que sienten atrapadas + hiperactividad mental reportan una sensación de liberación después de tomar decisiones intencionales sobre su contexto — incluso pequeñas.',
   },
   'CB': {
-    text: 'Este síntoma puede estar relacionado con una déficit metabólico o con deficiencias en los neurotransmisores y hormonas que regulan los ciclos de sueño y vigilia.',
+    text: 'Este síntoma puede estar relacionado con un posible déficit metabólico o con posibles deficiencias en los neurotransmisores y hormonas que regulan los ciclos de sueño y vigilia.',
     collectiveData:
       'El 82% de las personas con señales físicas persistentes y sueño no reparador muestran activación crónica del sistema de alerta. Vivir en modo huida compromete seriamente tu salud física y emocional. Tus relaciones y tus logros se ponen en riesgo.',
   },

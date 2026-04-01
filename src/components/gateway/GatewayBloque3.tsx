@@ -91,6 +91,22 @@ export default function GatewayBloque3({
     [onComplete]
   )
 
+  /* ── Back navigation within Bloque3 (fix G1: Volver no funcionaba en email 95%) ── */
+  const PREV_STEP: Partial<Record<Step, Step>> = {
+    archetype: 'bisagra',
+    email: 'archetype',
+  }
+
+  const handleBack = useCallback(() => {
+    const prev = PREV_STEP[step]
+    if (!prev) {
+      // bisagra (first step) → exit to previous bloque
+      onClose?.()
+      return
+    }
+    changeStep(prev)
+  }, [step, onClose, changeStep])
+
   const progress = PROGRESS[step]
   const progressLabel = `Tu regulación: ${progress}% completo`
 
@@ -125,7 +141,7 @@ export default function GatewayBloque3({
         }}
       >
         <div style={{ maxWidth: '540px', margin: '0 auto' }}>
-          {onClose && (
+          {(onClose || PREV_STEP[step]) && (
             <div
               style={{
                 display: 'flex',
@@ -134,8 +150,8 @@ export default function GatewayBloque3({
               }}
             >
               <button
-                onClick={onClose}
-                aria-label="Volver a la landing"
+                onClick={handleBack}
+                aria-label={PREV_STEP[step] ? 'Volver a la pantalla anterior' : 'Volver a la landing'}
                 style={{
                   background: 'none',
                   border: 'none',

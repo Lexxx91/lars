@@ -68,15 +68,16 @@ export const EMAIL_DEFAULTS: Record<string, EmailTemplateDefaults> = {
     dynamicNote:
       'Este email tiene elementos estructurales fijos (cita destacada, firma, enlace de reactivación). Solo el texto narrativo principal, el asunto y el botón son editables.',
   },
-  amplify_comparison_ready: {
-    subject: 'Tu comparación de mapas está lista',
-    bodyContent:
-      'ha completado su diagnóstico.\n\nAhora podéis ver cómo se comparan vuestras dimensiones. Las brechas compartidas revelan lo que ningún mapa individual puede mostrar.',
-    ctaText: 'Ver comparación',
-    isDynamic: true,
-    dynamicNote:
-      'El cuerpo incluye las iniciales del invitado dinámicamente. Solo el asunto y el texto del botón son editables.',
-  },
+  /* AMPLIFY hidden — reactivar cuando se necesite */
+  // amplify_comparison_ready: {
+  //   subject: 'Tu comparación de mapas está lista',
+  //   bodyContent:
+  //     'ha completado su diagnóstico.\n\nAhora podéis ver cómo se comparan vuestras dimensiones. Las brechas compartidas revelan lo que ningún mapa individual puede mostrar.',
+  //   ctaText: 'Ver comparación',
+  //   isDynamic: true,
+  //   dynamicNote:
+  //     'El cuerpo incluye las iniciales del invitado dinámicamente. Solo el asunto y el texto del botón son editables.',
+  // },
   post_pago: {
     subject: 'Tu Semana 1 empieza ahora — aquí tienes todo',
     bodyContent: 'Has dado el paso que el 97% no da. Lo que sigue es que tu cuerpo note la diferencia.',

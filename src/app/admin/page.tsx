@@ -220,12 +220,15 @@ export default function AdminHub() {
         {/* Stat Cards + AMPLIFY */}
         <div>
           <HubStatCards data={data?.stats ?? null} loading={loading} />
-          <div style={{ marginTop: 'var(--space-5)' }}>
-            <HubAmplifyCard
-              data={amplifyData}
-              loading={loading}
-            />
-          </div>
+          {/* AMPLIFY hidden — reactivar cuando se necesite */}
+          {false && (
+            <div style={{ marginTop: 'var(--space-5)' }}>
+              <HubAmplifyCard
+                data={amplifyData}
+                loading={loading}
+              />
+            </div>
+          )}
         </div>
 
         {/* Alerts */}

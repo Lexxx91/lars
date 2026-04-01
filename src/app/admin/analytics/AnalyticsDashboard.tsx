@@ -376,10 +376,13 @@ export default function AnalyticsDashboard() {
       <AnalyticsGeo period={period} />
 
       {/* ── AMPLIFY ── */}
-      <AnalyticsAmplify
-        data={amplifyStats}
-        loading={loading}
-      />
+      {/* AMPLIFY hidden — reactivar cuando se necesite */}
+      {false && (
+        <AnalyticsAmplify
+          data={amplifyStats}
+          loading={loading}
+        />
+      )}
 
       {/* ── Últimas Evaluaciones ── */}
       <Card style={{ padding: 'var(--space-6)', overflow: 'hidden' }}>

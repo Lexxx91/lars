@@ -897,9 +897,9 @@ export function getMapaDefaults(): CopySection[] {
       section: 'mapa',
       subsection: 'programa',
       label: 'Semana 1 — items de aprendizaje',
-      defaultValue: 'Neurociencia real de tu colapso · Cartografía corporal del agotamiento · Los 7 patrones de burnout profesional · Métricas base: MBI e indicadores biológicos · Primera práctica de regulación vagal',
+      defaultValue: 'Neurociencia real de tu colapso. · Cartografía corporal del agotamiento. · Los 7 patrones de burnout profesional. · Métricas base: MBI e indicadores biológicos. · Primera práctica de regulación vagal.',
       fieldType: 'long',
-      hint: 'Separados por " · " (punto medio con espacios).',
+      hint: 'Separados por " · " (punto medio con espacios). Cada item debe terminar con punto.',
     },
     {
       id: 'mapa.programa.week1.sleep.title',

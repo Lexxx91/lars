@@ -540,7 +540,7 @@ export function getGatewayBloque1Defaults(): CopySection[] {
       section: 'gateway',
       subsection: 'primeraverdad',
       label: 'P1=Consecuencias + P2=Sueño no reparador → Dato colectivo',
-      defaultValue: 'El 82% de las personas con consecuencias serias y sueño no reparador tienen una deficiencia metabólica o nutricional que bloquea la recuperación profunda. Es identificable y corregible.',
+      defaultValue: 'El 82% de las personas con consecuencias serias y sueño no reparador tienen una posible deficiencia metabólica o nutricional que bloquea la recuperación profunda. Es identificable y corregible.',
       fieldType: 'long',
     },
     {
@@ -601,7 +601,7 @@ export function getGatewayBloque1Defaults(): CopySection[] {
       section: 'gateway',
       subsection: 'primeraverdad',
       label: 'P1=Atrapado + P2=Despertar nocturno → Reflexión',
-      defaultValue: 'Este síntoma puede estar relacionado con una déficit metabólico o con deficiencias en los neurotransmisores y hormonas que regulan los ciclos de sueño y vigilia.',
+      defaultValue: 'Este síntoma puede estar relacionado con un posible déficit metabólico o con posibles deficiencias en los neurotransmisores y hormonas que regulan los ciclos de sueño y vigilia.',
       fieldType: 'long',
       hint: 'Cuando elige "Me siento atrapado" + "Me despierto a las 3-4".',
     },

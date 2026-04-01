@@ -342,7 +342,7 @@ export default function EvolutionArchetype({ archetype, isNew, mode = 'full', on
                 paddingLeft: 'var(--space-3)',
               }}
             >
-              · {fear}
+              · {fear}{/[.!?]$/.test(fear.trim()) ? '' : '.'}
             </p>
           ))}
         </div>
@@ -534,7 +534,7 @@ function NeedLayerSection({
               marginBottom: 'var(--space-1)',
             }}
           >
-            · {item}
+            · {item}{/[.!?]$/.test(item.trim()) ? '' : '.'}
           </li>
         ))}
       </ul>

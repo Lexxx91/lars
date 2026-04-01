@@ -827,7 +827,7 @@ input[type="range"]::-moz-range-track {
 }
 
 .site-header__logo {
-  height: 24px;
+  height: 34px;  /* was 24px — +40% per Javi feedback A4 */
   width: auto;
 }
 
@@ -839,7 +839,7 @@ input[type="range"]::-moz-range-track {
     padding: 0 40px;
   }
   .site-header__logo {
-    height: 28px;
+    height: 39px;  /* was 28px — +40% */
   }
 }
 
@@ -849,7 +849,7 @@ input[type="range"]::-moz-range-track {
     padding: 0 64px;
   }
   .site-header__logo {
-    height: 32px;
+    height: 45px;  /* was 32px — +40% */
   }
 }
 

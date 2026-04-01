@@ -439,7 +439,8 @@ export function GatewayMindMap({ entries, onNavigate }: Props) {
       {/* CANVAS */}
       <div
         style={{ flex: 1, height: fullscreen ? undefined : 560, cursor: dragging.current ? 'grabbing' : 'grab', overflow: 'hidden', userSelect: 'none' }}
-        onMouseDown={onDown} onMouseMove={onMove} onMouseUp={onUp} onMouseLeave={onUp} onWheel={onWheel}
+        onMouseDown={onDown} onMouseMove={onMove} onMouseUp={onUp} onMouseLeave={onUp}
+        /* onWheel disabled — Javi feedback G2: zoom solo con botones +/- */
       >
         <svg width="100%" height="100%" viewBox={`${bounds.x} ${bounds.y} ${bounds.w} ${bounds.h}`} preserveAspectRatio="xMidYMid meet"
           style={{ transform: `translate(${pan.x}px,${pan.y}px) scale(${scale})`, transformOrigin: 'center center', transition: dragging.current ? 'none' : 'transform 150ms ease-out' }}>

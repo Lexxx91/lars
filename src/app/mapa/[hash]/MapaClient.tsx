@@ -433,11 +433,11 @@ export default function MapaClient({
       ),
     })
 
-    // Day 3+ — "Tu Identidad"
+    // Day 0+ — "Mecanismo de defensa adaptativo"
     if (evolution.archetype.unlocked && archetype) {
       accordionSections.push({
         id: 'identidad',
-        title: 'Tu Identidad',
+        title: 'Mecanismo de defensa adaptativo',
         summary: archetype.name,
         badge: evolution.archetype.isNew ? 'nuevo' : null,
         children: (
@@ -590,7 +590,9 @@ export default function MapaClient({
     }
 
     // AMPLIFY — "Comparar tu mapa" (≥7 days, ≥1 return visit, <5 invites)
-    if (meetsTimeRequirement && hasInviteCapacity) {
+    /* AMPLIFY hidden — reactivar cuando se necesite */
+    const AMPLIFY_ENABLED = false
+    if (AMPLIFY_ENABLED && meetsTimeRequirement && hasInviteCapacity) {
       accordionSections.push({
         id: 'amplify',
         title: getCopy('amplify.accordion.title'),
@@ -632,7 +634,7 @@ export default function MapaClient({
 
     // Disabled teaser rows for upcoming unlocks
     const UNLOCK_SCHEDULE = [
-      { key: 'archetype', id: 'identidad', title: 'Tu Identidad', day: 3 },
+      { key: 'archetype', id: 'identidad', title: 'Mecanismo de defensa adaptativo', day: 3 },
       { key: 'session', id: 'sesion', title: 'Sesión con Javier', day: 10 },
       { key: 'subdimensions', id: 'profundidad', title: 'Tu Profundidad', day: 14 },
       { key: 'bookExcerpt', id: 'libro', title: 'Extracto del libro', day: 21 },

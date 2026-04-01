@@ -539,16 +539,19 @@ export default function LeadDetailPanel({ hash, data, loading, onClose, onRefres
               </section>
             )}
 
-            {/* ── Acción sugerida ── */}
-            {data.suggested_action && (
-              <section style={{ marginBottom: 'var(--space-6)' }}>
-                <SectionHeader title="Acción sugerida" />
+            {/* ── Tomar acción (siempre visible — A5) ── */}
+            <section style={{ marginBottom: 'var(--space-6)' }}>
+              <SectionHeader title="Tomar acción" />
+
+              {/* Acción sugerida (solo cuando existe recomendación automática) */}
+              {data.suggested_action && (
                 <div
                   style={{
                     background: 'var(--color-bg-tertiary)',
                     borderRadius: 'var(--radius-md)',
                     padding: 'var(--space-5)',
                     borderLeft: '3px solid var(--color-accent)',
+                    marginBottom: 'var(--space-3)',
                   }}
                 >
                   <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 10 }}>
@@ -590,79 +593,36 @@ export default function LeadDetailPanel({ hash, data, loading, onClose, onRefres
                       fontSize: '13px',
                       lineHeight: 1.55,
                       color: 'var(--color-text-secondary)',
-                      margin: '0 0 12px',
+                      margin: 0,
                     }}
                   >
                     {data.suggested_action!.reason}
                   </p>
-                  <button
-                    onClick={() => setActionModalOpen(true)}
-                    style={{
-                      padding: '8px 20px',
-                      borderRadius: 'var(--radius-pill)',
-                      border: 'none',
-                      background: 'var(--color-accent)',
-                      color: 'var(--color-text-inverse)',
-                      fontFamily: 'var(--font-host-grotesk)',
-                      fontSize: '13px',
-                      fontWeight: 500,
-                      cursor: 'pointer',
-                    }}
-                  >
-                    Tomar acción →
-                  </button>
                 </div>
-              </section>
-            )}
+              )}
+
+              {/* Botón siempre visible — contacto manual independiente de la acción sugerida */}
+              <button
+                onClick={() => setActionModalOpen(true)}
+                style={{
+                  padding: '8px 20px',
+                  borderRadius: 'var(--radius-pill)',
+                  border: 'none',
+                  background: 'var(--color-accent)',
+                  color: 'var(--color-text-inverse)',
+                  fontFamily: 'var(--font-host-grotesk)',
+                  fontSize: '13px',
+                  fontWeight: 500,
+                  cursor: 'pointer',
+                }}
+              >
+                Tomar acción →
+              </button>
+            </section>
 
             {/* ── AMPLIFY ── */}
-            {data.amplify && (data.amplify.is_referred || (data.amplify.invites_sent ?? 0) > 0) && (
-              <section style={{ marginBottom: 'var(--space-6)' }}>
-                <SectionHeader title="AMPLIFY" />
-                <div
-                  style={{
-                    background: 'var(--color-bg-tertiary)',
-                    borderRadius: 'var(--radius-md)',
-                    padding: 'var(--space-5)',
-                    borderLeft: '3px solid #4A6FA5',
-                    display: 'flex',
-                    flexDirection: 'column',
-                    gap: 'var(--space-3)',
-                  }}
-                >
-                  {data.amplify.is_referred && data.amplify.referred_by_email && (
-                    <div>
-                      <span style={{ fontFamily: 'var(--font-host-grotesk)', fontSize: '12px', color: 'var(--color-text-tertiary)', textTransform: 'uppercase', letterSpacing: '0.06em' }}>
-                        Invitado por
-                      </span>
-                      <p style={{ fontFamily: 'var(--font-host-grotesk)', fontSize: '14px', color: 'var(--color-text-primary)', margin: '4px 0 0' }}>
-                        {data.amplify.referred_by_email}
-                      </p>
-                    </div>
-                  )}
-                  {data.amplify.comparison_status && (
-                    <div>
-                      <span style={{ fontFamily: 'var(--font-host-grotesk)', fontSize: '12px', color: 'var(--color-text-tertiary)', textTransform: 'uppercase', letterSpacing: '0.06em' }}>
-                        Comparación
-                      </span>
-                      <p style={{ fontFamily: 'var(--font-host-grotesk)', fontSize: '14px', color: 'var(--color-text-primary)', margin: '4px 0 0' }}>
-                        {data.amplify.comparison_status === 'accepted' ? '✓ Activa' : data.amplify.comparison_status === 'pending' ? '⏳ Pendiente de aceptación' : '✗ Declinada'}
-                      </p>
-                    </div>
-                  )}
-                  {(data.amplify.invites_sent ?? 0) > 0 && (
-                    <div>
-                      <span style={{ fontFamily: 'var(--font-host-grotesk)', fontSize: '12px', color: 'var(--color-text-tertiary)', textTransform: 'uppercase', letterSpacing: '0.06em' }}>
-                        Invitaciones enviadas
-                      </span>
-                      <p style={{ fontFamily: 'var(--font-host-grotesk)', fontSize: '14px', color: 'var(--color-text-primary)', margin: '4px 0 0' }}>
-                        {data.amplify.invites_sent} enviadas · {data.amplify.invites_completed ?? 0} completadas
-                      </p>
-                    </div>
-                  )}
-                </div>
-              </section>
-            )}
+            {/* AMPLIFY hidden — reactivar cuando se necesite */}
+            {null}
 
             {/* ── Dimensiones ── */}
             <section style={{ marginBottom: 'var(--space-6)' }}>
