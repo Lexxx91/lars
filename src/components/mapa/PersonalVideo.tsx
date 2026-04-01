@@ -7,6 +7,10 @@ interface Props {
   createdAt: string
   autoPlay?: boolean
   id?: string
+  /** Called when user taps GUARDAR — moves message to saved */
+  onSave?: () => void
+  /** Called when user taps ELIMINAR — removes message from view */
+  onDelete?: () => void
 }
 
 function relativeTime(iso: string): string {
@@ -19,7 +23,7 @@ function relativeTime(iso: string): string {
   return months === 1 ? 'hace 1 mes' : `hace ${months} meses`
 }
 
-export default function PersonalVideo({ videoUrl, createdAt, autoPlay, id }: Props) {
+export default function PersonalVideo({ videoUrl, createdAt, autoPlay, id, onSave, onDelete }: Props) {
   const videoRef = useRef<HTMLVideoElement>(null)
   const [isPlaying, setIsPlaying] = useState(false)
   const [hasThumb, setHasThumb] = useState(false)
@@ -51,16 +55,70 @@ export default function PersonalVideo({ videoUrl, createdAt, autoPlay, id }: Pro
         padding: 'var(--space-6)',
       }}
     >
-      <p style={{
-        fontFamily: 'var(--font-host-grotesk)',
-        fontSize: 'var(--text-overline)',
-        letterSpacing: 'var(--ls-overline)',
-        textTransform: 'uppercase',
-        color: '#CD796C',
+      {/* Header: label + acciones */}
+      <div style={{
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'space-between',
         marginBottom: 'var(--space-2)',
       }}>
-        Mensaje personal
-      </p>
+        <p style={{
+          fontFamily: 'var(--font-host-grotesk)',
+          fontSize: 'var(--text-overline)',
+          letterSpacing: 'var(--ls-overline)',
+          textTransform: 'uppercase',
+          color: '#CD796C',
+          margin: 0,
+        }}>
+          Mensaje personal
+        </p>
+
+        {(onSave || onDelete) && (
+          <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-1)' }}>
+            {onSave && (
+              <button
+                onClick={onSave}
+                style={{
+                  background: 'none',
+                  border: 'none',
+                  fontFamily: 'var(--font-host-grotesk)',
+                  fontSize: 'var(--text-caption)',
+                  fontWeight: 600,
+                  letterSpacing: '0.04em',
+                  textTransform: 'uppercase',
+                  color: '#CD796C',
+                  cursor: 'pointer',
+                  padding: 'var(--space-1)',
+                }}
+              >
+                Guardar
+              </button>
+            )}
+            {onSave && onDelete && (
+              <span style={{ color: 'var(--color-text-tertiary)', fontSize: '12px' }}>|</span>
+            )}
+            {onDelete && (
+              <button
+                onClick={onDelete}
+                style={{
+                  background: 'none',
+                  border: 'none',
+                  fontFamily: 'var(--font-host-grotesk)',
+                  fontSize: 'var(--text-caption)',
+                  fontWeight: 600,
+                  letterSpacing: '0.04em',
+                  textTransform: 'uppercase',
+                  color: 'var(--color-error)',
+                  cursor: 'pointer',
+                  padding: 'var(--space-1)',
+                }}
+              >
+                Eliminar
+              </button>
+            )}
+          </div>
+        )}
+      </div>
 
       <p style={{
         fontFamily: 'var(--font-host-grotesk)',
