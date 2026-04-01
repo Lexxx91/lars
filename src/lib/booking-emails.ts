@@ -6,7 +6,7 @@
  * - Recordatorio 24h antes
  * - Notificacion a Javier (con link al mapa del usuario)
  *
- * Misma estetica dark que el resto de emails del proyecto.
+ * Misma estética blanca (DESIGN.md) que el resto de emails del proyecto.
  */
 
 import { Resend } from 'resend'

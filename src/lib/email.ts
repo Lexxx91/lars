@@ -2,7 +2,8 @@
  * email.ts — Envío de emails con Resend
  *
  * Email día 0: se envía inmediatamente al capturar el email.
- * Template minimalista, warm cream, personal — per spec Four Seasons.
+ * Template minimalista, fondo blanco, personal — per spec Four Seasons.
+ * Identidad: Logo IE + fondo #FFFFFF + botones #264233 + acento #CD796C.
  * Sin logos agresivos, sin footer corporativo. El email es un mensajero.
  *
  * Requiere: RESEND_API_KEY en variables de entorno
@@ -126,7 +127,7 @@ export async function sendDia0Email({
 
   const firstStep = firstStepByKey[worstKey]
 
-  // Template HTML minimal, warm cream, personal
+  // Template HTML minimal — fondo blanco #FFFFFF, botón verde bosque #264233
   const html = `
 <!DOCTYPE html>
 <html lang="es">
@@ -265,7 +266,7 @@ export async function sendDia0Email({
 // ─── EMAILS DE EVOLUCIÓN (Día 3-90) ──────────────────────────────────────────
 
 /**
- * Template base dark minimal para todos los emails de evolución.
+ * Template base (fondo blanco, identidad DESIGN.md) para todos los emails de evolución.
  * Solo cambia: asunto, contenido, texto del botón.
  */
 function buildEvolutionEmail(params: {
