@@ -43,30 +43,25 @@ const EMAIL_META: Record<string, { description: string; cta: string; conditions?
       'Envío inmediato al capturar email. Incluye score global, las 5 dimensiones con barras de color, la dimensión más comprometida y enlace al mapa interactivo.',
     cta: 'Ver mi mapa',
   },
-  d3: {
+  d1: {
     description:
-      'Revela el mecanismo de defensa adaptativo. Genera curiosidad sobre una pieza que "faltaba" en el diagnóstico inicial.',
+      'Notifica que se han desbloqueado los miedos principales, las 3 capas de necesidad y los patrones de burnout. Completa el mecanismo de defensa adaptativo.',
     cta: 'Ver mi mapa',
   },
-  d7: {
+  d3: {
     description:
-      'Nuevo insight sobre la dimensión más comprometida. Dato de inteligencia colectiva que no existía cuando hizo el diagnóstico.',
+      'Análisis en profundidad de la dimensión más comprometida. Un nivel de detalle que no existía en la evaluación inicial.',
+    cta: 'Ver mi mapa',
+  },
+  d6: {
+    description:
+      'Extracto personalizado del libro "Burnout Ejecutivo: el renacimiento del líder Fénix", basado en la dimensión más comprometida.',
     cta: 'Ver mi mapa',
   },
   d10: {
     description:
-      'Invitación a agendar sesión con Javier. 20 minutos, sin compromiso. Javier ya tiene los datos del mapa.',
-    cta: 'Agendar sesión',
-  },
-  d14: {
-    description:
-      'Desbloquea 3 subdimensiones con 2 preguntas adicionales. Aumenta la resolución del diagnóstico.',
-    cta: 'Ver mi mapa',
-  },
-  d21: {
-    description:
-      'Extracto personalizado del libro "Burnout: El Renacimiento del Líder Fénix", basado en la dimensión más comprometida.',
-    cta: 'Ver mi mapa',
+      'Primera reevaluación: actualiza el mapa en 30 segundos. Los scores anteriores se guardan para ver la evolución real.',
+    cta: 'Actualizar mi mapa',
   },
   d30: {
     description:

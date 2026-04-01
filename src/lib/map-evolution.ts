@@ -13,6 +13,9 @@
 export interface MapEvolutionData {
   archetype_unlocked: boolean
   archetype_viewed: boolean
+  fears_needs_unlocked: boolean
+  fears_needs_viewed: boolean
+  // Legacy fields (kept for backward compatibility with existing records)
   insight_d7_unlocked: boolean
   insight_d7_viewed: boolean
   session_unlocked: boolean
@@ -26,16 +29,19 @@ export interface MapEvolutionData {
   reevaluation_completed: boolean
   reevaluation_scores: ReevaluationScores | null
   reevaluations: ReevaluationEntry[]
-  // Email tracking flags (may not exist on older records)
+  // Email tracking flags — new timeline: d0, d1, d3, d6, d10, d30, d90
+  email_d1_sent?: boolean
   email_d3_sent?: boolean
-  email_d7_sent?: boolean
+  email_d6_sent?: boolean
   email_d10_sent?: boolean
-  email_d14_sent?: boolean
-  email_d21_sent?: boolean
   email_d30_sent?: boolean
   email_d90_sent?: string[] // ISO dates of sent d90 emails
+  // Legacy email flags (kept for backward compat, no longer sent)
+  email_d7_sent?: boolean
+  email_d14_sent?: boolean
+  email_d21_sent?: boolean
   // Open tracking & suppression
-  email_opens?: Record<string, string> // key = email key (d0, d3...), value = ISO date
+  email_opens?: Record<string, string> // key = email key (d0, d1, d3...), value = ISO date
   consecutive_unopened?: number // resets to 0 on any open
   email_unsubscribed?: boolean
   email_goodbye_sent?: boolean
@@ -65,14 +71,26 @@ export interface EvolutionSection {
 export interface EvolutionState {
   daysSinceCreation: number
   archetype: EvolutionSection
-  insightD7: EvolutionSection
-  session: EvolutionSection & { booked: boolean }
-  subdimensions: EvolutionSection & { completed: boolean }
+  fearsNeeds: EvolutionSection
+  priorityDeep: EvolutionSection
   bookExcerpt: EvolutionSection
+  evolution: EvolutionSection & {
+    completed: boolean
+    reevaluations: ReevaluationEntry[]
+    /** El milestone activo (10, 90, 180...) o null si no hay pendiente */
+    activeMilestone: number | null
+  }
+  // Legacy fields (still computed for backward compat in admin)
+  /** @deprecated Use evolution instead */
+  insightD7: EvolutionSection
+  /** @deprecated Session is always available from D0 */
+  session: EvolutionSection & { booked: boolean }
+  /** @deprecated Replaced by priorityDeep */
+  subdimensions: EvolutionSection & { completed: boolean }
+  /** @deprecated Use evolution instead */
   reevaluation: EvolutionSection & {
     completed: boolean
     reevaluations: ReevaluationEntry[]
-    /** El milestone activo (30, 90, 180...) o null si no hay pendiente */
     activeMilestone: number | null
   }
   /** True si hay una reevaluación trimestral pendiente (día 90, 180, 270...) */
@@ -83,14 +101,31 @@ export interface EvolutionState {
 
 const DAY_MS = 86400000
 
+/**
+ * Nueva línea temporal de desbloqueo (abril 2026):
+ *
+ * D0: Archetype (mecanismo de defensa) — se muestra al 93% del gateway + mapa
+ * D1: Fears+Needs (miedos + necesidades nucleares)
+ * D3: PriorityDeep (profundizamos en tu prioridad nº1)
+ * D6: BookExcerpt (extracto del libro)
+ * D10: Evolution (tu evolución / primera reevaluación)
+ * D90+: Quarterly (reevaluación trimestral)
+ */
 const UNLOCK_DAYS = {
-  archetype: 3,
+  archetype: 0,
+  fearsNeeds: 1,
+  priorityDeep: 3,
+  bookExcerpt: 6,
+  evolution: 10,
+  quarterly: 90,
+} as const
+
+// Legacy constants (referenced by old code paths)
+const LEGACY_UNLOCK_DAYS = {
   insightD7: 7,
   session: 10,
   subdimensions: 14,
-  bookExcerpt: 21,
   reevaluation: 30,
-  quarterly: 90,
 } as const
 
 // ─── FUNCIÓN PRINCIPAL ───────────────────────────────────────────────────────
@@ -106,7 +141,8 @@ export function computeEvolutionState(
 
   const daysReached = (days: number) => daysSinceCreation >= days
 
-  // ── Archetype (Día 3) ──────────────────────────────────────────────────────
+  // ── Archetype (Día 0) — Mecanismo de defensa adaptativo ───────────────────
+  // Siempre desbloqueado desde el D0 (se muestra al 93% del gateway)
   const archetypeUnlocked = daysReached(UNLOCK_DAYS.archetype)
   const archetype: EvolutionSection = {
     unlocked: archetypeUnlocked,
@@ -114,33 +150,23 @@ export function computeEvolutionState(
     isNew: archetypeUnlocked && !mapEvolution.archetype_viewed,
   }
 
-  // ── Insight D7 (Día 7) ─────────────────────────────────────────────────────
-  const insightD7Unlocked = daysReached(UNLOCK_DAYS.insightD7)
-  const insightD7: EvolutionSection = {
-    unlocked: insightD7Unlocked,
-    viewed: mapEvolution.insight_d7_viewed,
-    isNew: insightD7Unlocked && !mapEvolution.insight_d7_viewed,
+  // ── Fears + Needs (Día 1) — Miedos + Necesidades Nucleares ────────────────
+  const fearsNeedsUnlocked = daysReached(UNLOCK_DAYS.fearsNeeds)
+  const fearsNeeds: EvolutionSection = {
+    unlocked: fearsNeedsUnlocked,
+    viewed: mapEvolution.fears_needs_viewed ?? false,
+    isNew: fearsNeedsUnlocked && !(mapEvolution.fears_needs_viewed ?? false),
   }
 
-  // ── Session (Día 10) ───────────────────────────────────────────────────────
-  const sessionUnlocked = daysReached(UNLOCK_DAYS.session)
-  const session: EvolutionSection & { booked: boolean } = {
-    unlocked: sessionUnlocked,
-    viewed: false, // La sesión no tiene "viewed" — solo booked
-    isNew: sessionUnlocked && !mapEvolution.session_booked,
-    booked: mapEvolution.session_booked,
+  // ── Priority Deep (Día 3) — Profundizamos en tu prioridad nº1 ─────────────
+  const priorityDeepUnlocked = daysReached(UNLOCK_DAYS.priorityDeep)
+  const priorityDeep: EvolutionSection = {
+    unlocked: priorityDeepUnlocked,
+    viewed: mapEvolution.insight_d7_viewed, // Reusa campo legacy
+    isNew: priorityDeepUnlocked && !mapEvolution.insight_d7_viewed,
   }
 
-  // ── Subdimensions (Día 14) ─────────────────────────────────────────────────
-  const subdimsUnlocked = daysReached(UNLOCK_DAYS.subdimensions)
-  const subdimensions: EvolutionSection & { completed: boolean } = {
-    unlocked: subdimsUnlocked,
-    viewed: mapEvolution.subdimensions_completed, // completed implica viewed
-    isNew: subdimsUnlocked && !mapEvolution.subdimensions_completed,
-    completed: mapEvolution.subdimensions_completed,
-  }
-
-  // ── Book Excerpt (Día 21) ──────────────────────────────────────────────────
+  // ── Book Excerpt (Día 6) ──────────────────────────────────────────────────
   const bookUnlocked = daysReached(UNLOCK_DAYS.bookExcerpt)
   const bookExcerpt: EvolutionSection = {
     unlocked: bookUnlocked,
@@ -148,15 +174,14 @@ export function computeEvolutionState(
     isNew: bookUnlocked && !mapEvolution.book_excerpt_viewed,
   }
 
-  // ── Reevaluation (Día 30+) ─────────────────────────────────────────────────
-  // Cada período de reevaluación es independiente:
-  // Día 30 = primera reevaluación
+  // ── Evolution (Día 10+) — Tu Evolución / Reevaluaciones ───────────────────
+  // Día 10 = primera evolución (antes era reevaluación día 30)
   // Día 90, 180, 270... = trimestrales
-  const reevalUnlocked = daysReached(UNLOCK_DAYS.reevaluation)
+  const evolutionUnlocked = daysReached(UNLOCK_DAYS.evolution)
   const allReevaluations = mapEvolution.reevaluations ?? []
 
-  // Determinar qué reevaluación es la "activa" (la más reciente pendiente)
-  const reevalMilestones: number[] = [UNLOCK_DAYS.reevaluation] // día 30
+  // Milestones de reevaluación: día 10, luego cada 90 días
+  const reevalMilestones: number[] = [UNLOCK_DAYS.evolution]
   for (
     let q = UNLOCK_DAYS.quarterly;
     q <= daysSinceCreation;
@@ -168,7 +193,6 @@ export function computeEvolutionState(
   // Reevaluaciones completadas (por milestone cercano)
   const completedMilestones = new Set(
     allReevaluations.map((r) => {
-      // Encontrar el milestone más cercano al día en que se hizo
       return reevalMilestones.reduce((closest, m) =>
         Math.abs(r.day - m) < Math.abs(r.day - closest) ? m : closest,
       )
@@ -184,33 +208,60 @@ export function computeEvolutionState(
   }
 
   const hasActiveReeval = activeReevalMilestone !== null
-  const lastCompletedReeval = allReevaluations.length > 0
-    ? allReevaluations[allReevaluations.length - 1]
-    : null
 
-  const reevaluation: EvolutionSection & {
+  const evolutionState: EvolutionSection & {
     completed: boolean
     reevaluations: ReevaluationEntry[]
     activeMilestone: number | null
   } = {
-    unlocked: reevalUnlocked,
-    viewed: reevalUnlocked && !hasActiveReeval,
+    unlocked: evolutionUnlocked,
+    viewed: evolutionUnlocked && !hasActiveReeval,
     isNew: hasActiveReeval,
-    completed: reevalUnlocked && !hasActiveReeval,
+    completed: evolutionUnlocked && !hasActiveReeval,
     reevaluations: allReevaluations,
     activeMilestone: activeReevalMilestone,
   }
 
-  // nextQuarterlyUnlocked ahora es simplemente si hay un milestone activo >= 90
+  // nextQuarterlyUnlocked: hay un milestone activo >= 90
   const nextQuarterlyUnlocked = activeReevalMilestone !== null && activeReevalMilestone >= UNLOCK_DAYS.quarterly
+
+  // ── Legacy fields (backward compat) ──────────────────────────────────────
+  const insightD7Unlocked = daysReached(LEGACY_UNLOCK_DAYS.insightD7)
+  const insightD7: EvolutionSection = {
+    unlocked: insightD7Unlocked,
+    viewed: mapEvolution.insight_d7_viewed,
+    isNew: insightD7Unlocked && !mapEvolution.insight_d7_viewed,
+  }
+
+  const sessionUnlocked = true // Session siempre disponible desde D0
+  const session: EvolutionSection & { booked: boolean } = {
+    unlocked: sessionUnlocked,
+    viewed: false,
+    isNew: !mapEvolution.session_booked,
+    booked: mapEvolution.session_booked,
+  }
+
+  const subdimsUnlocked = daysReached(LEGACY_UNLOCK_DAYS.subdimensions)
+  const subdimensions: EvolutionSection & { completed: boolean } = {
+    unlocked: subdimsUnlocked,
+    viewed: mapEvolution.subdimensions_completed,
+    isNew: subdimsUnlocked && !mapEvolution.subdimensions_completed,
+    completed: mapEvolution.subdimensions_completed,
+  }
+
+  const reevaluation = { ...evolutionState }
 
   return {
     daysSinceCreation,
     archetype,
+    fearsNeeds,
+    priorityDeep,
+    bookExcerpt,
+    evolution: evolutionState,
+    // Legacy
     insightD7,
     session,
     subdimensions,
-    bookExcerpt,
     reevaluation,
     nextQuarterlyUnlocked,
   }
@@ -218,18 +269,27 @@ export function computeEvolutionState(
 
 // ─── HELPERS PARA EMAILS ─────────────────────────────────────────────────────
 
-/** Devuelve qué emails deben enviarse (unlocked pero no sent) */
+/**
+ * Devuelve qué emails deben enviarse (unlocked pero no sent).
+ *
+ * Nueva secuencia (abril 2026):
+ *   D1: Miedos + necesidades desbloqueados
+ *   D3: Profundizamos en tu prioridad nº1
+ *   D6: Extracto del libro disponible
+ *   D10: Tu Evolución está lista
+ *   D30: Reevaluación mensual
+ *   D90+: Reevaluación trimestral
+ */
 export function getPendingEmails(
   daysSinceCreation: number,
   mapEvolution: MapEvolutionData,
 ): string[] {
   const pending: string[] = []
 
+  if (daysSinceCreation >= 1 && !mapEvolution.email_d1_sent) pending.push('d1')
   if (daysSinceCreation >= 3 && !mapEvolution.email_d3_sent) pending.push('d3')
-  if (daysSinceCreation >= 7 && !mapEvolution.email_d7_sent) pending.push('d7')
+  if (daysSinceCreation >= 6 && !mapEvolution.email_d6_sent) pending.push('d6')
   if (daysSinceCreation >= 10 && !mapEvolution.email_d10_sent) pending.push('d10')
-  if (daysSinceCreation >= 14 && !mapEvolution.email_d14_sent) pending.push('d14')
-  if (daysSinceCreation >= 21 && !mapEvolution.email_d21_sent) pending.push('d21')
   if (daysSinceCreation >= 30 && !mapEvolution.email_d30_sent) pending.push('d30')
 
   // D90: cada 90 días

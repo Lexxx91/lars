@@ -72,11 +72,10 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
     daysSinceCreation: evolution.daysSinceCreation,
     evolution: {
       archetype: evolution.archetype.unlocked,
-      insightD7: evolution.insightD7.unlocked,
-      session: evolution.session.unlocked,
-      subdimensions: evolution.subdimensions.unlocked,
+      fearsNeeds: evolution.fearsNeeds.unlocked,
+      priorityDeep: evolution.priorityDeep.unlocked,
       bookExcerpt: evolution.bookExcerpt.unlocked,
-      reevaluation: evolution.reevaluation.unlocked,
+      evolution: evolution.evolution.unlocked,
       nextQuarterly: evolution.nextQuarterlyUnlocked,
     },
   })

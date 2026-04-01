@@ -26,12 +26,11 @@ interface TimelineEvent {
 // Emails conocidos con metadata
 const EMAIL_KEYS = [
   { key: 'd0', name: 'Tu mapa de neuroregulación', subject: 'Tu mapa de neuroregulación', day: 0 },
-  { key: 'd3', name: 'Mecanismo de defensa', subject: 'Hay algo nuevo en tu mapa de neuroregulación', day: 3 },
-  { key: 'd7', name: 'Insight colectivo', subject: 'Tu mapa se ha actualizado', day: 7 },
-  { key: 'd10', name: 'Sesión con Javier', subject: 'Javier puede revisar tu mapa contigo', day: 10 },
-  { key: 'd14', name: 'Subdimensiones', subject: 'Hay 3 subdimensiones nuevas disponibles', day: 14 },
-  { key: 'd21', name: 'Extracto libro', subject: 'Un capítulo escrito para tu situación', day: 21 },
-  { key: 'd30', name: 'Reevaluación', subject: 'Un mes desde tu diagnóstico — ¿ha cambiado algo?', day: 30 },
+  { key: 'd1', name: 'Miedos + necesidades', subject: 'Hay algo nuevo en tu mapa', day: 1 },
+  { key: 'd3', name: 'Prioridad nº1', subject: 'Profundizamos en tu prioridad nº1', day: 3 },
+  { key: 'd6', name: 'Extracto libro', subject: 'Un capítulo escrito para tu situación', day: 6 },
+  { key: 'd10', name: 'Tu Evolución', subject: 'Tu Evolución está lista', day: 10 },
+  { key: 'd30', name: 'Reevaluación', subject: 'Un mes desde tu análisis — ¿ha cambiado algo?', day: 30 },
   { key: 'd90', name: 'Reevaluación trimestral', subject: '3 meses desde tu mapa — una pregunta', day: 90 },
   { key: 'goodbye', name: 'Despedida', subject: 'Tu mapa sigue aquí', day: -1 },
 ]
@@ -98,12 +97,11 @@ export async function GET(
 
   // Otros emails enviados (por flags)
   const sentFlags: [string, string, string][] = [
-    ['email_d3_sent', 'd3', 'Hay algo nuevo en tu mapa de neuroregulación'],
-    ['email_d7_sent', 'd7', 'Tu mapa se ha actualizado'],
-    ['email_d10_sent', 'd10', 'Javier puede revisar tu mapa contigo'],
-    ['email_d14_sent', 'd14', 'Hay 3 subdimensiones nuevas disponibles'],
-    ['email_d21_sent', 'd21', 'Un capítulo escrito para tu situación'],
-    ['email_d30_sent', 'd30', 'Un mes desde tu diagnóstico — ¿ha cambiado algo?'],
+    ['email_d1_sent', 'd1', 'Hay algo nuevo en tu mapa'],
+    ['email_d3_sent', 'd3', 'Profundizamos en tu prioridad nº1'],
+    ['email_d6_sent', 'd6', 'Un capítulo escrito para tu situación'],
+    ['email_d10_sent', 'd10', 'Tu Evolución está lista'],
+    ['email_d30_sent', 'd30', 'Un mes desde tu análisis — ¿ha cambiado algo?'],
   ]
 
   for (const [flag, key, subject] of sentFlags) {

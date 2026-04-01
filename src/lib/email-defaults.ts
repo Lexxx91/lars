@@ -24,33 +24,29 @@ export const EMAIL_DEFAULTS: Record<string, EmailTemplateDefaults> = {
     dynamicNote:
       'El cuerpo de este email incluye scores y dimensiones calculados automáticamente. Solo el asunto y el texto del botón son editables.',
   },
-  d3: {
-    subject: 'Hay algo nuevo en tu mapa de neuroregulación',
+  d1: {
+    subject: 'Hay algo nuevo en tu mapa',
     bodyContent:
-      'Tu mecanismo de defensa adaptativo está disponible. Es la pieza que faltaba para entender por qué tu cuerpo responde como responde.',
+      'Tus miedos principales, tus tres capas de necesidad y tus patrones de burnout ya están disponibles. Es la pieza que completa tu mecanismo de defensa adaptativo.',
     ctaText: 'Ver mi mapa',
   },
-  d7: {
-    subject: 'Tu mapa se ha actualizado',
+  d3: {
+    subject: 'Profundizamos en tu prioridad nº1',
     bodyContent:
-      'Nuevo insight sobre tu dimensión más comprometida. Un dato que no existía cuando hiciste tu análisis.',
+      'Nuevo análisis en profundidad sobre tu dimensión más comprometida. Un nivel de detalle que no existía cuando hiciste tu evaluación.',
+    ctaText: 'Ver mi mapa',
+  },
+  d6: {
+    subject: 'Un capítulo escrito para tu situación',
+    bodyContent:
+      'Basado en tu dimensión más comprometida. Del libro "Burnout Ejecutivo: el renacimiento del líder Fénix."',
     ctaText: 'Ver mi mapa',
   },
   d10: {
-    subject: 'Javier puede revisar tu mapa contigo',
-    bodyContent: '20 minutos. Sin compromiso. Ya tiene tus datos.',
-    ctaText: 'Agendar sesión',
-  },
-  d14: {
-    subject: 'Hay 3 subdimensiones nuevas disponibles',
-    bodyContent: '2 preguntas más para aumentar la resolución de tu análisis.',
-    ctaText: 'Ver mi mapa',
-  },
-  d21: {
-    subject: 'Un capítulo escrito para tu situación',
+    subject: 'Tu Evolución está lista',
     bodyContent:
-      'Basado en tu dimensión más comprometida. Del libro "Burnout: El Renacimiento del Líder Fénix."',
-    ctaText: 'Ver mi mapa',
+      'Actualiza tu mapa en 30 segundos. Tus scores anteriores se guardan para que veas la evolución real.',
+    ctaText: 'Actualizar mi mapa',
   },
   d30: {
     subject: 'Un mes desde tu análisis — ¿ha cambiado algo?',

@@ -62,7 +62,7 @@ export function CopyPreviewMapa({ localValues, activeSubsection }: CopyPreviewMa
             {v('mapa.evolution.header')}
           </h3>
           <div style={{ marginTop: 10, display: 'flex', flexDirection: 'column', gap: 6 }}>
-            {['d0', 'd3', 'd7', 'd14', 'd21', 'd30'].map((d) => {
+            {['d0', 'd1', 'd3', 'd6', 'd10', 'd30'].map((d) => {
               const label = v(`mapa.evolution.${d}.label`)
               const sublabel = v(`mapa.evolution.${d}.sublabel`)
               const hasLabel = label && label !== `mapa.evolution.${d}.label`

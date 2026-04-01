@@ -13,23 +13,21 @@ interface EvolutionResult {
   daysSinceCreation: number
   evolution: {
     archetype: boolean
-    insightD7: boolean
-    session: boolean
-    subdimensions: boolean
+    fearsNeeds: boolean
+    priorityDeep: boolean
     bookExcerpt: boolean
-    reevaluation: boolean
+    evolution: boolean
     nextQuarterly: boolean
   }
 }
 
 const PRESETS = [
-  { label: 'Día 4 → Mecanismo de defensa', days: 4, color: 'var(--color-accent)' },
-  { label: 'Día 8 → Insight D7', days: 4, color: 'var(--color-accent)' },
-  { label: 'Día 11 → Sesión', days: 3, color: 'var(--color-success)' },
-  { label: 'Día 15 → Subdimensiones', days: 4, color: 'var(--color-accent)' },
-  { label: 'Día 22 → Libro', days: 7, color: 'var(--color-success)' },
-  { label: 'Día 31 → Reevaluación', days: 9, color: 'var(--color-warning)' },
-  { label: 'Día 91 → Trimestral', days: 60, color: 'var(--color-warning)' },
+  { label: 'Día 1 → Miedos + necesidades', days: 1, color: 'var(--color-accent)' },
+  { label: 'Día 3 → Prioridad nº1', days: 2, color: 'var(--color-accent)' },
+  { label: 'Día 6 → Extracto del libro', days: 3, color: 'var(--color-success)' },
+  { label: 'Día 10 → Tu Evolución', days: 4, color: 'var(--color-success)' },
+  { label: 'Día 30 → Reevaluación', days: 20, color: 'var(--color-warning)' },
+  { label: 'Día 91 → Trimestral', days: 61, color: 'var(--color-warning)' },
 ]
 
 const COLOR_HEX: Record<string, string> = {

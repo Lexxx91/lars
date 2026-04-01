@@ -50,9 +50,9 @@ export default function ActionUnlock({ lead, onSubmit, onCancel, submitting }: P
         </p>
         <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
           {[
-            { icon: '🧬', label: 'Mecanismo de defensa adaptativo', day: 3 },
-            { icon: '📊', label: 'Insight de Inteligencia Colectiva (D7)', day: 7 },
-            { icon: '🔬', label: 'Subdimensiones detalladas', day: 14 },
+            { icon: '🧬', label: 'Miedos + Necesidades Nucleares (D1)', day: 1 },
+            { icon: '📊', label: 'Profundizamos en tu prioridad nº1 (D3)', day: 3 },
+            { icon: '📖', label: 'Extracto del libro (D6)', day: 6 },
           ].map((item) => (
             <div key={item.label} style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
               <span style={{ fontSize: '14px' }}>{item.icon}</span>

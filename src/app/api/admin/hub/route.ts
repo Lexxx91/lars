@@ -357,7 +357,7 @@ export async function GET(req: NextRequest) {
   }
 
   // Emails sent (derived from map_evolution flags)
-  const emailDayKeys = ['d3', 'd7', 'd10', 'd14', 'd21', 'd30'] as const
+  const emailDayKeys = ['d1', 'd3', 'd6', 'd10', 'd30'] as const
   for (const row of allDiags.slice(0, 30)) {
     const me = row.map_evolution
     if (!me) continue

@@ -313,6 +313,30 @@ function buildEvolutionEmail(params: {
 }
 
 /** Día 3: Mecanismo de defensa adaptativo */
+/** Día 1: Miedos + Necesidades Nucleares desbloqueados */
+export async function sendDia1Email(to: string, mapHash: string): Promise<void> {
+  const mapUrl = `${getBaseUrl()}/mapa/${mapHash}`
+  const override = await getTemplateOverride('d1')
+  const defaults = EMAIL_DEFAULTS.d1
+
+  const bodyText = override?.body_content ?? defaults.bodyContent
+  const html = buildEvolutionEmail({
+    content: `
+      <p style="font-size: 14px; color: #212426; line-height: 1.6; margin: 0 0 16px 0;">
+        ${escapeHtml(bodyText)}
+      </p>`,
+    buttonText: override?.cta_text ?? defaults.ctaText,
+    mapUrl, mapHash, emailKey: 'd1',
+  })
+
+  await getResend().emails.send({
+    from: getFromEmail(), to,
+    subject: override?.subject ?? defaults.subject,
+    html, headers: listUnsubscribeHeaders(mapHash),
+  })
+}
+
+/** Día 3: Profundizamos en tu prioridad nº1 */
 export async function sendDia3Email(to: string, mapHash: string): Promise<void> {
   const mapUrl = `${getBaseUrl()}/mapa/${mapHash}`
   const override = await getTemplateOverride('d3')
@@ -335,33 +359,20 @@ export async function sendDia3Email(to: string, mapHash: string): Promise<void> 
   })
 }
 
-/** Día 7: Insight de inteligencia colectiva */
-export async function sendDia7Email(to: string, mapHash: string): Promise<void> {
+/** Día 6: Extracto del libro */
+export async function sendDia6Email(to: string, mapHash: string): Promise<void> {
   const mapUrl = `${getBaseUrl()}/mapa/${mapHash}`
-  const override = await getTemplateOverride('d7')
-  const defaults = EMAIL_DEFAULTS.d7
+  const override = await getTemplateOverride('d6')
+  const defaults = EMAIL_DEFAULTS.d6
 
   const bodyText = override?.body_content ?? defaults.bodyContent
-  const amplifyBlock = `
-      <tr>
-        <td style="padding: 24px 0 0 0; border-top: 1px solid rgba(38,66,51,0.08);">
-          <p style="font-size: 13px; color: #878E92; line-height: 1.5; margin: 0 0 12px 0;">
-            ¿Conoces a alguien que podría necesitar ver su mapa?
-            Si ambos hacéis el diagnóstico, podréis comparar vuestras dimensiones.
-          </p>
-          <a href="${mapUrl}" style="font-size: 13px; color: #CD796C; text-decoration: underline;">
-            Invitar a alguien a comparar →
-          </a>
-        </td>
-      </tr>`
   const html = buildEvolutionEmail({
     content: `
       <p style="font-size: 14px; color: #212426; line-height: 1.6; margin: 0 0 16px 0;">
         ${escapeHtml(bodyText)}
-      </p>
-      ${amplifyBlock}`,
+      </p>`,
     buttonText: override?.cta_text ?? defaults.ctaText,
-    mapUrl, mapHash, emailKey: 'd7',
+    mapUrl, mapHash, emailKey: 'd6',
   })
 
   await getResend().emails.send({
@@ -371,7 +382,7 @@ export async function sendDia7Email(to: string, mapHash: string): Promise<void> 
   })
 }
 
-/** Día 10: Sesión con Javier */
+/** Día 10: Tu Evolución está lista */
 export async function sendDia10Email(to: string, mapHash: string): Promise<void> {
   const mapUrl = `${getBaseUrl()}/mapa/${mapHash}`
   const override = await getTemplateOverride('d10')
@@ -385,52 +396,6 @@ export async function sendDia10Email(to: string, mapHash: string): Promise<void>
       </p>`,
     buttonText: override?.cta_text ?? defaults.ctaText,
     mapUrl, mapHash, emailKey: 'd10',
-  })
-
-  await getResend().emails.send({
-    from: getFromEmail(), to,
-    subject: override?.subject ?? defaults.subject,
-    html, headers: listUnsubscribeHeaders(mapHash),
-  })
-}
-
-/** Día 14: Subdimensiones */
-export async function sendDia14Email(to: string, mapHash: string): Promise<void> {
-  const mapUrl = `${getBaseUrl()}/mapa/${mapHash}`
-  const override = await getTemplateOverride('d14')
-  const defaults = EMAIL_DEFAULTS.d14
-
-  const bodyText = override?.body_content ?? defaults.bodyContent
-  const html = buildEvolutionEmail({
-    content: `
-      <p style="font-size: 14px; color: #212426; line-height: 1.6; margin: 0 0 16px 0;">
-        ${escapeHtml(bodyText)}
-      </p>`,
-    buttonText: override?.cta_text ?? defaults.ctaText,
-    mapUrl, mapHash, emailKey: 'd14',
-  })
-
-  await getResend().emails.send({
-    from: getFromEmail(), to,
-    subject: override?.subject ?? defaults.subject,
-    html, headers: listUnsubscribeHeaders(mapHash),
-  })
-}
-
-/** Día 21: Extracto del libro */
-export async function sendDia21Email(to: string, mapHash: string): Promise<void> {
-  const mapUrl = `${getBaseUrl()}/mapa/${mapHash}`
-  const override = await getTemplateOverride('d21')
-  const defaults = EMAIL_DEFAULTS.d21
-
-  const bodyText = override?.body_content ?? defaults.bodyContent
-  const html = buildEvolutionEmail({
-    content: `
-      <p style="font-size: 14px; color: #212426; line-height: 1.6; margin: 0 0 16px 0;">
-        ${escapeHtml(bodyText)}
-      </p>`,
-    buttonText: override?.cta_text ?? defaults.ctaText,
-    mapUrl, mapHash, emailKey: 'd21',
   })
 
   await getResend().emails.send({

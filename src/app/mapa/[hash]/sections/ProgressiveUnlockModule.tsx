@@ -32,6 +32,12 @@ export default function ProgressiveUnlockModule({ daysSinceCreation = 0 }: Progr
 
   const unlockItems: UnlockItem[] = [
     {
+      title: getCopy('mapa.unlock.mechanism.title'),
+      subtitle: getCopy('mapa.unlock.mechanism.subtitle'),
+      status: 'active',
+      isClickable: true,
+    },
+    {
       title: getCopy('mapa.unlock.session.title'),
       subtitle: getCopy('mapa.unlock.session.subtitle'),
       status: 'pending',
@@ -41,26 +47,32 @@ export default function ProgressiveUnlockModule({ daysSinceCreation = 0 }: Progr
       title: getCopy('mapa.unlock.compare.title'),
       subtitle: getCopy('mapa.unlock.compare.subtitle'),
       status: 'active',
+      isClickable: true,
     },
     {
-      title: getCopy('mapa.unlock.mechanism.title'),
-      status: 'available',
-      daysUntil: Math.max(1 - daysSinceCreation, 0),
+      title: getCopy('mapa.unlock.fearsNeeds.title'),
+      subtitle: getCopy('mapa.unlock.fearsNeeds.subtitle'),
+      status: daysSinceCreation >= 1 ? 'active' : 'available',
+      daysUntil: daysSinceCreation >= 1 ? undefined : Math.max(1 - daysSinceCreation, 0),
+      isClickable: daysSinceCreation >= 1,
     },
     {
       title: getCopy('mapa.unlock.priority.title'),
-      status: 'available',
-      daysUntil: Math.max(3 - daysSinceCreation, 0),
+      status: daysSinceCreation >= 3 ? 'active' : 'available',
+      daysUntil: daysSinceCreation >= 3 ? undefined : Math.max(3 - daysSinceCreation, 0),
+      isClickable: daysSinceCreation >= 3,
     },
     {
       title: getCopy('mapa.unlock.bookExcerpt.title'),
-      status: 'available',
-      daysUntil: Math.max(6 - daysSinceCreation, 0),
+      status: daysSinceCreation >= 6 ? 'active' : 'available',
+      daysUntil: daysSinceCreation >= 6 ? undefined : Math.max(6 - daysSinceCreation, 0),
+      isClickable: daysSinceCreation >= 6,
     },
     {
       title: getCopy('mapa.unlock.evolution.title'),
-      status: 'available',
-      daysUntil: Math.max(10 - daysSinceCreation, 0),
+      status: daysSinceCreation >= 10 ? 'active' : 'available',
+      daysUntil: daysSinceCreation >= 10 ? undefined : Math.max(10 - daysSinceCreation, 0),
+      isClickable: daysSinceCreation >= 10,
     },
   ]
 

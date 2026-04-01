@@ -21,12 +21,11 @@ interface EmailDef {
 
 const EMAIL_DEFINITIONS: EmailDef[] = [
   { key: 'd0', name: 'Tu mapa de neuroregulación', subject: 'Tu mapa de neuroregulación', trigger: 'Inmediato al completar gateway', day: 0, sentFlag: null },
-  { key: 'd3', name: 'Mecanismo de defensa', subject: 'Hay algo nuevo en tu mapa de neuroregulación', trigger: 'Día 3 automático', day: 3, sentFlag: 'email_d3_sent' },
-  { key: 'd7', name: 'Insight colectivo', subject: 'Tu mapa se ha actualizado', trigger: 'Día 7 automático', day: 7, sentFlag: 'email_d7_sent' },
-  { key: 'd10', name: 'Sesión con Javier', subject: 'Javier puede revisar tu mapa contigo', trigger: 'Día 10 automático', day: 10, sentFlag: 'email_d10_sent' },
-  { key: 'd14', name: 'Subdimensiones', subject: 'Hay 3 subdimensiones nuevas disponibles', trigger: 'Día 14 automático', day: 14, sentFlag: 'email_d14_sent' },
-  { key: 'd21', name: 'Extracto libro', subject: 'Un capítulo escrito para tu situación', trigger: 'Día 21 automático', day: 21, sentFlag: 'email_d21_sent' },
-  { key: 'd30', name: 'Reevaluación', subject: 'Un mes desde tu diagnóstico — ¿ha cambiado algo?', trigger: 'Día 30 automático', day: 30, sentFlag: 'email_d30_sent' },
+  { key: 'd1', name: 'Miedos + necesidades', subject: 'Hay algo nuevo en tu mapa', trigger: 'Día 1 automático', day: 1, sentFlag: 'email_d1_sent' },
+  { key: 'd3', name: 'Prioridad nº1', subject: 'Profundizamos en tu prioridad nº1', trigger: 'Día 3 automático', day: 3, sentFlag: 'email_d3_sent' },
+  { key: 'd6', name: 'Extracto libro', subject: 'Un capítulo escrito para tu situación', trigger: 'Día 6 automático', day: 6, sentFlag: 'email_d6_sent' },
+  { key: 'd10', name: 'Tu Evolución', subject: 'Tu Evolución está lista', trigger: 'Día 10 automático', day: 10, sentFlag: 'email_d10_sent' },
+  { key: 'd30', name: 'Reevaluación', subject: 'Un mes desde tu análisis — ¿ha cambiado algo?', trigger: 'Día 30 automático', day: 30, sentFlag: 'email_d30_sent' },
   { key: 'd90', name: 'Reevaluación trimestral', subject: '3 meses desde tu mapa — una pregunta', trigger: 'Día 90+ automático', day: 90, sentFlag: 'email_d90_sent' },
   { key: 'goodbye', name: 'Despedida empática', subject: 'Tu mapa sigue aquí', trigger: '3+ emails sin abrir', day: -1, sentFlag: 'email_goodbye_sent' },
 ]

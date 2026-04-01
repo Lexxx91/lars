@@ -16,11 +16,10 @@ import { NextRequest, NextResponse } from 'next/server'
 import { createAdminClient } from '@/lib/supabase'
 import { getPendingEmails, type MapEvolutionData } from '@/lib/map-evolution'
 import {
+  sendDia1Email,
   sendDia3Email,
-  sendDia7Email,
+  sendDia6Email,
   sendDia10Email,
-  sendDia14Email,
-  sendDia21Email,
   sendDia30Email,
   sendDia90Email,
   sendGoodbyeEmail,
@@ -43,8 +42,8 @@ export async function GET(req: NextRequest): Promise<NextResponse> {
   const supabase = createAdminClient()
   const now = new Date()
 
-  // Buscar diagnósticos creados hace 3+ días (elegibles para alguna evolución)
-  const cutoff = new Date(now.getTime() - 3 * DAY_MS)
+  // Buscar diagnósticos creados hace 1+ días (elegibles para alguna evolución)
+  const cutoff = new Date(now.getTime() - 1 * DAY_MS)
 
   const { data: diagnosticos, error } = await supabase
     .from('diagnosticos')
@@ -120,11 +119,10 @@ export async function GET(req: NextRequest): Promise<NextResponse> {
 
     try {
       const emailFns: Record<string, (to: string, hash: string) => Promise<void>> = {
+        d1: sendDia1Email,
         d3: sendDia3Email,
-        d7: sendDia7Email,
+        d6: sendDia6Email,
         d10: sendDia10Email,
-        d14: sendDia14Email,
-        d21: sendDia21Email,
         d30: sendDia30Email,
       }
 
@@ -140,11 +138,10 @@ export async function GET(req: NextRequest): Promise<NextResponse> {
       const updatedEvolution = { ...mapEvolution }
       updatedEvolution.consecutive_unopened = (updatedEvolution.consecutive_unopened ?? 0) + 1
 
-      if (emailKey === 'd3') updatedEvolution.email_d3_sent = true
-      else if (emailKey === 'd7') updatedEvolution.email_d7_sent = true
+      if (emailKey === 'd1') updatedEvolution.email_d1_sent = true
+      else if (emailKey === 'd3') updatedEvolution.email_d3_sent = true
+      else if (emailKey === 'd6') updatedEvolution.email_d6_sent = true
       else if (emailKey === 'd10') updatedEvolution.email_d10_sent = true
-      else if (emailKey === 'd14') updatedEvolution.email_d14_sent = true
-      else if (emailKey === 'd21') updatedEvolution.email_d21_sent = true
       else if (emailKey === 'd30') updatedEvolution.email_d30_sent = true
       else if (emailKey.startsWith('d90_')) {
         updatedEvolution.email_d90_sent = [

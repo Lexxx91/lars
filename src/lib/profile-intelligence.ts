@@ -339,11 +339,10 @@ export function lastEmailOpened(lead: LeadData): boolean {
   // Determinar qué emails se han enviado (por flags en map_evolution)
   const me = lead.map_evolution
   const sentKeys: string[] = ['d0'] // d0 siempre se envía
+  if (me?.email_d1_sent) sentKeys.push('d1')
   if (me?.email_d3_sent) sentKeys.push('d3')
-  if (me?.email_d7_sent) sentKeys.push('d7')
+  if (me?.email_d6_sent) sentKeys.push('d6')
   if (me?.email_d10_sent) sentKeys.push('d10')
-  if (me?.email_d14_sent) sentKeys.push('d14')
-  if (me?.email_d21_sent) sentKeys.push('d21')
   if (me?.email_d30_sent) sentKeys.push('d30')
 
   // El último email enviado
