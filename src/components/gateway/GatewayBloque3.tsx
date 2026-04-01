@@ -177,7 +177,7 @@ export default function GatewayBloque3({
           flex: 1,
           display: 'flex',
           flexDirection: 'column',
-          justifyContent: (step === 'bisagra' || step === 'archetype') ? 'center' : 'flex-start',
+          justifyContent: step === 'bisagra' ? 'center' : 'flex-start',
           padding: 'var(--space-8) var(--container-padding-mobile)',
         }}
       >

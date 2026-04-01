@@ -300,6 +300,29 @@ export default function EmailCapture({ scores, onComplete }: EmailCaptureProps) 
             </p>
           )}
 
+          {/* NOTA — B2: aviso de contenido D2 antes del botón */}
+          <div
+            style={{
+              background: 'rgba(107, 142, 35, 0.08)',
+              border: '1px solid rgba(107, 142, 35, 0.2)',
+              borderRadius: 'var(--radius-md)',
+              padding: 'var(--space-3) var(--space-4)',
+              marginBottom: 'var(--space-4)',
+            }}
+          >
+            <p
+              style={{
+                fontFamily: 'var(--font-host-grotesk)',
+                fontSize: 'var(--text-caption)',
+                lineHeight: 'var(--lh-body-sm)',
+                color: 'var(--color-text-primary)',
+                margin: 0,
+              }}
+            >
+              <strong style={{ color: '#5A7A2B' }}>NOTA:</strong> Mañana recibirás información ampliada sobre tu mecanismo de defensa adaptativo. Incluirá <em>&ldquo;Miedos principales&rdquo;</em>, <em>&ldquo;Necesidades bioquímicas de tu sistema nervioso&rdquo;</em> y <em>&ldquo;Tus patrones de burnout&rdquo;</em> entre otros.
+            </p>
+          </div>
+
           {/* Botón principal */}
           <button
             type="submit"
